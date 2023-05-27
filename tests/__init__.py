@@ -1,3 +1,3 @@
 import sys
 
-sys.path.append("../poly")
+sys.path.append("../sympol")
