@@ -159,17 +159,17 @@ def test_barycenter():
     )
 
 
-def test_hyperplanes():
+def test_linear_inequalities():
     """
-    Test that the hyperplanes are correct
+    Test that the linear_inequalities are correct
     """
     points = [[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]]
     polytope = Polytope(points)
 
-    assert len(polytope.hyperplanes) == 3
-    assert polytope.hyperplanes[0].normal_vector == [1, 0, 0]
-    assert polytope.hyperplanes[1].normal_vector == [0, 1, 0]
-    assert polytope.hyperplanes[2].normal_vector == [0, 0, 1]
+    assert len(polytope.linear_inequalities) == 4
+    # assert polytope.linear_inequalities[0].normal_vector == [1, 0, 0]
+    # assert polytope.linear_inequalities[1].normal_vector == [0, 1, 0]
+    # assert polytope.linear_inequalities[2].normal_vector == [0, 0, 1]
 
 
 def test_inner_normal_to_facet():

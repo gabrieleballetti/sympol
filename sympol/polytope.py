@@ -49,7 +49,7 @@ class Polytope:
         self._normalized_volume = None
 
         # TODO: implement
-        self._hyperplanes = None
+        self._linear_inequalities = None
         self._edges = None
 
     @property
@@ -155,40 +155,42 @@ class Polytope:
         return self._normalized_volume
 
     @property
-    def hyperplanes(self):
+    def linear_inequalities(self):
         """
         Get the inequalities of the polytope
         TODO: implement
         """
-        if self._hyperplanes is None:
-            self._calculate_hyperplanes()
+        if self._linear_inequalities is None:
+            self._calculate_linear_inequalities()
 
-        return self._hyperplanes
+        return self._linear_inequalities
 
-    def _calculate_hyperplanes(self):
+    def _calculate_linear_inequalities(self):
         """
-        Calculate the hyperplanes of the polytope, sets _hyperplanes
+        Calculate the linear_inequalities of the polytope, sets _linear_inequalities
         (merges scipy_conv_hull.simplices into facets)
         """
 
-        self._hyperplanes = []
+        self._linear_inequalities = []
 
         for simplex in self.boundary_triangulation:
-            self._inner_normal_to_facet(simplex)
-            pass
+            normal = self._inner_normal_to_facet(simplex)
+
+            if normal in [lineq._normal for lineq in self._linear_inequalities]:
+                continue
+
+            lineq = LinIneq(normal, normal.dot(simplex[0]))
+            self._linear_inequalities.append(lineq)
 
     def _inner_normal_to_facet(self, facet):
         """
         Calculate the inner normal to a facet
         """
-        # homogeneous coordinates of the vertices of the simplex
-        matrix = [vertex - facet[0] for vertex in facet[1 : self.dim + 1]]
-        matrix += [[1 for _ in range(self.dim)]]
-        matrix = Matrix(matrix)
-        zero_hom = Matrix([0 for _ in range(self.dim - 1)] + [1])
-        normal = matrix.solve(zero_hom).transpose()
-        normal = Point(normal.tolist()[0])  # convert row matrix to point
+        matrix = Matrix([vertex - facet[0] for vertex in facet[1 : self.dim + 1]])
+        normal = matrix.nullspace()[0].transpose()  # guaranteed to exist and be 1-dim
+        normal = Point(normal.tolist()[0])  # convert to Point
 
+        # make sure it points inwards
         if normal.dot(self.barycenter - facet[0]) < 0:
             normal = -normal
 
