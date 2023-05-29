@@ -1,6 +1,9 @@
 from scipy.spatial import ConvexHull
 from sympy import Abs, factorial, Matrix, Rational
-from sympy.geometry.point import Point
+
+from sympol.point import Point
+from sympol.point_list import PointList
+from sympol.lineq import LinIneq
 
 
 class Polytope:
@@ -27,25 +30,21 @@ class Polytope:
             raise ValueError("Vertices cannot be empty")
 
         if vertices is not None:
-            self._vertices = [Point(v) for v in vertices]
+            vertices = PointList(vertices)
         else:
-            self._vertices = None
+            vertices = None
 
         if points is not None:
-            self._points = [Point(p) for p in points]
+            self._points = PointList(points)
         else:
-            self._points = [Point(v) for v in vertices]
+            self._points = PointList(vertices)
 
         self._ambient_dim = self._points[0].ambient_dimension
 
-        # Need affine_rank to be calculated (unless given by user)
         self._dim = dim
         self._scipy_conv_hull = None
-
-        # Need scipy_conv_hull to be calculated (unless given by user)
+        self._vertices = vertices
         self._boundary_triangulation = None
-
-        # Need volume to be calculated
         self._volume = None
         self._normalized_volume = None
 
@@ -73,7 +72,7 @@ class Polytope:
         Get the dimension of the polytope
         """
         if self._dim is None:
-            self._dim = Point.affine_rank(*self._points)
+            self._dim = self.points.affine_rank()
 
             # TODO: this should be removed!
             # Add support for non-full dimensional polytopes
@@ -112,9 +111,9 @@ class Polytope:
         Get the vertices of the polytope
         """
         if self._vertices is None:
-            self._vertices = [
-                self.points[i] for i in self.scipy_conv_hull.vertices.tolist()
-            ]
+            self._vertices = PointList(
+                [self.points[i] for i in self.scipy_conv_hull.vertices.tolist()]
+            )
 
         return self._vertices
 
@@ -129,6 +128,13 @@ class Polytope:
                 for simplex_ids in self.scipy_conv_hull.simplices.tolist()
             ]
         return self._boundary_triangulation
+
+    @property
+    def barycenter(self):
+        """
+        Get the barycenter of the polytope
+        """
+        return self.vertices.barycenter
 
     @property
     def volume(self):
@@ -148,6 +154,46 @@ class Polytope:
             self.calculate_volume()
         return self._normalized_volume
 
+    @property
+    def hyperplanes(self):
+        """
+        Get the inequalities of the polytope
+        TODO: implement
+        """
+        if self._hyperplanes is None:
+            self._calculate_hyperplanes()
+
+        return self._hyperplanes
+
+    def _calculate_hyperplanes(self):
+        """
+        Calculate the hyperplanes of the polytope, sets _hyperplanes
+        (merges scipy_conv_hull.simplices into facets)
+        """
+
+        self._hyperplanes = []
+
+        for simplex in self.boundary_triangulation:
+            self._inner_normal_to_facet(simplex)
+            pass
+
+    def _inner_normal_to_facet(self, facet):
+        """
+        Calculate the inner normal to a facet
+        """
+        # homogeneous coordinates of the vertices of the simplex
+        matrix = [vertex - facet[0] for vertex in facet[1 : self.dim + 1]]
+        matrix += [[1 for _ in range(self.dim)]]
+        matrix = Matrix(matrix)
+        zero_hom = Matrix([0 for _ in range(self.dim - 1)] + [1])
+        normal = matrix.solve(zero_hom).transpose()
+        normal = Point(normal.tolist()[0])  # convert row matrix to point
+
+        if normal.dot(self.barycenter - facet[0]) < 0:
+            normal = -normal
+
+        return normal
+
     def _calculate_volume(self):
         """
         Calculate the volume of the polytope, sets both _volume and _normalized_volume
@@ -162,17 +208,6 @@ class Polytope:
 
         self._volume = volume
         self._normalized_volume = volume * factorial(self.dim)
-
-    @property
-    def hyperplanes(self):
-        """
-        Get the inequalities of the polytope
-        TODO: implement
-        """
-        if self._hyperplanes is not None:
-            return self._hyperplanes
-
-        return None
 
     @property
     def edges(self):
