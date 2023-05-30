@@ -1,5 +1,6 @@
 from scipy.spatial import ConvexHull
 from sympy import Abs, factorial, Matrix, Rational
+from sympy.matrices import zeros
 
 from sympol.point import Point
 from sympol.point_list import PointList
@@ -50,6 +51,7 @@ class Polytope:
 
         self._linear_inequalities = None
         self._facets = None
+        self._vertex_facet_matrix = None
 
         # TODO: implement
         self._edges = None
@@ -172,6 +174,20 @@ class Polytope:
             self._calculate_facets_and_lin_eqs()
 
         return self._facets
+
+    @property
+    def vertex_facet_matrix(self):
+        """
+        Get the vertex facet matrix of the polytope
+        """
+        if self._vertex_facet_matrix is None:
+            self._vertex_facet_matrix = zeros(len(self.facets), self.vertices.shape[0])
+
+            for i, facet in enumerate(self.facets):
+                for vertex_id in facet:
+                    self._vertex_facet_matrix[i, vertex_id] = 1
+
+        return self._vertex_facet_matrix
 
     def _calculate_facets_and_lin_eqs(self):
         """

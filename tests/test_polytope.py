@@ -1,5 +1,5 @@
 from unittest.mock import MagicMock
-from sympy import Rational
+from sympy import Matrix, Rational
 
 from sympol.point import Point
 from sympol.point_list import PointList
@@ -211,6 +211,17 @@ def test_facets():
 
     for facet in polytope.facets:
         assert len(facet) == 4
+
+
+def test_vertex_facet_matrix():
+    """
+    Test calculation of the vertex facet matrix of a polytope
+    """
+    vertices = [Point([0, 0]), Point([1, 0]), Point([0, 1])]
+    polytope = Polytope(vertices)
+
+    expected_matrix = Matrix([[1, 1, 0], [1, 0, 1], [0, 1, 1]])
+    assert polytope.vertex_facet_matrix == expected_matrix
 
 
 def test_inner_normal_to_facet():
