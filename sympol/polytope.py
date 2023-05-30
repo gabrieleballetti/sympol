@@ -48,8 +48,10 @@ class Polytope:
         self._volume = None
         self._normalized_volume = None
 
-        # TODO: implement
         self._linear_inequalities = None
+        self._facets = None
+
+        # TODO: implement
         self._edges = None
 
     @property
@@ -123,10 +125,7 @@ class Polytope:
         Get the boundary triangulation of the polytope
         """
         if self._boundary_triangulation is None:
-            self._boundary_triangulation = [
-                [self.points[j] for j in simplex_ids]
-                for simplex_ids in self.scipy_conv_hull.simplices.tolist()
-            ]
+            self._boundary_triangulation = self.scipy_conv_hull.simplices.tolist()
         return self._boundary_triangulation
 
     @property
@@ -157,30 +156,43 @@ class Polytope:
     @property
     def linear_inequalities(self):
         """
-        Get the inequalities of the polytope
-        TODO: implement
+        Get the defining inequalities of the polytope
         """
         if self._linear_inequalities is None:
-            self._calculate_linear_inequalities()
+            self._calculate_facets_and_lin_eqs()
 
         return self._linear_inequalities
 
-    def _calculate_linear_inequalities(self):
+    @property
+    def facets(self):
         """
-        Calculate the linear_inequalities of the polytope, sets _linear_inequalities
-        (merges scipy_conv_hull.simplices into facets)
+        Get the facets of the polytope
         """
+        if self._facets is None:
+            self._calculate_facets_and_lin_eqs()
 
+        return self._facets
+
+    def _calculate_facets_and_lin_eqs(self):
+        """
+        Calculate the facets and the linear_inequalities of the polytope by merging
+        scipy_conv_hull.simplices into facets.
+        This sets _facets and _linear_inequalities.
+        """
         self._linear_inequalities = []
+        facets_dict = dict()
 
-        for simplex in self.boundary_triangulation:
-            normal = self._inner_normal_to_facet(simplex)
-
+        for simplex_ids in self.boundary_triangulation:
+            simplex_verts = [self.vertices[i] for i in simplex_ids]
+            normal = self._inner_normal_to_facet(simplex_verts)
             if normal in [lineq._normal for lineq in self._linear_inequalities]:
+                facets_dict[normal].update(simplex_ids)
                 continue
-
-            lineq = LinIneq(normal, normal.dot(simplex[0]))
+            lineq = LinIneq(normal, normal.dot(self._vertices[simplex_ids[0]]))
             self._linear_inequalities.append(lineq)
+            facets_dict[normal] = set(simplex_ids)
+
+        self._facets = [list(ids) for ids in facets_dict.values()]
 
     def _inner_normal_to_facet(self, facet):
         """
@@ -202,10 +214,12 @@ class Polytope:
         """
         volume = Rational(0)
 
-        for simplex in self.boundary_triangulation:
-            if self.vertices[0] in simplex:
+        for simplex_ids in self.boundary_triangulation:
+            if 0 in simplex_ids:
                 continue
-            translated_simplex = [vertex - self.vertices[0] for vertex in simplex]
+            translated_simplex = [
+                self.vertices[id] - self.vertices[0] for id in simplex_ids
+            ]
             volume += Abs(Matrix(translated_simplex).det())
 
         self._volume = volume

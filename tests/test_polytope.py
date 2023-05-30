@@ -103,9 +103,16 @@ def test_boundary_triangulation():
     points = [[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]]
     polytope = Polytope(points)
 
-    assert len(polytope.boundary_triangulation) == 4
-    assert len(polytope.boundary_triangulation[0]) == 3
-    assert len(polytope.boundary_triangulation[0][0]) == 3
+    # make into a set to ignore order
+    expected = {
+        frozenset((0, 1, 2)),
+        frozenset((0, 1, 3)),
+        frozenset((0, 2, 3)),
+        frozenset((1, 2, 3)),
+    }
+    result = {frozenset(simplex_ids) for simplex_ids in polytope.boundary_triangulation}
+
+    assert result == expected
 
 
 def test_get_volume():
@@ -161,15 +168,49 @@ def test_barycenter():
 
 def test_linear_inequalities():
     """
-    Test that the linear_inequalities are correct
+    Test that the linear_inequalities of a cube are six and are
+    at distance one from the origin
     """
-    points = [[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]]
+    points = [
+        [-1, -1, -1],
+        [1, -1, -1],
+        [-1, 1, -1],
+        [-1, -1, 1],
+        [1, 1, -1],
+        [1, -1, 1],
+        [-1, 1, 1],
+        [1, 1, 1],
+    ]
     polytope = Polytope(points)
 
-    assert len(polytope.linear_inequalities) == 4
-    # assert polytope.linear_inequalities[0].normal_vector == [1, 0, 0]
-    # assert polytope.linear_inequalities[1].normal_vector == [0, 1, 0]
-    # assert polytope.linear_inequalities[2].normal_vector == [0, 0, 1]
+    assert len(polytope.linear_inequalities) == 6
+
+    origin = Point([0, 0, 0])
+    for lineq in polytope.linear_inequalities:
+        assert lineq.evaluate(origin) == 1
+
+
+def test_facets():
+    """
+    Test that the facets of a cube are six and are
+    at distance one from the origin
+    """
+    points = [
+        [-1, -1, -1],
+        [1, -1, -1],
+        [-1, 1, -1],
+        [-1, -1, 1],
+        [1, 1, -1],
+        [1, -1, 1],
+        [-1, 1, 1],
+        [1, 1, 1],
+    ]
+    polytope = Polytope(points)
+
+    assert len(polytope.facets) == 6
+
+    for facet in polytope.facets:
+        assert len(facet) == 4
 
 
 def test_inner_normal_to_facet():
