@@ -1,4 +1,4 @@
-from sympy import Array, Matrix
+from sympy import Array, Matrix, NDimArray
 from sympol.point import Point
 
 
@@ -22,6 +22,22 @@ class PointList(Array):
         Overload the getitem method to return a Point
         """
         return Point(super().__getitem__(index))
+
+    def __add__(self, other):
+        """
+        Overload the + operator to add allow translation by a vector
+        """
+        if isinstance(other, NDimArray) and self.shape[1] == other.shape[0]:
+            return PointList([p + other for p in self])
+        return super().__add__(other)
+
+    def __sub__(self, other):
+        """
+        Overload the - operator to add allow translation by a vector
+        """
+        if isinstance(other, NDimArray) and self.shape[1] == other.shape[0]:
+            return PointList([p - other for p in self])
+        return super().__sub__(other)
 
     def affine_rank(self):
         """

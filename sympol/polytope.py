@@ -1,5 +1,5 @@
 from scipy.spatial import ConvexHull
-from sympy import Abs, factorial, Matrix, Rational
+from sympy import Abs, factorial, lcm, Matrix, Rational
 from sympy.matrices import zeros
 
 from sympol.point import Point
@@ -52,6 +52,7 @@ class Polytope:
         self._linear_inequalities = None
         self._facets = None
         self._vertex_facet_matrix = None
+        self._vertex_facet_pairing_matrix = None
 
         # TODO: implement
         self._edges = None
@@ -189,6 +190,22 @@ class Polytope:
 
         return self._vertex_facet_matrix
 
+    @property
+    def vertex_facet_pairing_matrix(self):
+        """
+        Get the vertex facet matrix of the polytope
+        """
+        if self._vertex_facet_pairing_matrix is None:
+            self._vertex_facet_pairing_matrix = zeros(
+                len(self.facets), self.vertices.shape[0]
+            )
+
+            for i, lineq in enumerate(self.linear_inequalities):
+                for j, vertex in enumerate(self.vertices):
+                    self._vertex_facet_pairing_matrix[i, j] = lineq.evaluate(vertex)
+
+        return self._vertex_facet_pairing_matrix
+
     def _calculate_facets_and_lin_eqs(self):
         """
         Calculate the facets and the linear_inequalities of the polytope by merging
@@ -201,6 +218,8 @@ class Polytope:
         for simplex_ids in self.boundary_triangulation:
             simplex_verts = [self.vertices[i] for i in simplex_ids]
             normal = self._inner_normal_to_facet(simplex_verts)
+            # make sure the normal has integer coefficients
+            normal = normal * lcm([frac.q for frac in normal])
             if normal in [lineq._normal for lineq in self._linear_inequalities]:
                 facets_dict[normal].update(simplex_ids)
                 continue

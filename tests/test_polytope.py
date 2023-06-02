@@ -235,3 +235,35 @@ def test_inner_normal_to_facet():
     normal = polytope._inner_normal_to_facet(facet)
 
     assert normal == Point([0, 0, 1])
+
+
+def test_vertex_facet_pairing_matrix():
+    """
+    Test calculation of the vertex facet pairing matrix of a polytope
+    """
+    vertices = [
+        [1, 0, 0],
+        [0, 1, 0],
+        [0, 0, 1],
+        [-1, 0, 1],
+        [0, 1, -1],
+        [0, -1, 0],
+        [0, 0, -1],
+    ]
+    polytope = Polytope(vertices)
+
+    expected = Matrix(
+        [
+            [2, 0, 1, 0, 0, 2, 1],
+            [0, 0, 1, 2, 0, 2, 1],
+            [1, 2, 0, 0, 3, 0, 2],
+            [0, 2, 0, 1, 3, 0, 2],
+            [1, 0, 0, 0, 1, 2, 2],
+            [0, 0, 0, 1, 1, 2, 2],
+            [3, 2, 2, 0, 1, 0, 0],
+            [3, 1, 2, 0, 0, 1, 0],
+            [0, 2, 2, 3, 1, 0, 0],
+            [0, 1, 2, 3, 0, 1, 0],
+        ]
+    )
+    assert polytope.vertex_facet_pairing_matrix == expected
