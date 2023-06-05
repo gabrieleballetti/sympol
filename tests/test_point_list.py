@@ -24,7 +24,7 @@ def test_affine_rank():
     points = [[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]]
     point_list = PointList(points)
 
-    assert point_list.affine_rank() == 3
+    assert point_list.affine_rank == 3
 
 
 def test_barycenter():

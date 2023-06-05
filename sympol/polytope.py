@@ -77,7 +77,7 @@ class Polytope:
         Get the dimension of the polytope
         """
         if self._dim is None:
-            self._dim = self.points.affine_rank()
+            self._dim = self.points.affine_rank
 
             # TODO: this should be removed!
             # Add support for non-full dimensional polytopes
