@@ -1,7 +1,5 @@
-from random import shuffle, randint
-from unittest.mock import MagicMock
-from sympy import Matrix, Rational
-from sympy.combinatorics.generators import symmetric
+from random import shuffle
+from sympy import Matrix
 
 from sympol.normal_form import (
     get_normal_form,
@@ -13,23 +11,23 @@ from sympol.point_list import PointList
 from sympol.polytope import Polytope
 
 
-def test_get_normal_form():
+def test_normal_form():
     """
     Test normal form of a polytope
     """
     verts = [
-        [-1, -1, -1],
-        [-1, -1, 1],
-        [-1, 1, -1],
-        [-1, 1, 1],
-        [1, -1, -1],
-        [1, -1, 1],
-        [1, 1, -1],
-        [1, 1, 1],
+        [-2, -1, -3],
+        [-2, -1, 3],
+        [-2, 1, -3],
+        [-2, 1, 3],
+        [2, -1, -3],
+        [2, -1, 3],
+        [2, 1, -3],
+        [2, 1, 3],
     ]
 
     polytope_1 = Polytope(vertices=verts)
-    affine_normal_form_1 = get_normal_form(polytope_1)
+    normal_form_1 = get_normal_form(polytope_1)
 
     shuffle(verts)
     uni_map = Matrix(
@@ -40,9 +38,9 @@ def test_get_normal_form():
         ]
     )
     polytope_2 = Polytope(vertices=(Matrix(verts) * uni_map))
-    affine_normal_form_2 = get_normal_form(polytope_2)
+    normal_form_2 = get_normal_form(polytope_2)
 
-    assert affine_normal_form_1 == affine_normal_form_2
+    assert normal_form_1 == normal_form_2
 
 
 def test_identity_is_automorphisms():

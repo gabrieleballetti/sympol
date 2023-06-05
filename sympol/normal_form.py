@@ -1,13 +1,20 @@
-import numpy as np
+from enum import Enum
 from igraph import Graph
 
 from sympy import Abs, Matrix
-from sympy.combinatorics import Permutation
-from sympy.combinatorics.generators import symmetric
 from sympy.matrices.normalforms import hermite_normal_form
 
-from sympol.point import Point
 from sympol.point_list import PointList
+
+
+class VertexType(Enum):
+    """
+    Enum for vertex type
+    """
+
+    VERTEX = 0
+    FACET = 1
+    LATTICE_DISTANCE = 2
 
 
 def get_normal_form(polytope):
@@ -19,31 +26,21 @@ def get_normal_form(polytope):
     :param polytope: polytope
     :return: canonical permutation
     """
-    vfm = polytope.vertex_facet_matrix.tolist()
-    vfpm = polytope.vertex_facet_pairing_matrix.tolist()
+    graph = _get_vertex_facet_pairing_graph(polytope)
 
-    bipartite_graph = Graph.Incidence(vfm)
+    # Find the canonical permutation of the bipartite graph
+    perm = graph.canonical_permutation(color=[v["color"] for v in graph.vs])
 
-    verts_ids = np.array([v.index for v in bipartite_graph.vs if v["type"]])
-    facets_ids = np.array([v.index for v in bipartite_graph.vs if not v["type"]])
-
-    # Add the vertices coords to the vertices of the graph
-    for i, v in zip(verts_ids, polytope.vertices):
-        bipartite_graph.vs[i]["point"] = v
-
-    color = [0 if v["type"] else -1 for v in bipartite_graph.vs]
-    perm = bipartite_graph.canonical_permutation(color=color)
-
-    bipartite_graph = bipartite_graph.permute_vertices(perm)
-
-    color = [0 if v["type"] else -1 for v in bipartite_graph.vs]
-    aut_group = bipartite_graph.get_automorphisms_vf2(color=color)
+    graph = graph.permute_vertices(perm)
+    aut_group = graph.get_automorphisms_vf2(color=[v["color"] for v in graph.vs])
 
     normal_form = None
     min_compare_tuple = None
     for aut in aut_group:
-        temp_bg = bipartite_graph.permute_vertices(aut)
-        permuted_verts = [v["point"] for v in temp_bg.vs if v["type"]]
+        temp_graph = graph.permute_vertices(aut)
+        permuted_verts = [
+            v["point"] for v in temp_graph.vs if v["type"] == VertexType.VERTEX
+        ]
         candidate_normal_form = hermite_normal_form(Matrix(permuted_verts))
 
         compare_tuple = tuple(candidate_normal_form.flat())
@@ -52,6 +49,48 @@ def get_normal_form(polytope):
             min_compare_tuple = compare_tuple
 
     return PointList(normal_form)
+
+
+def _get_vertex_facet_pairing_graph(polytope):
+    """
+    Get the colored tri-partite graph of the vertex-facet pairing matrix
+    :param polytope: polytope
+    :return: graph
+    """
+    vfpm = polytope.vertex_facet_pairing_matrix
+
+    graph = Graph()
+    n_facets = vfpm.shape[0]
+    n_verts = vfpm.shape[1]
+    graph.add_vertices(
+        n_facets,
+        attributes={
+            "type": [VertexType.FACET for _ in range(n_facets)],
+            "color": [-1 for _ in range(n_facets)],
+        },
+    )
+    graph.add_vertices(
+        n_verts,
+        attributes={
+            "type": [VertexType.VERTEX for _ in range(n_verts)],
+            "color": [0 for _ in range(n_verts)],
+            "point": [v for v in polytope.vertices],
+        },
+    )
+
+    for i in range(n_facets):
+        for j in range(n_verts):
+            if vfpm[i, j] > 0:
+                facet_id = i
+                vert_id = j + n_facets
+                new_vertex = graph.add_vertex(
+                    type=VertexType.LATTICE_DISTANCE,
+                    color=vfpm[i, j],
+                )
+                graph.add_edge(vert_id, new_vertex)
+                graph.add_edge(new_vertex, facet_id)
+
+    return graph
 
 
 def _is_automorphism(input_list: PointList, output_list: PointList):
