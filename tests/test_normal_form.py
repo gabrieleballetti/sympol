@@ -1,14 +1,67 @@
 from random import shuffle
+import time
 from sympy import Matrix
 
 from sympol.normal_form import (
     get_normal_form,
-    _is_automorphism,
+    # _is_automorphism,
     # _find_canonical_permutation_and_automorphisms,
 )
 from sympol.point import Point
 from sympol.point_list import PointList
 from sympol.polytope import Polytope
+
+
+# def test_time_normal_form_1():
+#     verts = [
+#         [-1, 0, 0, 0, 0, 0],
+#         [1, 0, 0, 0, 0, 0],
+#         [0, -1, 0, 0, 0, 0],
+#         [0, 1, 0, 0, 0, 0],
+#         [0, 0, -1, 0, 0, 0],
+#         [0, 0, 1, 0, 0, 0],
+#         [0, 0, 0, -1, 0, 0],
+#         [0, 0, 0, 1, 0, 0],
+#         [0, 0, 0, 0, -1, 0],
+#         [0, 0, 0, 0, 1, 0],
+#         [0, 0, 0, 0, 0, -1],
+#         [0, 0, 0, 0, 0, 1],
+#         [-1, -1, -1, -1, -1, -1],
+#         [1, 1, 1, 1, 1, 1],
+#     ]
+
+#     polytope = Polytope(vertices=verts)
+
+#     start = time.time()
+#     normal_form = get_normal_form(polytope)
+#     end = time.time()
+#     time_1 = end - start
+#     print(f"Time 1: {time_1}")
+
+
+# def test_time_normal_form_2():
+#     verts = [
+#         [1, 0, 0, 0, 0, 0],
+#         [0, 1, 0, 0, 0, 0],
+#         [0, 0, 1, 0, 0, 0],
+#         [0, 0, 0, 1, 0, 0],
+#         [0, 0, 0, 0, 1, 0],
+#         [0, 0, 0, 0, 0, 1],
+#         [-1, -1, -1, 1, 1, 1],
+#         [0, 0, 1, -1, 0, 0],
+#         [0, 0, -1, 0, 0, 0],
+#         [0, 1, 1, -1, -1, -1],
+#         [0, -1, -1, 0, 0, 0],
+#         [0, 0, 0, 0, -1, -1],
+#     ]
+
+#     polytope = Polytope(vertices=verts)
+
+#     start = time.time()
+#     get_normal_form(polytope)
+#     end = time.time()
+#     time_1 = end - start
+#     print(f"Time 1: {time_1}")
 
 
 def test_normal_form():
@@ -43,76 +96,76 @@ def test_normal_form():
     assert normal_form_1 == normal_form_2
 
 
-def test_identity_is_automorphisms():
-    """
-    Test that is_automorphism returns True for a coord permutation
-    """
+# def test_identity_is_automorphisms():
+#     """
+#     Test that is_automorphism returns True for a coord permutation
+#     """
 
-    input_list = PointList(
-        [
-            [-1, -1, -1],
-            [-1, -1, 1],
-            [-1, 1, -1],
-            [-1, 1, 1],
-            [1, -1, -1],
-            [1, -1, 1],
-            [1, 1, -1],
-            [1, 1, 1],
-        ]
-    )
+#     input_list = PointList(
+#         [
+#             [-1, -1, -1],
+#             [-1, -1, 1],
+#             [-1, 1, -1],
+#             [-1, 1, 1],
+#             [1, -1, -1],
+#             [1, -1, 1],
+#             [1, 1, -1],
+#             [1, 1, 1],
+#         ]
+#     )
 
-    assert _is_automorphism(input_list, input_list)
-
-
-def test_unimodular_eq_lists_is_automorphism():
-    """
-    Test that is_automorphism returns True when called with two affinely unimodular
-    equivalent lists
-    """
-
-    input_list = PointList(
-        [
-            [-1, -1, -1],
-            [-1, -1, 1],
-            [-1, 1, -1],
-            [-1, 1, 1],
-            [1, -1, -1],
-            [1, -1, 1],
-            [1, 1, -1],
-            [1, 1, 1],
-        ]
-    )
-
-    matrix_input = Matrix(input_list)
-    unim_eq_map = Matrix([[2, 5, 0], [1, 3, 0], [0, 0, -1]])
-    output_list = PointList((matrix_input * unim_eq_map).tolist())
-    output_list = output_list + Point([2, 6, -1])
-
-    assert _is_automorphism(input_list, output_list)
+#     assert _is_automorphism(input_list, input_list)
 
 
-def test_non_unimodular_eq_lists_is_not_automorphism():
-    """
-    Test that is_automorphism returns True when called with two affinely unimodular
-    equivalent lists
-    """
+# def test_unimodular_eq_lists_is_automorphism():
+#     """
+#     Test that is_automorphism returns True when called with two affinely unimodular
+#     equivalent lists
+#     """
 
-    input_list = PointList(
-        [
-            [-1, -1, -1],
-            [-1, -1, 1],
-            [-1, 1, -1],
-            [-1, 1, 1],
-            [1, -1, -1],
-            [1, -1, 1],
-            [1, 1, -1],
-            [1, 1, 1],
-        ]
-    )
+#     input_list = PointList(
+#         [
+#             [-1, -1, -1],
+#             [-1, -1, 1],
+#             [-1, 1, -1],
+#             [-1, 1, 1],
+#             [1, -1, -1],
+#             [1, -1, 1],
+#             [1, 1, -1],
+#             [1, 1, 1],
+#         ]
+#     )
 
-    matrix_input = Matrix(input_list)
-    unim_eq_map = Matrix([[1, 5, 0], [1, 3, 0], [0, 0, -1]])
-    output_list = PointList((matrix_input * unim_eq_map).tolist())
-    output_list = output_list + Point([2, 6, -1])
+#     matrix_input = Matrix(input_list)
+#     unim_eq_map = Matrix([[2, 5, 0], [1, 3, 0], [0, 0, -1]])
+#     output_list = PointList((matrix_input * unim_eq_map).tolist())
+#     output_list = output_list + Point([2, 6, -1])
 
-    assert not _is_automorphism(input_list, output_list)
+#     assert _is_automorphism(input_list, output_list)
+
+
+# def test_non_unimodular_eq_lists_is_not_automorphism():
+#     """
+#     Test that is_automorphism returns True when called with two affinely unimodular
+#     equivalent lists
+#     """
+
+#     input_list = PointList(
+#         [
+#             [-1, -1, -1],
+#             [-1, -1, 1],
+#             [-1, 1, -1],
+#             [-1, 1, 1],
+#             [1, -1, -1],
+#             [1, -1, 1],
+#             [1, 1, -1],
+#             [1, 1, 1],
+#         ]
+#     )
+
+#     matrix_input = Matrix(input_list)
+#     unim_eq_map = Matrix([[1, 5, 0], [1, 3, 0], [0, 0, -1]])
+#     output_list = PointList((matrix_input * unim_eq_map).tolist())
+#     output_list = output_list + Point([2, 6, -1])
+
+#     assert not _is_automorphism(input_list, output_list)

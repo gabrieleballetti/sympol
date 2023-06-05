@@ -88,7 +88,6 @@ class Polytope:
 
         return self._dim
 
-    @property
     def is_full_dim(self):
         """
         Check if the polytope is full dimensional
@@ -102,7 +101,7 @@ class Polytope:
         """
         if self._scipy_conv_hull is None:
             # TODO: add support for non-full dimensional polytopes
-            if not self.is_full_dim:
+            if not self.is_full_dim():
                 raise NotImplementedError(
                     "Non-full dimensional polytopes are not supported yet"
                 )
