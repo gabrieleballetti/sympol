@@ -42,6 +42,14 @@ class PointList(Array):
             return PointList([p - other for p in self])
         return super().__sub__(other)
 
+    def __mul__(self, other):
+        """
+        Overload the * operator to allow scaling by a scalar
+        """
+        if isinstance(other, (int, float)):
+            return PointList([p * other for p in self])
+        return super().__mul__(other)
+
     def ambient_dimension(self):
         """
         Get the ambient dimension of the point list

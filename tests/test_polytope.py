@@ -100,8 +100,7 @@ def test_boundary_triangulation():
     """
     Test that the boundary triangulation has the expected shape
     """
-    points = [[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]]
-    polytope = Polytope(points)
+    polytope = Polytope.unimodular_simplex(3)
 
     # make into a set to ignore order
     expected = {
@@ -119,23 +118,21 @@ def test_get_volume():
     """
     Test that the volume is correct
     """
-    points = [[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]]
-    polytope = Polytope(points)
+    polytope = Polytope.unimodular_simplex(3)
 
     assert polytope._volume is None
     assert polytope._normalized_volume is None
-    assert polytope.volume == 1  # This triggers a volume computation
-    assert polytope._volume == 1
-    assert polytope._normalized_volume == 6
-    assert polytope.normalized_volume == 6
+    assert polytope.volume == Rational(1, 6)  # This triggers a volume computation
+    assert polytope._volume == Rational(1, 6)
+    assert polytope._normalized_volume == 1
+    assert polytope.normalized_volume == 1
 
 
 def test_volume_computed_only_once():
     """
     Test that the volume is computed only once
     """
-    points = [[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]]
-    polytope = Polytope(points)
+    polytope = Polytope.unimodular_simplex(3)
 
     def mock_calculate_volume():
         polytope._volume = 1
@@ -158,11 +155,70 @@ def test_barycenter():
     """
     Test that the barycenter is correct
     """
-    points = [[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]]
-    polytope = Polytope(points)
+    polytope = Polytope.unimodular_simplex(3)
 
     assert polytope.barycenter == Point(
         [Rational(1, 4), Rational(1, 4), Rational(1, 4)]
+    )
+
+
+def test_translation():
+    """
+    Test that the translation is correct
+    """
+    polytope = Polytope.cube(3) + Point([1, 1, 1])
+
+    assert polytope.vertices == PointList(
+        [
+            [1, 1, 1],
+            [1, 1, 2],
+            [1, 2, 1],
+            [1, 2, 2],
+            [2, 1, 1],
+            [2, 1, 2],
+            [2, 2, 1],
+            [2, 2, 2],
+        ]
+    )
+
+
+def test_dilation():
+    """
+    Test that the dilation is correct
+    """
+    polytope = Polytope.cube(3) * 2
+
+    assert polytope.vertices == PointList(
+        [
+            [0, 0, 0],
+            [0, 0, 2],
+            [0, 2, 0],
+            [0, 2, 2],
+            [2, 0, 0],
+            [2, 0, 2],
+            [2, 2, 0],
+            [2, 2, 2],
+        ]
+    )
+
+
+def test_translation_and_dilation():
+    """
+    Test that the translation and dilation are correct
+    """
+    polytope = Polytope.cube(3) * 2 - Point([1, 1, 1])
+
+    assert polytope.vertices == PointList(
+        [
+            [-1, -1, -1],
+            [-1, -1, 1],
+            [-1, 1, -1],
+            [-1, 1, 1],
+            [1, -1, -1],
+            [1, -1, 1],
+            [1, 1, -1],
+            [1, 1, 1],
+        ]
     )
 
 
@@ -171,17 +227,7 @@ def test_linear_inequalities():
     Test that the linear_inequalities of a cube are six and are
     at distance one from the origin
     """
-    points = [
-        [-1, -1, -1],
-        [1, -1, -1],
-        [-1, 1, -1],
-        [-1, -1, 1],
-        [1, 1, -1],
-        [1, -1, 1],
-        [-1, 1, 1],
-        [1, 1, 1],
-    ]
-    polytope = Polytope(points)
+    polytope = Polytope.cube(3) * 2 - Point([1, 1, 1])
 
     assert len(polytope.linear_inequalities) == 6
 
@@ -195,17 +241,7 @@ def test_facets():
     Test that the facets of a cube are six and are
     at distance one from the origin
     """
-    points = [
-        [-1, -1, -1],
-        [1, -1, -1],
-        [-1, 1, -1],
-        [-1, -1, 1],
-        [1, 1, -1],
-        [1, -1, 1],
-        [-1, 1, 1],
-        [1, 1, 1],
-    ]
-    polytope = Polytope(points)
+    polytope = Polytope.cube(3) * 2 - Point([1, 1, 1])
 
     assert len(polytope.facets) == 6
 
@@ -217,8 +253,7 @@ def test_vertex_facet_matrix():
     """
     Test calculation of the vertex facet matrix of a polytope
     """
-    vertices = [Point([0, 0]), Point([1, 0]), Point([0, 1])]
-    polytope = Polytope(vertices)
+    polytope = Polytope.unimodular_simplex(dim=2)
 
     expected_matrix = Matrix([[1, 1, 0], [1, 0, 1], [0, 1, 1]])
     assert polytope.vertex_facet_matrix == expected_matrix
@@ -267,3 +302,47 @@ def test_vertex_facet_pairing_matrix():
         ]
     )
     assert polytope.vertex_facet_pairing_matrix == expected
+
+
+def test_unimodular_simplex():
+    """
+    Test that the unimodular simplex is correctly constructed
+    """
+    simplex = Polytope.unimodular_simplex(3)
+
+    expected_vertices = PointList(
+        [
+            [0, 0, 0],
+            [1, 0, 0],
+            [0, 1, 0],
+            [0, 0, 1],
+        ]
+    )
+
+    assert simplex.vertices == expected_vertices
+    assert simplex.volume == Rational(1, 6)
+    assert simplex.normalized_volume == 1
+
+
+def test_cube():
+    """
+    Test that the cube is correctly constructed
+    """
+    cube = Polytope.cube(3)
+
+    expected_vertices = PointList(
+        [
+            [0, 0, 0],
+            [0, 0, 1],
+            [0, 1, 0],
+            [0, 1, 1],
+            [1, 0, 0],
+            [1, 0, 1],
+            [1, 1, 0],
+            [1, 1, 1],
+        ]
+    )
+
+    assert cube.vertices == expected_vertices
+    assert cube.volume == 1
+    assert cube.normalized_volume == 6

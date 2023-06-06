@@ -1,7 +1,8 @@
 from scipy.spatial import ConvexHull
-from sympy import Abs, factorial, lcm, Matrix, Rational
+from sympy import Abs, factorial, lcm, Number, Matrix, Rational
 from sympy.matrices import zeros
 
+from sympol.isomorphism import get_normal_form
 from sympol.point import Point
 from sympol.point_list import PointList
 from sympol.lineq import LinIneq
@@ -51,8 +52,12 @@ class Polytope:
 
         self._linear_inequalities = None
         self._facets = None
+        self._n_vertices = None
+        self._n_facets = None
         self._vertex_facet_matrix = None
         self._vertex_facet_pairing_matrix = None
+        self._normal_form = None
+        self._affine_normal_form = None
 
         # TODO: implement
         self._edges = None
@@ -176,6 +181,26 @@ class Polytope:
         return self._facets
 
     @property
+    def n_vertices(self):
+        """
+        Get the number of vertices of the polytope
+        """
+        if self._n_vertices is None:
+            self._n_vertices = len(self.vertices)
+
+        return self._n_vertices
+
+    @property
+    def n_facets(self):
+        """
+        Get the number of facets of the polytope
+        """
+        if self._n_facets is None:
+            self._n_facets = len(self.facets)
+
+        return self._n_facets
+
+    @property
     def vertex_facet_matrix(self):
         """
         Get the vertex facet matrix of the polytope
@@ -256,8 +281,8 @@ class Polytope:
             ]
             volume += Abs(Matrix(translated_simplex).det())
 
-        self._volume = volume
-        self._normalized_volume = volume * factorial(self.dim)
+        self._normalized_volume = volume
+        self._volume = volume / factorial(self.dim)
 
     @property
     def edges(self):
@@ -270,3 +295,119 @@ class Polytope:
             return self._edges
 
         return None
+
+    @property
+    def normal_form(self):
+        """
+        Return a polytope in normal form
+        """
+        if self._normal_form is None:
+            self._normal_form = get_normal_form(polytope=self)
+
+        return self._normal_form
+
+    @property
+    def affine_normal_form(self):
+        """
+        Return a polytope in affine normal form
+        """
+        if self._affine_normal_form is None:
+            self._affine_normal_form = get_normal_form(polytope=self, affine=True)
+
+        return self._affine_normal_form
+
+    # Polytope operations
+
+    def __add__(self, other):
+        """
+        Return the the sum of self and other:
+            - the translation of self by other if other is a Point
+            - the Minkowski sum of self and other if other is a Polytope (TODO)
+        """
+        if isinstance(other, Point):
+            verts = self.vertices + other
+            return Polytope(vertices=verts)
+
+        if isinstance(other, Polytope):
+            raise NotImplementedError("Minkowski sum not implemented yet")
+
+        raise TypeError(
+            "A polytope can only be added to a Point (translation)"
+            " or another polytope (Minkowski sum)"
+        )
+
+    def __sub__(self, other):
+        """
+        Return the the difference of self and other:
+            - the translation of self by -other if other is a Point
+            - the Minkowski difference of self and other if other is a Polytope (TODO)
+        """
+        return self + (-other)
+
+    def __neg__(self):
+        """
+        Return the negation of self
+        """
+        return self * (-1)
+
+    def __mul__(self, other):
+        """
+        Return the product of self and other:
+            - the dilation of self by other if other is a scalar
+            - the cartesian product of self and other if other is a Polytope
+        """
+        if isinstance(other, Number) or isinstance(other, int):
+            verts = self.vertices * other
+            return Polytope(vertices=verts)
+
+        if isinstance(other, Polytope):
+            verts = []
+            for v1 in self.vertices:
+                for v2 in other.vertices:
+                    verts.append(v1.tolist() + v2.tolist())
+            return Polytope(vertices=verts)
+
+        raise TypeError(
+            "A polytope can only be multiplied with a scalar (dilation)"
+            " or another polytope (cartesian product)"
+        )
+
+    # Polytope constructors
+
+    @classmethod
+    def unimodular_simplex(cls, dim):
+        """
+        Return a unimodular simplex in the given dimension
+        """
+
+        # check if dim is an integer > 0
+        if not isinstance(dim, int) or dim < 1:
+            raise ValueError("Dimension must be a positive integer")
+
+        verts = [[0] * dim]
+        for i in range(dim):
+            vert = [0] * dim
+            vert[i] = 1
+            verts.append(vert)
+
+        simplex = cls(vertices=verts)
+
+        return simplex
+
+    @classmethod
+    def cube(cls, dim):
+        """
+        Return a unit cube in the given dimension
+        """
+
+        # check if dim is an integer > 0
+        if not isinstance(dim, int) or dim < 1:
+            raise ValueError("Dimension must be a positive integer")
+
+        segment_verts = [[0], [1]]
+        cube = cls(vertices=segment_verts)
+
+        for _ in range(dim - 1):
+            cube = cube * cls(vertices=segment_verts)
+
+        return cube

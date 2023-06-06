@@ -2,7 +2,7 @@ from random import shuffle
 import time
 from sympy import Matrix
 
-from sympol.normal_form import (
+from sympol.isomorphism import (
     get_normal_form,
     # _is_automorphism,
     # _find_canonical_permutation_and_automorphisms,

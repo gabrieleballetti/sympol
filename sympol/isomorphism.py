@@ -9,7 +9,7 @@ from sympol.point_list import PointList
 
 class VertexType(Enum):
     """
-    Enum for vertex type
+    Enum for vertex type in the vertex-facet pairing graph.
     """
 
     VERTEX = 0
@@ -17,9 +17,9 @@ class VertexType(Enum):
     LATTICE_DISTANCE = 2
 
 
-def get_normal_form(polytope):
+def get_normal_form(polytope, affine=False):
     """
-    Find the normal form a lattice polytope by:
+    Find the normal form of a lattice polytope by:
         1. associate to each polytope a graph encoding the vertex-facet relations,
         2. put the graph in canonical form with the igraph Bliss algorithm,
         3. find the automorphism group of the graph with the igraph vf2 algorithm,
@@ -47,9 +47,20 @@ def get_normal_form(polytope):
         permuted_verts = [
             v["point"] for v in temp_graph.vs if v["type"] == VertexType.VERTEX
         ]
-        candidate_normal_form = hermite_normal_form(Matrix(permuted_verts))
-
-        compare_tuple = tuple(candidate_normal_form.flat())
+        if affine:
+            for v in polytope.vertices:
+                candidate_normal_form = hermite_normal_form(
+                    Matrix(PointList(permuted_verts) - v)
+                )
+                compare_tuple = tuple(candidate_normal_form.flat())
+                if normal_form is None or compare_tuple < min_compare_tuple:
+                    normal_form = candidate_normal_form
+                    min_compare_tuple = compare_tuple
+            candidate_normal_form = normal_form
+            compare_tuple = min_compare_tuple
+        else:
+            candidate_normal_form = hermite_normal_form(Matrix(permuted_verts))
+            compare_tuple = tuple(candidate_normal_form.flat())
         if normal_form is None or compare_tuple < min_compare_tuple:
             normal_form = candidate_normal_form
             min_compare_tuple = compare_tuple
