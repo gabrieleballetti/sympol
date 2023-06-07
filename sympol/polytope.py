@@ -94,12 +94,6 @@ class Polytope:
 
         return self._dim
 
-    def is_full_dim(self):
-        """
-        Check if the polytope is full dimensional
-        """
-        return self.dim == self.ambient_dim
-
     @property
     def scipy_conv_hull(self):
         """
@@ -329,6 +323,19 @@ class Polytope:
             self._affine_normal_form = get_normal_form(polytope=self, affine=True)
 
         return self._affine_normal_form
+
+    # Helper functions
+    def is_full_dim(self):
+        """
+        Check if the polytope is full dimensional
+        """
+        return self.dim == self.ambient_dim
+
+    def is_lattice_polytope(self):
+        """
+        Check if the polytope is a lattice polytope
+        """
+        return all([all([i.is_integer for i in v]) for v in self.vertices])
 
     # Polytope operations
 

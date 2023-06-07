@@ -359,6 +359,17 @@ def test_affine_normal_form_idempotent():
     assert polytope.affine_normal_form == polytope_anf.affine_normal_form
 
 
+def test_is_lattice_polytope():
+    """
+    Test the is_lattice_polytope method
+    """
+    polytope = Polytope.unimodular_simplex(dim=3)
+    assert polytope.is_lattice_polytope()
+
+    polytope = polytope * Rational(3, 2)
+    assert not polytope.is_lattice_polytope()
+
+
 def test_unimodular_simplex():
     """
     Test that the unimodular simplex is correctly constructed
