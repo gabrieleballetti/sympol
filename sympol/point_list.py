@@ -11,9 +11,12 @@ class PointList(Array):
         """
         Initialize a point list
         """
-
         if self.rank() > 2:
-            raise ValueError("Point list must be a rank 2 array at most")
+            # Attempt to convert to a rank 2 array
+            if all([i == 1 for i in self.shape[2:]]):
+                self = self.reshape(*self.shape[:2])
+            else:
+                raise ValueError("Point list must be a rank 2 array at most")
 
         self._ambient_dimension = None
         self._hom_rank = None
@@ -49,6 +52,12 @@ class PointList(Array):
         if isinstance(other, (int, float)):
             return PointList([p * other for p in self])
         return super().__mul__(other)
+
+    def tolist(self):
+        """
+        Convert the point list to a list of numbers
+        """
+        return [p.tolist() for p in self]
 
     def ambient_dimension(self):
         """

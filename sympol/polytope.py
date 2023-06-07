@@ -1,3 +1,4 @@
+import numpy as np
 from scipy.spatial import ConvexHull
 from sympy import Abs, factorial, lcm, Number, Matrix, Rational
 from sympy.matrices import zeros
@@ -132,7 +133,12 @@ class Polytope:
         Get the boundary triangulation of the polytope
         """
         if self._boundary_triangulation is None:
-            self._boundary_triangulation = self.scipy_conv_hull.simplices.tolist()
+            self._boundary_triangulation = []
+            for simplex_ids in self.scipy_conv_hull.simplices.tolist():
+                simplex_vs = PointList([self.points[i] for i in simplex_ids])
+                if simplex_vs.affine_rank == self.dim - 1:
+                    self._boundary_triangulation.append(simplex_ids)
+
         return self._boundary_triangulation
 
     @property
@@ -186,7 +192,7 @@ class Polytope:
         Get the number of vertices of the polytope
         """
         if self._n_vertices is None:
-            self._n_vertices = len(self.vertices)
+            self._n_vertices = self.vertices.shape[0]
 
         return self._n_vertices
 
@@ -240,29 +246,37 @@ class Polytope:
         facets_dict = dict()
 
         for simplex_ids in self.boundary_triangulation:
-            simplex_verts = [self.vertices[i] for i in simplex_ids]
-            normal = self._inner_normal_to_facet(simplex_verts)
+            normal = self._inner_normal_to_facet(simplex_ids)
             # make sure the normal has integer coefficients
             normal = normal * lcm([frac.q for frac in normal])
             if normal in [lineq._normal for lineq in self._linear_inequalities]:
                 facets_dict[normal].update(simplex_ids)
                 continue
-            lineq = LinIneq(normal, normal.dot(self._vertices[simplex_ids[0]]))
+            lineq = LinIneq(normal, normal.dot(self.points[simplex_ids[0]]))
             self._linear_inequalities.append(lineq)
             facets_dict[normal] = set(simplex_ids)
 
         self._facets = [list(ids) for ids in facets_dict.values()]
 
-    def _inner_normal_to_facet(self, facet):
+    def _inner_normal_to_facet(self, simplex_ids):
         """
-        Calculate the inner normal to a facet
+        Calculate the inner normal to a codimension 1 boundary simplex
         """
-        matrix = Matrix([vertex - facet[0] for vertex in facet[1 : self.dim + 1]])
+        translated_simplex = (
+            PointList([self.points[i] for i in simplex_ids[1:]])
+            - self.points[simplex_ids[0]]
+        )
+        if translated_simplex.hom_rank != self.ambient_dim - 1:
+            # TODO: this is here to fix a bug, should be removed
+            raise ValueError(
+                "The simplex {} is not a boundary simplex".format(simplex_ids)
+            )
+        matrix = Matrix(translated_simplex)
         normal = matrix.nullspace()[0].transpose()  # guaranteed to exist and be 1-dim
         normal = Point(normal.tolist()[0])  # convert to Point
 
         # make sure it points inwards
-        if normal.dot(self.barycenter - facet[0]) < 0:
+        if normal.dot(self.barycenter - self.points[simplex_ids[0]]) < 0:
             normal = -normal
 
         return normal
@@ -411,3 +425,12 @@ class Polytope:
             cube = cube * cls(vertices=segment_verts)
 
         return cube
+
+    @classmethod
+    def random_lattice_polytope(cls, dim, n_vertices, min=0, max=1):
+        """
+        Return a random lattice polytope in the given dimension from a given number of
+        point with integer coordinates between min and max (included, default 0 and 1)
+        """
+        pts = np.random.randint(min, max + 1, size=(n_vertices, dim))
+        return cls(points=pts)

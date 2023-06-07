@@ -266,10 +266,10 @@ def test_inner_normal_to_facet():
     points = [[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]]
     polytope = Polytope(points)
 
-    facet = [Point(v) for v in points[:-1]]
-    normal = polytope._inner_normal_to_facet(facet)
+    facet_ids = [1, 2, 3]
+    normal = polytope._inner_normal_to_facet(facet_ids)
 
-    assert normal == Point([0, 0, 1])
+    assert normal == Point([-1, -1, -1])
 
 
 def test_vertex_facet_pairing_matrix():
@@ -302,6 +302,61 @@ def test_vertex_facet_pairing_matrix():
         ]
     )
     assert polytope.vertex_facet_pairing_matrix == expected
+
+
+def test_vertex_facet_pairing_matrix_is_nonnegative():
+    """
+    Test that the vertex facet pairing matrix is nonnegative
+    """
+    polytope = Polytope.random_lattice_polytope(dim=4, n_vertices=50, min=-5, max=5)
+    assert min(polytope.vertex_facet_pairing_matrix) >= 0
+
+
+def test_normal_form():
+    """
+    Test calculation of the normal form of a polytope
+    """
+    cube_1 = Polytope.cube(3) * 2 - Point([1, 1, 1])
+
+    unimodular_map = Matrix(
+        [
+            [4, -1, 0],
+            [-7, 2, 0],
+            [-2, -1, 1],
+        ]
+    )
+
+    cube_2 = Polytope(Matrix(cube_1.vertices) * unimodular_map)
+
+    assert cube_1.normal_form == cube_2.normal_form
+
+
+def test_affine_normal_form():
+    """
+    Test calculation of the affine normal form of a polytope
+    """
+    cube_1 = Polytope.cube(3) * 3
+
+    unimodular_map = Matrix(
+        [
+            [4, -1, 0],
+            [-7, 2, 0],
+            [-2, -1, 1],
+        ]
+    )
+
+    cube_2 = Polytope(Matrix(cube_1.vertices) * unimodular_map) - Point([5, -1, 3])
+
+    assert cube_1.affine_normal_form == cube_2.affine_normal_form
+
+
+def test_affine_normal_form_idempotent():
+    """
+    Test that the affine normal form is idempotent
+    """
+    polytope = Polytope.random_lattice_polytope(dim=4, n_vertices=10, min=-2, max=2)
+    polytope_anf = Polytope(vertices=polytope.affine_normal_form)
+    assert polytope.affine_normal_form == polytope_anf.affine_normal_form
 
 
 def test_unimodular_simplex():

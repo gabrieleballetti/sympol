@@ -48,7 +48,7 @@ def get_normal_form(polytope, affine=False):
             v["point"] for v in temp_graph.vs if v["type"] == VertexType.VERTEX
         ]
         if affine:
-            for v in polytope.vertices:
+            for v in permuted_verts:
                 candidate_normal_form = hermite_normal_form(
                     Matrix(PointList(permuted_verts) - v)
                 )
@@ -56,14 +56,12 @@ def get_normal_form(polytope, affine=False):
                 if normal_form is None or compare_tuple < min_compare_tuple:
                     normal_form = candidate_normal_form
                     min_compare_tuple = compare_tuple
-            candidate_normal_form = normal_form
-            compare_tuple = min_compare_tuple
         else:
             candidate_normal_form = hermite_normal_form(Matrix(permuted_verts))
             compare_tuple = tuple(candidate_normal_form.flat())
-        if normal_form is None or compare_tuple < min_compare_tuple:
-            normal_form = candidate_normal_form
-            min_compare_tuple = compare_tuple
+            if normal_form is None or compare_tuple < min_compare_tuple:
+                normal_form = candidate_normal_form
+                min_compare_tuple = compare_tuple
 
     return PointList(normal_form)
 
@@ -80,28 +78,26 @@ def _get_vertex_facet_pairing_graph(polytope):
     vfpm = polytope.vertex_facet_pairing_matrix
 
     graph = Graph()
-    n_facets = vfpm.shape[0]
-    n_verts = vfpm.shape[1]
     graph.add_vertices(
-        n_facets,
+        polytope.n_facets,
         attributes={
-            "type": [VertexType.FACET for _ in range(n_facets)],
-            "color": [-max(vfpm.row(i).flat()) for i in range(n_facets)],
+            "type": [VertexType.FACET for _ in range(polytope.n_facets)],
+            "color": [-max(vfpm.row(i).flat()) for i in range(polytope.n_facets)],
         },
     )
     graph.add_vertices(
-        n_verts,
+        polytope.n_vertices,
         attributes={
-            "type": [VertexType.VERTEX for _ in range(n_verts)],
-            "color": [max(vfpm.col(j).flat()) for j in range(n_verts)],
+            "type": [VertexType.VERTEX for _ in range(polytope.n_vertices)],
+            "color": [max(vfpm.col(j).flat()) for j in range(polytope.n_vertices)],
             "point": [v for v in polytope.vertices],
         },
     )
 
-    for i in range(n_facets):
-        for j in range(n_verts):
+    for i in range(polytope.n_facets):
+        for j in range(polytope.n_vertices):
             if vfpm[i, j] > 0:
-                graph.add_edge(i, j + n_facets)
+                graph.add_edge(i, j + polytope.n_facets)
 
     return graph
 
