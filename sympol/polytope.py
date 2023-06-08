@@ -112,14 +112,21 @@ class Polytope:
     @property
     def vertices(self):
         """
-        Get the vertices of the polytope
+        Return the vertices of the polytope or calculate them if they are not
+        already calculated
         """
         if self._vertices is None:
-            self._vertices = PointList(
-                [self.points[i] for i in self.scipy_conv_hull.vertices.tolist()]
-            )
+            self._get_vertices()
 
         return self._vertices
+
+    def _get_vertices(self):
+        """
+        Calculate the vertices of the polytope
+        """
+        self._vertices = PointList(
+            [self.points[i] for i in self.scipy_conv_hull.vertices.tolist()]
+        )
 
     @property
     def boundary_triangulation(self):
@@ -392,6 +399,25 @@ class Polytope:
             "A polytope can only be multiplied with a scalar (dilation)"
             " or another polytope (cartesian product)"
         )
+
+    def contains(self, other):
+        """
+        Check if the polytope contains a point or another polytope
+        """
+        if isinstance(other, Point):
+            for lineq in self.linear_inequalities:
+                if lineq.evaluate(other) < 0:
+                    return False
+            return True
+
+        if isinstance(other, Polytope):
+            pts = other._vertices if other._vertices is not None else other.points
+            for p in pts:
+                if not self.contains(p):
+                    return False
+            return True
+
+        raise TypeError("contains() only accepts a Point or a Polytope as argument")
 
     # Polytope constructors
 

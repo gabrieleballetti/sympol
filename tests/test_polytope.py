@@ -1,5 +1,5 @@
 from unittest.mock import MagicMock
-from sympy import Matrix, Rational
+from sympy import Matrix, Pow, Rational
 
 from sympol.point import Point
 from sympol.point_list import PointList
@@ -220,6 +220,36 @@ def test_translation_and_dilation():
             [1, 1, 1],
         ]
     )
+
+
+def test_contains_point():
+    """
+    Test that the contains method works correctly for a point
+    """
+    polytope = Polytope.cube(3) * 2 - Point([1, 1, 1])
+
+    assert polytope.contains(Point([0, 0, 0]))
+    assert polytope.contains(Point([0, 0, 1]))
+    assert polytope.contains(Point([0, 1, 1]))
+    assert polytope.contains(Point([1, 1, 1]))
+    assert not polytope.contains(Point([0, 0, 2]))
+
+
+def test_contains_polytope():
+    """
+    Test that the contains method works correctly for a polytope
+    """
+    polytope = Polytope.cube(3) * 2 - Point([1, 1, 1])
+
+    assert polytope.contains(polytope)
+    assert polytope.contains(Polytope.cube(3))
+
+    # check that vertices are not used if not available
+    pts = PointList([[Pow(a, 1), Pow(a, 2), Pow(a, 3)] for a in range(100)])
+    polytope_2 = Polytope(pts)
+    polytope_2._get_vertices = MagicMock()
+    assert not polytope.contains(polytope_2)
+    polytope_2._get_vertices.assert_not_called()
 
 
 def test_linear_inequalities():
