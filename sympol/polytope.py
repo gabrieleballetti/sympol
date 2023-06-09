@@ -1,12 +1,13 @@
 import numpy as np
-from scipy.spatial import ConvexHull
-from sympy import Abs, factorial, lcm, Number, Matrix, Rational
+import cdd
+from sympy import Abs, factorial, gcd, lcm, Number, Matrix, Rational
 from sympy.matrices import zeros
 
 from sympol.isomorphism import get_normal_form
 from sympol.point import Point
 from sympol.point_list import PointList
 from sympol.lineq import LinIneq
+from sympol.utils import _cdd_fraction_to_simpy_rational
 
 
 class Polytope:
@@ -45,7 +46,9 @@ class Polytope:
         self._ambient_dim = self._points[0].ambient_dimension
 
         self._dim = dim
-        self._scipy_conv_hull = None
+
+        self._cdd_polyheodron = None
+
         self._vertices = vertices
         self._boundary_triangulation = None
         self._volume = None
@@ -95,19 +98,19 @@ class Polytope:
         return self._dim
 
     @property
-    def scipy_conv_hull(self):
+    def cdd_polyhedron(self):
         """
-        Get the scipy convex hull of the polytope
+        Get the cdd polyhedron of the polytope
         """
-        if self._scipy_conv_hull is None:
-            # TODO: add support for non-full dimensional polytopes
-            if not self.is_full_dim():
-                raise NotImplementedError(
-                    "Non-full dimensional polytopes are not supported yet"
-                )
-            self._scipy_conv_hull = ConvexHull(self.points)
+        if self._cdd_polyheodron is None:
+            if self._vertices is not None or self._points is not None:
+                self._get_cdd_polyhedron_from_points()
+            elif self._linear_inequalities is not None:
+                self._get_cdd_polyhedron_from_inequalities()
+            else:
+                raise ValueError("No points or inequalities given")
 
-        return self._scipy_conv_hull
+        return self._cdd_polyheodron
 
     @property
     def vertices(self):
@@ -124,23 +127,24 @@ class Polytope:
         """
         Calculate the vertices of the polytope
         """
-        self._vertices = PointList(
-            [self.points[i] for i in self.scipy_conv_hull.vertices.tolist()]
-        )
+        mat_gens = self.cdd_polyhedron.get_generators()
+        mat_gens.canonicalize()  # remove redundant points
+        self._vertices = PointList([p[1:] for p in mat_gens])
 
     @property
     def boundary_triangulation(self):
         """
         Get the boundary triangulation of the polytope
         """
-        if self._boundary_triangulation is None:
-            self._boundary_triangulation = []
-            for simplex_ids in self.scipy_conv_hull.simplices.tolist():
-                simplex_vs = PointList([self.points[i] for i in simplex_ids])
-                if simplex_vs.affine_rank == self.dim - 1:
-                    self._boundary_triangulation.append(simplex_ids)
+        # TODO
+        # if self._boundary_triangulation is None:
+        #     self._boundary_triangulation = []
+        #     for simplex_ids in self.scipy_conv_hull.simplices.tolist():
+        #         simplex_vs = PointList([self.points[i] for i in simplex_ids])
+        #         if simplex_vs.affine_rank == self.dim - 1:
+        #             self._boundary_triangulation.append(simplex_ids)
 
-        return self._boundary_triangulation
+        # return self._boundary_triangulation
 
     @property
     def barycenter(self):
@@ -173,7 +177,7 @@ class Polytope:
         Get the defining inequalities of the polytope
         """
         if self._linear_inequalities is None:
-            self._calculate_facets_and_lin_eqs()
+            self._get_linear_inequalities()
 
         return self._linear_inequalities
 
@@ -183,7 +187,7 @@ class Polytope:
         Get the facets of the polytope
         """
         if self._facets is None:
-            self._calculate_facets_and_lin_eqs()
+            self._get_facets()
 
         return self._facets
 
@@ -203,7 +207,7 @@ class Polytope:
         Get the number of facets of the polytope
         """
         if self._n_facets is None:
-            self._n_facets = len(self.facets)
+            self._n_facets = len(self.linear_inequalities)
 
         return self._n_facets
 
@@ -213,7 +217,7 @@ class Polytope:
         Get the vertex facet matrix of the polytope
         """
         if self._vertex_facet_matrix is None:
-            self._vertex_facet_matrix = zeros(len(self.facets), self.vertices.shape[0])
+            self._vertex_facet_matrix = zeros(self.n_facets, self.n_vertices)
 
             for i, facet in enumerate(self.facets):
                 for vertex_id in facet:
@@ -227,60 +231,65 @@ class Polytope:
         Get the vertex facet matrix of the polytope
         """
         if self._vertex_facet_pairing_matrix is None:
-            self._vertex_facet_pairing_matrix = zeros(
-                len(self.facets), self.vertices.shape[0]
-            )
-
+            self._vertex_facet_pairing_matrix = zeros(self.n_facets, self.n_vertices)
             for i, lineq in enumerate(self.linear_inequalities):
                 for j, vertex in enumerate(self.vertices):
                     self._vertex_facet_pairing_matrix[i, j] = lineq.evaluate(vertex)
 
         return self._vertex_facet_pairing_matrix
 
-    def _calculate_facets_and_lin_eqs(self):
+    # property setters
+
+    def _get_cdd_polyhedron_from_points(self):
         """
-        Calculate the facets and the linear_inequalities of the polytope by merging
-        scipy_conv_hull.simplices into facets.
-        This sets _facets and _linear_inequalities.
+        Get the cdd polyhedron from the v-representation of the polytope
         """
+        points_to_use = self._vertices if self._vertices is not None else self.points
+        formatted_points = [[1] + [c for c in p] for p in points_to_use]
+        mat = cdd.Matrix(formatted_points, number_type="fraction")
+        mat.rep_type = cdd.RepType.GENERATOR
+        self._cdd_polyheodron = cdd.Polyhedron(mat)
+
+    def _get_cdd_polyhedron_from_inequalities(self):
+        """
+        Get the cdd polyhedron from the h-representation of the polytope
+        """
+        # TODO
+        pass
+
+    def _get_linear_inequalities(self):
+        """
+        Get the linear inequalities of the polytope from cdd_polyhedron
+        """
+        mat_ineq = self.cdd_polyhedron.get_inequalities()
+        # TODO: (this might be worth not doing for certain applications)
+        mat_ineq.canonicalize()  # remove redundant inequalities
+
         self._linear_inequalities = []
-        facets_dict = dict()
 
-        for simplex_ids in self.boundary_triangulation:
-            normal = self._inner_normal_to_facet(simplex_ids)
-            # make sure the normal has integer coefficients
-            normal = normal * lcm([frac.q for frac in normal])
-            if normal in [lineq._normal for lineq in self._linear_inequalities]:
-                facets_dict[normal].update(simplex_ids)
-                continue
-            lineq = LinIneq(normal, normal.dot(self.points[simplex_ids[0]]))
-            self._linear_inequalities.append(lineq)
-            facets_dict[normal] = set(simplex_ids)
+        for ineq in mat_ineq:
+            # convert cdd rational to sympy rational
+            ineq = [_cdd_fraction_to_simpy_rational(coeff) for coeff in ineq]
 
-        self._facets = [list(ids) for ids in facets_dict.values()]
+            # make the normal integer and primitive
+            lcm_ineq = lcm([rat_coeff.q for rat_coeff in ineq[1:]])
+            ineq = [rat_coeff * lcm_ineq for rat_coeff in ineq]
 
-    def _inner_normal_to_facet(self, simplex_ids):
+            gcd_ineq = gcd([int_coeff for int_coeff in ineq[1:]])
+            ineq = [int_coeff / gcd_ineq for int_coeff in ineq]
+            self._linear_inequalities.append(LinIneq(Point(ineq[1:]), -ineq[0]))
+
+    def _get_facets(self):
         """
-        Calculate the inner normal to a codimension 1 boundary simplex
+        Get the facets of the polytope by testing the vertices on the linear
+        inequalities (uses vertex_facet_pairing_matrix)
+        NOTE: this might be sped up by using the adjacency information from
+        the cdd polyhedron
         """
-        translated_simplex = (
-            PointList([self.points[i] for i in simplex_ids[1:]])
-            - self.points[simplex_ids[0]]
-        )
-        if translated_simplex.hom_rank != self.ambient_dim - 1:
-            # TODO: this is here to fix a bug, should be removed
-            raise ValueError(
-                "The simplex {} is not a boundary simplex".format(simplex_ids)
-            )
-        matrix = Matrix(translated_simplex)
-        normal = matrix.nullspace()[0].transpose()  # guaranteed to exist and be 1-dim
-        normal = Point(normal.tolist()[0])  # convert to Point
-
-        # make sure it points inwards
-        if normal.dot(self.barycenter - self.points[simplex_ids[0]]) < 0:
-            normal = -normal
-
-        return normal
+        mat = self.vertex_facet_pairing_matrix
+        self._facets = [
+            [j for j in range(mat.cols) if mat.row(i)[j] == 0] for i in range(mat.rows)
+        ]
 
     def _calculate_volume(self):
         """
