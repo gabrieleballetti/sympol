@@ -7,6 +7,7 @@ from sympol.isomorphism import get_normal_form
 from sympol.point import Point
 from sympol.point_list import PointList
 from sympol.lineq import LinIneq
+from sympol.triangulation import get_placing_triangulation
 from sympol.utils import _cdd_fraction_to_simpy_rational
 
 
@@ -47,10 +48,11 @@ class Polytope:
 
         self._dim = dim
 
-        self._cdd_polyheodron = None
+        self._cdd_polyhedron = None
 
         self._vertices = vertices
-        self._boundary_triangulation = None
+
+        self._triangulation = None
         self._volume = None
         self._normalized_volume = None
 
@@ -58,8 +60,14 @@ class Polytope:
         self._facets = None
         self._n_vertices = None
         self._n_facets = None
+        self._n_edges = None
+
+        self._cdd_vertex_adjacency = None
+        self._cdd_vertex_facet_incidence = None
+        self._vertex_adjacency_matrix = None
         self._vertex_facet_matrix = None
         self._vertex_facet_pairing_matrix = None
+
         self._normal_form = None
         self._affine_normal_form = None
 
@@ -102,7 +110,7 @@ class Polytope:
         """
         Get the cdd polyhedron of the polytope
         """
-        if self._cdd_polyheodron is None:
+        if self._cdd_polyhedron is None:
             if self._vertices is not None or self._points is not None:
                 self._get_cdd_polyhedron_from_points()
             elif self._linear_inequalities is not None:
@@ -110,7 +118,27 @@ class Polytope:
             else:
                 raise ValueError("No points or inequalities given")
 
-        return self._cdd_polyheodron
+        return self._cdd_polyhedron
+
+    @property
+    def cdd_vertex_facet_incidence(self):
+        """
+        Get the cdd vertex facet incidence output
+        """
+        if self._cdd_vertex_facet_incidence is None:
+            self._cdd_vertex_facet_incidence = self.cdd_polyhedron.get_incidence()
+
+        return self._cdd_vertex_facet_incidence
+
+    @property
+    def cdd_vertex_adjacency(self):
+        """
+        Get the cdd vertex adjacency output
+        """
+        if self._cdd_vertex_adjacency is None:
+            self._cdd_vertex_adjacency = self.cdd_polyhedron.get_input_adjacency()
+
+        return self._cdd_vertex_adjacency
 
     @property
     def vertices(self):
@@ -132,26 +160,21 @@ class Polytope:
         self._vertices = PointList([p[1:] for p in mat_gens])
 
     @property
-    def boundary_triangulation(self):
-        """
-        Get the boundary triangulation of the polytope
-        """
-        # TODO
-        # if self._boundary_triangulation is None:
-        #     self._boundary_triangulation = []
-        #     for simplex_ids in self.scipy_conv_hull.simplices.tolist():
-        #         simplex_vs = PointList([self.points[i] for i in simplex_ids])
-        #         if simplex_vs.affine_rank == self.dim - 1:
-        #             self._boundary_triangulation.append(simplex_ids)
-
-        # return self._boundary_triangulation
-
-    @property
     def barycenter(self):
         """
         Get the barycenter of the polytope
         """
         return self.vertices.barycenter
+
+    @property
+    def triangulation(self):
+        """
+        Get the triangulation of the polytope
+        """
+        if self._triangulation is None:
+            self._triangulation = get_placing_triangulation(self.vertices)
+
+        return self._triangulation
 
     @property
     def volume(self):
@@ -187,7 +210,7 @@ class Polytope:
         Get the facets of the polytope
         """
         if self._facets is None:
-            self._get_facets()
+            self._facets = self.cdd_vertex_facet_incidence
 
         return self._facets
 
@@ -212,23 +235,51 @@ class Polytope:
         return self._n_facets
 
     @property
+    def n_edges(self):
+        """
+        Get the number of edges of the polytope
+        """
+        if self._n_edges is None:
+            self._n_edges = len(self.edges)
+
+        return self._n_edges
+
+    @property
+    def vertex_adjacency_matrix(self):
+        """
+        Get the vertex adjacency matrix of the polytope:
+            a_ij = 1 if vertex i adjacent to vertex j,
+            a_ij = 0 otherwise
+        """
+        if self._vertex_adjacency_matrix is None:
+            self._vertex_adjacency_matrix = zeros(self.n_vertices, self.n_vertices)
+            for i, ads in enumerate(self.cdd_vertex_adjacency):
+                for j in ads:
+                    self._vertex_adjacency_matrix[i, j] = 1
+
+        return self._vertex_adjacency_matrix
+
+    @property
     def vertex_facet_matrix(self):
         """
-        Get the vertex facet matrix of the polytope
+        Get the vertex facet incidence matrix of the polytope:
+            m_ij = 1 if vertex j is in facet i,
+            m_ij = 0 otherwise
         """
         if self._vertex_facet_matrix is None:
             self._vertex_facet_matrix = zeros(self.n_facets, self.n_vertices)
 
             for i, facet in enumerate(self.facets):
-                for vertex_id in facet:
-                    self._vertex_facet_matrix[i, vertex_id] = 1
+                for j in facet:
+                    self._vertex_facet_matrix[i, j] = 1
 
         return self._vertex_facet_matrix
 
     @property
     def vertex_facet_pairing_matrix(self):
         """
-        Get the vertex facet matrix of the polytope
+        Get the vertex facet pairing matrix of the polytope:
+            m_ij = <F_j, v_i> (distance of vertex j to facet i)
         """
         if self._vertex_facet_pairing_matrix is None:
             self._vertex_facet_pairing_matrix = zeros(self.n_facets, self.n_vertices)
@@ -248,7 +299,7 @@ class Polytope:
         formatted_points = [[1] + [c for c in p] for p in points_to_use]
         mat = cdd.Matrix(formatted_points, number_type="fraction")
         mat.rep_type = cdd.RepType.GENERATOR
-        self._cdd_polyheodron = cdd.Polyhedron(mat)
+        self._cdd_polyhedron = cdd.Polyhedron(mat)
 
     def _get_cdd_polyhedron_from_inequalities(self):
         """
@@ -279,46 +330,38 @@ class Polytope:
             ineq = [int_coeff / gcd_ineq for int_coeff in ineq]
             self._linear_inequalities.append(LinIneq(Point(ineq[1:]), -ineq[0]))
 
-    def _get_facets(self):
-        """
-        Get the facets of the polytope by testing the vertices on the linear
-        inequalities (uses vertex_facet_pairing_matrix)
-        NOTE: this might be sped up by using the adjacency information from
-        the cdd polyhedron
-        """
-        mat = self.vertex_facet_pairing_matrix
-        self._facets = [
-            [j for j in range(mat.cols) if mat.row(i)[j] == 0] for i in range(mat.rows)
-        ]
+    # def _calculate_volume(self):
+    #     """
+    #     Calculate the volume of the polytope, sets both _volume and _normalized_volume
+    #     """
+    #     volume = Rational(0)
 
-    def _calculate_volume(self):
-        """
-        Calculate the volume of the polytope, sets both _volume and _normalized_volume
-        """
-        volume = Rational(0)
+    #     for simplex_ids in self.boundary_triangulation:
+    #         if 0 in simplex_ids:
+    #             continue
+    #         translated_simplex = [
+    #             self.vertices[id] - self.vertices[0] for id in simplex_ids
+    #         ]
+    #         volume += Abs(Matrix(translated_simplex).det())
 
-        for simplex_ids in self.boundary_triangulation:
-            if 0 in simplex_ids:
-                continue
-            translated_simplex = [
-                self.vertices[id] - self.vertices[0] for id in simplex_ids
-            ]
-            volume += Abs(Matrix(translated_simplex).det())
-
-        self._normalized_volume = volume
-        self._volume = volume / factorial(self.dim)
+    #     self._normalized_volume = volume
+    #     self._volume = volume / factorial(self.dim)
 
     @property
     def edges(self):
         """
         Get the edges of the polytope
-        TODO: implement
         """
 
-        if self._edges is not None:
-            return self._edges
+        if self._edges is None:
+            edges = []
+            for i, ads in enumerate(self.cdd_vertex_adjacency):
+                for j in ads:
+                    if i < j:
+                        edges.append((i, j))
+            self._edges = tuple(edges)
 
-        return None
+        return self._edges
 
     @property
     def normal_form(self):
@@ -408,6 +451,8 @@ class Polytope:
             "A polytope can only be multiplied with a scalar (dilation)"
             " or another polytope (cartesian product)"
         )
+
+    # Polytope relations
 
     def contains(self, other):
         """
