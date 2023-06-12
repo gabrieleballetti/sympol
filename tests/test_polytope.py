@@ -252,9 +252,8 @@ def test_contains_polytope():
     # check that vertices are not used if not available
     pts = PointList([[Pow(a, 1), Pow(a, 2), Pow(a, 3)] for a in range(100)])
     polytope_2 = Polytope(pts)
-    polytope_2._get_vertices = MagicMock()
     assert not polytope.contains(polytope_2)
-    polytope_2._get_vertices.assert_not_called()
+    assert polytope_2._vertices is None
 
 
 def test_linear_inequalities():
@@ -290,24 +289,67 @@ def test_facets():
     Test that the facets of a cube are six and are
     at distance one from the origin
     """
-    polytope = Polytope.cube(3) * 2 - Point([1, 1, 1])
+    p = Polytope.cube(3)
 
-    assert polytope.n_facets == 6
+    assert p.n_facets == 6
 
-    for facet in polytope.facets:
+    for facet in p.facets:
         assert len(facet) == 4
+
+
+def test_ridges():
+    """
+    Test that the ridges of a 3-cube are its edges
+    """
+    p = Polytope.cube(3)
+
+    assert p.n_ridges == 12
+
+    for ridge in p.ridges:
+        assert len(ridge) == 2
+
+    assert frozenset(p.ridges) == frozenset(p.edges)
 
 
 def test_edges():
     """
     Test that the edges of a cube are twelve
     """
-    polytope = Polytope.cube(3) * 2 - Point([1, 1, 1])
+    p = Polytope.cube(3)
 
-    assert polytope.n_edges == 12
+    assert p.n_edges == 12
 
-    for edge in polytope.edges:
+    for edge in p.edges:
         assert len(edge) == 2
+
+
+def test_faces():
+    """
+    Test calculation of the faces of a polytope
+    """
+    p = Polytope.unimodular_simplex(7)
+
+    # test edge cases
+    assert p.faces(-1) == tuple([frozenset()])
+    assert p.faces(0) == tuple([frozenset([i]) for i in range(p.n_vertices)])
+    assert p.faces(7) == (frozenset(range(p.n_vertices)),)
+
+    # test length for other dimensions
+    assert len(p.faces(6)) == 8
+    assert len(p.faces(5)) == 28
+    assert len(p.faces(4)) == 56
+    assert len(p.faces(3)) == 70
+    assert len(p.faces(2)) == 56
+
+
+def test_neighbors():
+    """
+    Test the neighbors method on a vertex of a cube
+    """
+    p = Polytope.cube(3)
+    neighbors = p.neighbors(0)
+    assert len(neighbors) == 3
+    assert neighbors == frozenset([1, 2, 4])
 
 
 def test_vertex_adjacency_matrix():
@@ -331,6 +373,16 @@ def test_vertex_adjacency_matrix():
 
     assert p.vertex_adjacency_matrix.is_symmetric()
     assert p.vertex_adjacency_matrix == expected_matrix
+
+
+def test_f_vector():
+    """
+    Test calculation of the f-vector for an hypercube
+    """
+    p = Polytope.cube(7)
+
+    expected_f_vector = (1, 128, 448, 672, 560, 280, 84, 14, 1)
+    assert p.f_vector == expected_f_vector
 
 
 def test_vertex_facet_matrix():
@@ -385,8 +437,8 @@ def test_vertex_facet_pairing_matrix_is_nonnegative():
     """
     Test that the vertex facet pairing matrix is nonnegative
     """
-    polytope = Polytope.random_lattice_polytope(dim=4, n_vertices=50, min=-5, max=5)
-    assert min(polytope.vertex_facet_pairing_matrix) >= 0
+    p = Polytope.random_lattice_polytope(dim=4, n_vertices=50, min=-5, max=5)
+    assert min(p.vertex_facet_pairing_matrix) >= 0
 
 
 def test_normal_form():

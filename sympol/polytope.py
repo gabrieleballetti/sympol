@@ -48,31 +48,36 @@ class Polytope:
 
         self._dim = dim
 
-        self._cdd_polyhedron = None
+        self._linear_inequalities = None
 
         self._vertices = vertices
+        self._facets = None
+        self._ridges = None
+        self._edges = None
+
+        self._n_vertices = None
+        self._n_edges = None
+        self._n_ridges = None
+        self._n_facets = None
+
+        self._faces = None
+        self._f_vector = None
+
+        self._cdd_polyhedron = None
+        self._cdd_vertex_adjacency = None
+        self._cdd_facet_adjacency = None
+        self._cdd_vertex_facet_incidence = None
+
+        self._vertex_adjacency_matrix = None
+        self._vertex_facet_matrix = None
+        self._vertex_facet_pairing_matrix = None
 
         self._triangulation = None
         self._volume = None
         self._normalized_volume = None
 
-        self._linear_inequalities = None
-        self._facets = None
-        self._n_vertices = None
-        self._n_facets = None
-        self._n_edges = None
-
-        self._cdd_vertex_adjacency = None
-        self._cdd_vertex_facet_incidence = None
-        self._vertex_adjacency_matrix = None
-        self._vertex_facet_matrix = None
-        self._vertex_facet_pairing_matrix = None
-
         self._normal_form = None
         self._affine_normal_form = None
-
-        # TODO: implement
-        self._edges = None
 
     @property
     def points(self):
@@ -141,58 +146,24 @@ class Polytope:
         return self._cdd_vertex_adjacency
 
     @property
+    def cdd_facet_adjacency(self):
+        """
+        Get the cdd facet adjacency output
+        """
+        return self.cdd_polyhedron.get_adjacency()
+
+    @property
     def vertices(self):
         """
         Return the vertices of the polytope or calculate them if they are not
         already calculated
         """
         if self._vertices is None:
-            self._get_vertices()
+            mat_gens = self.cdd_polyhedron.get_generators()
+            mat_gens.canonicalize()  # remove redundant points
+            self._vertices = PointList([p[1:] for p in mat_gens])
 
         return self._vertices
-
-    def _get_vertices(self):
-        """
-        Calculate the vertices of the polytope
-        """
-        mat_gens = self.cdd_polyhedron.get_generators()
-        mat_gens.canonicalize()  # remove redundant points
-        self._vertices = PointList([p[1:] for p in mat_gens])
-
-    @property
-    def barycenter(self):
-        """
-        Get the barycenter of the polytope
-        """
-        return self.vertices.barycenter
-
-    @property
-    def triangulation(self):
-        """
-        Get the triangulation of the polytope
-        """
-        if self._triangulation is None:
-            self._triangulation = get_placing_triangulation(self.vertices)
-
-        return self._triangulation
-
-    @property
-    def volume(self):
-        """
-        Get the normalized volume of the polytope
-        """
-        if self._volume is None:
-            self._calculate_volume()
-        return self._volume
-
-    @property
-    def normalized_volume(self):
-        """
-        Get the normalized volume of the polytope
-        """
-        if self._normalized_volume is None:
-            self.calculate_volume()
-        return self._normalized_volume
 
     @property
     def linear_inequalities(self):
@@ -207,12 +178,92 @@ class Polytope:
     @property
     def facets(self):
         """
-        Get the facets of the polytope
+        Get the facets of the polytope (d-1 dimensional faces)
         """
         if self._facets is None:
             self._facets = self.cdd_vertex_facet_incidence
 
         return self._facets
+
+    @property
+    def ridges(self):
+        """
+        Get the ridges of the polytope (d-2 dimensional faces)
+        """
+        if self._ridges is None:
+            self._ridges = []
+            for i, ads in enumerate(self.cdd_facet_adjacency):
+                for j in ads:
+                    if i < j:
+                        self._ridges.append(self.facets[i].intersection(self.facets[j]))
+            self._ridges = tuple(self._ridges)
+
+        return self._ridges
+
+    @property
+    def edges(self):
+        """
+        Get the edges of the polytope (1 dimensional faces)
+        """
+
+        if self._edges is None:
+            self._edges = []
+            for i, ads in enumerate(self.cdd_vertex_adjacency):
+                for j in ads:
+                    if i < j:
+                        self._edges.append(frozenset((i, j)))
+            # sort the edges and make a tuple
+            self._edges = tuple(self._edges)
+
+        return self._edges
+
+    def faces(self, dim):
+        """
+        Get the faces of the polytope of a given dimension
+        """
+        if dim < -1 or dim > self.dim:
+            raise ValueError(
+                "The dimension of the face should be between -1 and the dimension of"
+                " the polytope"
+            )
+
+        if self._faces is None:
+            self._faces = {i: None for i in range(-1, self.dim + 1)}
+
+        if self._faces[dim] is None:
+            if dim == -1:
+                self._faces[dim] = tuple([frozenset()])
+            elif dim == 0:
+                self._faces[dim] = tuple(
+                    [frozenset([i]) for i in range(self.n_vertices)]
+                )
+            elif dim == 1:
+                self._faces[dim] = self.edges
+            elif dim == self.dim - 2:
+                self._faces[dim] = self.ridges
+            elif dim == self.dim - 1:
+                self._faces[dim] = self.facets
+            elif dim == self.dim:
+                self._faces[dim] = (frozenset(range(self.n_vertices)),)
+            else:
+                new_faces = []
+                for facet in self.facets:
+                    for face in self.faces(dim + 1):
+                        if face.issubset(facet):
+                            continue
+                        f = face.intersection(facet)
+                        add_f = True
+                        for f2 in new_faces:
+                            if f.issubset(f2):
+                                add_f = False
+                                break
+                            if f2.issubset(f):
+                                new_faces.remove(f2)
+                        if add_f:
+                            new_faces.append(f)
+                self._faces[dim] = tuple(new_faces)
+
+        return self._faces[dim]
 
     @property
     def n_vertices(self):
@@ -235,6 +286,16 @@ class Polytope:
         return self._n_facets
 
     @property
+    def n_ridges(self):
+        """
+        Get the number of ridges of the polytope
+        """
+        if self._n_ridges is None:
+            self._n_ridges = len(self.ridges)
+
+        return self._n_ridges
+
+    @property
     def n_edges(self):
         """
         Get the number of edges of the polytope
@@ -243,6 +304,18 @@ class Polytope:
             self._n_edges = len(self.edges)
 
         return self._n_edges
+
+    @property
+    def f_vector(self):
+        """
+        Get the f-vector of the polytope
+        """
+        if self._f_vector is None:
+            self._f_vector = tuple(
+                [len(self.faces(dim)) for dim in range(-1, self.dim + 1)]
+            )
+
+        return self._f_vector
 
     @property
     def vertex_adjacency_matrix(self):
@@ -288,6 +361,61 @@ class Polytope:
                     self._vertex_facet_pairing_matrix[i, j] = lineq.evaluate(vertex)
 
         return self._vertex_facet_pairing_matrix
+
+    @property
+    def barycenter(self):
+        """
+        Get the barycenter of the polytope
+        """
+        return self.vertices.barycenter
+
+    @property
+    def triangulation(self):
+        """
+        Get the triangulation of the polytope
+        """
+        if self._triangulation is None:
+            self._triangulation = get_placing_triangulation(self.vertices)
+
+        return self._triangulation
+
+    @property
+    def volume(self):
+        """
+        Get the normalized volume of the polytope
+        """
+        if self._volume is None:
+            self._calculate_volume()
+        return self._volume
+
+    @property
+    def normalized_volume(self):
+        """
+        Get the normalized volume of the polytope
+        """
+        if self._normalized_volume is None:
+            self.calculate_volume()
+        return self._normalized_volume
+
+    @property
+    def normal_form(self):
+        """
+        Return a polytope in normal form
+        """
+        if self._normal_form is None:
+            self._normal_form = get_normal_form(polytope=self)
+
+        return self._normal_form
+
+    @property
+    def affine_normal_form(self):
+        """
+        Return a polytope in affine normal form
+        """
+        if self._affine_normal_form is None:
+            self._affine_normal_form = get_normal_form(polytope=self, affine=True)
+
+        return self._affine_normal_form
 
     # property setters
 
@@ -347,43 +475,8 @@ class Polytope:
     #     self._normalized_volume = volume
     #     self._volume = volume / factorial(self.dim)
 
-    @property
-    def edges(self):
-        """
-        Get the edges of the polytope
-        """
-
-        if self._edges is None:
-            edges = []
-            for i, ads in enumerate(self.cdd_vertex_adjacency):
-                for j in ads:
-                    if i < j:
-                        edges.append((i, j))
-            self._edges = tuple(edges)
-
-        return self._edges
-
-    @property
-    def normal_form(self):
-        """
-        Return a polytope in normal form
-        """
-        if self._normal_form is None:
-            self._normal_form = get_normal_form(polytope=self)
-
-        return self._normal_form
-
-    @property
-    def affine_normal_form(self):
-        """
-        Return a polytope in affine normal form
-        """
-        if self._affine_normal_form is None:
-            self._affine_normal_form = get_normal_form(polytope=self, affine=True)
-
-        return self._affine_normal_form
-
     # Helper functions
+
     def is_full_dim(self):
         """
         Check if the polytope is full dimensional
@@ -395,6 +488,12 @@ class Polytope:
         Check if the polytope is a lattice polytope
         """
         return all([all([i.is_integer for i in v]) for v in self.vertices])
+
+    def neighbors(self, vertex_id):
+        """
+        Get the neighbors of a vertex
+        """
+        return self.cdd_vertex_adjacency[vertex_id]
 
     # Polytope operations
 
