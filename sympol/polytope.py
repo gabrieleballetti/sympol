@@ -7,7 +7,6 @@ from sympol.isomorphism import get_normal_form
 from sympol.point import Point
 from sympol.point_list import PointList
 from sympol.lineq import LinIneq
-from sympol.triangulation import get_placing_triangulation
 from sympol.utils import _cdd_fraction_to_simpy_rational
 
 
@@ -217,9 +216,26 @@ class Polytope:
 
         return self._edges
 
+    @property
+    def all_faces(self):
+        """
+        Get all the faces of the polytope. If only the faces of a certain dimension
+        are needed, use the faces(dim) method instead to avoid unnecessary computations.
+        """
+        if self._faces is None:
+            for d in range(-1, self.dim + 1):
+                # trigger the calculation of the faces
+                self.faces(d)
+
+        return self._faces
+
     def faces(self, dim):
         """
-        Get the faces of the polytope of a given dimension
+        Get the faces of the polytope of a given dimension. Faces of dimension and
+        codimension lower ore equal to two are found from the cdd polyhedron. Other
+        faces are found from higher dimensional faces, via intersection with facets.
+        TODO: This could be done more efficiently especially as low dimensional faces
+        need all the higher dimensional faces to be calculated first.
         """
         if dim < -1 or dim > self.dim:
             raise ValueError(
@@ -375,7 +391,7 @@ class Polytope:
         Get the triangulation of the polytope
         """
         if self._triangulation is None:
-            self._triangulation = get_placing_triangulation(self.vertices)
+            self._triangulation = []
 
         return self._triangulation
 

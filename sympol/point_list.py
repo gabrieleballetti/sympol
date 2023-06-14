@@ -1,4 +1,5 @@
-from sympy import Array, Matrix, NDimArray
+from sympy import Abs, Array, Matrix, NDimArray, ZZ
+from sympy.polys.matrices import DomainMatrix
 from sympol.point import Point
 
 
@@ -22,6 +23,8 @@ class PointList(Array):
         self._hom_rank = None
         self._affine_rank = None
         self._barycenter = None
+        self._basis = None
+        self._index = None
 
     def __getitem__(self, index):
         """
@@ -59,6 +62,7 @@ class PointList(Array):
         """
         return [p.tolist() for p in self]
 
+    @property
     def ambient_dimension(self):
         """
         Get the ambient dimension of the point list
@@ -104,3 +108,37 @@ class PointList(Array):
             )
 
         return self._barycenter
+
+    @property
+    def basis(self):
+        """
+        Get the basis of the sublattice spanned by the point list. Use the LLL
+        algorithm to compute the basis (which is probably an overkill). Assume
+        that the point list is full rank.
+        """
+        if self._basis is None:
+            if self.affine_rank < self.ambient_dimension:
+                raise ValueError("Point list is not full rank")
+            m = Matrix(self - self[0])
+            m = DomainMatrix.from_Matrix(m, ZZ)
+            basis, _ = m.transpose().lll_transform()
+            basis = basis.transpose().to_list()
+
+            # the last d rows of the LLL basis are the basis of the sublattice
+            basis = basis[-self.ambient_dimension :]
+            self._basis = PointList(basis)
+
+        return self._basis
+
+    @property
+    def index(self):
+        """
+        Get the index of the sublattice spanned by the point list in the integer
+        lattice.
+        """
+        if self._index is None:
+            if self.affine_rank < self.ambient_dimension:
+                raise ValueError("Point list is not full rank")
+            self._index = Abs(Matrix(self.basis).det())
+
+        return self._index
