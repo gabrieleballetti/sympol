@@ -1,9 +1,12 @@
-from sympy import Abs, Array, Matrix, NDimArray, ZZ
-from sympy.polys.matrices import DomainMatrix
+import sympy
+
+# from sympy import Abs, Array, Matrix, NDimArray, prod, ZZ
+# from sympy.polys.matrices import DomainMatrix
+# from sympy.polys.matrices.normalforms import smith_normal_form as _smith_normal_form
 from sympol.point import Point
 
 
-class PointList(Array):
+class PointList(sympy.Array):
     """
     Point list class based on sympy Array
     """
@@ -23,20 +26,25 @@ class PointList(Array):
         self._hom_rank = None
         self._affine_rank = None
         self._barycenter = None
-        self._basis = None
+        self._smith_normal_form = None
         self._index = None
 
     def __getitem__(self, index):
         """
         Overload the getitem method to return a Point
         """
-        return Point(super().__getitem__(index))
+        if isinstance(index, int):
+            return Point(super().__getitem__(index))
+        elif isinstance(index, slice):
+            return PointList(super().__getitem__(index))
+        else:
+            return super().__getitem__(index)
 
     def __add__(self, other):
         """
         Overload the + operator to add allow translation by a vector
         """
-        if isinstance(other, NDimArray) and self.shape[1] == other.shape[0]:
+        if isinstance(other, sympy.NDimArray) and self.shape[1] == other.shape[0]:
             return PointList([p + other for p in self])
         return super().__add__(other)
 
@@ -44,7 +52,7 @@ class PointList(Array):
         """
         Overload the - operator to add allow translation by a vector
         """
-        if isinstance(other, NDimArray) and self.shape[1] == other.shape[0]:
+        if isinstance(other, sympy.NDimArray) and self.shape[1] == other.shape[0]:
             return PointList([p - other for p in self])
         return super().__sub__(other)
 
@@ -82,7 +90,7 @@ class PointList(Array):
         conflict with the rank method of the Array class)
         """
         if self._hom_rank is None:
-            self._hom_rank = Matrix(self).rank()
+            self._hom_rank = sympy.Matrix(self).rank()
 
         return self._hom_rank
 
@@ -93,7 +101,7 @@ class PointList(Array):
         """
         if self._affine_rank is None:
             translated_points = [p - self[0] for p in self]
-            self._affine_rank = Matrix(translated_points).rank()
+            self._affine_rank = sympy.Matrix(translated_points).rank()
 
         return self._affine_rank
 
@@ -110,25 +118,17 @@ class PointList(Array):
         return self._barycenter
 
     @property
-    def basis(self):
+    def smith_normal_form(self):
         """
-        Get the basis of the sublattice spanned by the point list. Use the LLL
-        algorithm to compute the basis (which is probably an overkill). Assume
-        that the point list is full rank.
+        Get the (diagonal entries of the) affine Smith Normal Form of the point list.
         """
-        if self._basis is None:
-            if self.affine_rank < self.ambient_dimension:
-                raise ValueError("Point list is not full rank")
-            m = Matrix(self - self[0])
-            m = DomainMatrix.from_Matrix(m, ZZ)
-            basis, _ = m.transpose().lll_transform()
-            basis = basis.transpose().to_list()
+        if self._smith_normal_form is None:
+            m = sympy.Matrix(self[1:] - self[0])
+            m = sympy.polys.matrices.DomainMatrix.from_Matrix(m, sympy.ZZ)
+            snf = sympy.polys.matrices.normalforms.smith_normal_form(m).to_Matrix()
+            self._smith_normal_form = snf.diagonal().flat()
 
-            # the last d rows of the LLL basis are the basis of the sublattice
-            basis = basis[-self.ambient_dimension :]
-            self._basis = PointList(basis)
-
-        return self._basis
+        return self._smith_normal_form
 
     @property
     def index(self):
@@ -139,6 +139,6 @@ class PointList(Array):
         if self._index is None:
             if self.affine_rank < self.ambient_dimension:
                 raise ValueError("Point list is not full rank")
-            self._index = Abs(Matrix(self.basis).det())
+            self._index = sympy.Abs(sympy.prod(self.smith_normal_form))
 
         return self._index

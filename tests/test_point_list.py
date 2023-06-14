@@ -39,20 +39,21 @@ def test_barycenter():
     )
 
 
-def test_basis():
+def test_smith_normal_form():
     """
-    Test calculation of the basis of a point list with affine
-    rank smaller than the ambient space.
+    Test calculation of the affine Smith normal form of a point list with rank
+    strictly less than the ambient dimension
     """
     points = [
         [0, 0, 0, 0],
         [1, 0, 0, 0],
         [0, 1, 0, 0],
         [1, 1, 3, 0],
+        [0, 0, -2, 0],
     ]
     point_list = PointList(points)
-    b = point_list.basis
-    pass
+
+    assert point_list.smith_normal_form == [1, 1, 1, 0]
 
 
 def test_index():
