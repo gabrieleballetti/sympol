@@ -1,12 +1,10 @@
-import sympy
+from sympy import Abs, Array, Matrix, NDimArray, prod, ZZ
+from sympy.matrices.normalforms import smith_normal_form
 
-# from sympy import Abs, Array, Matrix, NDimArray, prod, ZZ
-# from sympy.polys.matrices import DomainMatrix
-# from sympy.polys.matrices.normalforms import smith_normal_form as _smith_normal_form
 from sympol.point import Point
 
 
-class PointList(sympy.Array):
+class PointList(Array):
     """
     Point list class based on sympy Array
     """
@@ -26,7 +24,7 @@ class PointList(sympy.Array):
         self._hom_rank = None
         self._affine_rank = None
         self._barycenter = None
-        self._smith_normal_form = None
+        self._snf_diag = None
         self._index = None
 
     def __getitem__(self, index):
@@ -44,7 +42,7 @@ class PointList(sympy.Array):
         """
         Overload the + operator to add allow translation by a vector
         """
-        if isinstance(other, sympy.NDimArray) and self.shape[1] == other.shape[0]:
+        if isinstance(other, NDimArray) and self.shape[1] == other.shape[0]:
             return PointList([p + other for p in self])
         return super().__add__(other)
 
@@ -52,7 +50,7 @@ class PointList(sympy.Array):
         """
         Overload the - operator to add allow translation by a vector
         """
-        if isinstance(other, sympy.NDimArray) and self.shape[1] == other.shape[0]:
+        if isinstance(other, NDimArray) and self.shape[1] == other.shape[0]:
             return PointList([p - other for p in self])
         return super().__sub__(other)
 
@@ -90,7 +88,7 @@ class PointList(sympy.Array):
         conflict with the rank method of the Array class)
         """
         if self._hom_rank is None:
-            self._hom_rank = sympy.Matrix(self).rank()
+            self._hom_rank = Matrix(self).rank()
 
         return self._hom_rank
 
@@ -101,7 +99,7 @@ class PointList(sympy.Array):
         """
         if self._affine_rank is None:
             translated_points = [p - self[0] for p in self]
-            self._affine_rank = sympy.Matrix(translated_points).rank()
+            self._affine_rank = Matrix(translated_points).rank()
 
         return self._affine_rank
 
@@ -118,17 +116,15 @@ class PointList(sympy.Array):
         return self._barycenter
 
     @property
-    def smith_normal_form(self):
+    def snf_diag(self):
         """
         Get the (diagonal entries of the) affine Smith Normal Form of the point list.
         """
-        if self._smith_normal_form is None:
-            m = sympy.Matrix(self[1:] - self[0])
-            m = sympy.polys.matrices.DomainMatrix.from_Matrix(m, sympy.ZZ)
-            snf = sympy.polys.matrices.normalforms.smith_normal_form(m).to_Matrix()
-            self._smith_normal_form = snf.diagonal().flat()
+        if self._snf_diag is None:
+            m = Matrix(self[1:] - self[0])
+            self._snf_diag = smith_normal_form(m, domain=ZZ).diagonal().flat()
 
-        return self._smith_normal_form
+        return self._snf_diag
 
     @property
     def index(self):
@@ -139,6 +135,6 @@ class PointList(sympy.Array):
         if self._index is None:
             if self.affine_rank < self.ambient_dimension:
                 raise ValueError("Point list is not full rank")
-            self._index = sympy.Abs(sympy.prod(self.smith_normal_form))
+            self._index = Abs(prod(self.snf_diag))
 
         return self._index

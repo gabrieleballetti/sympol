@@ -53,7 +53,7 @@ def test_smith_normal_form():
     ]
     point_list = PointList(points)
 
-    assert point_list.smith_normal_form == [1, 1, 1, 0]
+    assert point_list.snf_diag == [1, 1, 1, 0]
 
 
 def test_index():
