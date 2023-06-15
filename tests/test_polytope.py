@@ -240,6 +240,23 @@ def test_contains_point():
     assert not polytope.contains(Point([0, 0, 2]))
 
 
+def test_lower_dim_polytope_contains_point():
+    """
+    Test that points are correctly contained (or not) in lower dimensional polytopes
+    """
+    p = Polytope(
+        [
+            [0, 0, 0],
+            [1, 0, 0],
+            [0, 1, 0],
+            [1, 1, 0],
+        ]
+    )
+
+    assert p.contains(Point([0, 0, 0]))
+    assert not p.contains(Point([0, 0, 1]))
+
+
 def test_contains_polytope():
     """
     Test that the contains method works correctly for a polytope
@@ -254,6 +271,23 @@ def test_contains_polytope():
     polytope_2 = Polytope(pts)
     assert not polytope.contains(polytope_2)
     assert polytope_2._vertices is None
+
+
+def test_lower_dim_polytope_contains_polytope():
+    """
+    Test that points are correctly contained (or not) in lower dimensional polytopes
+    """
+    verts = [
+        [0, 0, 0],
+        [1, 0, 0],
+        [0, 1, 0],
+        [1, 1, 0],
+    ]
+    p = Polytope(vertices=verts)
+
+    assert (p * 2).contains(p)
+    assert (p * 2).contains(p * 2)
+    assert not (p * 2).contains(p * 3)
 
 
 def test_linear_inequalities():
@@ -556,3 +590,19 @@ def test_get_cdd_polyhedron_from_points():
     polytope = Polytope(points)
     polytope._get_cdd_polyhedron_from_points()
     assert polytope._cdd_polyhedron is not None
+
+
+def test_lower_dimensional_polytope():
+    """
+    Test that the lower dimensional polytope is correctly constructed
+    """
+    verts = PointList(
+        [
+            [0, 0, 0],
+            [1, 1, 0],
+        ]
+    )
+
+    p = Polytope(verts)
+    eqs = [lin_eq.is_equality for lin_eq in p.linear_inequalities]
+    assert len(eqs) > 0

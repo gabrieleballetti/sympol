@@ -459,10 +459,11 @@ class Polytope:
         mat_ineq = self.cdd_polyhedron.get_inequalities()
         # TODO: (this might be worth not doing for certain applications)
         mat_ineq.canonicalize()  # remove redundant inequalities
+        eq = mat_ineq.lin_set
 
         self._linear_inequalities = []
 
-        for ineq in mat_ineq:
+        for i, ineq in enumerate(mat_ineq):
             # convert cdd rational to sympy rational
             ineq = [_cdd_fraction_to_simpy_rational(coeff) for coeff in ineq]
 
@@ -472,7 +473,13 @@ class Polytope:
 
             gcd_ineq = gcd([int_coeff for int_coeff in ineq[1:]])
             ineq = [int_coeff / gcd_ineq for int_coeff in ineq]
-            self._linear_inequalities.append(LinIneq(Point(ineq[1:]), -ineq[0]))
+            self._linear_inequalities.append(
+                LinIneq(
+                    normal=Point(ineq[1:]),
+                    rhs=-ineq[0],
+                    is_equality=i in eq,
+                )
+            )
 
     # def _calculate_volume(self):
     #     """
@@ -575,7 +582,9 @@ class Polytope:
         """
         if isinstance(other, Point):
             for lineq in self.linear_inequalities:
-                if lineq.evaluate(other) < 0:
+                if lineq.is_equality and lineq.evaluate(other) != 0:
+                    return False
+                elif lineq.evaluate(other) < 0:
                     return False
             return True
 

@@ -10,12 +10,14 @@ class LinIneq:
         self,
         normal: Point,
         rhs: Rational,
+        is_equality: bool = False,
     ):
         """
         Initialize a linear inequality
         """
         self._normal = normal
         self._rhs = rhs
+        self._is_equality = is_equality
 
     @property
     def normal(self):
@@ -30,6 +32,13 @@ class LinIneq:
         Get the right hand side of the linear inequality
         """
         return self._rhs
+
+    @property
+    def is_equality(self):
+        """
+        True if the linear inequality is an equality
+        """
+        return self._is_equality
 
     def evaluate(self, point: Point):
         """
