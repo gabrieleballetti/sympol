@@ -1,7 +1,7 @@
 from enum import Enum
 from igraph import Graph
 
-from sympy import Abs, Matrix
+from sympy import Matrix
 from sympy.matrices.normalforms import hermite_normal_form
 
 from sympol.point_list import PointList

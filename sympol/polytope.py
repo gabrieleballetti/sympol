@@ -1,7 +1,9 @@
 import numpy as np
 import cdd
+from scipy.spatial import Delaunay
 from sympy import Abs, factorial, gcd, lcm, Number, Matrix, Rational
 from sympy.matrices import zeros
+from sympy.matrices.normalforms import hermite_normal_form
 
 from sympol.isomorphism import get_normal_form
 from sympol.point import Point
@@ -63,6 +65,8 @@ class Polytope:
         self._f_vector = None
 
         self._cdd_polyhedron = None
+        self._cdd_inequalities = None
+        self._cdd_equality_ids = None
         self._cdd_vertex_adjacency = None
         self._cdd_facet_adjacency = None
         self._cdd_vertex_facet_incidence = None
@@ -75,6 +79,7 @@ class Polytope:
         self._volume = None
         self._normalized_volume = None
 
+        self._full_dim_projection = None
         self._normal_form = None
         self._affine_normal_form = None
 
@@ -100,13 +105,6 @@ class Polytope:
         if self._dim is None:
             self._dim = self.points.affine_rank
 
-            # TODO: this should be removed!
-            # Add support for non-full dimensional polytopes
-            if self._dim < self._ambient_dim:
-                raise NotImplementedError(
-                    "Non-full dimensional polytopes are not supported yet"
-                )
-
         return self._dim
 
     @property
@@ -125,11 +123,39 @@ class Polytope:
         return self._cdd_polyhedron
 
     @property
+    def cdd_inequalities(self):
+        """
+        Get the cdd inequalities of the polytope
+        """
+        if self._cdd_inequalities is None:
+            self._cdd_inequalities = self.cdd_polyhedron.get_inequalities()
+
+            # check if we have redunancies
+            r1, r2 = self._cdd_inequalities.copy().canonicalize()
+            assert r1 == (frozenset({}))
+            assert r2 == frozenset({})
+
+        return self._cdd_inequalities
+
+    @property
+    def cdd_equality_ids(self):
+        """
+        Get the indices of the cdd inequalities that are actually equalities
+        """
+        if self._cdd_equality_ids is None:
+            self._cdd_equality_ids = self.cdd_inequalities.lin_set
+
+        return self._cdd_equality_ids
+
+    @property
     def cdd_vertex_facet_incidence(self):
         """
         Get the cdd vertex facet incidence output
         """
         if self._cdd_vertex_facet_incidence is None:
+            # make sure vertices and inequalities are calculated (and simplified)
+            _ = self.vertices
+            _ = self.cdd_inequalities
             self._cdd_vertex_facet_incidence = self.cdd_polyhedron.get_incidence()
 
         return self._cdd_vertex_facet_incidence
@@ -140,6 +166,8 @@ class Polytope:
         Get the cdd vertex adjacency output
         """
         if self._cdd_vertex_adjacency is None:
+            # make sure vertices are calculated (and simplified)
+            _ = self.vertices
             self._cdd_vertex_adjacency = self.cdd_polyhedron.get_input_adjacency()
 
         return self._cdd_vertex_adjacency
@@ -147,9 +175,14 @@ class Polytope:
     @property
     def cdd_facet_adjacency(self):
         """
-        Get the cdd facet adjacency output
+        Get the cdd facet adjacency
         """
-        return self.cdd_polyhedron.get_adjacency()
+        if self._cdd_facet_adjacency is None:
+            # make sure inequalities are calculated (and simplified)
+            _ = self.cdd_inequalities
+            self._cdd_facet_adjacency = self.cdd_polyhedron.get_adjacency()
+
+        return self._cdd_facet_adjacency
 
     @property
     def vertices(self):
@@ -159,7 +192,11 @@ class Polytope:
         """
         if self._vertices is None:
             mat_gens = self.cdd_polyhedron.get_generators()
-            mat_gens.canonicalize()  # remove redundant points
+
+            # remove redundant generators and update the cdd polyhedron
+            mat_gens.canonicalize()
+            self._cdd_polyhedron = cdd.Polyhedron(mat_gens)
+
             self._vertices = PointList([p[1:] for p in mat_gens])
 
         return self._vertices
@@ -177,10 +214,16 @@ class Polytope:
     @property
     def facets(self):
         """
-        Get the facets of the polytope (d-1 dimensional faces)
+        Get the facets of the polytope (dim(P)-1 dimensional faces)
         """
         if self._facets is None:
-            self._facets = self.cdd_vertex_facet_incidence
+            self._facets = tuple(
+                [
+                    f
+                    for i, f in enumerate(self.cdd_vertex_facet_incidence)
+                    if i not in self.cdd_equality_ids
+                ]
+            )
 
         return self._facets
 
@@ -297,7 +340,7 @@ class Polytope:
         Get the number of facets of the polytope
         """
         if self._n_facets is None:
-            self._n_facets = len(self.linear_inequalities)
+            self._n_facets = len(self.facets)
 
         return self._n_facets
 
@@ -372,7 +415,9 @@ class Polytope:
         """
         if self._vertex_facet_pairing_matrix is None:
             self._vertex_facet_pairing_matrix = zeros(self.n_facets, self.n_vertices)
-            for i, lineq in enumerate(self.linear_inequalities):
+            for i, lineq in enumerate(
+                [h for h in self.linear_inequalities if not h.is_equality]
+            ):
                 for j, vertex in enumerate(self.vertices):
                     self._vertex_facet_pairing_matrix[i, j] = lineq.evaluate(vertex)
 
@@ -388,10 +433,22 @@ class Polytope:
     @property
     def triangulation(self):
         """
-        Get the triangulation of the polytope
+        Get the triangulation of the polytope (uses scipy.spatial.Delaunay)
+        NOTE: scipy.spatial.Delaunay uses Qhull, which is float based!
         """
         if self._triangulation is None:
-            self._triangulation = []
+            # if the polytope is not full-dimensional, we need to project it
+            # to a full-dimensional subspace
+            if self.is_full_dim():
+                delaunay_triangulation = Delaunay(np.array(self.vertices))
+                self._triangulation = tuple(
+                    [
+                        frozenset([int(i) for i in s])
+                        for s in delaunay_triangulation.simplices
+                    ]
+                )
+            else:
+                self._triangulation = self.full_dim_projection.triangulation
 
         return self._triangulation
 
@@ -401,7 +458,10 @@ class Polytope:
         Get the normalized volume of the polytope
         """
         if self._volume is None:
-            self._calculate_volume()
+            if self.is_full_dim():
+                self._calculate_volume()
+            else:
+                self._volume = self.full_dim_projection.volume
         return self._volume
 
     @property
@@ -410,8 +470,23 @@ class Polytope:
         Get the normalized volume of the polytope
         """
         if self._normalized_volume is None:
-            self.calculate_volume()
+            if self.is_full_dim():
+                self.calculate_volume()
+            else:
+                self._normalized_volume = self.full_dim_projection.normalized_volume
         return self._normalized_volume
+
+    @property
+    def full_dim_projection(self):
+        """
+        An affine unimodular copy of the polytope in a lower dimensional space
+        """
+        if self._full_dim_projection is None:
+            m = Matrix(self.vertices - self.vertices[0])
+            hnf = hermite_normal_form(m)
+            self._full_dim_projection = Polytope(hnf)
+
+        return self._full_dim_projection
 
     @property
     def normal_form(self):
@@ -456,14 +531,10 @@ class Polytope:
         """
         Get the linear inequalities of the polytope from cdd_polyhedron
         """
-        mat_ineq = self.cdd_polyhedron.get_inequalities()
-        # TODO: (this might be worth not doing for certain applications)
-        mat_ineq.canonicalize()  # remove redundant inequalities
-        eq = mat_ineq.lin_set
 
         self._linear_inequalities = []
 
-        for i, ineq in enumerate(mat_ineq):
+        for i, ineq in enumerate(self.cdd_inequalities):
             # convert cdd rational to sympy rational
             ineq = [_cdd_fraction_to_simpy_rational(coeff) for coeff in ineq]
 
@@ -477,26 +548,25 @@ class Polytope:
                 LinIneq(
                     normal=Point(ineq[1:]),
                     rhs=-ineq[0],
-                    is_equality=i in eq,
+                    is_equality=i in self.cdd_equality_ids,
                 )
             )
 
-    # def _calculate_volume(self):
-    #     """
-    #     Calculate the volume of the polytope, sets both _volume and _normalized_volume
-    #     """
-    #     volume = Rational(0)
+    def _calculate_volume(self):
+        """
+        Calculate the volume of the polytope, sets both _volume and _normalized_volume
+        """
+        volume = Rational(0)
 
-    #     for simplex_ids in self.boundary_triangulation:
-    #         if 0 in simplex_ids:
-    #             continue
-    #         translated_simplex = [
-    #             self.vertices[id] - self.vertices[0] for id in simplex_ids
-    #         ]
-    #         volume += Abs(Matrix(translated_simplex).det())
+        for simplex_ids in self.triangulation:
+            verts = list(simplex_ids)
+            translated_simplex = [
+                self.vertices[id] - self.vertices[verts[0]] for id in verts[1:]
+            ]
+            volume += Abs(Matrix(translated_simplex).det())
 
-    #     self._normalized_volume = volume
-    #     self._volume = volume / factorial(self.dim)
+        self._normalized_volume = volume
+        self._volume = volume / factorial(self.dim)
 
     # Helper functions
 

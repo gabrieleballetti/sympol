@@ -96,6 +96,16 @@ def test_vertices():
     assert polytope.vertices == PointList(verts)
 
 
+def test_redundant_vertices():
+    """
+    Test that the redundant vertices are correct
+    """
+    verts = [[0, 0], [1, 0], [1, 0], [1, 1], [2, 0], [0, 2], [2, 2], [2, 2]]
+    p = Polytope(verts)
+
+    assert p.n_vertices == 4
+
+
 def test_rational_vertices_precision():
     """
     Test that sympy rationals are correctly converted cdd rationals
@@ -115,45 +125,64 @@ def test_triangulation():
     """
     p = Polytope.cube(2)
 
-    return
-    assert p.triangulation == [[0, 1, 2], [0, 2, 3]]
+    assert p.triangulation == (frozenset({0, 1, 3}), frozenset({0, 2, 3}))
 
 
-# def test_get_volume():
-#     """
-#     Test that the volume is correct
-#     """
-#     polytope = Polytope.unimodular_simplex(3)
+def test_triangulation_lower_dimensional_polytope():
+    """
+    Test that the triangulation is correct
+    """
+    p = Polytope([[0, 0, 0], [1, 0, 0], [0, 1, 0], [1, 1, 0]])
 
-#     assert polytope._volume is None
-#     assert polytope._normalized_volume is None
-#     assert polytope.volume == Rational(1, 6)  # This triggers a volume computation
-#     assert polytope._volume == Rational(1, 6)
-#     assert polytope._normalized_volume == 1
-#     assert polytope.normalized_volume == 1
+    assert p.triangulation == (frozenset({0, 1, 3}), frozenset({0, 2, 3}))
 
 
-# def test_volume_computed_only_once():
-#     """
-#     Test that the volume is computed only once
-#     """
-#     polytope = Polytope.unimodular_simplex(3)
+def test_get_volume():
+    """
+    Test that the volume is correct
+    """
+    polytope = Polytope.unimodular_simplex(3)
 
-#     def mock_calculate_volume():
-#         polytope._volume = 1
-#         polytope._normalized_volume = 1
+    assert polytope._volume is None
+    assert polytope._normalized_volume is None
+    assert polytope.volume == Rational(1, 6)  # This triggers a volume computation
+    assert polytope._volume == Rational(1, 6)
+    assert polytope._normalized_volume == 1
+    assert polytope.normalized_volume == 1
 
-#     polytope._calculate_volume = MagicMock(side_effect=mock_calculate_volume)
 
-#     assert polytope._volume is None
-#     assert polytope._normalized_volume is None
-#     assert polytope.volume == 1  # This triggers a volume computation
-#     assert polytope._volume == 1
-#     assert polytope._normalized_volume == 1
-#     assert polytope.normalized_volume == 1
+def test_volume_computed_only_once():
+    """
+    Test that the volume is computed only once
+    """
+    polytope = Polytope.unimodular_simplex(3)
 
-#     # Check that the _calculate_volume method was called only once
-#     polytope._calculate_volume.assert_called_once()
+    def mock_calculate_volume():
+        polytope._volume = 1
+        polytope._normalized_volume = 1
+
+    polytope._calculate_volume = MagicMock(side_effect=mock_calculate_volume)
+
+    assert polytope._volume is None
+    assert polytope._normalized_volume is None
+    assert polytope.volume == 1  # This triggers a volume computation
+    assert polytope._volume == 1
+    assert polytope._normalized_volume == 1
+    assert polytope.normalized_volume == 1
+
+    # Check that the _calculate_volume method was called only once
+    polytope._calculate_volume.assert_called_once()
+
+
+def test_volume_lower_dimensional_polytope():
+    """
+    Test that the volume is correct for a lower dimensional polytope
+    """
+    verts = [[0, 0, 0], [2, 0, 0], [0, 3, 0]]
+    p = Polytope(verts)
+
+    assert p.volume == 3
+    assert p.normalized_volume == 6
 
 
 def test_barycenter():
@@ -467,12 +496,61 @@ def test_vertex_facet_pairing_matrix():
     assert polytope.vertex_facet_pairing_matrix == expected
 
 
+def test_vertex_facet_matrix_low_dimensional_polytope():
+    """
+    Test calculation of the vertex facet matrix of a non-full-dimensional polytope
+    """
+    verts = [[0, 0, 1], [7, 4, 19], [5, 3, 14], [12, 7, 32]]
+    square = Polytope(verts)
+
+    expected_vfm = Matrix(
+        [
+            [1, 0, 1, 0],
+            [1, 1, 0, 0],
+            [0, 1, 0, 1],
+            [0, 0, 1, 1],
+        ]
+    )
+
+    expected_vfpm = Matrix(
+        [
+            [0, 1, 0, 1],
+            [0, 0, 1, 1],
+            [1, 0, 1, 0],
+            [1, 1, 0, 0],
+        ]
+    )
+    assert square.vertex_facet_matrix == expected_vfm
+    assert square.vertex_facet_pairing_matrix == expected_vfpm
+
+
 def test_vertex_facet_pairing_matrix_is_nonnegative():
     """
     Test that the vertex facet pairing matrix is nonnegative
     """
     p = Polytope.random_lattice_polytope(dim=4, n_vertices=50, min=-5, max=5)
     assert min(p.vertex_facet_pairing_matrix) >= 0
+
+
+def test_vertex_facet_pairing_matrix_low_dimensional_polytope():
+    """
+    Test calculation of the vertex facet pairing matrix of a non-full-dimensional
+    polytope
+    TODO: Is this guaranteed to work or should we project to a full-dimensional
+    polytope in a lower dimension?
+    """
+    verts = [[0, 0, 1], [1, 0, 6], [0, 1, 5], [1, 1, 10]]
+    square = Polytope(verts)
+
+    expected = Matrix(
+        [
+            [0, 0, 1, 1],
+            [0, 1, 0, 1],
+            [1, 1, 0, 0],
+            [1, 0, 1, 0],
+        ]
+    )
+    assert square.vertex_facet_pairing_matrix == expected
 
 
 def test_normal_form():

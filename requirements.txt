@@ -1,4 +1,5 @@
 numpy
 igraph>=0.10.4
 pycddlib>=2.1.6
+scipy>=0.12.0
 sympy>=1.12
