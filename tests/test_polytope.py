@@ -3,7 +3,7 @@ from sympy import Matrix, Pow, Rational
 
 from sympol.point import Point
 from sympol.point_list import PointList
-from sympol.polytope import Polytope
+from sympol.polytope import Polytope, Simplex
 
 
 def test_init_from_points():
@@ -137,7 +137,21 @@ def test_triangulation_lower_dimensional_polytope():
     assert p.triangulation == (frozenset({0, 1, 3}), frozenset({0, 2, 3}))
 
 
-def test_get_volume():
+def test_get_volume_cube():
+    """
+    Test that the volume is correct
+    """
+    polytope = Polytope.cube(3)
+
+    assert polytope._volume is None
+    assert polytope._normalized_volume is None
+    assert polytope.volume == 1  # This triggers a volume computation
+    assert polytope._volume == 1
+    assert polytope._normalized_volume == 6
+    assert polytope.normalized_volume == 6
+
+
+def test_get_volume_simplex():
     """
     Test that the volume is correct
     """
@@ -405,6 +419,21 @@ def test_faces():
     assert len(p.faces(2)) == 56
 
 
+def test_faces_lower_dimensional_polytope():
+    """
+    Test calculation of the faces of a polytope
+    """
+    p = Polytope.cube(3)
+    p = Polytope([list(v) + [0] for v in p.vertices])
+
+    # test length for other dimensions
+    assert len(p.faces(3)) == 1
+    assert len(p.faces(2)) == 6
+    assert len(p.faces(1)) == 12
+    assert len(p.faces(0)) == 8
+    assert len(p.faces(-1)) == 1
+
+
 def test_neighbors():
     """
     Test the neighbors method on a vertex of a cube
@@ -600,6 +629,15 @@ def test_affine_normal_form_idempotent():
     assert polytope.affine_normal_form == polytope_anf.affine_normal_form
 
 
+def test_affine_normal_lower_dimensional_polytope():
+    """
+    Test that the affine normal works for lower dimensional polytopes
+    """
+    p = Polytope.cube(2)
+    q = Polytope([[0, 0, 0], [1, 0, 0], [0, 1, 0], [1, 1, 0]])
+    assert p.affine_normal_form == q.affine_normal_form
+
+
 def test_is_lattice_polytope():
     """
     Test the is_lattice_polytope method
@@ -684,3 +722,46 @@ def test_lower_dimensional_polytope():
     p = Polytope(verts)
     eqs = [lin_eq.is_equality for lin_eq in p.linear_inequalities]
     assert len(eqs) > 0
+
+
+def test_simplex_conversion():
+    """
+    Test that the polytope is correctly converted to a simplex
+    """
+    simplex = Polytope([[0, 0], [1, 0], [0, 1]])
+
+    # On initialization no checks are done
+    assert simplex.__class__ == Polytope
+
+    # Calculating vertices should convert to a simplex
+    simplex.vertices
+    assert simplex.__class__ == Simplex
+
+
+def test_barycentric_coordinates():
+    """
+    Test that barycentric coordinates are correctly calculated
+    """
+    simplex = Polytope([[-1, -1], [2, -1], [-1, 2]])
+    simplex._make_simplex()
+
+    assert simplex.barycentric_coordinates(Point([0, 0])) == [
+        Rational(1, 3),
+        Rational(1, 3),
+        Rational(1, 3),
+    ]
+    assert simplex.barycentric_coordinates(Point([-1, 0])) == [
+        Rational(2, 3),
+        0,
+        Rational(1, 3),
+    ]
+
+
+def test_weights():
+    """
+    Test that weights are correctly calculated
+    """
+    simplex = Polytope([[-1, -1], [1, 0], [0, 1]])
+    simplex._make_simplex()
+
+    assert simplex.weights == [1, 1, 1]

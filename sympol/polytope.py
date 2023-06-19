@@ -83,6 +83,9 @@ class Polytope:
         self._normal_form = None
         self._affine_normal_form = None
 
+        # Simplex specific attributes
+        self._weights = None
+
     @property
     def points(self):
         """
@@ -104,6 +107,11 @@ class Polytope:
         """
         if self._dim is None:
             self._dim = self.points.affine_rank
+
+            # check if it is a simplex, but only if vertices are
+            # already calculated
+            if self._vertices is not None and self.is_simplex():
+                self._make_simplex()
 
         return self._dim
 
@@ -198,6 +206,10 @@ class Polytope:
             self._cdd_polyhedron = cdd.Polyhedron(mat_gens)
 
             self._vertices = PointList([p[1:] for p in mat_gens])
+
+            # check if the polytope is a simplex
+            if self.is_simplex():
+                self._make_simplex()
 
         return self._vertices
 
@@ -576,6 +588,20 @@ class Polytope:
         """
         return self.dim == self.ambient_dim
 
+    def is_simplex(self):
+        """
+        Check if the polytope is a simplex
+        """
+        return self.n_vertices == self.dim + 1
+
+    def _make_simplex(self):
+        """
+        Make the polytope a simplex
+        """
+        if not self.is_simplex():
+            raise ValueError("Polytope is not a simplex")
+        self.__class__ = Simplex
+
     def is_lattice_polytope(self):
         """
         Check if the polytope is a lattice polytope
@@ -685,7 +711,7 @@ class Polytope:
             vert[i] = 1
             verts.append(vert)
 
-        simplex = cls(vertices=verts)
+        simplex = Simplex(vertices=verts)
 
         return simplex
 
@@ -715,3 +741,45 @@ class Polytope:
         """
         pts = np.random.randint(min, max + 1, size=(n_vertices, dim))
         return cls(points=pts)
+
+
+class Simplex(Polytope):
+    """
+    Simplex class
+    """
+
+    @property
+    def triangulation(self):
+        """
+        Triangulation of the simplex
+        """
+        if self._triangulation is None:
+            self._triangulation = tuple([frozenset({i for i in range(self.dim + 1)})])
+
+        return self._triangulation
+
+    def barycentric_coordinates(self, point: Point):
+        """
+        Return the barycentric coordinates of a point in the simplex, or the
+        barycentric coordinates of the origin if no point is given
+        """
+        m = Matrix([[1] + v.tolist() for v in self.vertices]).T
+        b = m.LUsolve(Matrix([1] + point.tolist()))
+
+        return b.flat()
+
+    @property
+    def weights(self):
+        """
+        Return the weights of the simplex, i.e. the barycentric coordinates of the
+        origin given as integers
+        """
+        if self._weights is None:
+            b = self.barycentric_coordinates(Point([0] * self.dim))
+
+            lcm_b = lcm([frac.q for frac in b])
+            b = [frac * lcm_b for frac in b]
+            gcd_b = gcd(b)
+            self._weights = [i / gcd_b for i in b]
+
+        return self._weights
