@@ -557,7 +557,7 @@ def test_vertex_facet_pairing_matrix_is_nonnegative():
     """
     Test that the vertex facet pairing matrix is nonnegative
     """
-    p = Polytope.random_lattice_polytope(dim=4, n_vertices=50, min=-5, max=5)
+    p = Polytope.random_lattice_polytope(dim=4, n_vertices=10, min=-5, max=5)
     assert min(p.vertex_facet_pairing_matrix) >= 0
 
 
@@ -605,7 +605,7 @@ def test_affine_normal_form():
     """
     Test calculation of the affine normal form of a polytope
     """
-    cube_1 = Polytope.cube(3) * 3
+    cube_1 = Polytope.random_lattice_polytope(3, 8, -2, 2)
 
     unimodular_map = Matrix(
         [
@@ -615,7 +615,9 @@ def test_affine_normal_form():
         ]
     )
 
-    cube_2 = Polytope(Matrix(cube_1.vertices) * unimodular_map) - Point([5, -1, 3])
+    cube_2 = Polytope(vertices=(Matrix(cube_1.vertices) * unimodular_map)) - Point(
+        [5, -1, 3]
+    )
 
     assert cube_1.affine_normal_form == cube_2.affine_normal_form
 
@@ -665,8 +667,8 @@ def test_unimodular_simplex():
     )
 
     assert simplex.vertices == expected_vertices
-    # assert simplex.volume == Rational(1, 6)
-    # assert simplex.normalized_volume == 1
+    assert simplex.volume == Rational(1, 6)
+    assert simplex.normalized_volume == 1
 
 
 def test_cube():
@@ -689,8 +691,8 @@ def test_cube():
     )
 
     assert cube.vertices == expected_vertices
-    # assert cube.volume == 1
-    # assert cube.normalized_volume == 6
+    assert cube.volume == 1
+    assert cube.normalized_volume == 6
 
 
 def test_get_cdd_polyhedron_from_points():

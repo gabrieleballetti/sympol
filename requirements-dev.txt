@@ -1,4 +1,5 @@
 black
 pylint
 pytest
+pytest-html
 ruff
