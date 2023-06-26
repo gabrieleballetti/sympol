@@ -5,6 +5,7 @@ from sympy import Abs, factorial, gcd, lcm, Number, Matrix, Rational
 from sympy.matrices import zeros
 from sympy.matrices.normalforms import hermite_normal_form
 
+from sympol.integer_points import _find_integer_points
 from sympol.isomorphism import get_normal_form
 from sympol.point import Point
 from sympol.point_list import PointList
@@ -78,6 +79,14 @@ class Polytope:
         self._triangulation = None
         self._volume = None
         self._normalized_volume = None
+
+        self._integer_points_raw = None
+        self._integer_points = None
+        self._interior_points = None
+        self._boundary_points = None
+        self._n_integer_points = None
+        self._n_interior_points = None
+        self._n_boundary_points = None
 
         self._full_dim_projection = None
         self._normal_form = None
@@ -519,6 +528,87 @@ class Polytope:
             self._affine_normal_form = get_normal_form(polytope=self, affine=True)
 
         return self._affine_normal_form
+
+    @property
+    def integer_points_raw(self):
+        """
+        Get the raw output of the integer points function
+        """
+        if self._integer_points_raw is None:
+            self._integer_points_raw = _find_integer_points(polytope=self)
+
+        return self._integer_points_raw
+
+    @property
+    def integer_points(self):
+        """
+        Get the integer points of the polytope
+        """
+        if self._integer_points is None:
+            self._integer_points = PointList([pt[0] for pt in self.integer_points_raw])
+
+        return self._integer_points
+
+    @property
+    def interior_points(self):
+        """
+        Get the interior integer points of the polytope
+        """
+        if self._interior_points is None:
+            int_pts = []
+            for pt in self.integer_points_raw:
+                if pt[1] != frozenset({}):
+                    break
+                else:
+                    int_pts.append(pt[0])
+            self._interior_points = PointList(int_pts)
+
+        return self._interior_points
+
+    @property
+    def boundary_points(self):
+        """
+        Get the boundary integer points of the polytope
+        """
+        if self._boundary_points is None:
+            int_pts = []
+            for pt in self.integer_points_raw:
+                if pt[1] == frozenset({}):
+                    continue
+                int_pts.append(pt[0])
+            self._boundary_points = PointList(int_pts)
+
+        return self._boundary_points
+
+    @property
+    def n_integer_points(self):
+        """
+        Get the number of integer points of the polytope
+        """
+        if self._n_integer_points is None:
+            self._n_integer_points = len(self.integer_points)
+
+        return self._n_integer_points
+
+    @property
+    def n_interior_points(self):
+        """
+        Get the number of interior integer points of the polytope
+        """
+        if self._n_interior_points is None:
+            self._n_interior_points = len(self.interior_points)
+
+        return self._n_interior_points
+
+    @property
+    def n_boundary_points(self):
+        """
+        Get the number of boundary integer points of the polytope
+        """
+        if self._n_boundary_points is None:
+            self._n_boundary_points = len(self.boundary_points)
+
+        return self._n_boundary_points
 
     # property setters
 

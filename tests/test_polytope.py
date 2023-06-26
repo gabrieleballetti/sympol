@@ -651,6 +651,17 @@ def test_is_lattice_polytope():
     assert not polytope.is_lattice_polytope()
 
 
+def test_integer_points():
+    """
+    Test that the integer points of a polytope are correctly calculated
+    """
+    s = Polytope.unimodular_simplex(3)
+    c = Polytope.cube(3)
+
+    assert s.n_integer_points == s.n_vertices
+    assert c.n_integer_points == c.n_vertices
+
+
 def test_unimodular_simplex():
     """
     Test that the unimodular simplex is correctly constructed
