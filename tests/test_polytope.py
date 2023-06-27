@@ -653,13 +653,39 @@ def test_is_lattice_polytope():
 
 def test_integer_points():
     """
-    Test that the integer points of a polytope are correctly calculated
+    Test that the integer/interior/boundary points of a polytope are correct
     """
     s = Polytope.unimodular_simplex(3)
-    c = Polytope.cube(3)
+    s2 = s * 2
+    s3 = s * 3
+    s4 = s * 4
 
-    assert s.n_integer_points == s.n_vertices
-    assert c.n_integer_points == c.n_vertices
+    c = Polytope.cube(3)
+    c2 = c * 2
+
+    assert set([pt for pt in s.integer_points]) == set([pt for pt in s.vertices])
+    assert s.n_interior_points == 0
+    assert s.n_boundary_points == 4
+
+    assert s2.n_integer_points == 10
+    assert s2.n_interior_points == 0
+    assert s2.n_boundary_points == 10
+
+    assert s3.n_integer_points == 20
+    assert s3.n_interior_points == 0
+    assert s3.n_boundary_points == 20
+
+    assert s4.n_integer_points == 35
+    assert s4.n_interior_points == 1
+    assert s4.n_boundary_points == 34
+
+    assert set([pt for pt in c.integer_points]) == set([pt for pt in c.vertices])
+    assert c.n_interior_points == 0
+    assert c.n_boundary_points == 8
+
+    assert c2.n_integer_points == 27
+    assert c2.n_interior_points == 1
+    assert c2.n_boundary_points == 26
 
 
 def test_unimodular_simplex():

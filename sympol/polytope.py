@@ -586,7 +586,7 @@ class Polytope:
         Get the number of integer points of the polytope
         """
         if self._n_integer_points is None:
-            self._n_integer_points = len(self.integer_points)
+            self._n_integer_points = self.integer_points.shape[0]
 
         return self._n_integer_points
 
@@ -596,7 +596,7 @@ class Polytope:
         Get the number of interior integer points of the polytope
         """
         if self._n_interior_points is None:
-            self._n_interior_points = len(self.interior_points)
+            self._n_interior_points = self.interior_points.shape[0]
 
         return self._n_interior_points
 
@@ -606,7 +606,7 @@ class Polytope:
         Get the number of boundary integer points of the polytope
         """
         if self._n_boundary_points is None:
-            self._n_boundary_points = len(self.boundary_points)
+            self._n_boundary_points = self.boundary_points.shape[0]
 
         return self._n_boundary_points
 
