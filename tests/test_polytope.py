@@ -1,5 +1,6 @@
 from unittest.mock import MagicMock
 from sympy import Matrix, Pow, Rational
+from sympy.abc import x
 
 from sympol.point import Point
 from sympol.point_list import PointList
@@ -686,6 +687,20 @@ def test_integer_points():
     assert c2.n_integer_points == 27
     assert c2.n_interior_points == 1
     assert c2.n_boundary_points == 26
+
+
+def test_ehrhart_polynomial():
+    """
+    Test that the Ehrhart polynomial of a lattice polytope is correct
+    """
+    # assert Polytope.unimodular_simplex(1).ehrhart_polynomial == 1 + x
+    assert (
+        Polytope.unimodular_simplex(2).ehrhart_polynomial == 1 + 3 * x / 2 + x**2 / 2
+    )
+    assert (
+        Polytope.unimodular_simplex(3).ehrhart_polynomial
+        == 1 + 6 * x + 6 * x**2 + x**3
+    )
 
 
 def test_unimodular_simplex():

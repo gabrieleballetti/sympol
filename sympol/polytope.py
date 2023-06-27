@@ -1,9 +1,13 @@
 import numpy as np
 import cdd
 from scipy.spatial import Delaunay
+
+
 from sympy import Abs, factorial, gcd, lcm, Number, Matrix, Rational
+from sympy.abc import x
 from sympy.matrices import zeros
 from sympy.matrices.normalforms import hermite_normal_form
+from sympy.polys.polyfuncs import interpolate
 
 from sympol.integer_points import _find_integer_points
 from sympol.isomorphism import get_normal_form
@@ -87,6 +91,8 @@ class Polytope:
         self._n_integer_points = None
         self._n_interior_points = None
         self._n_boundary_points = None
+
+        self._ehrhart_polynomial = None
 
         self._full_dim_projection = None
         self._normal_form = None
@@ -609,6 +615,31 @@ class Polytope:
             self._n_boundary_points = self.boundary_points.shape[0]
 
         return self._n_boundary_points
+
+    @property
+    def ehrhart_polynomial(self):
+        """
+        Get the Ehrhart polynomial of the polytope
+        """
+        if self._ehrhart_polynomial is None:
+            if not self.is_lattice_polytope:
+                raise ValueError(
+                    "Ehrhart polynomial is only defined for lattice polytopes"
+                )
+
+            data = {
+                0: 1,
+                1: self.n_integer_points,
+                -1: (-1) ** self.dim * self.n_interior_points,
+            }
+
+            for k in range(2, (self.dim + 1) // 2 + 1):
+                dilation = self * k
+                data[k] = dilation.n_integer_points
+                data[-k] = (-1) ** (self.dim) * dilation.n_interior_points
+            self._ehrhart_polynomial = interpolate(data, x)
+
+        return self._ehrhart_polynomial
 
     # property setters
 
