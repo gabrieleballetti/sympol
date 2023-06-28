@@ -36,7 +36,11 @@ def _find_integer_points(polytope):
     facet_ind = []
     p = np.array(box_min)
     while True:
-        tmp_v = ineqs[:, 1:-1].dot(p[1:]) + ineqs[:, -1]
+        tmp_v = (
+            ineqs[:, 1:-1].dot(p[1:]) + ineqs[:, -1]
+            if polytope.dim > 1
+            else ineqs[:, -1]
+        )
         i_min = box_min[0]
         i_max = box_max[0]
         # Find the lower bound for the allowed region

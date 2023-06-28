@@ -693,14 +693,16 @@ def test_ehrhart_polynomial():
     """
     Test that the Ehrhart polynomial of a lattice polytope is correct
     """
-    # assert Polytope.unimodular_simplex(1).ehrhart_polynomial == 1 + x
-    assert (
-        Polytope.unimodular_simplex(2).ehrhart_polynomial == 1 + 3 * x / 2 + x**2 / 2
+    assert Polytope.unimodular_simplex(1).ehrhart_polynomial.equals(x + 1)
+    assert Polytope.unimodular_simplex(2).ehrhart_polynomial.equals(
+        x**2 / 2 + 3 * x / 2 + 1
     )
-    assert (
-        Polytope.unimodular_simplex(3).ehrhart_polynomial
-        == 1 + 6 * x + 6 * x**2 + x**3
+    assert Polytope.unimodular_simplex(3).ehrhart_polynomial.equals(
+        x**3 / 6 + x**2 + 11 * x / 6 + 1
     )
+
+    for d in range(1, 5):
+        assert Polytope.cube(d).ehrhart_polynomial.equals((x + 1) ** d)
 
 
 def test_unimodular_simplex():

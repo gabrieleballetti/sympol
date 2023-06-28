@@ -673,10 +673,10 @@ class Polytope:
 
             # make the normal integer and primitive
             lcm_ineq = lcm([rat_coeff.q for rat_coeff in ineq[1:]])
-            ineq = [rat_coeff * lcm_ineq for rat_coeff in ineq]
+            ineq = [rat_coeff * Abs(lcm_ineq) for rat_coeff in ineq]
 
             gcd_ineq = gcd([int_coeff for int_coeff in ineq[1:]])
-            ineq = [int_coeff / gcd_ineq for int_coeff in ineq]
+            ineq = [int_coeff / Abs(gcd_ineq) for int_coeff in ineq]
             self._linear_inequalities.append(
                 LinIneq(
                     normal=Point(ineq[1:]),
