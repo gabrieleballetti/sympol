@@ -8,13 +8,12 @@ from sympy.abc import x
 from sympy.matrices import zeros
 from sympy.matrices.normalforms import hermite_normal_form
 from sympy.polys.polyfuncs import interpolate
-
 from sympol.integer_points import _find_integer_points
 from sympol.isomorphism import get_normal_form
 from sympol.point import Point
 from sympol.point_list import PointList
 from sympol.lineq import LinIneq
-from sympol.utils import _cdd_fraction_to_simpy_rational
+from sympol.utils import _cdd_fraction_to_simpy_rational, _eulerian_poly
 
 
 class Polytope:
@@ -93,6 +92,9 @@ class Polytope:
         self._n_boundary_points = None
 
         self._ehrhart_polynomial = None
+        self._ehrhart_coefficients = None
+        self._h_star_polynomial = None
+        self._h_star_vector = None
 
         self._full_dim_projection = None
         self._normal_form = None
@@ -640,6 +642,55 @@ class Polytope:
             self._ehrhart_polynomial = interpolate(data, x)
 
         return self._ehrhart_polynomial
+
+    @property
+    def ehrhart_coefficients(self):
+        """
+        Get the Ehrhart coefficients of the polytope
+        """
+        if self._ehrhart_coefficients is None:
+            self._ehrhart_coefficients = tuple(
+                [1]
+                + [
+                    self.ehrhart_polynomial.coeff(x**d)
+                    for d in range(1, self.dim + 1)
+                ]
+            )
+
+        return self._ehrhart_coefficients
+
+    @property
+    def h_star_polynomial(self):
+        """
+        Get the h*-polynomial of the polytope
+        """
+        if self._h_star_polynomial is None:
+            if not self.is_lattice_polytope:
+                raise ValueError("h*-polynomial is only defined for lattice polytopes")
+
+            self._h_star_polynomial = sum(
+                [
+                    self.ehrhart_coefficients[i]
+                    * _eulerian_poly(i, x)
+                    * (1 - x) ** (self.dim - i)
+                    for i in range(self.dim + 1)
+                ]
+            ).simplify()
+
+        return self._h_star_polynomial
+
+    @property
+    def h_star_vector(self):
+        """
+        Get the h*-vector of the polytope
+        """
+        if self._h_star_vector is None:
+            self._h_star_vector = tuple(
+                [1]
+                + [self.h_star_polynomial.coeff(x**d) for d in range(1, self.dim + 1)]
+            )
+
+        return self._h_star_vector
 
     # property setters
 

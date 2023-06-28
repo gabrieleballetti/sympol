@@ -705,6 +705,39 @@ def test_ehrhart_polynomial():
         assert Polytope.cube(d).ehrhart_polynomial.equals((x + 1) ** d)
 
 
+def test_ehrhart_coefficients():
+    """
+    Test that the Ehrhart coefficients of a lattice polytope are correct
+    """
+
+    assert Polytope.unimodular_simplex(3).ehrhart_coefficients == (
+        1,
+        Rational(11, 6),
+        1,
+        Rational(1, 6),
+    )
+
+
+def test_h_star_polynomial():
+    """
+    Test that the h*-polynomial of a lattice polytope is correct
+    """
+    for d in range(1, 5):
+        assert Polytope.unimodular_simplex(d).h_star_polynomial.equals(1)
+
+    Polytope.cube(1).h_star_polynomial.equals(1)
+    Polytope.cube(2).h_star_polynomial.equals(x + 1)
+    Polytope.cube(3).h_star_polynomial.equals(x**2 + 4 * x + 1)
+
+
+def test_h_star_vector():
+    """
+    Test that the h*-vector of a lattice polytope is correct
+    """
+    assert Polytope.cube(3).h_star_vector == (1, 4, 1, 0)
+    assert (Polytope.cube(3) * 2).h_star_vector == (1, 23, 23, 1)
+
+
 def test_unimodular_simplex():
     """
     Test that the unimodular simplex is correctly constructed
