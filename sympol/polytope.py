@@ -546,12 +546,13 @@ class Polytope:
             if not self.is_full_dim():
                 raise ValueError("polytope must be full-dimensional")
             self._integer_points_raw = _find_integer_points(
-                verts=np.array(self.vertices),
+                verts=np.array(self.vertices, dtype=np.int64),
                 ineqs=np.array(
                     [
                         ineq.normal.tolist() + [-ineq.rhs]
                         for ineq in self.linear_inequalities
-                    ]
+                    ],
+                    dtype=np.int64,
                 ),
                 dim=self.dim,
             )

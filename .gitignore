@@ -1,5 +1,16 @@
+*.pyc
+*.pyd
+*.pyo
+__pycache__
+*.so
+*.o
+
+*.egg
+*.egg-info
+.*cache*/
 .venv/
 .vscode/
 .pytest_cache/
 
 __pycache__/  
+build/

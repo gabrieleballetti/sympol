@@ -18,9 +18,10 @@ def test_integer_points():
         ]
     )
     points = _find_integer_points(
-        verts=np.array(p.vertices),
+        verts=np.array(p.vertices, dtype=np.int64),
         ineqs=np.array(
-            [ineq.normal.tolist() + [-ineq.rhs] for ineq in p.linear_inequalities]
+            [ineq.normal.tolist() + [-ineq.rhs] for ineq in p.linear_inequalities],
+            dtype=np.int64,
         ),
         dim=p.dim,
     )
