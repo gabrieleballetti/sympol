@@ -543,7 +543,18 @@ class Polytope:
         Get the raw output of the integer points function
         """
         if self._integer_points_raw is None:
-            self._integer_points_raw = _find_integer_points(polytope=self)
+            if not self.is_full_dim():
+                raise ValueError("polytope must be full-dimensional")
+            self._integer_points_raw = _find_integer_points(
+                verts=np.array(self.vertices),
+                ineqs=np.array(
+                    [
+                        ineq.normal.tolist() + [-ineq.rhs]
+                        for ineq in self.linear_inequalities
+                    ]
+                ),
+                dim=self.dim,
+            )
 
         return self._integer_points_raw
 

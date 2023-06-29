@@ -1,3 +1,5 @@
+import numpy as np
+
 from sympol.integer_points import _find_integer_points
 from sympol.polytope import Polytope
 
@@ -15,7 +17,13 @@ def test_integer_points():
             [4, 2, 3],
         ]
     )
-    points = _find_integer_points(p)
+    points = _find_integer_points(
+        verts=np.array(p.vertices),
+        ineqs=np.array(
+            [ineq.normal.tolist() + [-ineq.rhs] for ineq in p.linear_inequalities]
+        ),
+        dim=p.dim,
+    )
 
     assert len(points) == 60
     # check the expected 6 interior points
