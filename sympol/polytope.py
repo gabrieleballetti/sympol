@@ -1,5 +1,7 @@
+from itertools import chain
 import numpy as np
 import cdd
+
 from scipy.spatial import Delaunay
 
 
@@ -83,10 +85,10 @@ class Polytope:
         self._volume = None
         self._normalized_volume = None
 
-        self._integer_points_raw = None
         self._integer_points = None
         self._interior_points = None
         self._boundary_points = None
+        self._boundary_points_facets = None
         self._n_integer_points = None
         self._n_interior_points = None
         self._n_boundary_points = None
@@ -500,7 +502,7 @@ class Polytope:
         """
         if self._normalized_volume is None:
             if self.is_full_dim():
-                self.calculate_volume()
+                self._calculate_volume()
             else:
                 self._normalized_volume = self.full_dim_projection.normalized_volume
         return self._normalized_volume
@@ -538,35 +540,15 @@ class Polytope:
         return self._affine_normal_form
 
     @property
-    def integer_points_raw(self):
-        """
-        Get the raw output of the integer points function
-        """
-        if self._integer_points_raw is None:
-            if not self.is_full_dim():
-                raise ValueError("polytope must be full-dimensional")
-            self._integer_points_raw = _find_integer_points(
-                verts=np.array(self.vertices, dtype=np.int64),
-                ineqs=np.array(
-                    [
-                        ineq.normal.tolist() + [-ineq.rhs]
-                        for ineq in self.linear_inequalities
-                    ],
-                    dtype=np.int64,
-                ),
-                dim=self.dim,
-            )
-
-        return self._integer_points_raw
-
-    @property
     def integer_points(self):
         """
         Get the integer points of the polytope
         """
         if self._integer_points is None:
-            self._integer_points = PointList([pt[0] for pt in self.integer_points_raw])
-
+            _integer_points = [pt for pt in self.boundary_points]
+            if self.n_interior_points > 0:
+                _integer_points += [pt for pt in self.interior_points]
+            self._integer_points = PointList(_integer_points)
         return self._integer_points
 
     @property
@@ -575,13 +557,7 @@ class Polytope:
         Get the interior integer points of the polytope
         """
         if self._interior_points is None:
-            int_pts = []
-            for pt in self.integer_points_raw:
-                if pt[1] != frozenset({}):
-                    break
-                else:
-                    int_pts.append(pt[0])
-            self._interior_points = PointList(int_pts)
+            self._get_integer_points()
 
         return self._interior_points
 
@@ -591,14 +567,19 @@ class Polytope:
         Get the boundary integer points of the polytope
         """
         if self._boundary_points is None:
-            int_pts = []
-            for pt in self.integer_points_raw:
-                if pt[1] == frozenset({}):
-                    continue
-                int_pts.append(pt[0])
-            self._boundary_points = PointList(int_pts)
+            self._get_integer_points()
 
         return self._boundary_points
+
+    @property
+    def boundary_points_facets(self):
+        """
+        Get the ids facets of the polytope that contain boundary integer points
+        """
+        if self._boundary_points_facets is None:
+            self._get_integer_points()
+
+        return self._boundary_points_facets
 
     @property
     def n_integer_points(self):
@@ -606,7 +587,7 @@ class Polytope:
         Get the number of integer points of the polytope
         """
         if self._n_integer_points is None:
-            self._n_integer_points = self.integer_points.shape[0]
+            self._get_integer_points(count_only=True)
 
         return self._n_integer_points
 
@@ -616,7 +597,7 @@ class Polytope:
         Get the number of interior integer points of the polytope
         """
         if self._n_interior_points is None:
-            self._n_interior_points = self.interior_points.shape[0]
+            self._get_integer_points(count_only=True)
 
         return self._n_interior_points
 
@@ -626,7 +607,7 @@ class Polytope:
         Get the number of boundary integer points of the polytope
         """
         if self._n_boundary_points is None:
-            self._n_boundary_points = self.boundary_points.shape[0]
+            self._n_boundary_points = self.n_integer_points - self.n_interior_points
 
         return self._n_boundary_points
 
@@ -764,6 +745,29 @@ class Polytope:
         self._normalized_volume = volume
         self._volume = volume / factorial(self.dim)
 
+    def _get_integer_points(self, count_only=False):
+        """
+        Get the integer points, or optionally just the count, and populate the
+        correct properties
+        """
+        if not self.is_full_dim():
+            raise ValueError("polytope must be full-dimensional")
+        (
+            _interior_points,
+            _boundary_points,
+            self._boundary_points_facets,
+            self._n_integer_points,
+            self._n_interior_points,
+        ) = _find_integer_points(
+            verts=self._verts_as_np_array(),
+            ineqs=self._ineqs_as_np_array(),
+            dim=self.dim,
+            count_only=count_only,
+        )
+        if not count_only:
+            self._interior_points = PointList(_interior_points)
+            self._boundary_points = PointList(_boundary_points)
+
     # Helper functions
 
     def is_full_dim(self):
@@ -797,6 +801,21 @@ class Polytope:
         Get the neighbors of a vertex
         """
         return self.cdd_vertex_adjacency[vertex_id]
+
+    def _verts_as_np_array(self):
+        """
+        Return the vertices of the polytope as a numpy array
+        """
+        return np.array(self.vertices, dtype=np.int64)
+
+    def _ineqs_as_np_array(self):
+        """
+        Return the linear inequalities of the polytope as a numpy array
+        """
+        return np.array(
+            [ineq.normal.tolist() + [-ineq.rhs] for ineq in self.linear_inequalities],
+            dtype=np.int64,
+        )
 
     # Polytope operations
 
@@ -895,7 +914,7 @@ class Polytope:
             vert[i] = 1
             verts.append(vert)
 
-        simplex = Simplex(vertices=verts)
+        simplex = Simplex(verts)
 
         return simplex
 

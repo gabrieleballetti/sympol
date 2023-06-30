@@ -679,6 +679,7 @@ def test_integer_points():
     assert s4.n_integer_points == 35
     assert s4.n_interior_points == 1
     assert s4.n_boundary_points == 34
+    assert s4.interior_points == PointList([[1, 1, 1]])
 
     assert set([pt for pt in c.integer_points]) == set([pt for pt in c.vertices])
     assert c.n_interior_points == 0
@@ -687,6 +688,21 @@ def test_integer_points():
     assert c2.n_integer_points == 27
     assert c2.n_interior_points == 1
     assert c2.n_boundary_points == 26
+    assert c2.interior_points == PointList([[1, 1, 1]])
+
+
+def test_boundary_points_facets():
+    """
+    Test that facets of the boundary points of a polytope are calculated correctly
+    """
+    p = Polytope.cube(3)
+
+    for pt, f_ids in zip(p.boundary_points, p.boundary_points_facets):
+        for j, lineq in enumerate(p.linear_inequalities):
+            if lineq.evaluate(pt) == 0:
+                assert j in f_ids
+            else:
+                assert j not in f_ids
 
 
 def test_ehrhart_polynomial():
