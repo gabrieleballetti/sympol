@@ -1,4 +1,3 @@
-from itertools import chain
 import numpy as np
 import cdd
 
@@ -101,6 +100,12 @@ class Polytope:
         self._full_dim_projection = None
         self._normal_form = None
         self._affine_normal_form = None
+
+        self._is_lattice_polytope = None
+        self._is_hollow = None
+        self._has_one_interior_point = None
+        self._is_canonical = None
+        self._is_reflexive = None
 
         # Simplex specific attributes
         self._weights = None
@@ -745,7 +750,7 @@ class Polytope:
         self._normalized_volume = volume
         self._volume = volume / factorial(self.dim)
 
-    def _get_integer_points(self, count_only=False):
+    def _get_integer_points(self, count_only=False, stop_at_interior=-1):
         """
         Get the integer points, or optionally just the count, and populate the
         correct properties
@@ -755,20 +760,98 @@ class Polytope:
         (
             _interior_points,
             _boundary_points,
-            self._boundary_points_facets,
-            self._n_integer_points,
-            self._n_interior_points,
+            _boundary_points_facets,
+            _n_integer_points,
+            _n_interior_points,
+            forced_stop,
         ) = _find_integer_points(
             verts=self._verts_as_np_array(),
             ineqs=self._ineqs_as_np_array(),
             dim=self.dim,
             count_only=count_only,
+            stop_at_interior=stop_at_interior,
         )
+
+        if forced_stop:
+            # enumeration has been interrupted, do not populate any property
+            return
+
         if not count_only:
             self._interior_points = PointList(_interior_points)
             self._boundary_points = PointList(_boundary_points)
+        self._boundary_points_facets = _boundary_points_facets
+        self._n_integer_points = _n_integer_points
+        self._n_interior_points = _n_interior_points
+
+    @property
+    def is_lattice_polytope(self):
+        """
+        Check if the polytope is a lattice polytope
+        """
+        if self._is_lattice_polytope is None:
+            self._is_lattice_polytope = all(
+                [all([i.is_integer for i in v]) for v in self.vertices]
+            )
+
+        return self._is_lattice_polytope
+
+    @property
+    def is_hollow(self):
+        """
+        Check if the polytope is hollow, i.e. if it has no interior points
+        """
+
+        if self._is_hollow is None:
+            self._is_hollow = self.has_n_interior_points(0)
+
+        return self._is_hollow
+
+    @property
+    def has_one_interior_point(self):
+        """
+        Check if the polytope has exactly one interior point
+        """
+        if self._has_one_interior_point is None:
+            self._has_one_interior_point = self.has_n_interior_points(1)
+
+        return self._has_one_interior_point
+
+    @property
+    def is_canonical(self):
+        """
+        Check if the polytope is canonical Fano, i.e. if it is a lattice polytope with
+        the origin as unique interior point
+        """
+        if self._is_canonical is None:
+            self._is_canonical = (
+                self.is_lattice_polytope
+                and self.has_one_interior_point
+                and self.contains(self._origin(), only_interior=True)
+            )
+
+        return self._is_canonical
+
+    @property
+    def is_reflexive(self):
+        """
+        Check if the polytope is reflexive
+        """
+        if self._is_reflexive is None:
+            self._is_reflexive = self.is_canonical and all(
+                le.evaluate(self._origin()) == 1
+                for le in self.linear_inequalities
+                if not le.is_equality
+            )
+
+        return self._is_reflexive
 
     # Helper functions
+
+    def _origin(self):
+        """
+        Return the origin of the ambient space
+        """
+        return Point([[0] * self.ambient_dim])
 
     def is_full_dim(self):
         """
@@ -790,12 +873,6 @@ class Polytope:
             raise ValueError("Polytope is not a simplex")
         self.__class__ = Simplex
 
-    def is_lattice_polytope(self):
-        """
-        Check if the polytope is a lattice polytope
-        """
-        return all([all([i.is_integer for i in v]) for v in self.vertices])
-
     def neighbors(self, vertex_id):
         """
         Get the neighbors of a vertex
@@ -816,6 +893,19 @@ class Polytope:
             [ineq.normal.tolist() + [-ineq.rhs] for ineq in self.linear_inequalities],
             dtype=np.int64,
         )
+
+    def has_n_interior_points(self, n):
+        """
+        Check if the polytope has *exactly* n interior points
+        """
+        if self._n_interior_points is None:
+            self._get_integer_points(count_only=True, stop_at_interior=n + 1)
+
+        # use the "private" _n_interior_points as _get_integer_points might
+        # have been interrupted in case more than n interior points were found
+        # (in that case _n_interior_points would be None and we do not need to
+        # know the exact number)
+        return self._n_interior_points == n
 
     # Polytope operations
 
@@ -875,7 +965,7 @@ class Polytope:
 
     # Polytope relations
 
-    def contains(self, other):
+    def contains(self, other, only_interior=False):
         """
         Check if the polytope contains a point or another polytope
         """
@@ -883,14 +973,16 @@ class Polytope:
             for lineq in self.linear_inequalities:
                 if lineq.is_equality and lineq.evaluate(other) != 0:
                     return False
-                elif lineq.evaluate(other) < 0:
+                elif not only_interior and lineq.evaluate(other) < 0:
+                    return False
+                elif only_interior and lineq.evaluate(other) <= 0:
                     return False
             return True
 
         if isinstance(other, Polytope):
             pts = other._vertices if other._vertices is not None else other.points
             for p in pts:
-                if not self.contains(p):
+                if not self.contains(p, only_interior=only_interior):
                     return False
             return True
 

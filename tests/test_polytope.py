@@ -646,10 +646,10 @@ def test_is_lattice_polytope():
     Test the is_lattice_polytope method
     """
     polytope = Polytope.unimodular_simplex(dim=3)
-    assert polytope.is_lattice_polytope()
+    assert polytope.is_lattice_polytope
 
     polytope = polytope * Rational(3, 2)
-    assert not polytope.is_lattice_polytope()
+    assert not polytope.is_lattice_polytope
 
 
 def test_integer_points():
@@ -689,6 +689,20 @@ def test_integer_points():
     assert c2.n_interior_points == 1
     assert c2.n_boundary_points == 26
     assert c2.interior_points == PointList([[1, 1, 1]])
+
+
+def test_has_n_interior_points():
+    """
+    Test that the has_n_interior_points method works correctly and the lattice points
+    enumeration stops if n is exceeded
+    """
+    c = Polytope.cube(3) * 2
+
+    assert not c.has_n_interior_points(0)
+    assert c._n_interior_points is None  # enumeration stopped and no value stored
+
+    assert c.has_n_interior_points(1)
+    assert c._n_interior_points == 1  # enumeration completed and value stored
 
 
 def test_boundary_points_facets():

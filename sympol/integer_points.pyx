@@ -11,15 +11,15 @@ def _find_integer_points(
         cnp.ndarray ineqs,
         int dim,
         bint count_only=False,
+        int stop_at = -1,
+        int stop_at_interior = -1
     ):
     """
     Find all integer points in a polytope. returns a list of pairs (point, facet_ids)
     where facet_ids is a list of the indices of the facets containing the point. Adapted
-    from https://github.com/LiamMcAllisterGroup/cytools/blob/main/cytools/polytope.py
-    (GPLv3) which in turn is adapted from a SageMath implementation by Volker Braun.
-    NOTE: This function is slow and not optimized, but I couldn't find a better
-    implementation available in Python. I have plans to implement a faster version
-    in Cython, but for now this will do.
+    from the SageMath implementation by Volker Braun.
+    NOTE: This function is slow if compared with Barvinok's algorithm but I couldn't
+    find a better implementation available in Python.
     """
 
     # Find bounding box and sort by decreasing dimension size
@@ -45,6 +45,7 @@ def _find_integer_points(
     cdef cnp.ndarray tmp_v
     cdef DTYPE_t i_min, i_max, i
     cdef int inc
+    cdef bint forced_stop = False
     while True:
         tmp_v = ineqs[:, 1:-1].dot(p[1:]) + ineqs[:, -1] if dim > 1 else ineqs[:, -1]
         i_min = box_min[0]
@@ -99,6 +100,15 @@ def _find_integer_points(
                     )
                     saturated_facets.append(saturated)
                 i += 1
+        
+        # Break if we have reached the required number of points
+        if stop_at > 0 and num_points >= stop_at:
+            forced_stop = True
+            break
+        if stop_at_interior > 0 and num_interior_points >= stop_at_interior:
+            forced_stop = True
+            break
+
         # Increment the other entries in p to move on to next loop
         inc = 1
         if dim == 1:
@@ -118,16 +128,10 @@ def _find_integer_points(
             break
     
     if count_only:
-        return None, None, None, num_points, num_interior_points
+        return None, None, None, num_points, num_interior_points, forced_stop
 
     # The points and saturated inequalities have now been computed.
     cdef cnp.ndarray[DTYPE_t, ndim=2] interior_points_arr = np.array(interior_points, dtype=np.int64, ndmin=2)
     cdef cnp.ndarray[DTYPE_t, ndim=2] boundary_points_arr = np.array(boundary_points, dtype=np.int64, ndmin=2)
 
-    # # Organize the points as explained above.
-    # cdef list points_with_faces = sorted(
-    #     [(tuple(points_mat[i]), facet_ind[i]) for i in range(len(points))],
-    #     key=(lambda p: (-(len(p[1]) if len(p[1]) > 0 else 1e9),) + tuple(p[0])),
-    # )
-
-    return interior_points_arr, boundary_points_arr, saturated_facets, num_points, num_interior_points
+    return interior_points_arr, boundary_points_arr, saturated_facets, num_points, num_interior_points, forced_stop

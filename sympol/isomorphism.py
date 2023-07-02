@@ -28,7 +28,7 @@ def get_normal_form(polytope, affine=False):
     :param polytope: polytope
     :return: normal form of the polytope
     """
-    if not polytope.is_lattice_polytope():
+    if not polytope.is_lattice_polytope:
         raise ValueError("Polytope must be a lattice polytope")
 
     # if not polytope.is_full_dim():
