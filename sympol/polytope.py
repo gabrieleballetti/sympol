@@ -83,6 +83,8 @@ class Polytope:
         self._triangulation = None
         self._volume = None
         self._normalized_volume = None
+        self._boundary_volume = None
+        self._normalized_boundary_volume = None
 
         self._integer_points = None
         self._interior_points = None
@@ -513,6 +515,24 @@ class Polytope:
         return self._normalized_volume
 
     @property
+    def boundary_volume(self):
+        """
+        Get the normalized volume of the boundary of the polytope
+        """
+        if self._boundary_volume is None:
+            self._calculate_boundary_volume()
+        return self._boundary_volume
+
+    @property
+    def normalized_boundary_volume(self):
+        """
+        Get the normalized volume of the boundary of the polytope
+        """
+        if self._normalized_boundary_volume is None:
+            self._calculate_boundary_volume()
+        return self._normalized_boundary_volume
+
+    @property
     def full_dim_projection(self):
         """
         An affine unimodular copy of the polytope in a lower dimensional space
@@ -633,6 +653,11 @@ class Polytope:
                 -1: (-1) ** self.dim * self.n_interior_points,
             }
 
+            # TODO: use the fact that
+            # ec[-1] == p.volume
+            # ec[-2] == Rational(1, 2) * p.boundary_volume
+            # to speed up the computation
+
             for k in range(2, (self.dim + 1) // 2 + 1):
                 dilation = self * k
                 data[k] = dilation.n_integer_points
@@ -749,6 +774,21 @@ class Polytope:
 
         self._normalized_volume = volume
         self._volume = volume / factorial(self.dim)
+
+    def _calculate_boundary_volume(self):
+        """
+        Calculate the volume of the boundary of the polytope, i.e. the sum of the
+        volumes of the facets of the polytopes, wrt their affinely spanned lattice.
+        Sets both _boundary_volume and _normalized_boundary_volume
+        """
+        boundary_norm_volume = Rational(0)
+
+        for facet in self.facets:
+            facet_polytope = Polytope([self.vertices[i] for i in facet])
+            boundary_norm_volume += facet_polytope.normalized_volume
+
+        self._normalized_boundary_volume = boundary_norm_volume
+        self._boundary_volume = boundary_norm_volume / factorial(self.dim - 1)
 
     def _get_integer_points(self, count_only=False, stop_at_interior=-1):
         """

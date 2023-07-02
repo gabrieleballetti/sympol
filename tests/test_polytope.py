@@ -201,6 +201,16 @@ def test_volume_lower_dimensional_polytope():
     assert p.normalized_volume == 6
 
 
+def test_boundary_volume():
+    """
+    Test that the boundary volume is calculated correctly
+    """
+    polytope = Polytope.cube(3)
+
+    assert polytope.boundary_volume == 6
+    assert polytope.normalized_boundary_volume == 12
+
+
 def test_barycenter():
     """
     Test that the barycenter is correct
