@@ -826,7 +826,7 @@ class Polytope:
             self._is_canonical = (
                 self.is_lattice_polytope
                 and self.has_one_interior_point
-                and self.contains(self._origin(), only_interior=True)
+                and self.contains(self._origin(), strict=True)
             )
 
         return self._is_canonical
@@ -851,7 +851,7 @@ class Polytope:
         """
         Return the origin of the ambient space
         """
-        return Point([[0] * self.ambient_dim])
+        return Point([0 for _ in range(self.ambient_dim)])
 
     def is_full_dim(self):
         """
@@ -965,24 +965,27 @@ class Polytope:
 
     # Polytope relations
 
-    def contains(self, other, only_interior=False):
+    def contains(self, other, strict=False):
         """
-        Check if the polytope contains a point or another polytope
+        Check if the polytope contains a point or another polytope, optionally
+        only checking the ralative interior
         """
         if isinstance(other, Point):
             for lineq in self.linear_inequalities:
-                if lineq.is_equality and lineq.evaluate(other) != 0:
-                    return False
-                elif not only_interior and lineq.evaluate(other) < 0:
-                    return False
-                elif only_interior and lineq.evaluate(other) <= 0:
-                    return False
+                if lineq.is_equality:
+                    if lineq.evaluate(other) != 0:
+                        return False
+                else:
+                    if not strict and lineq.evaluate(other) < 0:
+                        return False
+                    if strict and lineq.evaluate(other) <= 0:
+                        return False
             return True
 
         if isinstance(other, Polytope):
             pts = other._vertices if other._vertices is not None else other.points
             for p in pts:
-                if not self.contains(p, only_interior=only_interior):
+                if not self.contains(p, strict=strict):
                     return False
             return True
 
@@ -1070,7 +1073,7 @@ class Simplex(Polytope):
         origin given as integers
         """
         if self._weights is None:
-            b = self.barycentric_coordinates(Point([0] * self.dim))
+            b = self.barycentric_coordinates(self._origin())
 
             lcm_b = lcm([frac.q for frac in b])
             b = [frac * lcm_b for frac in b]

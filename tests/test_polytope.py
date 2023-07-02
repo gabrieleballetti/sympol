@@ -1,3 +1,4 @@
+import pytest
 from unittest.mock import MagicMock
 from sympy import Matrix, Pow, Rational
 from sympy.abc import x
@@ -271,50 +272,53 @@ def test_translation_and_dilation():
     )
 
 
-def test_contains_point():
+@pytest.mark.parametrize("strict", [True, False])
+def test_contains_point(strict):
     """
-    Test that the contains method works correctly for a point
+    Test that the contains method works correctly
     """
     polytope = Polytope.cube(3) * 2 - Point([1, 1, 1])
 
-    assert polytope.contains(Point([0, 0, 0]))
-    assert polytope.contains(Point([0, 0, 1]))
-    assert polytope.contains(Point([0, 1, 1]))
-    assert polytope.contains(Point([1, 1, 1]))
-    assert not polytope.contains(Point([0, 0, 2]))
+    assert polytope.contains(Point([0, 0, 0]), strict)
+    assert polytope.contains(Point([0, 0, 1]), strict) is (False if strict else True)
+    assert polytope.contains(Point([0, 1, 1]), strict) is (False if strict else True)
+    assert polytope.contains(Point([1, 1, 1]), strict) is (False if strict else True)
+    assert not polytope.contains(Point([0, 0, 2]), strict)
 
 
-def test_lower_dim_polytope_contains_point():
+@pytest.mark.parametrize("strict", [True, False])
+def test_lower_dim_polytope_contains_point(strict):
     """
     Test that points are correctly contained (or not) in lower dimensional polytopes
     """
-    p = Polytope(
-        [
-            [0, 0, 0],
-            [1, 0, 0],
-            [0, 1, 0],
-            [1, 1, 0],
-        ]
-    )
+    p = Polytope.cube(2) * 2 - Point([1, 1])
+    new_verts = [v.tolist() + [0] for v in p.vertices]
+    p = Polytope(new_verts)
 
-    assert p.contains(Point([0, 0, 0]))
-    assert not p.contains(Point([0, 0, 1]))
+    assert p.contains(Point([0, 0, 0]), strict)
+    assert p.contains(Point([1, 0, 0]), strict) is (False if strict else True)
+    assert p.contains(Point([1, 1, 0]), strict) is (False if strict else True)
+    assert not p.contains(Point([0, 0, 1]), strict)
 
 
-def test_contains_polytope():
+@pytest.mark.parametrize("strict", [True, False])
+def test_contains_polytope(strict):
     """
     Test that the contains method works correctly for a polytope
     """
-    polytope = Polytope.cube(3) * 2 - Point([1, 1, 1])
+    p = Polytope.cube(3) * 3
+    p1 = Polytope.cube(3)
+    p2 = Polytope.cube(3) + Point([1, 1, 1])
 
-    assert polytope.contains(polytope)
-    assert polytope.contains(Polytope.cube(3))
+    assert p.contains(p, strict) == (False if strict else True)
+    assert p.contains(p1, strict) == (False if strict else True)
+    assert p.contains(p2, strict)
 
     # check that vertices are not used if not available
     pts = PointList([[Pow(a, 1), Pow(a, 2), Pow(a, 3)] for a in range(100)])
-    polytope_2 = Polytope(pts)
-    assert not polytope.contains(polytope_2)
-    assert polytope_2._vertices is None
+    p3 = Polytope(pts)
+    assert not p.contains(p3)
+    assert p3._vertices is None
 
 
 def test_lower_dim_polytope_contains_polytope():
@@ -641,17 +645,6 @@ def test_affine_normal_lower_dimensional_polytope():
     assert p.affine_normal_form == q.affine_normal_form
 
 
-def test_is_lattice_polytope():
-    """
-    Test the is_lattice_polytope method
-    """
-    polytope = Polytope.unimodular_simplex(dim=3)
-    assert polytope.is_lattice_polytope
-
-    polytope = polytope * Rational(3, 2)
-    assert not polytope.is_lattice_polytope
-
-
 def test_integer_points():
     """
     Test that the integer/interior/boundary points of a polytope are correct
@@ -766,6 +759,71 @@ def test_h_star_vector():
     """
     assert Polytope.cube(3).h_star_vector == (1, 4, 1, 0)
     assert (Polytope.cube(3) * 2).h_star_vector == (1, 23, 23, 1)
+
+
+def test_is_lattice_polytope():
+    """
+    Test the is_lattice_polytope method
+    """
+    polytope = Polytope.unimodular_simplex(dim=3)
+    assert polytope.is_lattice_polytope
+
+    polytope = polytope * Rational(3, 2)
+    assert not polytope.is_lattice_polytope
+
+
+def test_is_hollow():
+    """
+    Test the is_hollow property
+    """
+    s = Polytope.unimodular_simplex(3)
+
+    assert s.is_hollow
+    assert (s * 2).is_hollow
+    assert (s * 3).is_hollow
+    assert not (s * 4).is_hollow
+
+
+def test_has_one_interior_point():
+    """
+    Test the has_one_interior_point property
+    """
+    s = Polytope.unimodular_simplex(3)
+
+    assert s.is_hollow
+    assert (s * 2).is_hollow
+    assert (s * 3).is_hollow
+    assert not (s * 4).is_hollow
+
+
+def test_is_canonical():
+    """
+    Test the is_canonical property
+    """
+    s = Polytope.unimodular_simplex(3)
+
+    assert not s.is_canonical
+    assert not (s * 2).is_canonical
+    assert not (s * 3).is_canonical
+    assert not (s * 4).is_canonical
+    assert ((s * 4) - Point([1, 1, 1])).is_canonical
+    assert not ((s * 5) - Point([1, 1, 1])).is_canonical
+
+
+def test_is_reflexive():
+    """
+    Test the is_reflexive property
+    """
+    s = Polytope.unimodular_simplex(3) * 4 - Point([1, 1, 1])
+    c = Polytope.cube(3) * 2 - Point([1, 1, 1])
+
+    assert s.is_reflexive
+    assert c.is_reflexive
+
+    pts = [pt for pt in c.integer_points if pt != Point([1, 1, 1])]
+    c2 = Polytope(pts)
+    assert c2.is_canonical
+    assert not c2.is_reflexive
 
 
 def test_unimodular_simplex():
