@@ -1,8 +1,9 @@
-from cdd import NumberTypeable, Fraction
-from sympy import Point, Rational
+from cdd import Fraction
+from sympy import Poly, Rational
 from sympy.abc import x
 from sympol.utils import (
     _cdd_fraction_to_simpy_rational,
+    is_unimodal,
     _eulerian_number,
     _eulerian_poly,
 )
@@ -19,6 +20,19 @@ def test_cdd_fraction_to_simpy_rational():
     n = 10**100
     frac = _cdd_fraction_to_simpy_rational(n)
     assert frac == Rational(10**100)
+
+
+def test_is_unimodal():
+    """
+    Test that a sequence is correctly identified as unimodal or not.
+    """
+    assert is_unimodal([1, 2, 3, 4, 5, 5, 5, 4, 3, 2, 1])
+    assert is_unimodal([1, 2, 3, 4, 5, 5, 5, 5, 5, 5, 5])
+    assert is_unimodal([5, 4, 3, 2, 1, 0, 0, 0, 0, 0, 0])
+    assert is_unimodal([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])
+    assert not is_unimodal([1, 2, 3, 4, 5, 4, 5, 4, 3, 2, 1])
+    assert not is_unimodal([2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2])
+    assert not is_unimodal([1, 2, 3, 4, 5, 4, 3, 2, 1, 0, 1])
 
 
 def test_eulerian_number():
@@ -53,13 +67,13 @@ def test_eulerian_polynomial():
     Test that the Eulerian polynomials are correctly calculated. Up to n = 10 they are
     hardcoded so we test them against the explicit formula.
     """
-    assert _eulerian_poly(0, x).equals(1)
+    assert _eulerian_poly(0, x) == Poly(1, x)
     for n in range(1, 11):
-        assert _eulerian_poly(n, x).equals(
+        assert _eulerian_poly(n, x) == Poly(
             sum([_eulerian_number(n, k - 1) * x**k for k in range(1, n + 1)])
         )
 
-    assert _eulerian_poly(11, x).equals(
+    assert _eulerian_poly(11, x) == Poly(
         x**11
         + 2036 * x**10
         + 152637 * x**9

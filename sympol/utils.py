@@ -1,5 +1,5 @@
 from cdd import Fraction
-from sympy import binomial, Expr, Rational
+from sympy import binomial, Poly, Rational
 
 
 def _cdd_fraction_to_simpy_rational(frac):
@@ -13,6 +13,20 @@ def _cdd_fraction_to_simpy_rational(frac):
         return Rational(frac.numerator, frac.denominator)
 
     raise TypeError("Expected a cddlib Fraction or an int")
+
+
+def is_unimodal(iterable):
+    """
+    Return True if an iterable is unimodal, False otherwise. An iterable is
+    unimodal if "there are no valleys", i.e. it is weakly increasing and then weakly
+    decreasing.
+    """
+    i = 1
+    while i < len(iterable) and iterable[i - 1] <= iterable[i]:
+        i += 1
+    while i < len(iterable) and iterable[i - 1] >= iterable[i]:
+        i += 1
+    return i == len(iterable)
 
 
 def _eulerian_number(n, k):
@@ -29,21 +43,23 @@ def _eulerian_poly(n, x):
     Calculate Eulerian polynomial A_n(x), first 10 values are given explicitly
     """
     if n == 0:
-        return 1 * x**0  # x**0 to make the type consistent
+        return Poly(1, x)
     if n == 1:
-        return x
+        return Poly(x)
     if n == 2:
-        return x**2 + x
+        return Poly(x**2 + x)
     if n == 3:
-        return x**3 + 4 * x**2 + x
+        return Poly(x**3 + 4 * x**2 + x)
     if n == 4:
-        return x**4 + 11 * x**3 + 11 * x**2 + x
+        return Poly(x**4 + 11 * x**3 + 11 * x**2 + x)
     if n == 5:
-        return x**5 + 26 * x**4 + 66 * x**3 + 26 * x**2 + x
+        return Poly(x**5 + 26 * x**4 + 66 * x**3 + 26 * x**2 + x)
     if n == 6:
-        return x**6 + 57 * x**5 + 302 * x**4 + 302 * x**3 + 57 * x**2 + x
+        return Poly(
+            x**6 + 57 * x**5 + 302 * x**4 + 302 * x**3 + 57 * x**2 + x
+        )
     if n == 7:
-        return (
+        return Poly(
             x**7
             + 120 * x**6
             + 1191 * x**5
@@ -53,7 +69,7 @@ def _eulerian_poly(n, x):
             + x
         )
     if n == 8:
-        return (
+        return Poly(
             x**8
             + 247 * x**7
             + 4293 * x**6
@@ -64,7 +80,7 @@ def _eulerian_poly(n, x):
             + x
         )
     if n == 9:
-        return (
+        return Poly(
             x**9
             + 502 * x**8
             + 14608 * x**7
@@ -76,7 +92,7 @@ def _eulerian_poly(n, x):
             + x
         )
     if n == 10:
-        return (
+        return Poly(
             x**10
             + 1013 * x**9
             + 47840 * x**8
@@ -88,4 +104,4 @@ def _eulerian_poly(n, x):
             + 1013 * x**2
             + x
         )
-    return sum([_eulerian_number(n, k - 1) * x**k for k in range(1, n + 1)])
+    return Poly(sum([_eulerian_number(n, k - 1) * x**k for k in range(1, n + 1)]))

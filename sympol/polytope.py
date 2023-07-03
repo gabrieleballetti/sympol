@@ -14,7 +14,7 @@ from sympol.isomorphism import get_normal_form
 from sympol.point import Point
 from sympol.point_list import PointList
 from sympol.lineq import LinIneq
-from sympol.utils import _cdd_fraction_to_simpy_rational, _eulerian_poly
+from sympol.utils import _cdd_fraction_to_simpy_rational, _eulerian_poly, is_unimodal
 
 
 class Polytope:
@@ -81,6 +81,7 @@ class Polytope:
         self._vertex_facet_pairing_matrix = None
 
         self._triangulation = None
+        self._induced_boundary_triangulation = None
         self._volume = None
         self._normalized_volume = None
         self._boundary_volume = None
@@ -108,6 +109,8 @@ class Polytope:
         self._has_one_interior_point = None
         self._is_canonical = None
         self._is_reflexive = None
+        self._is_ehrhart_positive = None
+        self._has_unimodal_h_star_vector = None
 
         # Simplex specific attributes
         self._weights = None
@@ -472,7 +475,7 @@ class Polytope:
     def triangulation(self):
         """
         Get the triangulation of the polytope (uses scipy.spatial.Delaunay)
-        NOTE: scipy.spatial.Delaunay uses Qhull, which is float based!
+        NOTE: scipy.spatial.Delaunay uses Qhull, which is float based, use with care
         """
         if self._triangulation is None:
             # if the polytope is not full-dimensional, we need to project it
@@ -489,6 +492,24 @@ class Polytope:
                 self._triangulation = self.full_dim_projection.triangulation
 
         return self._triangulation
+
+    @property
+    def induced_boundary_triangulation(self):
+        """
+        Get the triangulation of the boundary of the polytope induced by the
+        triangulation of the polytope
+        """
+        if self._induced_boundary_triangulation is None:
+            self._induced_boundary_triangulation = tuple(
+                [
+                    ss
+                    for s in self.triangulation
+                    for f in self.facets
+                    if len(ss := f.intersection(s)) == self.dim
+                ]
+            )
+
+        return self._induced_boundary_triangulation
 
     @property
     def volume(self):
@@ -644,7 +665,7 @@ class Polytope:
         if self._ehrhart_polynomial is None:
             if not self.is_lattice_polytope:
                 raise ValueError(
-                    "Ehrhart polynomial is only defined for lattice polytopes"
+                    "Ehrhart polynomial is only implemented for lattice polytopes"
                 )
 
             self._ehrhart_polynomial = Poly(1, x, domain="QQ")
@@ -702,7 +723,9 @@ class Polytope:
         """
         if self._h_star_polynomial is None:
             if not self.is_lattice_polytope:
-                raise ValueError("h*-polynomial is only defined for lattice polytopes")
+                raise ValueError(
+                    "h*-polynomial is only implemented for lattice polytopes"
+                )
 
             self._h_star_polynomial = sum(
                 [
@@ -723,7 +746,10 @@ class Polytope:
         if self._h_star_vector is None:
             self._h_star_vector = tuple(
                 [1]
-                + [self.h_star_polynomial.coeff(x**d) for d in range(1, self.dim + 1)]
+                + [
+                    self.h_star_polynomial.coeff_monomial(x**d)
+                    for d in range(1, self.dim + 1)
+                ]
             )
 
         return self._h_star_vector
@@ -802,9 +828,13 @@ class Polytope:
         """
         boundary_norm_volume = Rational(0)
 
-        for facet in self.facets:
-            facet_polytope = Polytope([self.vertices[i] for i in facet])
-            boundary_norm_volume += facet_polytope.normalized_volume
+        # for facet in self.facets:
+        #     facet_polytope = Polytope([self.vertices[i] for i in facet])
+        #     boundary_norm_volume += facet_polytope.normalized_volume
+
+        for s in self.induced_boundary_triangulation:
+            simplex = Simplex(vertices=[self.vertices[i] for i in s])
+            boundary_norm_volume += simplex.normalized_volume
 
         self._normalized_boundary_volume = boundary_norm_volume
         self._boundary_volume = boundary_norm_volume / factorial(self.dim - 1)
@@ -903,6 +933,27 @@ class Polytope:
             )
 
         return self._is_reflexive
+
+    @property
+    def is_ehrhart_positive(self):
+        """
+        Check if the polytope is Ehrhart positive, i.e. if its Ehrhart polynomial has
+        only positive coefficients
+        """
+        if self._is_ehrhart_positive is None:
+            self._is_ehrhart_positive = all([i >= 0 for i in self.ehrhart_coefficients])
+
+        return self._is_ehrhart_positive
+
+    @property
+    def has_unimodal_h_star_vector(self):
+        """
+        Check if the polytope has a unimodal h* vector
+        """
+        if self._has_unimodal_h_star_vector is None:
+            self._has_unimodal_h_star_vector = is_unimodal(self.h_star_vector)
+
+        return self._has_unimodal_h_star_vector
 
     # Helper functions
 

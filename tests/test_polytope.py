@@ -130,6 +130,19 @@ def test_triangulation():
     assert p.triangulation == (frozenset({0, 1, 3}), frozenset({0, 2, 3}))
 
 
+def test_induced_boundary_triangulation():
+    """
+    Test that the triangulation of the boundary of a polytope induced
+    by a triangulation of the polytope is correct
+    """
+    p = Polytope.cube(3)
+
+    bt = p.induced_boundary_triangulation
+
+    assert len(bt) == 12
+    assert all(len(s) == 3 for s in bt)
+
+
 def test_triangulation_lower_dimensional_polytope():
     """
     Test that the triangulation is correct
@@ -137,6 +150,20 @@ def test_triangulation_lower_dimensional_polytope():
     p = Polytope([[0, 0, 0], [1, 0, 0], [0, 1, 0], [1, 1, 0]])
 
     assert p.triangulation == (frozenset({0, 1, 3}), frozenset({0, 2, 3}))
+
+
+def test_get_volume_segment():
+    """
+    Test that the volume is correct
+    """
+    p = Polytope.cube(1) * 10
+
+    assert p._volume is None
+    assert p._normalized_volume is None
+    assert p.volume == 10  # This triggers a volume computation
+    assert p._volume == 10
+    assert p._normalized_volume == 10
+    assert p.normalized_volume == 10
 
 
 def test_get_volume_cube():
@@ -756,11 +783,11 @@ def test_h_star_polynomial():
     Test that the h*-polynomial of a lattice polytope is correct
     """
     for d in range(1, 5):
-        assert Polytope.unimodular_simplex(d).h_star_polynomial.equals(1)
+        assert Polytope.unimodular_simplex(d).h_star_polynomial == Poly(1, x)
 
-    Polytope.cube(1).h_star_polynomial.equals(1)
-    Polytope.cube(2).h_star_polynomial.equals(x + 1)
-    Polytope.cube(3).h_star_polynomial.equals(x**2 + 4 * x + 1)
+    Polytope.cube(1).h_star_polynomial == Poly(1, x)
+    Polytope.cube(2).h_star_polynomial == Poly(x + 1)
+    Polytope.cube(3).h_star_polynomial == Poly(x**2 + 4 * x + 1)
 
 
 def test_h_star_vector():
@@ -834,6 +861,40 @@ def test_is_reflexive():
     c2 = Polytope(pts)
     assert c2.is_canonical
     assert not c2.is_reflexive
+
+
+def test_is_ehrhart_positive():
+    """
+    Test the is_ehrhart_positive property
+    """
+    s = Polytope.unimodular_simplex(3)
+
+    assert s.is_ehrhart_positive
+
+    p = Polytope(
+        [
+            [0, 0, 0, 0],
+            [1, 0, 0, 0],
+            [0, 1, 0, 0],
+            [0, 0, 1, 0],
+            [1, 0, 26, 27],
+        ]
+    )
+
+    assert not p.is_ehrhart_positive
+
+
+def test_has_unimodal_h_star_vector():
+    """
+    Test the has_unimodal_h_star_vector property
+    """
+    s = Polytope.unimodular_simplex(3) * 4
+
+    assert s.has_unimodal_h_star_vector
+
+    p = Polytope([[0, 0, 0], [1, 0, 0], [0, 1, 0], [1, 1, 2]])
+
+    assert not p.has_unimodal_h_star_vector
 
 
 def test_unimodular_simplex():
