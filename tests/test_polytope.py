@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import MagicMock
-from sympy import Matrix, Pow, Rational
+from sympy import Matrix, Poly, Rational
 from sympy.abc import x
 
 from sympol.point import Point
@@ -325,7 +325,7 @@ def test_contains_polytope(strict):
     assert p.contains(p2, strict)
 
     # check that vertices are not used if not available
-    pts = PointList([[Pow(a, 1), Pow(a, 2), Pow(a, 3)] for a in range(100)])
+    pts = PointList([[a**1, a**2, a**3] for a in range(100)])
     p3 = Polytope(pts)
     assert not p.contains(p3)
     assert p3._vertices is None
@@ -726,16 +726,16 @@ def test_ehrhart_polynomial():
     """
     Test that the Ehrhart polynomial of a lattice polytope is correct
     """
-    assert Polytope.unimodular_simplex(1).ehrhart_polynomial.equals(x + 1)
-    assert Polytope.unimodular_simplex(2).ehrhart_polynomial.equals(
-        x**2 / 2 + 3 * x / 2 + 1
+    assert Polytope.unimodular_simplex(1).ehrhart_polynomial == Poly(x + 1, domain="QQ")
+    assert Polytope.unimodular_simplex(2).ehrhart_polynomial == Poly(
+        x**2 / 2 + 3 * x / 2 + 1, domain="QQ"
     )
-    assert Polytope.unimodular_simplex(3).ehrhart_polynomial.equals(
-        x**3 / 6 + x**2 + 11 * x / 6 + 1
+    assert Polytope.unimodular_simplex(3).ehrhart_polynomial == Poly(
+        x**3 / 6 + x**2 + 11 * x / 6 + 1, domain="QQ"
     )
 
     for d in range(1, 5):
-        assert Polytope.cube(d).ehrhart_polynomial.equals((x + 1) ** d)
+        assert Polytope.cube(d).ehrhart_polynomial == Poly((x + 1) ** d, domain="QQ")
 
 
 def test_ehrhart_coefficients():

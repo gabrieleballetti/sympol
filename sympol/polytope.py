@@ -4,7 +4,7 @@ import cdd
 from scipy.spatial import Delaunay
 
 
-from sympy import Abs, factorial, gcd, lcm, Number, Matrix, Rational
+from sympy import Abs, factorial, gcd, lcm, Number, Matrix, Poly, Rational
 from sympy.abc import x
 from sympy.matrices import zeros
 from sympy.matrices.normalforms import hermite_normal_form
@@ -647,22 +647,41 @@ class Polytope:
                     "Ehrhart polynomial is only defined for lattice polytopes"
                 )
 
-            data = {
-                0: 1,
-                1: self.n_integer_points,
-                -1: (-1) ** self.dim * self.n_interior_points,
-            }
+            self._ehrhart_polynomial = Poly(1, x, domain="QQ")
 
-            # TODO: use the fact that
-            # ec[-1] == p.volume
-            # ec[-2] == Rational(1, 2) * p.boundary_volume
-            # to speed up the computation
+            if self.dim == 0:
+                return self._ehrhart_polynomial
 
-            for k in range(2, (self.dim + 1) // 2 + 1):
-                dilation = self * k
-                data[k] = dilation.n_integer_points
-                data[-k] = (-1) ** (self.dim) * dilation.n_interior_points
-            self._ehrhart_polynomial = interpolate(data, x)
+            # manually add the coefficient c_d
+            self._ehrhart_polynomial += self.volume * x**self.dim
+
+            if self.dim == 1:
+                return self._ehrhart_polynomial
+
+            # manually add the coefficient c_{d-1}
+            # (it is generally faster than determining it through interpolation)
+            self._ehrhart_polynomial += (
+                Rational(1, 2) * self.boundary_volume * x ** (self.dim - 1)
+            )
+
+            if self.dim == 2:
+                return self._ehrhart_polynomial
+
+            values_needed = self.dim - 2
+            values = {0: 0}
+            while values_needed > 0:
+                k = (self.dim - values_needed) // 2
+                dilation = self * k if k > 1 else self
+
+                # there's no additional computation to count also interior points
+                # so we can add them both at the same time
+                values[k] = dilation.n_integer_points - self._ehrhart_polynomial.eval(k)
+                values[-k] = (-1) ** (
+                    self.dim
+                ) * dilation.n_interior_points - self._ehrhart_polynomial.eval(-k)
+                values_needed -= 2
+
+            self._ehrhart_polynomial += interpolate(values, x)
 
         return self._ehrhart_polynomial
 
@@ -672,13 +691,7 @@ class Polytope:
         Get the Ehrhart coefficients of the polytope
         """
         if self._ehrhart_coefficients is None:
-            self._ehrhart_coefficients = tuple(
-                [1]
-                + [
-                    self.ehrhart_polynomial.coeff(x**d)
-                    for d in range(1, self.dim + 1)
-                ]
-            )
+            self._ehrhart_coefficients = tuple(self.ehrhart_polynomial.coeffs()[::-1])
 
         return self._ehrhart_coefficients
 
@@ -764,6 +777,12 @@ class Polytope:
         Calculate the volume of the polytope, sets both _volume and _normalized_volume
         """
         volume = Rational(0)
+
+        if self.ambient_dim == 1:
+            volume += Abs(self.vertices[1][0] - self.vertices[0][0])
+            self._normalized_volume = volume
+            self._volume = volume
+            return
 
         for simplex_ids in self.triangulation:
             verts = list(simplex_ids)
