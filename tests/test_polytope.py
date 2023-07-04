@@ -798,6 +798,27 @@ def test_h_star_vector():
     assert (Polytope.cube(3) * 2).h_star_vector == (1, 23, 23, 1)
 
 
+def test_is_simplicial():
+    """
+    Test the is_simplicial property
+    """
+    assert Polytope.unimodular_simplex(3).is_simplicial
+    assert not (Polytope.unimodular_simplex(2) * Polytope.cube(1)).is_simplicial
+    assert not Polytope.cube(3).is_simplicial
+
+
+def test_is_simple():
+    """
+    Test the is_simple property
+    """
+    assert Polytope.unimodular_simplex(3).is_simple
+    assert (Polytope.unimodular_simplex(2) * Polytope.cube(1)).is_simple
+    assert Polytope.cube(3).is_simple
+    assert not Polytope(
+        [[0, 0, 0], [1, 0, 0], [0, 1, 0], [1, 1, 0], [0, 0, 1]]
+    ).is_simple
+
+
 def test_is_lattice_polytope():
     """
     Test the is_lattice_polytope method
@@ -895,6 +916,55 @@ def test_has_unimodal_h_star_vector():
     p = Polytope([[0, 0, 0], [1, 0, 0], [0, 1, 0], [1, 1, 2]])
 
     assert not p.has_unimodal_h_star_vector
+
+
+def test_is_idp():
+    """
+    Test the is_idp property
+    """
+    p = Polytope([[0, 0, 0], [1, 0, 0], [0, 1, 0], [1, 1, 2], [0, 0, -1]])
+    assert p.is_idp
+
+    p = Polytope([[0, 0, 0], [1, 0, 0], [0, 1, 0], [1, 1, 3], [0, 0, -1]])
+    assert not p.is_idp
+
+
+def test_is_smooth():
+    """
+    Test the is_smooth property
+    """
+    assert Polytope.cube(3).is_smooth
+    assert not Polytope([[0, 0, 0], [1, 0, 0], [0, 1, 0], [1, 1, 2]]).is_smooth
+    assert not Polytope(
+        [[0, 0, 0], [1, 0, 0], [0, 1, 0], [1, 1, 3], [0, 0, -1]]
+    ).is_smooth
+
+
+def test_chisel_vertex():
+    """
+    Test that the chisel_vertex method works correctly
+    """
+    with pytest.raises(ValueError):
+        assert Polytope.cube(2).chisel(-1)
+
+    c = Polytope.cube(2) * 2
+    assert c.chisel_vertex(0, 0) == c
+    assert c.chisel_vertex(0, 1).n_vertices == 5
+
+
+def test_chisel():
+    """
+    Test that the chisel method works correctly
+    """
+    with pytest.raises(ValueError):
+        assert Polytope.cube(2).chisel(-1)
+
+    assert Polytope.cube(2).chisel(0).vertices == Polytope.cube(2).vertices
+    assert (Polytope.cube(2) * 2).chisel(1).n_vertices == 4
+    assert (Polytope.cube(2) * 3).chisel(1).n_vertices == 8
+
+    with pytest.raises(ValueError):
+        assert (Polytope.cube(2) * 3).chisel(2)
 
 
 def test_unimodular_simplex():

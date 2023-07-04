@@ -104,6 +104,8 @@ class Polytope:
         self._normal_form = None
         self._affine_normal_form = None
 
+        self._is_simplicial = None
+        self._is_simple = None
         self._is_lattice_polytope = None
         self._is_hollow = None
         self._has_one_interior_point = None
@@ -111,6 +113,8 @@ class Polytope:
         self._is_reflexive = None
         self._is_ehrhart_positive = None
         self._has_unimodal_h_star_vector = None
+        self._is_idp = None
+        self._is_smooth = None
 
         # Simplex specific attributes
         self._weights = None
@@ -754,6 +758,156 @@ class Polytope:
 
         return self._h_star_vector
 
+    @property
+    def is_simplicial(self):
+        """
+        Check if the polytope is simplicial, i.e. if all its facets are simplices.
+        """
+        if self._is_simplicial is None:
+            self._is_simplicial = all([len(f) == self.dim for f in self.facets])
+
+        return self._is_simplicial
+
+    @property
+    def is_simple(self):
+        """
+        Check if the polytope is simple, i.e. if each vertex is contained in exactly
+        d edges, where d is the dimension of the polytope.
+        """
+        if self._is_simple is None:
+            self._is_simple = all(
+                [
+                    len(self.neighbors(v_id)) == self.dim
+                    for v_id in range(self.n_vertices)
+                ]
+            )
+
+        return self._is_simple
+
+    @property
+    def is_lattice_polytope(self):
+        """
+        Check if the polytope is a lattice polytope
+        """
+        if self._is_lattice_polytope is None:
+            self._is_lattice_polytope = all(
+                [all([i.is_integer for i in v]) for v in self.vertices]
+            )
+
+        return self._is_lattice_polytope
+
+    @property
+    def is_hollow(self):
+        """
+        Check if the polytope is hollow, i.e. if it has no interior points
+        """
+
+        if self._is_hollow is None:
+            self._is_hollow = self.has_n_interior_points(0)
+
+        return self._is_hollow
+
+    @property
+    def has_one_interior_point(self):
+        """
+        Check if the polytope has exactly one interior point
+        """
+        if self._has_one_interior_point is None:
+            self._has_one_interior_point = self.has_n_interior_points(1)
+
+        return self._has_one_interior_point
+
+    @property
+    def is_canonical(self):
+        """
+        Check if the polytope is canonical Fano, i.e. if it is a lattice polytope with
+        the origin as unique interior point
+        """
+        if self._is_canonical is None:
+            self._is_canonical = (
+                self.is_lattice_polytope
+                and self.has_one_interior_point
+                and self.contains(self._origin(), strict=True)
+            )
+
+        return self._is_canonical
+
+    @property
+    def is_reflexive(self):
+        """
+        Check if the polytope is reflexive
+        """
+        if self._is_reflexive is None:
+            self._is_reflexive = self.is_canonical and all(
+                le.evaluate(self._origin()) == 1
+                for le in self.linear_inequalities
+                if not le.is_equality
+            )
+
+        return self._is_reflexive
+
+    @property
+    def is_ehrhart_positive(self):
+        """
+        Check if the polytope is Ehrhart positive, i.e. if its Ehrhart polynomial has
+        only positive coefficients
+        """
+        if self._is_ehrhart_positive is None:
+            self._is_ehrhart_positive = all([i >= 0 for i in self.ehrhart_coefficients])
+
+        return self._is_ehrhart_positive
+
+    @property
+    def has_unimodal_h_star_vector(self):
+        """
+        Check if the polytope has a unimodal h* vector
+        """
+        if self._has_unimodal_h_star_vector is None:
+            self._has_unimodal_h_star_vector = is_unimodal(self.h_star_vector)
+
+        return self._has_unimodal_h_star_vector
+
+    @property
+    def is_idp(self):
+        """
+        Check if the polytope P has the Integer Decomposition Property (IDP), i.e. if
+        if for every >= 2 and for every lattice point in kP there exist v1, . . . , vk
+        lattice points in P such that u = v1 + · · · + vk. A polytope P with this
+        property is also called integrally closed.
+        """
+        if self._is_idp is None:
+            self._is_idp = True
+            pts = self.integer_points
+            for d in range(2, self.dim):
+                n_pts = self.ehrhart_polynomial.eval(d)
+                gen_pts = set(p1 + p2 for p1 in pts for p2 in self.integer_points)
+                if len(gen_pts) != n_pts:
+                    self._is_idp = False
+                    break
+
+        return self._is_idp
+
+    @property
+    def is_smooth(self):
+        """
+        Check if the polytope is smooth, i.e. if it is simple and the tangent cone at
+        each vertex is unimodular.
+        """
+        if self._is_smooth is None:
+            if not self.is_simple:
+                self._is_smooth = False
+                return False
+
+            for v_id in range(self.n_vertices):
+                v = self.vertices[v_id]
+                mat = Matrix([self.vertices[u_id] - v for u_id in self.neighbors(v_id)])
+                if not Abs(mat.det()) == 1:
+                    self._is_smooth = False
+                    return False
+            self._is_smooth = True
+
+        return self._is_smooth
+
     # property setters
 
     def _get_cdd_polyhedron_from_points(self):
@@ -872,89 +1026,6 @@ class Polytope:
         self._n_integer_points = _n_integer_points
         self._n_interior_points = _n_interior_points
 
-    @property
-    def is_lattice_polytope(self):
-        """
-        Check if the polytope is a lattice polytope
-        """
-        if self._is_lattice_polytope is None:
-            self._is_lattice_polytope = all(
-                [all([i.is_integer for i in v]) for v in self.vertices]
-            )
-
-        return self._is_lattice_polytope
-
-    @property
-    def is_hollow(self):
-        """
-        Check if the polytope is hollow, i.e. if it has no interior points
-        """
-
-        if self._is_hollow is None:
-            self._is_hollow = self.has_n_interior_points(0)
-
-        return self._is_hollow
-
-    @property
-    def has_one_interior_point(self):
-        """
-        Check if the polytope has exactly one interior point
-        """
-        if self._has_one_interior_point is None:
-            self._has_one_interior_point = self.has_n_interior_points(1)
-
-        return self._has_one_interior_point
-
-    @property
-    def is_canonical(self):
-        """
-        Check if the polytope is canonical Fano, i.e. if it is a lattice polytope with
-        the origin as unique interior point
-        """
-        if self._is_canonical is None:
-            self._is_canonical = (
-                self.is_lattice_polytope
-                and self.has_one_interior_point
-                and self.contains(self._origin(), strict=True)
-            )
-
-        return self._is_canonical
-
-    @property
-    def is_reflexive(self):
-        """
-        Check if the polytope is reflexive
-        """
-        if self._is_reflexive is None:
-            self._is_reflexive = self.is_canonical and all(
-                le.evaluate(self._origin()) == 1
-                for le in self.linear_inequalities
-                if not le.is_equality
-            )
-
-        return self._is_reflexive
-
-    @property
-    def is_ehrhart_positive(self):
-        """
-        Check if the polytope is Ehrhart positive, i.e. if its Ehrhart polynomial has
-        only positive coefficients
-        """
-        if self._is_ehrhart_positive is None:
-            self._is_ehrhart_positive = all([i >= 0 for i in self.ehrhart_coefficients])
-
-        return self._is_ehrhart_positive
-
-    @property
-    def has_unimodal_h_star_vector(self):
-        """
-        Check if the polytope has a unimodal h* vector
-        """
-        if self._has_unimodal_h_star_vector is None:
-            self._has_unimodal_h_star_vector = is_unimodal(self.h_star_vector)
-
-        return self._has_unimodal_h_star_vector
-
     # Helper functions
 
     def _origin(self):
@@ -1072,6 +1143,65 @@ class Polytope:
             "A polytope can only be multiplied with a scalar (dilation)"
             " or another polytope (cartesian product)"
         )
+
+    def chisel_vertex(self, vertex_id, dist):
+        """
+        Return a new polytope obtained by "chiseling" a vertex at a given lattice
+        distance along its neighboring edges.
+        """
+        if dist < 0:
+            raise ValueError("dist must be positive")
+        if dist == 0:
+            return self
+
+        new_verts = [u for u_id, u in enumerate(self.vertices) if u_id != vertex_id]
+        v = self.vertices[vertex_id]
+        recompute = False
+        neighbors = self.neighbors(vertex_id)
+        if len(neighbors) > self.dim:
+            # if P is not simple we might need to recompute the vertices
+            recompute = True
+        for u_id in neighbors:
+            u = self.vertices[u_id]
+            vs_dir = u - v
+            vs_gcd = gcd(vs_dir)
+            if dist >= vs_gcd:
+                raise ValueError("Trying to chisel too greedily and too deep.")
+            w = vs_dir / vs_gcd
+            new_verts.append(v + w * dist)
+
+        return Polytope(new_verts) if recompute else Polytope(vertices=new_verts)
+
+    def chisel(self, dist):
+        """
+        Return a new polytope obtained by "chiseling" all the vertices at a given
+        lattice distance along their neighboring edges.
+        """
+        # NOTE: code repetition with the previous method is intentional for
+        # performance reasons
+        if dist < 0:
+            raise ValueError("dist must be positive")
+        if dist == 0:
+            return self
+
+        new_verts = set()
+        recompute = False
+        for v_id in range(self.n_vertices):
+            v = self.vertices[v_id]
+            neighbors = self.neighbors(v_id)
+            if len(neighbors) > self.dim:
+                # if P is not simple we might need to recompute the vertices
+                recompute = True
+            for u_id in neighbors:
+                u = self.vertices[u_id]
+                vs_dir = u - v
+                vs_gcd = gcd(vs_dir)
+                if dist > vs_gcd // 2:
+                    raise ValueError("Trying to chisel too greedily and too deep.")
+                w = vs_dir / vs_gcd
+                new_verts.add(v + w * dist)
+
+        return Polytope(new_verts) if recompute else Polytope(vertices=new_verts)
 
     # Polytope relations
 
