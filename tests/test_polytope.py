@@ -940,6 +940,18 @@ def test_is_smooth():
     ).is_smooth
 
 
+def test_free_sum():
+    """
+    Test the free_sum method
+    """
+    assert set(Polytope.cube(1).free_sum(Polytope.cube(1)).vertices) == set(
+        [Point((0, 0)), Point((0, 1)), Point((1, 0))]
+    )
+
+    with pytest.raises(TypeError):
+        assert Polytope.cube(2).free_sum(1)
+
+
 def test_chisel_vertex():
     """
     Test that the chisel_vertex method works correctly
@@ -1006,9 +1018,31 @@ def test_cube():
         ]
     )
 
-    assert cube.vertices == expected_vertices
+    assert set(cube.vertices) == set(expected_vertices)
     assert cube.volume == 1
     assert cube.normalized_volume == 6
+
+
+def test_cross_polytope():
+    """
+    Test that the cross polytope is correctly constructed
+    """
+    cross = Polytope.cross_polytope(3)
+
+    expected_vertices = PointList(
+        [
+            [1, 0, 0],
+            [-1, 0, 0],
+            [0, 1, 0],
+            [0, -1, 0],
+            [0, 0, 1],
+            [0, 0, -1],
+        ]
+    )
+
+    assert set(cross.vertices) == set(expected_vertices)
+    assert cross.volume == Rational(4, 3)
+    assert cross.normalized_volume == 8
 
 
 def test_get_cdd_polyhedron_from_points():

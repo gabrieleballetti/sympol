@@ -1144,6 +1144,21 @@ class Polytope:
             " or another polytope (cartesian product)"
         )
 
+    def free_sum(self, other):
+        """
+        Return the free sum of self and other.
+        """
+        if not isinstance(other, Polytope):
+            raise TypeError("The free sum is only defined for polytopes")
+
+        verts = [v.tolist() + [0] * other.ambient_dim for v in self.vertices]
+        verts += [[0] * self.ambient_dim + v.tolist() for v in other.vertices]
+
+        # make set to quickly remove duplicates (can only be origin)
+        verts = set(map(tuple, verts))
+
+        return Polytope(vertices=verts)
+
     def chisel_vertex(self, vertex_id, dist):
         """
         Return a new polytope obtained by "chiseling" a vertex at a given lattice
@@ -1256,7 +1271,7 @@ class Polytope:
     @classmethod
     def cube(cls, dim):
         """
-        Return a unit cube in the given dimension
+        Return a unit hypercube in the given dimension
         """
 
         # check if dim is an integer > 0
@@ -1270,6 +1285,24 @@ class Polytope:
             cube = cube * cls(vertices=segment_verts)
 
         return cube
+
+    @classmethod
+    def cross_polytope(cls, dim):
+        """
+        Return a cross polytope centered in 0 in the given dimension
+        """
+
+        # check if dim is an integer > 0
+        if not isinstance(dim, int) or dim < 1:
+            raise ValueError("Dimension must be a positive integer")
+
+        segment_verts = [[-1], [1]]
+        cross_polytope = cls(vertices=segment_verts)
+
+        for _ in range(dim - 1):
+            cross_polytope = cross_polytope.free_sum(cls(vertices=segment_verts))
+
+        return cross_polytope
 
     @classmethod
     def random_lattice_polytope(cls, dim, n_vertices, min=0, max=1):
