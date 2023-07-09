@@ -1,3 +1,4 @@
+import numpy as np
 from sympy import Abs, Array, Matrix, NDimArray, prod, ZZ
 from sympy.matrices.normalforms import smith_normal_form
 

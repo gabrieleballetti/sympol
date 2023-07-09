@@ -2,8 +2,10 @@ import sys
 
 sys.path.insert(0, ".")
 
+import pathlib
 import json
 from sympol.polytope import Polytope
+from sympol.random import sample_polytope_from_normal_distribution
 
 
 def get_random_polytope():
@@ -29,7 +31,6 @@ def get_polytope_data(p):
         "affine_normal_form": [[int(c) for c in v] for v in p.affine_normal_form],
         "is_simplicial": p.is_simplicial,
         "is_simple": p.is_simple,
-        "is_lattice_polytope": p.is_lattice_polytope,
         "is_hollow": p.is_hollow,
         "has_one_interior_point": p.has_one_interior_point,
         "is_canonical": p.is_canonical,
@@ -42,8 +43,29 @@ def get_polytope_data(p):
     return data
 
 
-p = get_random_polytope()
-data = get_polytope_data(p)
+def save_polytope_data(data, filename):
+    with open(filename, "w") as f:
+        json.dump(data, f)
 
-with open("polytope_data.json", "w") as f:
-    json.dump(data, f)
+
+import time
+
+for i in range(100):
+    start = time.time()
+    p = sample_polytope_from_normal_distribution(3, 30, 2)
+    data = get_polytope_data(p)
+
+    if p.dim < 3:
+        continue
+
+    pathlib.Path("data").mkdir(parents=True, exist_ok=True)
+    save_polytope_data(data, f"data/polytope_{i}.json")
+    end = time.time()
+    print("------")
+    print(f"Polytope {i}")
+    print(f"f vector: {p.f_vector}")
+    print(f"h* vector: {p.h_star_vector}")
+    print(f"Is IDP: {p.is_idp}")
+    print(f"Is smooth: {p.is_smooth}")
+    print(f"Time elapsed: {end - start}")
+    print("------")
