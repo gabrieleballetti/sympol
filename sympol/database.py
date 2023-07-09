@@ -35,6 +35,7 @@ def get_polytope_data(p):
         "has_one_interior_point": p.has_one_interior_point,
         "is_canonical": p.is_canonical,
         "is_reflexive": p.is_reflexive,
+        "is_gorenstein": p.is_gorenstein,
         "is_ehrhart_positive": p.is_ehrhart_positive,
         "has_unimodal_h_star_vector": p.has_unimodal_h_star_vector,
         "is_idp": p.is_idp,
@@ -65,6 +66,7 @@ for i in range(100):
     print(f"Polytope {i}")
     print(f"f vector: {p.f_vector}")
     print(f"h* vector: {p.h_star_vector}")
+    print(f"Is Gorenstein: {p.is_gorenstein}")
     print(f"Is IDP: {p.is_idp}")
     print(f"Is smooth: {p.is_smooth}")
     print(f"Time elapsed: {end - start}")

@@ -100,6 +100,7 @@ class Polytope:
         self._ehrhart_coefficients = None
         self._h_star_polynomial = None
         self._h_star_vector = None
+        self._degree = None
 
         self._full_dim_projection = None
         self._normal_form = None
@@ -112,6 +113,7 @@ class Polytope:
         self._has_one_interior_point = None
         self._is_canonical = None
         self._is_reflexive = None
+        self._is_gorenstein = None
         self._is_ehrhart_positive = None
         self._has_unimodal_h_star_vector = None
         self._is_idp = None
@@ -760,6 +762,16 @@ class Polytope:
         return self._h_star_vector
 
     @property
+    def degree(self):
+        """
+        Get the degree of the h*-polynomial of the polytope
+        """
+        if self._degree is None:
+            self._degree = self.h_star_polynomial.degree()
+
+        return self._degree
+
+    @property
     def is_simplicial(self):
         """
         Check if the polytope is simplicial, i.e. if all its facets are simplices.
@@ -846,6 +858,22 @@ class Polytope:
             )
 
         return self._is_reflexive
+
+    @property
+    def is_gorenstein(self):
+        """
+        Check if the polytope is Gorenstein
+        """
+        if self._is_gorenstein is None:
+            # if h* is not available, it would be faster to check if it has an integer
+            # dilation that is reflexive (up to translation), but this is not
+            # implemented yet
+
+            # check that the h*-vector is symmetric
+            hsv = self.h_star_vector[: self.degree + 1]
+            self._is_gorenstein = hsv == hsv[::-1]
+
+        return self._is_gorenstein
 
     @property
     def is_ehrhart_positive(self):

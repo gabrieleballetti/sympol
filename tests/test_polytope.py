@@ -798,6 +798,19 @@ def test_h_star_vector():
     assert (Polytope.cube(3) * 2).h_star_vector == (1, 23, 23, 1)
 
 
+def test_degree():
+    """
+    Test that the degree of a lattice polytope is correct
+    """
+    assert Polytope.unimodular_simplex(3).degree == 0
+    assert (Polytope.unimodular_simplex(3) * 2).degree == 2
+    assert (Polytope.unimodular_simplex(3) * 3).degree == 2
+    assert (Polytope.unimodular_simplex(3) * 4).degree == 3
+
+    assert (Polytope.cube(3) * 1).degree == 2
+    assert (Polytope.cube(3) * 2).degree == 3
+
+
 def test_is_simplicial():
     """
     Test the is_simplicial property
@@ -882,6 +895,16 @@ def test_is_reflexive():
     c2 = Polytope(pts)
     assert c2.is_canonical
     assert not c2.is_reflexive
+
+
+def test_is_gorenstein():
+    """
+    Test the is_gorenstein property
+    """
+    assert Polytope.unimodular_simplex(3).is_gorenstein
+    assert Polytope.cube(3).is_gorenstein
+    assert (Polytope.cube(3) * 2).is_gorenstein
+    assert not (Polytope.cube(3) * 3).is_gorenstein
 
 
 def test_is_ehrhart_positive():
