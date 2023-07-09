@@ -9,6 +9,7 @@ from sympy.abc import x
 from sympy.matrices import zeros
 from sympy.matrices.normalforms import hermite_normal_form
 from sympy.polys.polyfuncs import interpolate
+from sympol.cython_utils import _sum_of_points
 from sympol.integer_points import _find_integer_points
 from sympol.isomorphism import get_normal_form
 from sympol.point import Point
@@ -877,10 +878,11 @@ class Polytope:
         """
         if self._is_idp is None:
             self._is_idp = True
-            pts = self.integer_points
+            pts = np.array([pt.tolist() for pt in self.integer_points], dtype=np.int64)
+            gen_pts = np.array(pts, dtype=np.int64)
             for d in range(2, self.dim):
                 n_pts = self.ehrhart_polynomial.eval(d)
-                gen_pts = set(p1 + p2 for p1 in pts for p2 in self.integer_points)
+                gen_pts = _sum_of_points(pts, gen_pts)
                 if len(gen_pts) != n_pts:
                     self._is_idp = False
                     break

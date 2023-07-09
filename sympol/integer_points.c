@@ -6,7 +6,7 @@
         "depends": [],
         "name": "sympol.integer_points",
         "sources": [
-            "sympol/integer_points.pyx"
+            "sympol\\integer_points.pyx"
         ]
     },
     "module_name": "sympol.integer_points"

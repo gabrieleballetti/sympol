@@ -14,7 +14,6 @@ class VertexType(Enum):
 
     VERTEX = 0
     FACET = 1
-    LATTICE_DISTANCE = 2
 
 
 def get_normal_form(polytope, affine=False):
