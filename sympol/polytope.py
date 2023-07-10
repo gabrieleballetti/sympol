@@ -513,6 +513,8 @@ class Polytope:
                     for s in self.triangulation
                     for f in self.facets
                     if len(ss := f.intersection(s)) == self.dim
+                    and PointList([self.vertices[i] for i in ss]).affine_rank
+                    == self.dim - 1
                 ]
             )
 
