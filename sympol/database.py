@@ -5,6 +5,7 @@ sys.path.insert(0, ".")
 import pathlib
 import hashlib
 import json
+import numpy as np
 from sympol.polytope import Polytope
 from sympol.random import (
     sample_polytope_from_normal_distribution,
@@ -64,13 +65,13 @@ def save_polytope_data(data, filename):
 import time
 
 dim = 6
-n_points = 12
 
 for i in range(1000):
     p = None
 
     while p is None or (p.dim == dim and p.n_integer_points > dim + 1):
         if p is None:
+            n_points = int(abs(round(np.random.normal(0, 10)))) + dim + 1
             p = sample_polytope_from_normal_distribution(dim, n_points, 1)
         else:
             p = random_subpolytope(p, SubpolytopeStrategy.POINTS_SUBSET)
@@ -86,6 +87,8 @@ for i in range(1000):
         save_polytope_data(data, filename)
 
         print(f"{p.h_star_vector} - {polytope_hash}")
+        if p.is_smooth:
+            print("Smooth")
         if p.is_smooth and not p.is_idp:
             print(p.vertices)
             raise Exception("Found one")
