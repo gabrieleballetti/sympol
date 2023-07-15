@@ -1310,7 +1310,7 @@ struct __pyx_opt_args_6sympol_25integer_pts_parallelotope_get_parallelotope_poin
  */
 struct __pyx_opt_args_6sympol_25integer_pts_parallelotope_get_parallelotope_points {
   int __pyx_n;
-  int check_inequalities;
+  int height;
 };
 
 /* --- Runtime support code (head) --- */
@@ -1851,11 +1851,11 @@ typedef struct {
 /* CIntFromPy.proto */
 static CYTHON_INLINE npy_int64 __Pyx_PyInt_As_npy_int64(PyObject *);
 
-/* CIntToPy.proto */
-static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value);
-
 /* CIntFromPy.proto */
 static CYTHON_INLINE int __Pyx_PyInt_As_int(PyObject *);
+
+/* CIntToPy.proto */
+static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value);
 
 /* CIntToPy.proto */
 static CYTHON_INLINE PyObject* __Pyx_PyInt_From_npy_int64(npy_int64 value);
@@ -1926,7 +1926,7 @@ static PyTypeObject *__pyx_ptype_5numpy_ufunc = 0;
 static CYTHON_INLINE int __pyx_f_5numpy_import_array(void); /*proto*/
 
 /* Module declarations from 'sympol.integer_pts_parallelotope' */
-static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_points(PyArrayObject *, __pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t, PyArrayObject *, PyArrayObject *, PyArrayObject *, PyArrayObject *, int __pyx_skip_dispatch, struct __pyx_opt_args_6sympol_25integer_pts_parallelotope_get_parallelotope_points *__pyx_optional_args); /*proto*/
+static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_points(PyArrayObject *, __pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t, PyArrayObject *, PyArrayObject *, int __pyx_skip_dispatch, struct __pyx_opt_args_6sympol_25integer_pts_parallelotope_get_parallelotope_points *__pyx_optional_args); /*proto*/
 static __Pyx_TypeInfo __Pyx_TypeInfo_nn___pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t = { "DTYPE_t", NULL, sizeof(__pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t), { 0 }, 0, IS_UNSIGNED(__pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t) ? 'U' : 'I', IS_UNSIGNED(__pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t), 0 };
 #define __Pyx_MODULE_NAME "sympol.integer_pts_parallelotope"
 extern int __pyx_module_is_main_sympol__integer_pts_parallelotope;
@@ -1935,9 +1935,7 @@ int __pyx_module_is_main_sympol__integer_pts_parallelotope = 0;
 /* Implementation of 'sympol.integer_pts_parallelotope' */
 static PyObject *__pyx_builtin_range;
 static PyObject *__pyx_builtin_ImportError;
-static const char __pyx_k_A[] = "A";
 static const char __pyx_k_R[] = "R";
-static const char __pyx_k_b[] = "b";
 static const char __pyx_k_np[] = "np";
 static const char __pyx_k_det[] = "det";
 static const char __pyx_k_snf[] = "snf";
@@ -1951,24 +1949,22 @@ static const char __pyx_k_int64[] = "int64";
 static const char __pyx_k_numpy[] = "numpy";
 static const char __pyx_k_range[] = "range";
 static const char __pyx_k_zeros[] = "zeros";
+static const char __pyx_k_height[] = "height";
 static const char __pyx_k_import[] = "__import__";
 static const char __pyx_k_product[] = "product";
 static const char __pyx_k_itertools[] = "itertools";
 static const char __pyx_k_ImportError[] = "ImportError";
-static const char __pyx_k_check_inequalities[] = "check_inequalities";
 static const char __pyx_k_cline_in_traceback[] = "cline_in_traceback";
 static const char __pyx_k_numpy_core_multiarray_failed_to[] = "numpy.core.multiarray failed to import";
 static const char __pyx_k_numpy_core_umath_failed_to_impor[] = "numpy.core.umath failed to import";
-static PyObject *__pyx_n_s_A;
 static PyObject *__pyx_n_s_ImportError;
 static PyObject *__pyx_n_s_R;
 static PyObject *__pyx_n_s_VDinv;
-static PyObject *__pyx_n_s_b;
-static PyObject *__pyx_n_s_check_inequalities;
 static PyObject *__pyx_n_s_cline_in_traceback;
 static PyObject *__pyx_n_s_copy;
 static PyObject *__pyx_n_s_det;
 static PyObject *__pyx_n_s_dtype;
+static PyObject *__pyx_n_s_height;
 static PyObject *__pyx_n_s_import;
 static PyObject *__pyx_n_s_int64;
 static PyObject *__pyx_n_s_itertools;
@@ -1983,7 +1979,7 @@ static PyObject *__pyx_n_s_range;
 static PyObject *__pyx_n_s_snf;
 static PyObject *__pyx_n_s_test;
 static PyObject *__pyx_n_s_zeros;
-static PyObject *__pyx_pf_6sympol_25integer_pts_parallelotope_get_parallelotope_points(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_snf, __pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t __pyx_v_det, PyArrayObject *__pyx_v_VDinv, PyArrayObject *__pyx_v_R, PyArrayObject *__pyx_v_A, PyArrayObject *__pyx_v_b, int __pyx_v_check_inequalities); /* proto */
+static PyObject *__pyx_pf_6sympol_25integer_pts_parallelotope_get_parallelotope_points(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_snf, __pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t __pyx_v_det, PyArrayObject *__pyx_v_VDinv, PyArrayObject *__pyx_v_R, int __pyx_v_height); /* proto */
 static PyObject *__pyx_tuple_;
 static PyObject *__pyx_tuple__2;
 /* Late includes */
@@ -1997,16 +1993,8 @@ static PyObject *__pyx_tuple__2;
  */
 
 static PyObject *__pyx_pw_6sympol_25integer_pts_parallelotope_1get_parallelotope_points(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_points(PyArrayObject *__pyx_v_snf, __pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t __pyx_v_det, PyArrayObject *__pyx_v_VDinv, PyArrayObject *__pyx_v_R, PyArrayObject *__pyx_v_A, PyArrayObject *__pyx_v_b, CYTHON_UNUSED int __pyx_skip_dispatch, struct __pyx_opt_args_6sympol_25integer_pts_parallelotope_get_parallelotope_points *__pyx_optional_args) {
-
-  /* "sympol/integer_pts_parallelotope.pyx":17
- *         cnp.ndarray[DTYPE_t, ndim=2] A,
- *         cnp.ndarray[DTYPE_t, ndim=1] b,
- *         bint check_inequalities=False,             # <<<<<<<<<<<<<<
- *     ):
- *     """
- */
-  int __pyx_v_check_inequalities = ((int)0);
+static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_points(PyArrayObject *__pyx_v_snf, __pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t __pyx_v_det, PyArrayObject *__pyx_v_VDinv, PyArrayObject *__pyx_v_R, CYTHON_UNUSED int __pyx_skip_dispatch, struct __pyx_opt_args_6sympol_25integer_pts_parallelotope_get_parallelotope_points *__pyx_optional_args) {
+  int __pyx_v_height = ((int)-1);
   int __pyx_v_i;
   int __pyx_v_j;
   int __pyx_v_dim;
@@ -2016,14 +2004,10 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
   PyArrayObject *__pyx_v_gen = 0;
   PyArrayObject *__pyx_v_q_times_d = 0;
   PyObject *__pyx_v_base = NULL;
-  __Pyx_LocalBuf_ND __pyx_pybuffernd_A;
-  __Pyx_Buffer __pyx_pybuffer_A;
   __Pyx_LocalBuf_ND __pyx_pybuffernd_R;
   __Pyx_Buffer __pyx_pybuffer_R;
   __Pyx_LocalBuf_ND __pyx_pybuffernd_VDinv;
   __Pyx_Buffer __pyx_pybuffer_VDinv;
-  __Pyx_LocalBuf_ND __pyx_pybuffernd_b;
-  __Pyx_Buffer __pyx_pybuffer_b;
   __Pyx_LocalBuf_ND __pyx_pybuffernd_gen;
   __Pyx_Buffer __pyx_pybuffer_gen;
   __Pyx_LocalBuf_ND __pyx_pybuffernd_q_times_d;
@@ -2054,13 +2038,14 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
   Py_ssize_t __pyx_t_20;
   int __pyx_t_21;
   int __pyx_t_22;
+  int __pyx_t_23;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("get_parallelotope_points", 0);
   if (__pyx_optional_args) {
     if (__pyx_optional_args->__pyx_n > 0) {
-      __pyx_v_check_inequalities = __pyx_optional_args->check_inequalities;
+      __pyx_v_height = __pyx_optional_args->height;
     }
   }
   __pyx_pybuffer_gen.pybuffer.buf = NULL;
@@ -2083,14 +2068,6 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
   __pyx_pybuffer_R.refcount = 0;
   __pyx_pybuffernd_R.data = NULL;
   __pyx_pybuffernd_R.rcbuffer = &__pyx_pybuffer_R;
-  __pyx_pybuffer_A.pybuffer.buf = NULL;
-  __pyx_pybuffer_A.refcount = 0;
-  __pyx_pybuffernd_A.data = NULL;
-  __pyx_pybuffernd_A.rcbuffer = &__pyx_pybuffer_A;
-  __pyx_pybuffer_b.pybuffer.buf = NULL;
-  __pyx_pybuffer_b.refcount = 0;
-  __pyx_pybuffernd_b.data = NULL;
-  __pyx_pybuffernd_b.rcbuffer = &__pyx_pybuffer_b;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
     if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_snf.rcbuffer->pybuffer, (PyObject*)__pyx_v_snf, &__Pyx_TypeInfo_nn___pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) __PYX_ERR(0, 10, __pyx_L1_error)
@@ -2106,18 +2083,8 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
     if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_R.rcbuffer->pybuffer, (PyObject*)__pyx_v_R, &__Pyx_TypeInfo_nn___pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 10, __pyx_L1_error)
   }
   __pyx_pybuffernd_R.diminfo[0].strides = __pyx_pybuffernd_R.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_R.diminfo[0].shape = __pyx_pybuffernd_R.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_R.diminfo[1].strides = __pyx_pybuffernd_R.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_R.diminfo[1].shape = __pyx_pybuffernd_R.rcbuffer->pybuffer.shape[1];
-  {
-    __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_A.rcbuffer->pybuffer, (PyObject*)__pyx_v_A, &__Pyx_TypeInfo_nn___pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 10, __pyx_L1_error)
-  }
-  __pyx_pybuffernd_A.diminfo[0].strides = __pyx_pybuffernd_A.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_A.diminfo[0].shape = __pyx_pybuffernd_A.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_A.diminfo[1].strides = __pyx_pybuffernd_A.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_A.diminfo[1].shape = __pyx_pybuffernd_A.rcbuffer->pybuffer.shape[1];
-  {
-    __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_b.rcbuffer->pybuffer, (PyObject*)__pyx_v_b, &__Pyx_TypeInfo_nn___pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) __PYX_ERR(0, 10, __pyx_L1_error)
-  }
-  __pyx_pybuffernd_b.diminfo[0].strides = __pyx_pybuffernd_b.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_b.diminfo[0].shape = __pyx_pybuffernd_b.rcbuffer->pybuffer.shape[0];
 
-  /* "sympol/integer_pts_parallelotope.pyx":34
+  /* "sympol/integer_pts_parallelotope.pyx":30
  *     """
  *     cdef int i, j
  *     cdef int dim = VDinv.shape[0]             # <<<<<<<<<<<<<<
@@ -2126,7 +2093,7 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
  */
   __pyx_v_dim = (__pyx_v_VDinv->dimensions[0]);
 
-  /* "sympol/integer_pts_parallelotope.pyx":35
+  /* "sympol/integer_pts_parallelotope.pyx":31
  *     cdef int i, j
  *     cdef int dim = VDinv.shape[0]
  *     cdef int ambient_dim = R.shape[0]             # <<<<<<<<<<<<<<
@@ -2135,7 +2102,7 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
  */
   __pyx_v_ambient_dim = (__pyx_v_R->dimensions[0]);
 
-  /* "sympol/integer_pts_parallelotope.pyx":36
+  /* "sympol/integer_pts_parallelotope.pyx":32
  *     cdef int dim = VDinv.shape[0]
  *     cdef int ambient_dim = R.shape[0]
  *     cdef DTYPE_t s = 0             # <<<<<<<<<<<<<<
@@ -2144,58 +2111,58 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
  */
   __pyx_v_s = 0;
 
-  /* "sympol/integer_pts_parallelotope.pyx":37
+  /* "sympol/integer_pts_parallelotope.pyx":33
  *     cdef int ambient_dim = R.shape[0]
  *     cdef DTYPE_t s = 0
  *     cdef list gens = []             # <<<<<<<<<<<<<<
  *     cdef cnp.ndarray[DTYPE_t, ndim=1] gen = np.zeros(ambient_dim, dtype=np.int64)
  *     cdef cnp.ndarray[DTYPE_t, ndim=1] q_times_d = np.zeros(dim, dtype=np.int64)
  */
-  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 37, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 33, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_gens = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "sympol/integer_pts_parallelotope.pyx":38
+  /* "sympol/integer_pts_parallelotope.pyx":34
  *     cdef DTYPE_t s = 0
  *     cdef list gens = []
  *     cdef cnp.ndarray[DTYPE_t, ndim=1] gen = np.zeros(ambient_dim, dtype=np.int64)             # <<<<<<<<<<<<<<
  *     cdef cnp.ndarray[DTYPE_t, ndim=1] q_times_d = np.zeros(dim, dtype=np.int64)
  *     for base in itertools.product(*[range(i) for i in snf]):
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 38, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 34, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_zeros); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 38, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_zeros); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 34, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_ambient_dim); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 38, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_ambient_dim); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 34, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 38, __pyx_L1_error)
+  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 34, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_GIVEREF(__pyx_t_1);
   PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_1);
   __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 38, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 34, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 38, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 34, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_int64); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 38, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_int64); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 34, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_5) < 0) __PYX_ERR(0, 38, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_5) < 0) __PYX_ERR(0, 34, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 38, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 34, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (!(likely(((__pyx_t_5) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_5, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 38, __pyx_L1_error)
+  if (!(likely(((__pyx_t_5) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_5, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 34, __pyx_L1_error)
   __pyx_t_6 = ((PyArrayObject *)__pyx_t_5);
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
     if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_gen.rcbuffer->pybuffer, (PyObject*)__pyx_t_6, &__Pyx_TypeInfo_nn___pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES| PyBUF_WRITABLE, 1, 0, __pyx_stack) == -1)) {
       __pyx_v_gen = ((PyArrayObject *)Py_None); __Pyx_INCREF(Py_None); __pyx_pybuffernd_gen.rcbuffer->pybuffer.buf = NULL;
-      __PYX_ERR(0, 38, __pyx_L1_error)
+      __PYX_ERR(0, 34, __pyx_L1_error)
     } else {__pyx_pybuffernd_gen.diminfo[0].strides = __pyx_pybuffernd_gen.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_gen.diminfo[0].shape = __pyx_pybuffernd_gen.rcbuffer->pybuffer.shape[0];
     }
   }
@@ -2203,46 +2170,46 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
   __pyx_v_gen = ((PyArrayObject *)__pyx_t_5);
   __pyx_t_5 = 0;
 
-  /* "sympol/integer_pts_parallelotope.pyx":39
+  /* "sympol/integer_pts_parallelotope.pyx":35
  *     cdef list gens = []
  *     cdef cnp.ndarray[DTYPE_t, ndim=1] gen = np.zeros(ambient_dim, dtype=np.int64)
  *     cdef cnp.ndarray[DTYPE_t, ndim=1] q_times_d = np.zeros(dim, dtype=np.int64)             # <<<<<<<<<<<<<<
  *     for base in itertools.product(*[range(i) for i in snf]):
  *         for i in range(dim):
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_np); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 39, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_np); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 35, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_zeros); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 39, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_zeros); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 35, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_dim); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 39, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_dim); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 35, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 39, __pyx_L1_error)
+  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 35, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_GIVEREF(__pyx_t_5);
   PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_5);
   __pyx_t_5 = 0;
-  __pyx_t_5 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 39, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 35, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 39, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 35, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_int64); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 39, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_int64); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 35, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (PyDict_SetItem(__pyx_t_5, __pyx_n_s_dtype, __pyx_t_4) < 0) __PYX_ERR(0, 39, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_5, __pyx_n_s_dtype, __pyx_t_4) < 0) __PYX_ERR(0, 35, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_3, __pyx_t_5); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 39, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_3, __pyx_t_5); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 35, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  if (!(likely(((__pyx_t_4) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_4, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 39, __pyx_L1_error)
+  if (!(likely(((__pyx_t_4) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_4, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 35, __pyx_L1_error)
   __pyx_t_7 = ((PyArrayObject *)__pyx_t_4);
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
     if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_q_times_d.rcbuffer->pybuffer, (PyObject*)__pyx_t_7, &__Pyx_TypeInfo_nn___pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES| PyBUF_WRITABLE, 1, 0, __pyx_stack) == -1)) {
       __pyx_v_q_times_d = ((PyArrayObject *)Py_None); __Pyx_INCREF(Py_None); __pyx_pybuffernd_q_times_d.rcbuffer->pybuffer.buf = NULL;
-      __PYX_ERR(0, 39, __pyx_L1_error)
+      __PYX_ERR(0, 35, __pyx_L1_error)
     } else {__pyx_pybuffernd_q_times_d.diminfo[0].strides = __pyx_pybuffernd_q_times_d.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_q_times_d.diminfo[0].shape = __pyx_pybuffernd_q_times_d.rcbuffer->pybuffer.shape[0];
     }
   }
@@ -2250,44 +2217,44 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
   __pyx_v_q_times_d = ((PyArrayObject *)__pyx_t_4);
   __pyx_t_4 = 0;
 
-  /* "sympol/integer_pts_parallelotope.pyx":40
+  /* "sympol/integer_pts_parallelotope.pyx":36
  *     cdef cnp.ndarray[DTYPE_t, ndim=1] gen = np.zeros(ambient_dim, dtype=np.int64)
  *     cdef cnp.ndarray[DTYPE_t, ndim=1] q_times_d = np.zeros(dim, dtype=np.int64)
  *     for base in itertools.product(*[range(i) for i in snf]):             # <<<<<<<<<<<<<<
  *         for i in range(dim):
  *             s = 0
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_itertools); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 40, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_itertools); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 36, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_product); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 40, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_product); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 36, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = PyList_New(0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 40, __pyx_L1_error)
+  __pyx_t_4 = PyList_New(0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 36, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   if (likely(PyList_CheckExact(((PyObject *)__pyx_v_snf))) || PyTuple_CheckExact(((PyObject *)__pyx_v_snf))) {
     __pyx_t_3 = ((PyObject *)__pyx_v_snf); __Pyx_INCREF(__pyx_t_3); __pyx_t_8 = 0;
     __pyx_t_9 = NULL;
   } else {
-    __pyx_t_8 = -1; __pyx_t_3 = PyObject_GetIter(((PyObject *)__pyx_v_snf)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 40, __pyx_L1_error)
+    __pyx_t_8 = -1; __pyx_t_3 = PyObject_GetIter(((PyObject *)__pyx_v_snf)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 36, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_9 = Py_TYPE(__pyx_t_3)->tp_iternext; if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 40, __pyx_L1_error)
+    __pyx_t_9 = Py_TYPE(__pyx_t_3)->tp_iternext; if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 36, __pyx_L1_error)
   }
   for (;;) {
     if (likely(!__pyx_t_9)) {
       if (likely(PyList_CheckExact(__pyx_t_3))) {
         if (__pyx_t_8 >= PyList_GET_SIZE(__pyx_t_3)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_1 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_8); __Pyx_INCREF(__pyx_t_1); __pyx_t_8++; if (unlikely(0 < 0)) __PYX_ERR(0, 40, __pyx_L1_error)
+        __pyx_t_1 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_8); __Pyx_INCREF(__pyx_t_1); __pyx_t_8++; if (unlikely(0 < 0)) __PYX_ERR(0, 36, __pyx_L1_error)
         #else
-        __pyx_t_1 = PySequence_ITEM(__pyx_t_3, __pyx_t_8); __pyx_t_8++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 40, __pyx_L1_error)
+        __pyx_t_1 = PySequence_ITEM(__pyx_t_3, __pyx_t_8); __pyx_t_8++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 36, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         #endif
       } else {
         if (__pyx_t_8 >= PyTuple_GET_SIZE(__pyx_t_3)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_1 = PyTuple_GET_ITEM(__pyx_t_3, __pyx_t_8); __Pyx_INCREF(__pyx_t_1); __pyx_t_8++; if (unlikely(0 < 0)) __PYX_ERR(0, 40, __pyx_L1_error)
+        __pyx_t_1 = PyTuple_GET_ITEM(__pyx_t_3, __pyx_t_8); __Pyx_INCREF(__pyx_t_1); __pyx_t_8++; if (unlikely(0 < 0)) __PYX_ERR(0, 36, __pyx_L1_error)
         #else
-        __pyx_t_1 = PySequence_ITEM(__pyx_t_3, __pyx_t_8); __pyx_t_8++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 40, __pyx_L1_error)
+        __pyx_t_1 = PySequence_ITEM(__pyx_t_3, __pyx_t_8); __pyx_t_8++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 36, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         #endif
       }
@@ -2297,28 +2264,28 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
         PyObject* exc_type = PyErr_Occurred();
         if (exc_type) {
           if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-          else __PYX_ERR(0, 40, __pyx_L1_error)
+          else __PYX_ERR(0, 36, __pyx_L1_error)
         }
         break;
       }
       __Pyx_GOTREF(__pyx_t_1);
     }
-    __pyx_t_10 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_10 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 40, __pyx_L1_error)
+    __pyx_t_10 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_10 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 36, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_v_i = __pyx_t_10;
-    __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_i); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 40, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_i); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 36, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_builtin_range, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 40, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_builtin_range, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 36, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    if (unlikely(__Pyx_ListComp_Append(__pyx_t_4, (PyObject*)__pyx_t_2))) __PYX_ERR(0, 40, __pyx_L1_error)
+    if (unlikely(__Pyx_ListComp_Append(__pyx_t_4, (PyObject*)__pyx_t_2))) __PYX_ERR(0, 36, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   }
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PySequence_Tuple(__pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 40, __pyx_L1_error)
+  __pyx_t_3 = PySequence_Tuple(__pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 36, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_3, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 40, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_3, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 36, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -2326,9 +2293,9 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
     __pyx_t_3 = __pyx_t_4; __Pyx_INCREF(__pyx_t_3); __pyx_t_8 = 0;
     __pyx_t_9 = NULL;
   } else {
-    __pyx_t_8 = -1; __pyx_t_3 = PyObject_GetIter(__pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 40, __pyx_L1_error)
+    __pyx_t_8 = -1; __pyx_t_3 = PyObject_GetIter(__pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 36, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_9 = Py_TYPE(__pyx_t_3)->tp_iternext; if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 40, __pyx_L1_error)
+    __pyx_t_9 = Py_TYPE(__pyx_t_3)->tp_iternext; if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 36, __pyx_L1_error)
   }
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   for (;;) {
@@ -2336,17 +2303,17 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
       if (likely(PyList_CheckExact(__pyx_t_3))) {
         if (__pyx_t_8 >= PyList_GET_SIZE(__pyx_t_3)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_4 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_8); __Pyx_INCREF(__pyx_t_4); __pyx_t_8++; if (unlikely(0 < 0)) __PYX_ERR(0, 40, __pyx_L1_error)
+        __pyx_t_4 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_8); __Pyx_INCREF(__pyx_t_4); __pyx_t_8++; if (unlikely(0 < 0)) __PYX_ERR(0, 36, __pyx_L1_error)
         #else
-        __pyx_t_4 = PySequence_ITEM(__pyx_t_3, __pyx_t_8); __pyx_t_8++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 40, __pyx_L1_error)
+        __pyx_t_4 = PySequence_ITEM(__pyx_t_3, __pyx_t_8); __pyx_t_8++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 36, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         #endif
       } else {
         if (__pyx_t_8 >= PyTuple_GET_SIZE(__pyx_t_3)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_4 = PyTuple_GET_ITEM(__pyx_t_3, __pyx_t_8); __Pyx_INCREF(__pyx_t_4); __pyx_t_8++; if (unlikely(0 < 0)) __PYX_ERR(0, 40, __pyx_L1_error)
+        __pyx_t_4 = PyTuple_GET_ITEM(__pyx_t_3, __pyx_t_8); __Pyx_INCREF(__pyx_t_4); __pyx_t_8++; if (unlikely(0 < 0)) __PYX_ERR(0, 36, __pyx_L1_error)
         #else
-        __pyx_t_4 = PySequence_ITEM(__pyx_t_3, __pyx_t_8); __pyx_t_8++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 40, __pyx_L1_error)
+        __pyx_t_4 = PySequence_ITEM(__pyx_t_3, __pyx_t_8); __pyx_t_8++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 36, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         #endif
       }
@@ -2356,7 +2323,7 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
         PyObject* exc_type = PyErr_Occurred();
         if (exc_type) {
           if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-          else __PYX_ERR(0, 40, __pyx_L1_error)
+          else __PYX_ERR(0, 36, __pyx_L1_error)
         }
         break;
       }
@@ -2365,7 +2332,7 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
     __Pyx_XDECREF_SET(__pyx_v_base, __pyx_t_4);
     __pyx_t_4 = 0;
 
-    /* "sympol/integer_pts_parallelotope.pyx":41
+    /* "sympol/integer_pts_parallelotope.pyx":37
  *     cdef cnp.ndarray[DTYPE_t, ndim=1] q_times_d = np.zeros(dim, dtype=np.int64)
  *     for base in itertools.product(*[range(i) for i in snf]):
  *         for i in range(dim):             # <<<<<<<<<<<<<<
@@ -2377,7 +2344,7 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
     for (__pyx_t_12 = 0; __pyx_t_12 < __pyx_t_11; __pyx_t_12+=1) {
       __pyx_v_i = __pyx_t_12;
 
-      /* "sympol/integer_pts_parallelotope.pyx":42
+      /* "sympol/integer_pts_parallelotope.pyx":38
  *     for base in itertools.product(*[range(i) for i in snf]):
  *         for i in range(dim):
  *             s = 0             # <<<<<<<<<<<<<<
@@ -2386,7 +2353,7 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
  */
       __pyx_v_s = 0;
 
-      /* "sympol/integer_pts_parallelotope.pyx":43
+      /* "sympol/integer_pts_parallelotope.pyx":39
  *         for i in range(dim):
  *             s = 0
  *             for j in range(dim):             # <<<<<<<<<<<<<<
@@ -2398,14 +2365,14 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
       for (__pyx_t_15 = 0; __pyx_t_15 < __pyx_t_14; __pyx_t_15+=1) {
         __pyx_v_j = __pyx_t_15;
 
-        /* "sympol/integer_pts_parallelotope.pyx":44
+        /* "sympol/integer_pts_parallelotope.pyx":40
  *             s = 0
  *             for j in range(dim):
  *                 s += VDinv[i, j] * base[j]             # <<<<<<<<<<<<<<
  *             q_times_d[i] = s % det
  *         for i in range(ambient_dim):
  */
-        __pyx_t_4 = __Pyx_PyInt_From_npy_int64(__pyx_v_s); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 44, __pyx_L1_error)
+        __pyx_t_4 = __Pyx_PyInt_From_npy_int64(__pyx_v_s); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 40, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         __pyx_t_16 = __pyx_v_i;
         __pyx_t_17 = __pyx_v_j;
@@ -2420,26 +2387,26 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
         } else if (unlikely(__pyx_t_17 >= __pyx_pybuffernd_VDinv.diminfo[1].shape)) __pyx_t_18 = 1;
         if (unlikely(__pyx_t_18 != -1)) {
           __Pyx_RaiseBufferIndexError(__pyx_t_18);
-          __PYX_ERR(0, 44, __pyx_L1_error)
+          __PYX_ERR(0, 40, __pyx_L1_error)
         }
-        __pyx_t_5 = __Pyx_PyInt_From_npy_int64((*__Pyx_BufPtrStrided2d(__pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t *, __pyx_pybuffernd_VDinv.rcbuffer->pybuffer.buf, __pyx_t_16, __pyx_pybuffernd_VDinv.diminfo[0].strides, __pyx_t_17, __pyx_pybuffernd_VDinv.diminfo[1].strides))); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 44, __pyx_L1_error)
+        __pyx_t_5 = __Pyx_PyInt_From_npy_int64((*__Pyx_BufPtrStrided2d(__pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t *, __pyx_pybuffernd_VDinv.rcbuffer->pybuffer.buf, __pyx_t_16, __pyx_pybuffernd_VDinv.diminfo[0].strides, __pyx_t_17, __pyx_pybuffernd_VDinv.diminfo[1].strides))); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 40, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
-        __pyx_t_2 = __Pyx_GetItemInt(__pyx_v_base, __pyx_v_j, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 44, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_GetItemInt(__pyx_v_base, __pyx_v_j, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 40, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
-        __pyx_t_1 = PyNumber_Multiply(__pyx_t_5, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 44, __pyx_L1_error)
+        __pyx_t_1 = PyNumber_Multiply(__pyx_t_5, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 40, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-        __pyx_t_2 = PyNumber_InPlaceAdd(__pyx_t_4, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 44, __pyx_L1_error)
+        __pyx_t_2 = PyNumber_InPlaceAdd(__pyx_t_4, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 40, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        __pyx_t_19 = __Pyx_PyInt_As_npy_int64(__pyx_t_2); if (unlikely((__pyx_t_19 == ((npy_int64)-1)) && PyErr_Occurred())) __PYX_ERR(0, 44, __pyx_L1_error)
+        __pyx_t_19 = __Pyx_PyInt_As_npy_int64(__pyx_t_2); if (unlikely((__pyx_t_19 == ((npy_int64)-1)) && PyErr_Occurred())) __PYX_ERR(0, 40, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
         __pyx_v_s = __pyx_t_19;
       }
 
-      /* "sympol/integer_pts_parallelotope.pyx":45
+      /* "sympol/integer_pts_parallelotope.pyx":41
  *             for j in range(dim):
  *                 s += VDinv[i, j] * base[j]
  *             q_times_d[i] = s % det             # <<<<<<<<<<<<<<
@@ -2448,7 +2415,7 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
  */
       if (unlikely(__pyx_v_det == 0)) {
         PyErr_SetString(PyExc_ZeroDivisionError, "integer division or modulo by zero");
-        __PYX_ERR(0, 45, __pyx_L1_error)
+        __PYX_ERR(0, 41, __pyx_L1_error)
       }
       __pyx_t_17 = __pyx_v_i;
       __pyx_t_13 = -1;
@@ -2458,12 +2425,12 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
       } else if (unlikely(__pyx_t_17 >= __pyx_pybuffernd_q_times_d.diminfo[0].shape)) __pyx_t_13 = 0;
       if (unlikely(__pyx_t_13 != -1)) {
         __Pyx_RaiseBufferIndexError(__pyx_t_13);
-        __PYX_ERR(0, 45, __pyx_L1_error)
+        __PYX_ERR(0, 41, __pyx_L1_error)
       }
       *__Pyx_BufPtrStrided1d(__pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t *, __pyx_pybuffernd_q_times_d.rcbuffer->pybuffer.buf, __pyx_t_17, __pyx_pybuffernd_q_times_d.diminfo[0].strides) = __Pyx_mod___pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t(__pyx_v_s, __pyx_v_det);
     }
 
-    /* "sympol/integer_pts_parallelotope.pyx":46
+    /* "sympol/integer_pts_parallelotope.pyx":42
  *                 s += VDinv[i, j] * base[j]
  *             q_times_d[i] = s % det
  *         for i in range(ambient_dim):             # <<<<<<<<<<<<<<
@@ -2475,7 +2442,7 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
     for (__pyx_t_12 = 0; __pyx_t_12 < __pyx_t_11; __pyx_t_12+=1) {
       __pyx_v_i = __pyx_t_12;
 
-      /* "sympol/integer_pts_parallelotope.pyx":47
+      /* "sympol/integer_pts_parallelotope.pyx":43
  *             q_times_d[i] = s % det
  *         for i in range(ambient_dim):
  *             s = 0             # <<<<<<<<<<<<<<
@@ -2484,7 +2451,7 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
  */
       __pyx_v_s = 0;
 
-      /* "sympol/integer_pts_parallelotope.pyx":48
+      /* "sympol/integer_pts_parallelotope.pyx":44
  *         for i in range(ambient_dim):
  *             s = 0
  *             for j in range(dim):             # <<<<<<<<<<<<<<
@@ -2496,12 +2463,12 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
       for (__pyx_t_15 = 0; __pyx_t_15 < __pyx_t_14; __pyx_t_15+=1) {
         __pyx_v_j = __pyx_t_15;
 
-        /* "sympol/integer_pts_parallelotope.pyx":49
+        /* "sympol/integer_pts_parallelotope.pyx":45
  *             s = 0
  *             for j in range(dim):
  *                 s += R[i, j] * q_times_d[j]             # <<<<<<<<<<<<<<
  *             gen[i] = s / det
- *         if check_inequalities:
+ *             if i == 0 and height >= 0 and gen[0] != height:
  */
         __pyx_t_17 = __pyx_v_i;
         __pyx_t_16 = __pyx_v_j;
@@ -2516,7 +2483,7 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
         } else if (unlikely(__pyx_t_16 >= __pyx_pybuffernd_R.diminfo[1].shape)) __pyx_t_18 = 1;
         if (unlikely(__pyx_t_18 != -1)) {
           __Pyx_RaiseBufferIndexError(__pyx_t_18);
-          __PYX_ERR(0, 49, __pyx_L1_error)
+          __PYX_ERR(0, 45, __pyx_L1_error)
         }
         __pyx_t_20 = __pyx_v_j;
         __pyx_t_18 = -1;
@@ -2526,25 +2493,25 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
         } else if (unlikely(__pyx_t_20 >= __pyx_pybuffernd_q_times_d.diminfo[0].shape)) __pyx_t_18 = 0;
         if (unlikely(__pyx_t_18 != -1)) {
           __Pyx_RaiseBufferIndexError(__pyx_t_18);
-          __PYX_ERR(0, 49, __pyx_L1_error)
+          __PYX_ERR(0, 45, __pyx_L1_error)
         }
         __pyx_v_s = (__pyx_v_s + ((*__Pyx_BufPtrStrided2d(__pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t *, __pyx_pybuffernd_R.rcbuffer->pybuffer.buf, __pyx_t_17, __pyx_pybuffernd_R.diminfo[0].strides, __pyx_t_16, __pyx_pybuffernd_R.diminfo[1].strides)) * (*__Pyx_BufPtrStrided1d(__pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t *, __pyx_pybuffernd_q_times_d.rcbuffer->pybuffer.buf, __pyx_t_20, __pyx_pybuffernd_q_times_d.diminfo[0].strides))));
       }
 
-      /* "sympol/integer_pts_parallelotope.pyx":50
+      /* "sympol/integer_pts_parallelotope.pyx":46
  *             for j in range(dim):
  *                 s += R[i, j] * q_times_d[j]
  *             gen[i] = s / det             # <<<<<<<<<<<<<<
- *         if check_inequalities:
- *             s = 0
+ *             if i == 0 and height >= 0 and gen[0] != height:
+ *                 continue
  */
       if (unlikely(__pyx_v_det == 0)) {
         PyErr_SetString(PyExc_ZeroDivisionError, "integer division or modulo by zero");
-        __PYX_ERR(0, 50, __pyx_L1_error)
+        __PYX_ERR(0, 46, __pyx_L1_error)
       }
       else if (sizeof(__pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t) == sizeof(long) && (!(((__pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t)-1) > 0)) && unlikely(__pyx_v_det == (__pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t)-1)  && unlikely(UNARY_NEG_WOULD_OVERFLOW(__pyx_v_s))) {
         PyErr_SetString(PyExc_OverflowError, "value too large to perform division");
-        __PYX_ERR(0, 50, __pyx_L1_error)
+        __PYX_ERR(0, 46, __pyx_L1_error)
       }
       __pyx_t_20 = __pyx_v_i;
       __pyx_t_13 = -1;
@@ -2554,203 +2521,112 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
       } else if (unlikely(__pyx_t_20 >= __pyx_pybuffernd_gen.diminfo[0].shape)) __pyx_t_13 = 0;
       if (unlikely(__pyx_t_13 != -1)) {
         __Pyx_RaiseBufferIndexError(__pyx_t_13);
-        __PYX_ERR(0, 50, __pyx_L1_error)
+        __PYX_ERR(0, 46, __pyx_L1_error)
       }
       *__Pyx_BufPtrStrided1d(__pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t *, __pyx_pybuffernd_gen.rcbuffer->pybuffer.buf, __pyx_t_20, __pyx_pybuffernd_gen.diminfo[0].strides) = __Pyx_div___pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t(__pyx_v_s, __pyx_v_det);
-    }
 
-    /* "sympol/integer_pts_parallelotope.pyx":51
+      /* "sympol/integer_pts_parallelotope.pyx":47
  *                 s += R[i, j] * q_times_d[j]
  *             gen[i] = s / det
- *         if check_inequalities:             # <<<<<<<<<<<<<<
- *             s = 0
- *             for i in range(ambient_dim):
- */
-    __pyx_t_21 = (__pyx_v_check_inequalities != 0);
-    if (__pyx_t_21) {
-
-      /* "sympol/integer_pts_parallelotope.pyx":52
- *             gen[i] = s / det
- *         if check_inequalities:
- *             s = 0             # <<<<<<<<<<<<<<
- *             for i in range(ambient_dim):
- *                 s += A[i] * gen[i]
- */
-      __pyx_v_s = 0;
-
-      /* "sympol/integer_pts_parallelotope.pyx":53
- *         if check_inequalities:
- *             s = 0
- *             for i in range(ambient_dim):             # <<<<<<<<<<<<<<
- *                 s += A[i] * gen[i]
- *             if s > b:
- */
-      __pyx_t_10 = __pyx_v_ambient_dim;
-      __pyx_t_11 = __pyx_t_10;
-      for (__pyx_t_12 = 0; __pyx_t_12 < __pyx_t_11; __pyx_t_12+=1) {
-        __pyx_v_i = __pyx_t_12;
-
-        /* "sympol/integer_pts_parallelotope.pyx":54
- *             s = 0
- *             for i in range(ambient_dim):
- *                 s += A[i] * gen[i]             # <<<<<<<<<<<<<<
- *             if s > b:
+ *             if i == 0 and height >= 0 and gen[0] != height:             # <<<<<<<<<<<<<<
  *                 continue
+ *         else:
  */
-        __pyx_t_2 = __Pyx_PyInt_From_npy_int64(__pyx_v_s); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 54, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_2);
-        __pyx_t_1 = __Pyx_GetItemInt(((PyObject *)__pyx_v_A), __pyx_v_i, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 54, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_1);
-        __pyx_t_20 = __pyx_v_i;
-        __pyx_t_13 = -1;
-        if (__pyx_t_20 < 0) {
-          __pyx_t_20 += __pyx_pybuffernd_gen.diminfo[0].shape;
-          if (unlikely(__pyx_t_20 < 0)) __pyx_t_13 = 0;
-        } else if (unlikely(__pyx_t_20 >= __pyx_pybuffernd_gen.diminfo[0].shape)) __pyx_t_13 = 0;
-        if (unlikely(__pyx_t_13 != -1)) {
-          __Pyx_RaiseBufferIndexError(__pyx_t_13);
-          __PYX_ERR(0, 54, __pyx_L1_error)
-        }
-        __pyx_t_4 = __Pyx_PyInt_From_npy_int64((*__Pyx_BufPtrStrided1d(__pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t *, __pyx_pybuffernd_gen.rcbuffer->pybuffer.buf, __pyx_t_20, __pyx_pybuffernd_gen.diminfo[0].strides))); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 54, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_5 = PyNumber_Multiply(__pyx_t_1, __pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 54, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_5);
-        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-        __pyx_t_4 = PyNumber_InPlaceAdd(__pyx_t_2, __pyx_t_5); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 54, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_4);
-        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-        __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-        __pyx_t_19 = __Pyx_PyInt_As_npy_int64(__pyx_t_4); if (unlikely((__pyx_t_19 == ((npy_int64)-1)) && PyErr_Occurred())) __PYX_ERR(0, 54, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-        __pyx_v_s = __pyx_t_19;
+      __pyx_t_22 = ((__pyx_v_i == 0) != 0);
+      if (__pyx_t_22) {
+      } else {
+        __pyx_t_21 = __pyx_t_22;
+        goto __pyx_L16_bool_binop_done;
       }
-
-      /* "sympol/integer_pts_parallelotope.pyx":55
- *             for i in range(ambient_dim):
- *                 s += A[i] * gen[i]
- *             if s > b:             # <<<<<<<<<<<<<<
- *                 continue
- *         gens.append(copy.copy(gen))
- */
-      __pyx_t_4 = __Pyx_PyInt_From_npy_int64(__pyx_v_s); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 55, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_5 = PyObject_RichCompare(__pyx_t_4, ((PyObject *)__pyx_v_b), Py_GT); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 55, __pyx_L1_error)
-      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __pyx_t_21 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely(__pyx_t_21 < 0)) __PYX_ERR(0, 55, __pyx_L1_error)
-      __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+      __pyx_t_22 = ((__pyx_v_height >= 0) != 0);
+      if (__pyx_t_22) {
+      } else {
+        __pyx_t_21 = __pyx_t_22;
+        goto __pyx_L16_bool_binop_done;
+      }
+      __pyx_t_20 = 0;
+      __pyx_t_13 = -1;
+      if (__pyx_t_20 < 0) {
+        __pyx_t_20 += __pyx_pybuffernd_gen.diminfo[0].shape;
+        if (unlikely(__pyx_t_20 < 0)) __pyx_t_13 = 0;
+      } else if (unlikely(__pyx_t_20 >= __pyx_pybuffernd_gen.diminfo[0].shape)) __pyx_t_13 = 0;
+      if (unlikely(__pyx_t_13 != -1)) {
+        __Pyx_RaiseBufferIndexError(__pyx_t_13);
+        __PYX_ERR(0, 47, __pyx_L1_error)
+      }
+      __pyx_t_22 = (((*__Pyx_BufPtrStrided1d(__pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t *, __pyx_pybuffernd_gen.rcbuffer->pybuffer.buf, __pyx_t_20, __pyx_pybuffernd_gen.diminfo[0].strides)) != __pyx_v_height) != 0);
+      __pyx_t_21 = __pyx_t_22;
+      __pyx_L16_bool_binop_done:;
       if (__pyx_t_21) {
 
-        /* "sympol/integer_pts_parallelotope.pyx":56
- *                 s += A[i] * gen[i]
- *             if s > b:
+        /* "sympol/integer_pts_parallelotope.pyx":48
+ *             gen[i] = s / det
+ *             if i == 0 and height >= 0 and gen[0] != height:
  *                 continue             # <<<<<<<<<<<<<<
- *         gens.append(copy.copy(gen))
- *     if not check_inequalities:
+ *         else:
+ *             # only executed if the loop did not break
  */
-        goto __pyx_L3_continue;
+        goto __pyx_L11_continue;
 
-        /* "sympol/integer_pts_parallelotope.pyx":55
- *             for i in range(ambient_dim):
- *                 s += A[i] * gen[i]
- *             if s > b:             # <<<<<<<<<<<<<<
- *                 continue
- *         gens.append(copy.copy(gen))
- */
-      }
-
-      /* "sympol/integer_pts_parallelotope.pyx":51
+        /* "sympol/integer_pts_parallelotope.pyx":47
  *                 s += R[i, j] * q_times_d[j]
  *             gen[i] = s / det
- *         if check_inequalities:             # <<<<<<<<<<<<<<
- *             s = 0
- *             for i in range(ambient_dim):
- */
-    }
-
-    /* "sympol/integer_pts_parallelotope.pyx":57
- *             if s > b:
+ *             if i == 0 and height >= 0 and gen[0] != height:             # <<<<<<<<<<<<<<
  *                 continue
- *         gens.append(copy.copy(gen))             # <<<<<<<<<<<<<<
- *     if not check_inequalities:
- *         assert(len(gens) == det)
+ *         else:
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_copy); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 57, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_copy); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 57, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = NULL;
-    if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_2))) {
-      __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
-      if (likely(__pyx_t_4)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-        __Pyx_INCREF(__pyx_t_4);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_2, function);
       }
+      __pyx_L11_continue:;
     }
-    __pyx_t_5 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, ((PyObject *)__pyx_v_gen)) : __Pyx_PyObject_CallOneArg(__pyx_t_2, ((PyObject *)__pyx_v_gen));
-    __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-    if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 57, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_5);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_22 = __Pyx_PyList_Append(__pyx_v_gens, __pyx_t_5); if (unlikely(__pyx_t_22 == ((int)-1))) __PYX_ERR(0, 57, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+    /*else*/ {
 
-    /* "sympol/integer_pts_parallelotope.pyx":40
+      /* "sympol/integer_pts_parallelotope.pyx":51
+ *         else:
+ *             # only executed if the loop did not break
+ *             gens.append(copy.copy(gen))             # <<<<<<<<<<<<<<
+ *     return tuple(gens)
+ */
+      __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_copy); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 51, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_copy); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 51, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_4);
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      __pyx_t_1 = NULL;
+      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
+        __pyx_t_1 = PyMethod_GET_SELF(__pyx_t_4);
+        if (likely(__pyx_t_1)) {
+          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
+          __Pyx_INCREF(__pyx_t_1);
+          __Pyx_INCREF(function);
+          __Pyx_DECREF_SET(__pyx_t_4, function);
+        }
+      }
+      __pyx_t_2 = (__pyx_t_1) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_1, ((PyObject *)__pyx_v_gen)) : __Pyx_PyObject_CallOneArg(__pyx_t_4, ((PyObject *)__pyx_v_gen));
+      __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
+      if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 51, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_2);
+      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      __pyx_t_23 = __Pyx_PyList_Append(__pyx_v_gens, __pyx_t_2); if (unlikely(__pyx_t_23 == ((int)-1))) __PYX_ERR(0, 51, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    }
+
+    /* "sympol/integer_pts_parallelotope.pyx":36
  *     cdef cnp.ndarray[DTYPE_t, ndim=1] gen = np.zeros(ambient_dim, dtype=np.int64)
  *     cdef cnp.ndarray[DTYPE_t, ndim=1] q_times_d = np.zeros(dim, dtype=np.int64)
  *     for base in itertools.product(*[range(i) for i in snf]):             # <<<<<<<<<<<<<<
  *         for i in range(dim):
  *             s = 0
  */
-    __pyx_L3_continue:;
   }
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "sympol/integer_pts_parallelotope.pyx":58
- *                 continue
- *         gens.append(copy.copy(gen))
- *     if not check_inequalities:             # <<<<<<<<<<<<<<
- *         assert(len(gens) == det)
- *     return tuple(gens)
- */
-  __pyx_t_21 = ((!(__pyx_v_check_inequalities != 0)) != 0);
-  if (__pyx_t_21) {
-
-    /* "sympol/integer_pts_parallelotope.pyx":59
- *         gens.append(copy.copy(gen))
- *     if not check_inequalities:
- *         assert(len(gens) == det)             # <<<<<<<<<<<<<<
- *     return tuple(gens)
- */
-    #ifndef CYTHON_WITHOUT_ASSERTIONS
-    if (unlikely(!Py_OptimizeFlag)) {
-      __pyx_t_8 = PyList_GET_SIZE(__pyx_v_gens); if (unlikely(__pyx_t_8 == ((Py_ssize_t)-1))) __PYX_ERR(0, 59, __pyx_L1_error)
-      if (unlikely(!((__pyx_t_8 == __pyx_v_det) != 0))) {
-        PyErr_SetNone(PyExc_AssertionError);
-        __PYX_ERR(0, 59, __pyx_L1_error)
-      }
-    }
-    #endif
-
-    /* "sympol/integer_pts_parallelotope.pyx":58
- *                 continue
- *         gens.append(copy.copy(gen))
- *     if not check_inequalities:             # <<<<<<<<<<<<<<
- *         assert(len(gens) == det)
- *     return tuple(gens)
- */
-  }
-
-  /* "sympol/integer_pts_parallelotope.pyx":60
- *     if not check_inequalities:
- *         assert(len(gens) == det)
+  /* "sympol/integer_pts_parallelotope.pyx":52
+ *             # only executed if the loop did not break
+ *             gens.append(copy.copy(gen))
  *     return tuple(gens)             # <<<<<<<<<<<<<<
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_3 = PyList_AsTuple(__pyx_v_gens); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 60, __pyx_L1_error)
+  __pyx_t_3 = PyList_AsTuple(__pyx_v_gens); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 52, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_r = ((PyObject*)__pyx_t_3);
   __pyx_t_3 = 0;
@@ -2775,10 +2651,8 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
     __Pyx_PyThreadState_declare
     __Pyx_PyThreadState_assign
     __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
-    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_A.rcbuffer->pybuffer);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_R.rcbuffer->pybuffer);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_VDinv.rcbuffer->pybuffer);
-    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_b.rcbuffer->pybuffer);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_gen.rcbuffer->pybuffer);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_q_times_d.rcbuffer->pybuffer);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_snf.rcbuffer->pybuffer);
@@ -2787,10 +2661,8 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
   __pyx_r = 0;
   goto __pyx_L2;
   __pyx_L0:;
-  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_A.rcbuffer->pybuffer);
   __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_R.rcbuffer->pybuffer);
   __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_VDinv.rcbuffer->pybuffer);
-  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_b.rcbuffer->pybuffer);
   __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_gen.rcbuffer->pybuffer);
   __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_q_times_d.rcbuffer->pybuffer);
   __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_snf.rcbuffer->pybuffer);
@@ -2806,15 +2678,13 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
 
 /* Python wrapper */
 static PyObject *__pyx_pw_6sympol_25integer_pts_parallelotope_1get_parallelotope_points(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_6sympol_25integer_pts_parallelotope_get_parallelotope_points[] = "\n    Get all the integer points in the half-open parallelotope generated by\n    the columns of R. This is a modification of the SageMath implementation\n    at sage/src/sage/geometry/integral_points.pxi (GPLv2+).\n    Description of the parameters:\n    snf: the diagonal Smith normal form of the matrix R\n    det: the determinant of R\n    VDinv: the inverse of the matrix VD, where D is the diagonal matrix\n        in the Smith normal form of R\n    R: the matrix whose columns generate the parallelotope\n    A: a vector of coefficients for a linear inequality Ax <= b\n    b: the right-hand side of the linear inequality Ax <= b\n    Returns the tuple of the integer points in the parallelotope satisfying Ax <= b are returned.\n    ";
+static char __pyx_doc_6sympol_25integer_pts_parallelotope_get_parallelotope_points[] = "\n    Get all the integer points in the half-open parallelotope generated by\n    the columns of R. This is a modification of the SageMath implementation\n    at sage/src/sage/geometry/integral_points.pxi (GPLv2+).\n    Description of the parameters:\n    snf: the diagonal Smith normal form of the matrix R\n    det: the determinant of R\n    VDinv: the inverse of the matrix VD, where D is the diagonal matrix\n        in the Smith normal form of R\n    R: the matrix whose columns generate the parallelotope\n    height: if given, only return points with the given \"height\" (= first coordinate)\n    ";
 static PyObject *__pyx_pw_6sympol_25integer_pts_parallelotope_1get_parallelotope_points(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyArrayObject *__pyx_v_snf = 0;
   __pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t __pyx_v_det;
   PyArrayObject *__pyx_v_VDinv = 0;
   PyArrayObject *__pyx_v_R = 0;
-  PyArrayObject *__pyx_v_A = 0;
-  PyArrayObject *__pyx_v_b = 0;
-  int __pyx_v_check_inequalities;
+  int __pyx_v_height;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
@@ -2822,16 +2692,12 @@ static PyObject *__pyx_pw_6sympol_25integer_pts_parallelotope_1get_parallelotope
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("get_parallelotope_points (wrapper)", 0);
   {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_snf,&__pyx_n_s_det,&__pyx_n_s_VDinv,&__pyx_n_s_R,&__pyx_n_s_A,&__pyx_n_s_b,&__pyx_n_s_check_inequalities,0};
-    PyObject* values[7] = {0,0,0,0,0,0,0};
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_snf,&__pyx_n_s_det,&__pyx_n_s_VDinv,&__pyx_n_s_R,&__pyx_n_s_height,0};
+    PyObject* values[5] = {0,0,0,0,0};
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
       switch (pos_args) {
-        case  7: values[6] = PyTuple_GET_ITEM(__pyx_args, 6);
-        CYTHON_FALLTHROUGH;
-        case  6: values[5] = PyTuple_GET_ITEM(__pyx_args, 5);
-        CYTHON_FALLTHROUGH;
         case  5: values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
         CYTHON_FALLTHROUGH;
         case  4: values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
@@ -2854,37 +2720,25 @@ static PyObject *__pyx_pw_6sympol_25integer_pts_parallelotope_1get_parallelotope
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_det)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("get_parallelotope_points", 0, 6, 7, 1); __PYX_ERR(0, 10, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("get_parallelotope_points", 0, 4, 5, 1); __PYX_ERR(0, 10, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_VDinv)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("get_parallelotope_points", 0, 6, 7, 2); __PYX_ERR(0, 10, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("get_parallelotope_points", 0, 4, 5, 2); __PYX_ERR(0, 10, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (likely((values[3] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_R)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("get_parallelotope_points", 0, 6, 7, 3); __PYX_ERR(0, 10, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("get_parallelotope_points", 0, 4, 5, 3); __PYX_ERR(0, 10, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
-        if (likely((values[4] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_A)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("get_parallelotope_points", 0, 6, 7, 4); __PYX_ERR(0, 10, __pyx_L3_error)
-        }
-        CYTHON_FALLTHROUGH;
-        case  5:
-        if (likely((values[5] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_b)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("get_parallelotope_points", 0, 6, 7, 5); __PYX_ERR(0, 10, __pyx_L3_error)
-        }
-        CYTHON_FALLTHROUGH;
-        case  6:
         if (kw_args > 0) {
-          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_check_inequalities);
-          if (value) { values[6] = value; kw_args--; }
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_height);
+          if (value) { values[4] = value; kw_args--; }
         }
       }
       if (unlikely(kw_args > 0)) {
@@ -2892,11 +2746,9 @@ static PyObject *__pyx_pw_6sympol_25integer_pts_parallelotope_1get_parallelotope
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
-        case  7: values[6] = PyTuple_GET_ITEM(__pyx_args, 6);
+        case  5: values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
         CYTHON_FALLTHROUGH;
-        case  6: values[5] = PyTuple_GET_ITEM(__pyx_args, 5);
-        values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
-        values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
+        case  4: values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
         values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
         values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
         values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
@@ -2908,25 +2760,15 @@ static PyObject *__pyx_pw_6sympol_25integer_pts_parallelotope_1get_parallelotope
     __pyx_v_det = __Pyx_PyInt_As_npy_int64(values[1]); if (unlikely((__pyx_v_det == ((npy_int64)-1)) && PyErr_Occurred())) __PYX_ERR(0, 12, __pyx_L3_error)
     __pyx_v_VDinv = ((PyArrayObject *)values[2]);
     __pyx_v_R = ((PyArrayObject *)values[3]);
-    __pyx_v_A = ((PyArrayObject *)values[4]);
-    __pyx_v_b = ((PyArrayObject *)values[5]);
-    if (values[6]) {
-      __pyx_v_check_inequalities = __Pyx_PyObject_IsTrue(values[6]); if (unlikely((__pyx_v_check_inequalities == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 17, __pyx_L3_error)
+    if (values[4]) {
+      __pyx_v_height = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_height == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 15, __pyx_L3_error)
     } else {
-
-      /* "sympol/integer_pts_parallelotope.pyx":17
- *         cnp.ndarray[DTYPE_t, ndim=2] A,
- *         cnp.ndarray[DTYPE_t, ndim=1] b,
- *         bint check_inequalities=False,             # <<<<<<<<<<<<<<
- *     ):
- *     """
- */
-      __pyx_v_check_inequalities = ((int)0);
+      __pyx_v_height = ((int)-1);
     }
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("get_parallelotope_points", 0, 6, 7, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 10, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("get_parallelotope_points", 0, 4, 5, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 10, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("sympol.integer_pts_parallelotope.get_parallelotope_points", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -2935,17 +2777,7 @@ static PyObject *__pyx_pw_6sympol_25integer_pts_parallelotope_1get_parallelotope
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_snf), __pyx_ptype_5numpy_ndarray, 1, "snf", 0))) __PYX_ERR(0, 11, __pyx_L1_error)
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_VDinv), __pyx_ptype_5numpy_ndarray, 1, "VDinv", 0))) __PYX_ERR(0, 13, __pyx_L1_error)
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_R), __pyx_ptype_5numpy_ndarray, 1, "R", 0))) __PYX_ERR(0, 14, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_A), __pyx_ptype_5numpy_ndarray, 1, "A", 0))) __PYX_ERR(0, 15, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_b), __pyx_ptype_5numpy_ndarray, 1, "b", 0))) __PYX_ERR(0, 16, __pyx_L1_error)
-  __pyx_r = __pyx_pf_6sympol_25integer_pts_parallelotope_get_parallelotope_points(__pyx_self, __pyx_v_snf, __pyx_v_det, __pyx_v_VDinv, __pyx_v_R, __pyx_v_A, __pyx_v_b, __pyx_v_check_inequalities);
-
-  /* "sympol/integer_pts_parallelotope.pyx":10
- * ctypedef cnp.int64_t DTYPE_t
- * 
- * cpdef tuple get_parallelotope_points(             # <<<<<<<<<<<<<<
- *         cnp.ndarray[DTYPE_t, ndim=1] snf,
- *         DTYPE_t det,
- */
+  __pyx_r = __pyx_pf_6sympol_25integer_pts_parallelotope_get_parallelotope_points(__pyx_self, __pyx_v_snf, __pyx_v_det, __pyx_v_VDinv, __pyx_v_R, __pyx_v_height);
 
   /* function exit code */
   goto __pyx_L0;
@@ -2956,15 +2788,11 @@ static PyObject *__pyx_pw_6sympol_25integer_pts_parallelotope_1get_parallelotope
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_6sympol_25integer_pts_parallelotope_get_parallelotope_points(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_snf, __pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t __pyx_v_det, PyArrayObject *__pyx_v_VDinv, PyArrayObject *__pyx_v_R, PyArrayObject *__pyx_v_A, PyArrayObject *__pyx_v_b, int __pyx_v_check_inequalities) {
-  __Pyx_LocalBuf_ND __pyx_pybuffernd_A;
-  __Pyx_Buffer __pyx_pybuffer_A;
+static PyObject *__pyx_pf_6sympol_25integer_pts_parallelotope_get_parallelotope_points(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_snf, __pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t __pyx_v_det, PyArrayObject *__pyx_v_VDinv, PyArrayObject *__pyx_v_R, int __pyx_v_height) {
   __Pyx_LocalBuf_ND __pyx_pybuffernd_R;
   __Pyx_Buffer __pyx_pybuffer_R;
   __Pyx_LocalBuf_ND __pyx_pybuffernd_VDinv;
   __Pyx_Buffer __pyx_pybuffer_VDinv;
-  __Pyx_LocalBuf_ND __pyx_pybuffernd_b;
-  __Pyx_Buffer __pyx_pybuffer_b;
   __Pyx_LocalBuf_ND __pyx_pybuffernd_snf;
   __Pyx_Buffer __pyx_pybuffer_snf;
   PyObject *__pyx_r = NULL;
@@ -2987,14 +2815,6 @@ static PyObject *__pyx_pf_6sympol_25integer_pts_parallelotope_get_parallelotope_
   __pyx_pybuffer_R.refcount = 0;
   __pyx_pybuffernd_R.data = NULL;
   __pyx_pybuffernd_R.rcbuffer = &__pyx_pybuffer_R;
-  __pyx_pybuffer_A.pybuffer.buf = NULL;
-  __pyx_pybuffer_A.refcount = 0;
-  __pyx_pybuffernd_A.data = NULL;
-  __pyx_pybuffernd_A.rcbuffer = &__pyx_pybuffer_A;
-  __pyx_pybuffer_b.pybuffer.buf = NULL;
-  __pyx_pybuffer_b.refcount = 0;
-  __pyx_pybuffernd_b.data = NULL;
-  __pyx_pybuffernd_b.rcbuffer = &__pyx_pybuffer_b;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
     if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_snf.rcbuffer->pybuffer, (PyObject*)__pyx_v_snf, &__Pyx_TypeInfo_nn___pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) __PYX_ERR(0, 10, __pyx_L1_error)
@@ -3010,20 +2830,10 @@ static PyObject *__pyx_pf_6sympol_25integer_pts_parallelotope_get_parallelotope_
     if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_R.rcbuffer->pybuffer, (PyObject*)__pyx_v_R, &__Pyx_TypeInfo_nn___pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 10, __pyx_L1_error)
   }
   __pyx_pybuffernd_R.diminfo[0].strides = __pyx_pybuffernd_R.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_R.diminfo[0].shape = __pyx_pybuffernd_R.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_R.diminfo[1].strides = __pyx_pybuffernd_R.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_R.diminfo[1].shape = __pyx_pybuffernd_R.rcbuffer->pybuffer.shape[1];
-  {
-    __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_A.rcbuffer->pybuffer, (PyObject*)__pyx_v_A, &__Pyx_TypeInfo_nn___pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 10, __pyx_L1_error)
-  }
-  __pyx_pybuffernd_A.diminfo[0].strides = __pyx_pybuffernd_A.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_A.diminfo[0].shape = __pyx_pybuffernd_A.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_A.diminfo[1].strides = __pyx_pybuffernd_A.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_A.diminfo[1].shape = __pyx_pybuffernd_A.rcbuffer->pybuffer.shape[1];
-  {
-    __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_b.rcbuffer->pybuffer, (PyObject*)__pyx_v_b, &__Pyx_TypeInfo_nn___pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) __PYX_ERR(0, 10, __pyx_L1_error)
-  }
-  __pyx_pybuffernd_b.diminfo[0].strides = __pyx_pybuffernd_b.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_b.diminfo[0].shape = __pyx_pybuffernd_b.rcbuffer->pybuffer.shape[0];
   __Pyx_XDECREF(__pyx_r);
   __pyx_t_2.__pyx_n = 1;
-  __pyx_t_2.check_inequalities = __pyx_v_check_inequalities;
-  __pyx_t_1 = __pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_points(__pyx_v_snf, __pyx_v_det, __pyx_v_VDinv, __pyx_v_R, __pyx_v_A, __pyx_v_b, 0, &__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 10, __pyx_L1_error)
+  __pyx_t_2.height = __pyx_v_height;
+  __pyx_t_1 = __pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_points(__pyx_v_snf, __pyx_v_det, __pyx_v_VDinv, __pyx_v_R, 0, &__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 10, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -3036,20 +2846,16 @@ static PyObject *__pyx_pf_6sympol_25integer_pts_parallelotope_get_parallelotope_
     __Pyx_PyThreadState_declare
     __Pyx_PyThreadState_assign
     __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
-    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_A.rcbuffer->pybuffer);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_R.rcbuffer->pybuffer);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_VDinv.rcbuffer->pybuffer);
-    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_b.rcbuffer->pybuffer);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_snf.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
   __Pyx_AddTraceback("sympol.integer_pts_parallelotope.get_parallelotope_points", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   goto __pyx_L2;
   __pyx_L0:;
-  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_A.rcbuffer->pybuffer);
   __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_R.rcbuffer->pybuffer);
   __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_VDinv.rcbuffer->pybuffer);
-  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_b.rcbuffer->pybuffer);
   __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_snf.rcbuffer->pybuffer);
   __pyx_L2:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -4121,16 +3927,14 @@ static struct PyModuleDef __pyx_moduledef = {
 #endif
 
 static __Pyx_StringTabEntry __pyx_string_tab[] = {
-  {&__pyx_n_s_A, __pyx_k_A, sizeof(__pyx_k_A), 0, 0, 1, 1},
   {&__pyx_n_s_ImportError, __pyx_k_ImportError, sizeof(__pyx_k_ImportError), 0, 0, 1, 1},
   {&__pyx_n_s_R, __pyx_k_R, sizeof(__pyx_k_R), 0, 0, 1, 1},
   {&__pyx_n_s_VDinv, __pyx_k_VDinv, sizeof(__pyx_k_VDinv), 0, 0, 1, 1},
-  {&__pyx_n_s_b, __pyx_k_b, sizeof(__pyx_k_b), 0, 0, 1, 1},
-  {&__pyx_n_s_check_inequalities, __pyx_k_check_inequalities, sizeof(__pyx_k_check_inequalities), 0, 0, 1, 1},
   {&__pyx_n_s_cline_in_traceback, __pyx_k_cline_in_traceback, sizeof(__pyx_k_cline_in_traceback), 0, 0, 1, 1},
   {&__pyx_n_s_copy, __pyx_k_copy, sizeof(__pyx_k_copy), 0, 0, 1, 1},
   {&__pyx_n_s_det, __pyx_k_det, sizeof(__pyx_k_det), 0, 0, 1, 1},
   {&__pyx_n_s_dtype, __pyx_k_dtype, sizeof(__pyx_k_dtype), 0, 0, 1, 1},
+  {&__pyx_n_s_height, __pyx_k_height, sizeof(__pyx_k_height), 0, 0, 1, 1},
   {&__pyx_n_s_import, __pyx_k_import, sizeof(__pyx_k_import), 0, 0, 1, 1},
   {&__pyx_n_s_int64, __pyx_k_int64, sizeof(__pyx_k_int64), 0, 0, 1, 1},
   {&__pyx_n_s_itertools, __pyx_k_itertools, sizeof(__pyx_k_itertools), 0, 0, 1, 1},
@@ -4148,7 +3952,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {0, 0, 0, 0, 0, 0, 0}
 };
 static CYTHON_SMALL_CODE int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 40, __pyx_L1_error)
+  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 36, __pyx_L1_error)
   __pyx_builtin_ImportError = __Pyx_GetBuiltinName(__pyx_n_s_ImportError); if (!__pyx_builtin_ImportError) __PYX_ERR(1, 944, __pyx_L1_error)
   return 0;
   __pyx_L1_error:;
@@ -7038,44 +6842,6 @@ raise_neg_overflow:
     return (npy_int64) -1;
 }
 
-/* CIntToPy */
-  static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value) {
-#ifdef __Pyx_HAS_GCC_DIAGNOSTIC
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wconversion"
-#endif
-    const int neg_one = (int) -1, const_zero = (int) 0;
-#ifdef __Pyx_HAS_GCC_DIAGNOSTIC
-#pragma GCC diagnostic pop
-#endif
-    const int is_unsigned = neg_one > const_zero;
-    if (is_unsigned) {
-        if (sizeof(int) < sizeof(long)) {
-            return PyInt_FromLong((long) value);
-        } else if (sizeof(int) <= sizeof(unsigned long)) {
-            return PyLong_FromUnsignedLong((unsigned long) value);
-#ifdef HAVE_LONG_LONG
-        } else if (sizeof(int) <= sizeof(unsigned PY_LONG_LONG)) {
-            return PyLong_FromUnsignedLongLong((unsigned PY_LONG_LONG) value);
-#endif
-        }
-    } else {
-        if (sizeof(int) <= sizeof(long)) {
-            return PyInt_FromLong((long) value);
-#ifdef HAVE_LONG_LONG
-        } else if (sizeof(int) <= sizeof(PY_LONG_LONG)) {
-            return PyLong_FromLongLong((PY_LONG_LONG) value);
-#endif
-        }
-    }
-    {
-        int one = 1; int little = (int)*(unsigned char *)&one;
-        unsigned char *bytes = (unsigned char *)&value;
-        return _PyLong_FromByteArray(bytes, sizeof(int),
-                                     little, !is_unsigned);
-    }
-}
-
 /* CIntFromPy */
   static CYTHON_INLINE int __Pyx_PyInt_As_int(PyObject *x) {
 #ifdef __Pyx_HAS_GCC_DIAGNOSTIC
@@ -7270,6 +7036,44 @@ raise_neg_overflow:
     PyErr_SetString(PyExc_OverflowError,
         "can't convert negative value to int");
     return (int) -1;
+}
+
+/* CIntToPy */
+  static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value) {
+#ifdef __Pyx_HAS_GCC_DIAGNOSTIC
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wconversion"
+#endif
+    const int neg_one = (int) -1, const_zero = (int) 0;
+#ifdef __Pyx_HAS_GCC_DIAGNOSTIC
+#pragma GCC diagnostic pop
+#endif
+    const int is_unsigned = neg_one > const_zero;
+    if (is_unsigned) {
+        if (sizeof(int) < sizeof(long)) {
+            return PyInt_FromLong((long) value);
+        } else if (sizeof(int) <= sizeof(unsigned long)) {
+            return PyLong_FromUnsignedLong((unsigned long) value);
+#ifdef HAVE_LONG_LONG
+        } else if (sizeof(int) <= sizeof(unsigned PY_LONG_LONG)) {
+            return PyLong_FromUnsignedLongLong((unsigned PY_LONG_LONG) value);
+#endif
+        }
+    } else {
+        if (sizeof(int) <= sizeof(long)) {
+            return PyInt_FromLong((long) value);
+#ifdef HAVE_LONG_LONG
+        } else if (sizeof(int) <= sizeof(PY_LONG_LONG)) {
+            return PyLong_FromLongLong((PY_LONG_LONG) value);
+#endif
+        }
+    }
+    {
+        int one = 1; int little = (int)*(unsigned char *)&one;
+        unsigned char *bytes = (unsigned char *)&value;
+        return _PyLong_FromByteArray(bytes, sizeof(int),
+                                     little, !is_unsigned);
+    }
 }
 
 /* CIntToPy */

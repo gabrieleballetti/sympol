@@ -10,7 +10,7 @@ def test_smith_normal_form():
     generators = PointList([[1, -1, -1], [1, 1, 0], [1, 0, 1]])
     hop = HalfOpenParallelotope(generators)
     assert hop.m == Matrix([[1, 1, 1], [-1, 1, 0], [-1, 0, 1]])
-    assert hop.snf == [3, 1, 1]
+    assert hop.snf == [1, 1, 3]
     assert hop.det == 3
 
 

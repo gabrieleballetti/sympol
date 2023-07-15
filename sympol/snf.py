@@ -250,7 +250,7 @@ def smith_normal_form(A: Matrix):
     # The original algorithm was in a more general setting where solutions up to a
     # unit are enough. In our case we might end up with possibly negative diagonal
     # elements. We force them to be positive, and update S and T accordingly.
-    for i in range(J.rows):
+    for i in range(min(J.cols, J.rows)):
         if J[i, i] < 0:
             J, S = rLC(i, i, i, -1, 0, J, S)
 
