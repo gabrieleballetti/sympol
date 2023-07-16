@@ -7,7 +7,7 @@ cnp.import_array()
 
 ctypedef cnp.int64_t DTYPE_t
 
-cpdef tuple get_parallelotope_points(
+cpdef tuple get_parallelotope_points_np(
         cnp.ndarray[DTYPE_t, ndim=1] snf,
         DTYPE_t det,
         cnp.ndarray[DTYPE_t, ndim=2] VDinv,

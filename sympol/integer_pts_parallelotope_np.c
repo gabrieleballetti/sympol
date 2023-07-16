@@ -4,12 +4,12 @@
 {
     "distutils": {
         "depends": [],
-        "name": "sympol.integer_pts_parallelotope",
+        "name": "sympol.integer_pts_parallelotope_np",
         "sources": [
-            "sympol\\integer_pts_parallelotope.pyx"
+            "sympol\\integer_pts_parallelotope_np.pyx"
         ]
     },
-    "module_name": "sympol.integer_pts_parallelotope"
+    "module_name": "sympol.integer_pts_parallelotope_np"
 }
 END: Cython Metadata */
 
@@ -755,8 +755,8 @@ static CYTHON_INLINE float __PYX_NAN() {
   #endif
 #endif
 
-#define __PYX_HAVE__sympol__integer_pts_parallelotope
-#define __PYX_HAVE_API__sympol__integer_pts_parallelotope
+#define __PYX_HAVE__sympol__integer_pts_parallelotope_np
+#define __PYX_HAVE_API__sympol__integer_pts_parallelotope_np
 /* Early includes */
 #include <string.h>
 #include <stdio.h>
@@ -999,7 +999,7 @@ static const char *__pyx_filename;
 
 
 static const char *__pyx_f[] = {
-  "sympol\\integer_pts_parallelotope.pyx",
+  "sympol\\integer_pts_parallelotope_np.pyx",
   ".venv\\lib\\site-packages\\numpy\\__init__.pxd",
   ".venv\\lib\\site-packages\\Cython\\Includes\\cpython\\type.pxd",
 };
@@ -1229,14 +1229,14 @@ typedef npy_double __pyx_t_5numpy_double_t;
  */
 typedef npy_longdouble __pyx_t_5numpy_longdouble_t;
 
-/* "sympol/integer_pts_parallelotope.pyx":8
+/* "sympol/integer_pts_parallelotope_np.pyx":8
  * cnp.import_array()
  * 
  * ctypedef cnp.int64_t DTYPE_t             # <<<<<<<<<<<<<<
  * 
- * cpdef tuple get_parallelotope_points(
+ * cpdef tuple get_parallelotope_points_np(
  */
-typedef __pyx_t_5numpy_int64_t __pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t;
+typedef __pyx_t_5numpy_int64_t __pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t;
 /* Declarations.proto */
 #if CYTHON_CCOMPLEX
   #ifdef __cplusplus
@@ -1299,16 +1299,16 @@ typedef npy_clongdouble __pyx_t_5numpy_clongdouble_t;
  * cdef inline object PyArray_MultiIterNew1(a):
  */
 typedef npy_cdouble __pyx_t_5numpy_complex_t;
-struct __pyx_opt_args_6sympol_25integer_pts_parallelotope_get_parallelotope_points;
+struct __pyx_opt_args_6sympol_28integer_pts_parallelotope_np_get_parallelotope_points_np;
 
-/* "sympol/integer_pts_parallelotope.pyx":10
+/* "sympol/integer_pts_parallelotope_np.pyx":10
  * ctypedef cnp.int64_t DTYPE_t
  * 
- * cpdef tuple get_parallelotope_points(             # <<<<<<<<<<<<<<
+ * cpdef tuple get_parallelotope_points_np(             # <<<<<<<<<<<<<<
  *         cnp.ndarray[DTYPE_t, ndim=1] snf,
  *         DTYPE_t det,
  */
-struct __pyx_opt_args_6sympol_25integer_pts_parallelotope_get_parallelotope_points {
+struct __pyx_opt_args_6sympol_28integer_pts_parallelotope_np_get_parallelotope_points_np {
   int __pyx_n;
   int height;
 };
@@ -1554,12 +1554,12 @@ static PyObject *__Pyx_GetItemInt_Generic(PyObject *o, PyObject* j);
 static CYTHON_INLINE PyObject *__Pyx_GetItemInt_Fast(PyObject *o, Py_ssize_t i,
                                                      int is_list, int wraparound, int boundscheck);
 
-/* ModInt[__pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t].proto */
-static CYTHON_INLINE __pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t __Pyx_mod___pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t(__pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t, __pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t);
+/* ModInt[__pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t].proto */
+static CYTHON_INLINE __pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t __Pyx_mod___pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t(__pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t, __pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t);
 
 #define __Pyx_BufPtrStrided1d(type, buf, i0, s0) (type)((char*)buf + i0 * s0)
-/* DivInt[__pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t].proto */
-static CYTHON_INLINE __pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t __Pyx_div___pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t(__pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t, __pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t);
+/* DivInt[__pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t].proto */
+static CYTHON_INLINE __pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t __Pyx_div___pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t(__pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t, __pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t);
 
 /* UnaryNegOverflows.proto */
 #define UNARY_NEG_WOULD_OVERFLOW(x)\
@@ -1925,14 +1925,14 @@ static PyTypeObject *__pyx_ptype_5numpy_character = 0;
 static PyTypeObject *__pyx_ptype_5numpy_ufunc = 0;
 static CYTHON_INLINE int __pyx_f_5numpy_import_array(void); /*proto*/
 
-/* Module declarations from 'sympol.integer_pts_parallelotope' */
-static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_points(PyArrayObject *, __pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t, PyArrayObject *, PyArrayObject *, int __pyx_skip_dispatch, struct __pyx_opt_args_6sympol_25integer_pts_parallelotope_get_parallelotope_points *__pyx_optional_args); /*proto*/
-static __Pyx_TypeInfo __Pyx_TypeInfo_nn___pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t = { "DTYPE_t", NULL, sizeof(__pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t), { 0 }, 0, IS_UNSIGNED(__pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t) ? 'U' : 'I', IS_UNSIGNED(__pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t), 0 };
-#define __Pyx_MODULE_NAME "sympol.integer_pts_parallelotope"
-extern int __pyx_module_is_main_sympol__integer_pts_parallelotope;
-int __pyx_module_is_main_sympol__integer_pts_parallelotope = 0;
+/* Module declarations from 'sympol.integer_pts_parallelotope_np' */
+static PyObject *__pyx_f_6sympol_28integer_pts_parallelotope_np_get_parallelotope_points_np(PyArrayObject *, __pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t, PyArrayObject *, PyArrayObject *, int __pyx_skip_dispatch, struct __pyx_opt_args_6sympol_28integer_pts_parallelotope_np_get_parallelotope_points_np *__pyx_optional_args); /*proto*/
+static __Pyx_TypeInfo __Pyx_TypeInfo_nn___pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t = { "DTYPE_t", NULL, sizeof(__pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t), { 0 }, 0, IS_UNSIGNED(__pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t) ? 'U' : 'I', IS_UNSIGNED(__pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t), 0 };
+#define __Pyx_MODULE_NAME "sympol.integer_pts_parallelotope_np"
+extern int __pyx_module_is_main_sympol__integer_pts_parallelotope_np;
+int __pyx_module_is_main_sympol__integer_pts_parallelotope_np = 0;
 
-/* Implementation of 'sympol.integer_pts_parallelotope' */
+/* Implementation of 'sympol.integer_pts_parallelotope_np' */
 static PyObject *__pyx_builtin_range;
 static PyObject *__pyx_builtin_ImportError;
 static const char __pyx_k_R[] = "R";
@@ -1979,27 +1979,27 @@ static PyObject *__pyx_n_s_range;
 static PyObject *__pyx_n_s_snf;
 static PyObject *__pyx_n_s_test;
 static PyObject *__pyx_n_s_zeros;
-static PyObject *__pyx_pf_6sympol_25integer_pts_parallelotope_get_parallelotope_points(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_snf, __pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t __pyx_v_det, PyArrayObject *__pyx_v_VDinv, PyArrayObject *__pyx_v_R, int __pyx_v_height); /* proto */
+static PyObject *__pyx_pf_6sympol_28integer_pts_parallelotope_np_get_parallelotope_points_np(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_snf, __pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t __pyx_v_det, PyArrayObject *__pyx_v_VDinv, PyArrayObject *__pyx_v_R, int __pyx_v_height); /* proto */
 static PyObject *__pyx_tuple_;
 static PyObject *__pyx_tuple__2;
 /* Late includes */
 
-/* "sympol/integer_pts_parallelotope.pyx":10
+/* "sympol/integer_pts_parallelotope_np.pyx":10
  * ctypedef cnp.int64_t DTYPE_t
  * 
- * cpdef tuple get_parallelotope_points(             # <<<<<<<<<<<<<<
+ * cpdef tuple get_parallelotope_points_np(             # <<<<<<<<<<<<<<
  *         cnp.ndarray[DTYPE_t, ndim=1] snf,
  *         DTYPE_t det,
  */
 
-static PyObject *__pyx_pw_6sympol_25integer_pts_parallelotope_1get_parallelotope_points(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_points(PyArrayObject *__pyx_v_snf, __pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t __pyx_v_det, PyArrayObject *__pyx_v_VDinv, PyArrayObject *__pyx_v_R, CYTHON_UNUSED int __pyx_skip_dispatch, struct __pyx_opt_args_6sympol_25integer_pts_parallelotope_get_parallelotope_points *__pyx_optional_args) {
+static PyObject *__pyx_pw_6sympol_28integer_pts_parallelotope_np_1get_parallelotope_points_np(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_f_6sympol_28integer_pts_parallelotope_np_get_parallelotope_points_np(PyArrayObject *__pyx_v_snf, __pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t __pyx_v_det, PyArrayObject *__pyx_v_VDinv, PyArrayObject *__pyx_v_R, CYTHON_UNUSED int __pyx_skip_dispatch, struct __pyx_opt_args_6sympol_28integer_pts_parallelotope_np_get_parallelotope_points_np *__pyx_optional_args) {
   int __pyx_v_height = ((int)-1);
   int __pyx_v_i;
   int __pyx_v_j;
   int __pyx_v_dim;
   int __pyx_v_ambient_dim;
-  __pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t __pyx_v_s;
+  __pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t __pyx_v_s;
   PyObject *__pyx_v_gens = 0;
   PyArrayObject *__pyx_v_gen = 0;
   PyArrayObject *__pyx_v_q_times_d = 0;
@@ -2034,7 +2034,7 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
   Py_ssize_t __pyx_t_16;
   Py_ssize_t __pyx_t_17;
   int __pyx_t_18;
-  __pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t __pyx_t_19;
+  __pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t __pyx_t_19;
   Py_ssize_t __pyx_t_20;
   int __pyx_t_21;
   int __pyx_t_22;
@@ -2042,7 +2042,7 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("get_parallelotope_points", 0);
+  __Pyx_RefNannySetupContext("get_parallelotope_points_np", 0);
   if (__pyx_optional_args) {
     if (__pyx_optional_args->__pyx_n > 0) {
       __pyx_v_height = __pyx_optional_args->height;
@@ -2070,21 +2070,21 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
   __pyx_pybuffernd_R.rcbuffer = &__pyx_pybuffer_R;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_snf.rcbuffer->pybuffer, (PyObject*)__pyx_v_snf, &__Pyx_TypeInfo_nn___pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) __PYX_ERR(0, 10, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_snf.rcbuffer->pybuffer, (PyObject*)__pyx_v_snf, &__Pyx_TypeInfo_nn___pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) __PYX_ERR(0, 10, __pyx_L1_error)
   }
   __pyx_pybuffernd_snf.diminfo[0].strides = __pyx_pybuffernd_snf.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_snf.diminfo[0].shape = __pyx_pybuffernd_snf.rcbuffer->pybuffer.shape[0];
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_VDinv.rcbuffer->pybuffer, (PyObject*)__pyx_v_VDinv, &__Pyx_TypeInfo_nn___pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 10, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_VDinv.rcbuffer->pybuffer, (PyObject*)__pyx_v_VDinv, &__Pyx_TypeInfo_nn___pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 10, __pyx_L1_error)
   }
   __pyx_pybuffernd_VDinv.diminfo[0].strides = __pyx_pybuffernd_VDinv.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_VDinv.diminfo[0].shape = __pyx_pybuffernd_VDinv.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_VDinv.diminfo[1].strides = __pyx_pybuffernd_VDinv.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_VDinv.diminfo[1].shape = __pyx_pybuffernd_VDinv.rcbuffer->pybuffer.shape[1];
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_R.rcbuffer->pybuffer, (PyObject*)__pyx_v_R, &__Pyx_TypeInfo_nn___pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 10, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_R.rcbuffer->pybuffer, (PyObject*)__pyx_v_R, &__Pyx_TypeInfo_nn___pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 10, __pyx_L1_error)
   }
   __pyx_pybuffernd_R.diminfo[0].strides = __pyx_pybuffernd_R.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_R.diminfo[0].shape = __pyx_pybuffernd_R.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_R.diminfo[1].strides = __pyx_pybuffernd_R.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_R.diminfo[1].shape = __pyx_pybuffernd_R.rcbuffer->pybuffer.shape[1];
 
-  /* "sympol/integer_pts_parallelotope.pyx":30
+  /* "sympol/integer_pts_parallelotope_np.pyx":30
  *     """
  *     cdef int i, j
  *     cdef int dim = VDinv.shape[0]             # <<<<<<<<<<<<<<
@@ -2093,7 +2093,7 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
  */
   __pyx_v_dim = (__pyx_v_VDinv->dimensions[0]);
 
-  /* "sympol/integer_pts_parallelotope.pyx":31
+  /* "sympol/integer_pts_parallelotope_np.pyx":31
  *     cdef int i, j
  *     cdef int dim = VDinv.shape[0]
  *     cdef int ambient_dim = R.shape[0]             # <<<<<<<<<<<<<<
@@ -2102,7 +2102,7 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
  */
   __pyx_v_ambient_dim = (__pyx_v_R->dimensions[0]);
 
-  /* "sympol/integer_pts_parallelotope.pyx":32
+  /* "sympol/integer_pts_parallelotope_np.pyx":32
  *     cdef int dim = VDinv.shape[0]
  *     cdef int ambient_dim = R.shape[0]
  *     cdef DTYPE_t s = 0             # <<<<<<<<<<<<<<
@@ -2111,7 +2111,7 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
  */
   __pyx_v_s = 0;
 
-  /* "sympol/integer_pts_parallelotope.pyx":33
+  /* "sympol/integer_pts_parallelotope_np.pyx":33
  *     cdef int ambient_dim = R.shape[0]
  *     cdef DTYPE_t s = 0
  *     cdef list gens = []             # <<<<<<<<<<<<<<
@@ -2123,7 +2123,7 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
   __pyx_v_gens = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "sympol/integer_pts_parallelotope.pyx":34
+  /* "sympol/integer_pts_parallelotope_np.pyx":34
  *     cdef DTYPE_t s = 0
  *     cdef list gens = []
  *     cdef cnp.ndarray[DTYPE_t, ndim=1] gen = np.zeros(ambient_dim, dtype=np.int64)             # <<<<<<<<<<<<<<
@@ -2160,7 +2160,7 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
   __pyx_t_6 = ((PyArrayObject *)__pyx_t_5);
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_gen.rcbuffer->pybuffer, (PyObject*)__pyx_t_6, &__Pyx_TypeInfo_nn___pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES| PyBUF_WRITABLE, 1, 0, __pyx_stack) == -1)) {
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_gen.rcbuffer->pybuffer, (PyObject*)__pyx_t_6, &__Pyx_TypeInfo_nn___pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES| PyBUF_WRITABLE, 1, 0, __pyx_stack) == -1)) {
       __pyx_v_gen = ((PyArrayObject *)Py_None); __Pyx_INCREF(Py_None); __pyx_pybuffernd_gen.rcbuffer->pybuffer.buf = NULL;
       __PYX_ERR(0, 34, __pyx_L1_error)
     } else {__pyx_pybuffernd_gen.diminfo[0].strides = __pyx_pybuffernd_gen.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_gen.diminfo[0].shape = __pyx_pybuffernd_gen.rcbuffer->pybuffer.shape[0];
@@ -2170,7 +2170,7 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
   __pyx_v_gen = ((PyArrayObject *)__pyx_t_5);
   __pyx_t_5 = 0;
 
-  /* "sympol/integer_pts_parallelotope.pyx":35
+  /* "sympol/integer_pts_parallelotope_np.pyx":35
  *     cdef list gens = []
  *     cdef cnp.ndarray[DTYPE_t, ndim=1] gen = np.zeros(ambient_dim, dtype=np.int64)
  *     cdef cnp.ndarray[DTYPE_t, ndim=1] q_times_d = np.zeros(dim, dtype=np.int64)             # <<<<<<<<<<<<<<
@@ -2207,7 +2207,7 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
   __pyx_t_7 = ((PyArrayObject *)__pyx_t_4);
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_q_times_d.rcbuffer->pybuffer, (PyObject*)__pyx_t_7, &__Pyx_TypeInfo_nn___pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES| PyBUF_WRITABLE, 1, 0, __pyx_stack) == -1)) {
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_q_times_d.rcbuffer->pybuffer, (PyObject*)__pyx_t_7, &__Pyx_TypeInfo_nn___pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES| PyBUF_WRITABLE, 1, 0, __pyx_stack) == -1)) {
       __pyx_v_q_times_d = ((PyArrayObject *)Py_None); __Pyx_INCREF(Py_None); __pyx_pybuffernd_q_times_d.rcbuffer->pybuffer.buf = NULL;
       __PYX_ERR(0, 35, __pyx_L1_error)
     } else {__pyx_pybuffernd_q_times_d.diminfo[0].strides = __pyx_pybuffernd_q_times_d.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_q_times_d.diminfo[0].shape = __pyx_pybuffernd_q_times_d.rcbuffer->pybuffer.shape[0];
@@ -2217,7 +2217,7 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
   __pyx_v_q_times_d = ((PyArrayObject *)__pyx_t_4);
   __pyx_t_4 = 0;
 
-  /* "sympol/integer_pts_parallelotope.pyx":36
+  /* "sympol/integer_pts_parallelotope_np.pyx":36
  *     cdef cnp.ndarray[DTYPE_t, ndim=1] gen = np.zeros(ambient_dim, dtype=np.int64)
  *     cdef cnp.ndarray[DTYPE_t, ndim=1] q_times_d = np.zeros(dim, dtype=np.int64)
  *     for base in itertools.product(*[range(i) for i in snf]):             # <<<<<<<<<<<<<<
@@ -2332,7 +2332,7 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
     __Pyx_XDECREF_SET(__pyx_v_base, __pyx_t_4);
     __pyx_t_4 = 0;
 
-    /* "sympol/integer_pts_parallelotope.pyx":37
+    /* "sympol/integer_pts_parallelotope_np.pyx":37
  *     cdef cnp.ndarray[DTYPE_t, ndim=1] q_times_d = np.zeros(dim, dtype=np.int64)
  *     for base in itertools.product(*[range(i) for i in snf]):
  *         for i in range(dim):             # <<<<<<<<<<<<<<
@@ -2344,7 +2344,7 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
     for (__pyx_t_12 = 0; __pyx_t_12 < __pyx_t_11; __pyx_t_12+=1) {
       __pyx_v_i = __pyx_t_12;
 
-      /* "sympol/integer_pts_parallelotope.pyx":38
+      /* "sympol/integer_pts_parallelotope_np.pyx":38
  *     for base in itertools.product(*[range(i) for i in snf]):
  *         for i in range(dim):
  *             s = 0             # <<<<<<<<<<<<<<
@@ -2353,7 +2353,7 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
  */
       __pyx_v_s = 0;
 
-      /* "sympol/integer_pts_parallelotope.pyx":39
+      /* "sympol/integer_pts_parallelotope_np.pyx":39
  *         for i in range(dim):
  *             s = 0
  *             for j in range(dim):             # <<<<<<<<<<<<<<
@@ -2365,7 +2365,7 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
       for (__pyx_t_15 = 0; __pyx_t_15 < __pyx_t_14; __pyx_t_15+=1) {
         __pyx_v_j = __pyx_t_15;
 
-        /* "sympol/integer_pts_parallelotope.pyx":40
+        /* "sympol/integer_pts_parallelotope_np.pyx":40
  *             s = 0
  *             for j in range(dim):
  *                 s += VDinv[i, j] * base[j]             # <<<<<<<<<<<<<<
@@ -2389,7 +2389,7 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
           __Pyx_RaiseBufferIndexError(__pyx_t_18);
           __PYX_ERR(0, 40, __pyx_L1_error)
         }
-        __pyx_t_5 = __Pyx_PyInt_From_npy_int64((*__Pyx_BufPtrStrided2d(__pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t *, __pyx_pybuffernd_VDinv.rcbuffer->pybuffer.buf, __pyx_t_16, __pyx_pybuffernd_VDinv.diminfo[0].strides, __pyx_t_17, __pyx_pybuffernd_VDinv.diminfo[1].strides))); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 40, __pyx_L1_error)
+        __pyx_t_5 = __Pyx_PyInt_From_npy_int64((*__Pyx_BufPtrStrided2d(__pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t *, __pyx_pybuffernd_VDinv.rcbuffer->pybuffer.buf, __pyx_t_16, __pyx_pybuffernd_VDinv.diminfo[0].strides, __pyx_t_17, __pyx_pybuffernd_VDinv.diminfo[1].strides))); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 40, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
         __pyx_t_2 = __Pyx_GetItemInt(__pyx_v_base, __pyx_v_j, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 40, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
@@ -2406,7 +2406,7 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
         __pyx_v_s = __pyx_t_19;
       }
 
-      /* "sympol/integer_pts_parallelotope.pyx":41
+      /* "sympol/integer_pts_parallelotope_np.pyx":41
  *             for j in range(dim):
  *                 s += VDinv[i, j] * base[j]
  *             q_times_d[i] = s % det             # <<<<<<<<<<<<<<
@@ -2427,10 +2427,10 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
         __Pyx_RaiseBufferIndexError(__pyx_t_13);
         __PYX_ERR(0, 41, __pyx_L1_error)
       }
-      *__Pyx_BufPtrStrided1d(__pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t *, __pyx_pybuffernd_q_times_d.rcbuffer->pybuffer.buf, __pyx_t_17, __pyx_pybuffernd_q_times_d.diminfo[0].strides) = __Pyx_mod___pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t(__pyx_v_s, __pyx_v_det);
+      *__Pyx_BufPtrStrided1d(__pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t *, __pyx_pybuffernd_q_times_d.rcbuffer->pybuffer.buf, __pyx_t_17, __pyx_pybuffernd_q_times_d.diminfo[0].strides) = __Pyx_mod___pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t(__pyx_v_s, __pyx_v_det);
     }
 
-    /* "sympol/integer_pts_parallelotope.pyx":42
+    /* "sympol/integer_pts_parallelotope_np.pyx":42
  *                 s += VDinv[i, j] * base[j]
  *             q_times_d[i] = s % det
  *         for i in range(ambient_dim):             # <<<<<<<<<<<<<<
@@ -2442,7 +2442,7 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
     for (__pyx_t_12 = 0; __pyx_t_12 < __pyx_t_11; __pyx_t_12+=1) {
       __pyx_v_i = __pyx_t_12;
 
-      /* "sympol/integer_pts_parallelotope.pyx":43
+      /* "sympol/integer_pts_parallelotope_np.pyx":43
  *             q_times_d[i] = s % det
  *         for i in range(ambient_dim):
  *             s = 0             # <<<<<<<<<<<<<<
@@ -2451,7 +2451,7 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
  */
       __pyx_v_s = 0;
 
-      /* "sympol/integer_pts_parallelotope.pyx":44
+      /* "sympol/integer_pts_parallelotope_np.pyx":44
  *         for i in range(ambient_dim):
  *             s = 0
  *             for j in range(dim):             # <<<<<<<<<<<<<<
@@ -2463,7 +2463,7 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
       for (__pyx_t_15 = 0; __pyx_t_15 < __pyx_t_14; __pyx_t_15+=1) {
         __pyx_v_j = __pyx_t_15;
 
-        /* "sympol/integer_pts_parallelotope.pyx":45
+        /* "sympol/integer_pts_parallelotope_np.pyx":45
  *             s = 0
  *             for j in range(dim):
  *                 s += R[i, j] * q_times_d[j]             # <<<<<<<<<<<<<<
@@ -2495,10 +2495,10 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
           __Pyx_RaiseBufferIndexError(__pyx_t_18);
           __PYX_ERR(0, 45, __pyx_L1_error)
         }
-        __pyx_v_s = (__pyx_v_s + ((*__Pyx_BufPtrStrided2d(__pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t *, __pyx_pybuffernd_R.rcbuffer->pybuffer.buf, __pyx_t_17, __pyx_pybuffernd_R.diminfo[0].strides, __pyx_t_16, __pyx_pybuffernd_R.diminfo[1].strides)) * (*__Pyx_BufPtrStrided1d(__pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t *, __pyx_pybuffernd_q_times_d.rcbuffer->pybuffer.buf, __pyx_t_20, __pyx_pybuffernd_q_times_d.diminfo[0].strides))));
+        __pyx_v_s = (__pyx_v_s + ((*__Pyx_BufPtrStrided2d(__pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t *, __pyx_pybuffernd_R.rcbuffer->pybuffer.buf, __pyx_t_17, __pyx_pybuffernd_R.diminfo[0].strides, __pyx_t_16, __pyx_pybuffernd_R.diminfo[1].strides)) * (*__Pyx_BufPtrStrided1d(__pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t *, __pyx_pybuffernd_q_times_d.rcbuffer->pybuffer.buf, __pyx_t_20, __pyx_pybuffernd_q_times_d.diminfo[0].strides))));
       }
 
-      /* "sympol/integer_pts_parallelotope.pyx":46
+      /* "sympol/integer_pts_parallelotope_np.pyx":46
  *             for j in range(dim):
  *                 s += R[i, j] * q_times_d[j]
  *             gen[i] = s / det             # <<<<<<<<<<<<<<
@@ -2509,7 +2509,7 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
         PyErr_SetString(PyExc_ZeroDivisionError, "integer division or modulo by zero");
         __PYX_ERR(0, 46, __pyx_L1_error)
       }
-      else if (sizeof(__pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t) == sizeof(long) && (!(((__pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t)-1) > 0)) && unlikely(__pyx_v_det == (__pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t)-1)  && unlikely(UNARY_NEG_WOULD_OVERFLOW(__pyx_v_s))) {
+      else if (sizeof(__pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t) == sizeof(long) && (!(((__pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t)-1) > 0)) && unlikely(__pyx_v_det == (__pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t)-1)  && unlikely(UNARY_NEG_WOULD_OVERFLOW(__pyx_v_s))) {
         PyErr_SetString(PyExc_OverflowError, "value too large to perform division");
         __PYX_ERR(0, 46, __pyx_L1_error)
       }
@@ -2523,9 +2523,9 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
         __Pyx_RaiseBufferIndexError(__pyx_t_13);
         __PYX_ERR(0, 46, __pyx_L1_error)
       }
-      *__Pyx_BufPtrStrided1d(__pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t *, __pyx_pybuffernd_gen.rcbuffer->pybuffer.buf, __pyx_t_20, __pyx_pybuffernd_gen.diminfo[0].strides) = __Pyx_div___pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t(__pyx_v_s, __pyx_v_det);
+      *__Pyx_BufPtrStrided1d(__pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t *, __pyx_pybuffernd_gen.rcbuffer->pybuffer.buf, __pyx_t_20, __pyx_pybuffernd_gen.diminfo[0].strides) = __Pyx_div___pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t(__pyx_v_s, __pyx_v_det);
 
-      /* "sympol/integer_pts_parallelotope.pyx":47
+      /* "sympol/integer_pts_parallelotope_np.pyx":47
  *                 s += R[i, j] * q_times_d[j]
  *             gen[i] = s / det
  *             if i == 0 and height >= 0 and gen[0] != height:             # <<<<<<<<<<<<<<
@@ -2554,12 +2554,12 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
         __Pyx_RaiseBufferIndexError(__pyx_t_13);
         __PYX_ERR(0, 47, __pyx_L1_error)
       }
-      __pyx_t_22 = (((*__Pyx_BufPtrStrided1d(__pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t *, __pyx_pybuffernd_gen.rcbuffer->pybuffer.buf, __pyx_t_20, __pyx_pybuffernd_gen.diminfo[0].strides)) != __pyx_v_height) != 0);
+      __pyx_t_22 = (((*__Pyx_BufPtrStrided1d(__pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t *, __pyx_pybuffernd_gen.rcbuffer->pybuffer.buf, __pyx_t_20, __pyx_pybuffernd_gen.diminfo[0].strides)) != __pyx_v_height) != 0);
       __pyx_t_21 = __pyx_t_22;
       __pyx_L16_bool_binop_done:;
       if (__pyx_t_21) {
 
-        /* "sympol/integer_pts_parallelotope.pyx":48
+        /* "sympol/integer_pts_parallelotope_np.pyx":48
  *             gen[i] = s / det
  *             if i == 0 and height >= 0 and gen[0] != height:
  *                 continue             # <<<<<<<<<<<<<<
@@ -2568,7 +2568,7 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
  */
         goto __pyx_L11_continue;
 
-        /* "sympol/integer_pts_parallelotope.pyx":47
+        /* "sympol/integer_pts_parallelotope_np.pyx":47
  *                 s += R[i, j] * q_times_d[j]
  *             gen[i] = s / det
  *             if i == 0 and height >= 0 and gen[0] != height:             # <<<<<<<<<<<<<<
@@ -2580,7 +2580,7 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
     }
     /*else*/ {
 
-      /* "sympol/integer_pts_parallelotope.pyx":51
+      /* "sympol/integer_pts_parallelotope_np.pyx":51
  *         else:
  *             # only executed if the loop did not break
  *             gens.append(copy.copy(gen))             # <<<<<<<<<<<<<<
@@ -2610,7 +2610,7 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     }
 
-    /* "sympol/integer_pts_parallelotope.pyx":36
+    /* "sympol/integer_pts_parallelotope_np.pyx":36
  *     cdef cnp.ndarray[DTYPE_t, ndim=1] gen = np.zeros(ambient_dim, dtype=np.int64)
  *     cdef cnp.ndarray[DTYPE_t, ndim=1] q_times_d = np.zeros(dim, dtype=np.int64)
  *     for base in itertools.product(*[range(i) for i in snf]):             # <<<<<<<<<<<<<<
@@ -2620,7 +2620,7 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
   }
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "sympol/integer_pts_parallelotope.pyx":52
+  /* "sympol/integer_pts_parallelotope_np.pyx":52
  *             # only executed if the loop did not break
  *             gens.append(copy.copy(gen))
  *     return tuple(gens)             # <<<<<<<<<<<<<<
@@ -2632,10 +2632,10 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
   __pyx_t_3 = 0;
   goto __pyx_L0;
 
-  /* "sympol/integer_pts_parallelotope.pyx":10
+  /* "sympol/integer_pts_parallelotope_np.pyx":10
  * ctypedef cnp.int64_t DTYPE_t
  * 
- * cpdef tuple get_parallelotope_points(             # <<<<<<<<<<<<<<
+ * cpdef tuple get_parallelotope_points_np(             # <<<<<<<<<<<<<<
  *         cnp.ndarray[DTYPE_t, ndim=1] snf,
  *         DTYPE_t det,
  */
@@ -2657,7 +2657,7 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_q_times_d.rcbuffer->pybuffer);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_snf.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_AddTraceback("sympol.integer_pts_parallelotope.get_parallelotope_points", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("sympol.integer_pts_parallelotope_np.get_parallelotope_points_np", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = 0;
   goto __pyx_L2;
   __pyx_L0:;
@@ -2677,11 +2677,11 @@ static PyObject *__pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_p
 }
 
 /* Python wrapper */
-static PyObject *__pyx_pw_6sympol_25integer_pts_parallelotope_1get_parallelotope_points(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_6sympol_25integer_pts_parallelotope_get_parallelotope_points[] = "\n    Get all the integer points in the half-open parallelotope generated by\n    the columns of R. This is a modification of the SageMath implementation\n    at sage/src/sage/geometry/integral_points.pxi (GPLv2+).\n    Description of the parameters:\n    snf: the diagonal Smith normal form of the matrix R\n    det: the determinant of R\n    VDinv: the inverse of the matrix VD, where D is the diagonal matrix\n        in the Smith normal form of R\n    R: the matrix whose columns generate the parallelotope\n    height: if given, only return points with the given \"height\" (= first coordinate)\n    ";
-static PyObject *__pyx_pw_6sympol_25integer_pts_parallelotope_1get_parallelotope_points(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_6sympol_28integer_pts_parallelotope_np_1get_parallelotope_points_np(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_6sympol_28integer_pts_parallelotope_np_get_parallelotope_points_np[] = "\n    Get all the integer points in the half-open parallelotope generated by\n    the columns of R. This is a modification of the SageMath implementation\n    at sage/src/sage/geometry/integral_points.pxi (GPLv2+).\n    Description of the parameters:\n    snf: the diagonal Smith normal form of the matrix R\n    det: the determinant of R\n    VDinv: the inverse of the matrix VD, where D is the diagonal matrix\n        in the Smith normal form of R\n    R: the matrix whose columns generate the parallelotope\n    height: if given, only return points with the given \"height\" (= first coordinate)\n    ";
+static PyObject *__pyx_pw_6sympol_28integer_pts_parallelotope_np_1get_parallelotope_points_np(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyArrayObject *__pyx_v_snf = 0;
-  __pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t __pyx_v_det;
+  __pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t __pyx_v_det;
   PyArrayObject *__pyx_v_VDinv = 0;
   PyArrayObject *__pyx_v_R = 0;
   int __pyx_v_height;
@@ -2690,7 +2690,7 @@ static PyObject *__pyx_pw_6sympol_25integer_pts_parallelotope_1get_parallelotope
   int __pyx_clineno = 0;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("get_parallelotope_points (wrapper)", 0);
+  __Pyx_RefNannySetupContext("get_parallelotope_points_np (wrapper)", 0);
   {
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_snf,&__pyx_n_s_det,&__pyx_n_s_VDinv,&__pyx_n_s_R,&__pyx_n_s_height,0};
     PyObject* values[5] = {0,0,0,0,0};
@@ -2720,19 +2720,19 @@ static PyObject *__pyx_pw_6sympol_25integer_pts_parallelotope_1get_parallelotope
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_det)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("get_parallelotope_points", 0, 4, 5, 1); __PYX_ERR(0, 10, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("get_parallelotope_points_np", 0, 4, 5, 1); __PYX_ERR(0, 10, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_VDinv)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("get_parallelotope_points", 0, 4, 5, 2); __PYX_ERR(0, 10, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("get_parallelotope_points_np", 0, 4, 5, 2); __PYX_ERR(0, 10, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (likely((values[3] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_R)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("get_parallelotope_points", 0, 4, 5, 3); __PYX_ERR(0, 10, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("get_parallelotope_points_np", 0, 4, 5, 3); __PYX_ERR(0, 10, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
@@ -2742,7 +2742,7 @@ static PyObject *__pyx_pw_6sympol_25integer_pts_parallelotope_1get_parallelotope
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "get_parallelotope_points") < 0)) __PYX_ERR(0, 10, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "get_parallelotope_points_np") < 0)) __PYX_ERR(0, 10, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -2768,16 +2768,16 @@ static PyObject *__pyx_pw_6sympol_25integer_pts_parallelotope_1get_parallelotope
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("get_parallelotope_points", 0, 4, 5, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 10, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("get_parallelotope_points_np", 0, 4, 5, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 10, __pyx_L3_error)
   __pyx_L3_error:;
-  __Pyx_AddTraceback("sympol.integer_pts_parallelotope.get_parallelotope_points", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("sympol.integer_pts_parallelotope_np.get_parallelotope_points_np", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_snf), __pyx_ptype_5numpy_ndarray, 1, "snf", 0))) __PYX_ERR(0, 11, __pyx_L1_error)
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_VDinv), __pyx_ptype_5numpy_ndarray, 1, "VDinv", 0))) __PYX_ERR(0, 13, __pyx_L1_error)
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_R), __pyx_ptype_5numpy_ndarray, 1, "R", 0))) __PYX_ERR(0, 14, __pyx_L1_error)
-  __pyx_r = __pyx_pf_6sympol_25integer_pts_parallelotope_get_parallelotope_points(__pyx_self, __pyx_v_snf, __pyx_v_det, __pyx_v_VDinv, __pyx_v_R, __pyx_v_height);
+  __pyx_r = __pyx_pf_6sympol_28integer_pts_parallelotope_np_get_parallelotope_points_np(__pyx_self, __pyx_v_snf, __pyx_v_det, __pyx_v_VDinv, __pyx_v_R, __pyx_v_height);
 
   /* function exit code */
   goto __pyx_L0;
@@ -2788,7 +2788,7 @@ static PyObject *__pyx_pw_6sympol_25integer_pts_parallelotope_1get_parallelotope
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_6sympol_25integer_pts_parallelotope_get_parallelotope_points(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_snf, __pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t __pyx_v_det, PyArrayObject *__pyx_v_VDinv, PyArrayObject *__pyx_v_R, int __pyx_v_height) {
+static PyObject *__pyx_pf_6sympol_28integer_pts_parallelotope_np_get_parallelotope_points_np(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_snf, __pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t __pyx_v_det, PyArrayObject *__pyx_v_VDinv, PyArrayObject *__pyx_v_R, int __pyx_v_height) {
   __Pyx_LocalBuf_ND __pyx_pybuffernd_R;
   __Pyx_Buffer __pyx_pybuffer_R;
   __Pyx_LocalBuf_ND __pyx_pybuffernd_VDinv;
@@ -2798,11 +2798,11 @@ static PyObject *__pyx_pf_6sympol_25integer_pts_parallelotope_get_parallelotope_
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
-  struct __pyx_opt_args_6sympol_25integer_pts_parallelotope_get_parallelotope_points __pyx_t_2;
+  struct __pyx_opt_args_6sympol_28integer_pts_parallelotope_np_get_parallelotope_points_np __pyx_t_2;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("get_parallelotope_points", 0);
+  __Pyx_RefNannySetupContext("get_parallelotope_points_np", 0);
   __pyx_pybuffer_snf.pybuffer.buf = NULL;
   __pyx_pybuffer_snf.refcount = 0;
   __pyx_pybuffernd_snf.data = NULL;
@@ -2817,23 +2817,23 @@ static PyObject *__pyx_pf_6sympol_25integer_pts_parallelotope_get_parallelotope_
   __pyx_pybuffernd_R.rcbuffer = &__pyx_pybuffer_R;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_snf.rcbuffer->pybuffer, (PyObject*)__pyx_v_snf, &__Pyx_TypeInfo_nn___pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) __PYX_ERR(0, 10, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_snf.rcbuffer->pybuffer, (PyObject*)__pyx_v_snf, &__Pyx_TypeInfo_nn___pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) __PYX_ERR(0, 10, __pyx_L1_error)
   }
   __pyx_pybuffernd_snf.diminfo[0].strides = __pyx_pybuffernd_snf.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_snf.diminfo[0].shape = __pyx_pybuffernd_snf.rcbuffer->pybuffer.shape[0];
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_VDinv.rcbuffer->pybuffer, (PyObject*)__pyx_v_VDinv, &__Pyx_TypeInfo_nn___pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 10, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_VDinv.rcbuffer->pybuffer, (PyObject*)__pyx_v_VDinv, &__Pyx_TypeInfo_nn___pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 10, __pyx_L1_error)
   }
   __pyx_pybuffernd_VDinv.diminfo[0].strides = __pyx_pybuffernd_VDinv.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_VDinv.diminfo[0].shape = __pyx_pybuffernd_VDinv.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_VDinv.diminfo[1].strides = __pyx_pybuffernd_VDinv.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_VDinv.diminfo[1].shape = __pyx_pybuffernd_VDinv.rcbuffer->pybuffer.shape[1];
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_R.rcbuffer->pybuffer, (PyObject*)__pyx_v_R, &__Pyx_TypeInfo_nn___pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 10, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_R.rcbuffer->pybuffer, (PyObject*)__pyx_v_R, &__Pyx_TypeInfo_nn___pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 10, __pyx_L1_error)
   }
   __pyx_pybuffernd_R.diminfo[0].strides = __pyx_pybuffernd_R.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_R.diminfo[0].shape = __pyx_pybuffernd_R.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_R.diminfo[1].strides = __pyx_pybuffernd_R.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_R.diminfo[1].shape = __pyx_pybuffernd_R.rcbuffer->pybuffer.shape[1];
   __Pyx_XDECREF(__pyx_r);
   __pyx_t_2.__pyx_n = 1;
   __pyx_t_2.height = __pyx_v_height;
-  __pyx_t_1 = __pyx_f_6sympol_25integer_pts_parallelotope_get_parallelotope_points(__pyx_v_snf, __pyx_v_det, __pyx_v_VDinv, __pyx_v_R, 0, &__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 10, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_6sympol_28integer_pts_parallelotope_np_get_parallelotope_points_np(__pyx_v_snf, __pyx_v_det, __pyx_v_VDinv, __pyx_v_R, 0, &__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 10, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -2850,7 +2850,7 @@ static PyObject *__pyx_pf_6sympol_25integer_pts_parallelotope_get_parallelotope_
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_VDinv.rcbuffer->pybuffer);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_snf.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_AddTraceback("sympol.integer_pts_parallelotope.get_parallelotope_points", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("sympol.integer_pts_parallelotope_np.get_parallelotope_points_np", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   goto __pyx_L2;
   __pyx_L0:;
@@ -3881,24 +3881,24 @@ static CYTHON_INLINE NPY_DATETIMEUNIT __pyx_f_5numpy_get_datetime64_unit(PyObjec
 }
 
 static PyMethodDef __pyx_methods[] = {
-  {"get_parallelotope_points", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_6sympol_25integer_pts_parallelotope_1get_parallelotope_points, METH_VARARGS|METH_KEYWORDS, __pyx_doc_6sympol_25integer_pts_parallelotope_get_parallelotope_points},
+  {"get_parallelotope_points_np", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_6sympol_28integer_pts_parallelotope_np_1get_parallelotope_points_np, METH_VARARGS|METH_KEYWORDS, __pyx_doc_6sympol_28integer_pts_parallelotope_np_get_parallelotope_points_np},
   {0, 0, 0, 0}
 };
 
 #if PY_MAJOR_VERSION >= 3
 #if CYTHON_PEP489_MULTI_PHASE_INIT
 static PyObject* __pyx_pymod_create(PyObject *spec, PyModuleDef *def); /*proto*/
-static int __pyx_pymod_exec_integer_pts_parallelotope(PyObject* module); /*proto*/
+static int __pyx_pymod_exec_integer_pts_parallelotope_np(PyObject* module); /*proto*/
 static PyModuleDef_Slot __pyx_moduledef_slots[] = {
   {Py_mod_create, (void*)__pyx_pymod_create},
-  {Py_mod_exec, (void*)__pyx_pymod_exec_integer_pts_parallelotope},
+  {Py_mod_exec, (void*)__pyx_pymod_exec_integer_pts_parallelotope_np},
   {0, NULL}
 };
 #endif
 
 static struct PyModuleDef __pyx_moduledef = {
     PyModuleDef_HEAD_INIT,
-    "integer_pts_parallelotope",
+    "integer_pts_parallelotope_np",
     0, /* m_doc */
   #if CYTHON_PEP489_MULTI_PHASE_INIT
     0, /* m_size */
@@ -4117,11 +4117,11 @@ static int __Pyx_modinit_function_import_code(void) {
 
 
 #if PY_MAJOR_VERSION < 3
-__Pyx_PyMODINIT_FUNC initinteger_pts_parallelotope(void) CYTHON_SMALL_CODE; /*proto*/
-__Pyx_PyMODINIT_FUNC initinteger_pts_parallelotope(void)
+__Pyx_PyMODINIT_FUNC initinteger_pts_parallelotope_np(void) CYTHON_SMALL_CODE; /*proto*/
+__Pyx_PyMODINIT_FUNC initinteger_pts_parallelotope_np(void)
 #else
-__Pyx_PyMODINIT_FUNC PyInit_integer_pts_parallelotope(void) CYTHON_SMALL_CODE; /*proto*/
-__Pyx_PyMODINIT_FUNC PyInit_integer_pts_parallelotope(void)
+__Pyx_PyMODINIT_FUNC PyInit_integer_pts_parallelotope_np(void) CYTHON_SMALL_CODE; /*proto*/
+__Pyx_PyMODINIT_FUNC PyInit_integer_pts_parallelotope_np(void)
 #if CYTHON_PEP489_MULTI_PHASE_INIT
 {
   return PyModuleDef_Init(&__pyx_moduledef);
@@ -4188,7 +4188,7 @@ bad:
 }
 
 
-static CYTHON_SMALL_CODE int __pyx_pymod_exec_integer_pts_parallelotope(PyObject *__pyx_pyinit_module)
+static CYTHON_SMALL_CODE int __pyx_pymod_exec_integer_pts_parallelotope_np(PyObject *__pyx_pyinit_module)
 #endif
 #endif
 {
@@ -4201,7 +4201,7 @@ static CYTHON_SMALL_CODE int __pyx_pymod_exec_integer_pts_parallelotope(PyObject
   #if CYTHON_PEP489_MULTI_PHASE_INIT
   if (__pyx_m) {
     if (__pyx_m == __pyx_pyinit_module) return 0;
-    PyErr_SetString(PyExc_RuntimeError, "Module 'integer_pts_parallelotope' has already been imported. Re-initialisation is not supported.");
+    PyErr_SetString(PyExc_RuntimeError, "Module 'integer_pts_parallelotope_np' has already been imported. Re-initialisation is not supported.");
     return -1;
   }
   #elif PY_MAJOR_VERSION >= 3
@@ -4216,7 +4216,7 @@ if (!__Pyx_RefNanny) {
       Py_FatalError("failed to import 'refnanny' module");
 }
 #endif
-  __Pyx_RefNannySetupContext("__Pyx_PyMODINIT_FUNC PyInit_integer_pts_parallelotope(void)", 0);
+  __Pyx_RefNannySetupContext("__Pyx_PyMODINIT_FUNC PyInit_integer_pts_parallelotope_np(void)", 0);
   if (__Pyx_check_binary_version() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   #ifdef __Pxy_PyFrame_Initialize_Offsets
   __Pxy_PyFrame_Initialize_Offsets();
@@ -4253,7 +4253,7 @@ if (!__Pyx_RefNanny) {
   Py_INCREF(__pyx_m);
   #else
   #if PY_MAJOR_VERSION < 3
-  __pyx_m = Py_InitModule4("integer_pts_parallelotope", __pyx_methods, 0, 0, PYTHON_API_VERSION); Py_XINCREF(__pyx_m);
+  __pyx_m = Py_InitModule4("integer_pts_parallelotope_np", __pyx_methods, 0, 0, PYTHON_API_VERSION); Py_XINCREF(__pyx_m);
   #else
   __pyx_m = PyModule_Create(&__pyx_moduledef);
   #endif
@@ -4271,14 +4271,14 @@ if (!__Pyx_RefNanny) {
   #if PY_MAJOR_VERSION < 3 && (__PYX_DEFAULT_STRING_ENCODING_IS_ASCII || __PYX_DEFAULT_STRING_ENCODING_IS_DEFAULT)
   if (__Pyx_init_sys_getdefaultencoding_params() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   #endif
-  if (__pyx_module_is_main_sympol__integer_pts_parallelotope) {
+  if (__pyx_module_is_main_sympol__integer_pts_parallelotope_np) {
     if (PyObject_SetAttr(__pyx_m, __pyx_n_s_name, __pyx_n_s_main) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   }
   #if PY_MAJOR_VERSION >= 3
   {
     PyObject *modules = PyImport_GetModuleDict(); if (unlikely(!modules)) __PYX_ERR(0, 1, __pyx_L1_error)
-    if (!PyDict_GetItemString(modules, "sympol.integer_pts_parallelotope")) {
-      if (unlikely(PyDict_SetItemString(modules, "sympol.integer_pts_parallelotope", __pyx_m) < 0)) __PYX_ERR(0, 1, __pyx_L1_error)
+    if (!PyDict_GetItemString(modules, "sympol.integer_pts_parallelotope_np")) {
+      if (unlikely(PyDict_SetItemString(modules, "sympol.integer_pts_parallelotope_np", __pyx_m) < 0)) __PYX_ERR(0, 1, __pyx_L1_error)
     }
   }
   #endif
@@ -4299,7 +4299,7 @@ if (!__Pyx_RefNanny) {
   if (__Pyx_patch_abc() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   #endif
 
-  /* "sympol/integer_pts_parallelotope.pyx":1
+  /* "sympol/integer_pts_parallelotope_np.pyx":1
  * import copy             # <<<<<<<<<<<<<<
  * import itertools
  * import numpy as np
@@ -4309,7 +4309,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_copy, __pyx_t_1) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "sympol/integer_pts_parallelotope.pyx":2
+  /* "sympol/integer_pts_parallelotope_np.pyx":2
  * import copy
  * import itertools             # <<<<<<<<<<<<<<
  * import numpy as np
@@ -4320,7 +4320,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_itertools, __pyx_t_1) < 0) __PYX_ERR(0, 2, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "sympol/integer_pts_parallelotope.pyx":3
+  /* "sympol/integer_pts_parallelotope_np.pyx":3
  * import copy
  * import itertools
  * import numpy as np             # <<<<<<<<<<<<<<
@@ -4332,7 +4332,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, __pyx_t_1) < 0) __PYX_ERR(0, 3, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "sympol/integer_pts_parallelotope.pyx":6
+  /* "sympol/integer_pts_parallelotope_np.pyx":6
  * cimport numpy as cnp
  * 
  * cnp.import_array()             # <<<<<<<<<<<<<<
@@ -4341,7 +4341,7 @@ if (!__Pyx_RefNanny) {
  */
   __pyx_t_2 = __pyx_f_5numpy_import_array(); if (unlikely(__pyx_t_2 == ((int)-1))) __PYX_ERR(0, 6, __pyx_L1_error)
 
-  /* "sympol/integer_pts_parallelotope.pyx":1
+  /* "sympol/integer_pts_parallelotope_np.pyx":1
  * import copy             # <<<<<<<<<<<<<<
  * import itertools
  * import numpy as np
@@ -4366,11 +4366,11 @@ if (!__Pyx_RefNanny) {
   __Pyx_XDECREF(__pyx_t_1);
   if (__pyx_m) {
     if (__pyx_d) {
-      __Pyx_AddTraceback("init sympol.integer_pts_parallelotope", __pyx_clineno, __pyx_lineno, __pyx_filename);
+      __Pyx_AddTraceback("init sympol.integer_pts_parallelotope_np", __pyx_clineno, __pyx_lineno, __pyx_filename);
     }
     Py_CLEAR(__pyx_m);
   } else if (!PyErr_Occurred()) {
-    PyErr_SetString(PyExc_ImportError, "init sympol.integer_pts_parallelotope");
+    PyErr_SetString(PyExc_ImportError, "init sympol.integer_pts_parallelotope_np");
   }
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();
@@ -5378,17 +5378,17 @@ static CYTHON_INLINE PyObject *__Pyx_GetItemInt_Fast(PyObject *o, Py_ssize_t i, 
     return __Pyx_GetItemInt_Generic(o, PyInt_FromSsize_t(i));
 }
 
-/* ModInt[__pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t] */
-  static CYTHON_INLINE __pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t __Pyx_mod___pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t(__pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t a, __pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t b) {
-    __pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t r = a % b;
+/* ModInt[__pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t] */
+  static CYTHON_INLINE __pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t __Pyx_mod___pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t(__pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t a, __pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t b) {
+    __pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t r = a % b;
     r += ((r != 0) & ((r ^ b) < 0)) * b;
     return r;
 }
 
-/* DivInt[__pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t] */
-  static CYTHON_INLINE __pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t __Pyx_div___pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t(__pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t a, __pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t b) {
-    __pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t q = a / b;
-    __pyx_t_6sympol_25integer_pts_parallelotope_DTYPE_t r = a - q*b;
+/* DivInt[__pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t] */
+  static CYTHON_INLINE __pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t __Pyx_div___pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t(__pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t a, __pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t b) {
+    __pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t q = a / b;
+    __pyx_t_6sympol_28integer_pts_parallelotope_np_DTYPE_t r = a - q*b;
     q -= ((r != 0) & ((r ^ b) < 0));
     return q;
 }
