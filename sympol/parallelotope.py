@@ -71,7 +71,9 @@ class HalfOpenParallelotope:
 
         d_inv = diag(*[self._det // e_i for e_i in self._snf])
 
-        self._v_d_inv = v * d_inv
+        # Apply a % self._det to each entry of v * d_inv to keep the
+        # entries in the range [0, self._det)
+        self._v_d_inv = v * d_inv % self._det
 
     def get_integer_points(self, height=-1):
         """
@@ -90,10 +92,10 @@ class HalfOpenParallelotope:
             #     "The number of integer points is too large to be computed."
             # )
             pts = get_parallelotope_points(
-                bytearray(self.snf),
+                self.snf,
                 self.det,
-                self.v_d_inv.tolist(),
-                self.m.tolist(),
+                self.v_d_inv,
+                self.m,
                 height=height,
             )
         return pts
