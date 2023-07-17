@@ -45,7 +45,7 @@ cpdef tuple get_parallelotope_points_np(
                 s += R[i, j] * q_times_d[j]
             gen[i] = s / det
             if i == 0 and height >= 0 and gen[0] != height:
-                continue
+                break
         else:
             # only executed if the loop did not break
             gens.append(copy.copy(gen))

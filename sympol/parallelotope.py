@@ -6,6 +6,7 @@ from sympy import diag, Matrix
 from sympol.integer_pts_parallelotope_np import (
     get_parallelotope_points_np,
 )
+from sympol.point import Point
 from sympol.snf import smith_normal_form
 
 
@@ -15,11 +16,18 @@ class HalfOpenParallelotope:
     number of integer points.
     """
 
-    def __init__(self, generators, check_rank=True):
+    def __init__(self, generators, special_gens_ids=None, check_rank=True):
         """
         Initializes a half-open parallelotope with the given generators.
         """
-        self.m = Matrix(generators).T
+        if special_gens_ids is None:
+            special_gens_ids = []
+
+        self.t = sum(
+            [generators[i] for i in special_gens_ids], Point([0 for _ in generators[0]])
+        )
+
+        self.m = Matrix([g - self.t for g in generators]).T
 
         # check linear independence of generators
         if check_rank and self.m.rank() != self.m.shape[1]:
@@ -87,10 +95,12 @@ class HalfOpenParallelotope:
                 np.array(self.m, dtype=np.int64),
                 height,
             )
-        except OverflowError:
-            # raise ValueError(
-            #     "The number of integer points is too large to be computed."
-            # )
+        except OverflowError as e:
+            # This can be uset to allow to fallback in the pure Python implementation if
+            # there is a failure due to overflow. But in practice this will be too slow
+            # to be useful in most of the cases. Can still be used for debugging by
+            # commenting out the following line.
+            raise OverflowError(e)
             pts = get_parallelotope_points(
                 self.snf,
                 self.det,

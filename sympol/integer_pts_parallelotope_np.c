@@ -2503,7 +2503,7 @@ static PyObject *__pyx_f_6sympol_28integer_pts_parallelotope_np_get_parallelotop
  *                 s += R[i, j] * q_times_d[j]
  *             gen[i] = s / det             # <<<<<<<<<<<<<<
  *             if i == 0 and height >= 0 and gen[0] != height:
- *                 continue
+ *                 break
  */
       if (unlikely(__pyx_v_det == 0)) {
         PyErr_SetString(PyExc_ZeroDivisionError, "integer division or modulo by zero");
@@ -2529,7 +2529,7 @@ static PyObject *__pyx_f_6sympol_28integer_pts_parallelotope_np_get_parallelotop
  *                 s += R[i, j] * q_times_d[j]
  *             gen[i] = s / det
  *             if i == 0 and height >= 0 and gen[0] != height:             # <<<<<<<<<<<<<<
- *                 continue
+ *                 break
  *         else:
  */
       __pyx_t_22 = ((__pyx_v_i == 0) != 0);
@@ -2562,21 +2562,20 @@ static PyObject *__pyx_f_6sympol_28integer_pts_parallelotope_np_get_parallelotop
         /* "sympol/integer_pts_parallelotope_np.pyx":48
  *             gen[i] = s / det
  *             if i == 0 and height >= 0 and gen[0] != height:
- *                 continue             # <<<<<<<<<<<<<<
+ *                 break             # <<<<<<<<<<<<<<
  *         else:
  *             # only executed if the loop did not break
  */
-        goto __pyx_L11_continue;
+        goto __pyx_L12_break;
 
         /* "sympol/integer_pts_parallelotope_np.pyx":47
  *                 s += R[i, j] * q_times_d[j]
  *             gen[i] = s / det
  *             if i == 0 and height >= 0 and gen[0] != height:             # <<<<<<<<<<<<<<
- *                 continue
+ *                 break
  *         else:
  */
       }
-      __pyx_L11_continue:;
     }
     /*else*/ {
 
@@ -2609,6 +2608,7 @@ static PyObject *__pyx_f_6sympol_28integer_pts_parallelotope_np_get_parallelotop
       __pyx_t_23 = __Pyx_PyList_Append(__pyx_v_gens, __pyx_t_2); if (unlikely(__pyx_t_23 == ((int)-1))) __PYX_ERR(0, 51, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     }
+    __pyx_L12_break:;
 
     /* "sympol/integer_pts_parallelotope_np.pyx":36
  *     cdef cnp.ndarray[DTYPE_t, ndim=1] gen = np.zeros(ambient_dim, dtype=np.int64)

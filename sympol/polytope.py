@@ -12,6 +12,7 @@ from sympy.polys.polyfuncs import interpolate
 from sympol.cython_utils import _sum_of_points
 from sympol.integer_points import _find_integer_points
 from sympol.isomorphism import get_normal_form
+from sympol.parallelotope import HalfOpenParallelotope
 from sympol.point import Point
 from sympol.point_list import PointList
 from sympol.lineq import LinIneq
@@ -100,6 +101,7 @@ class Polytope:
         self._ehrhart_coefficients = None
         self._h_star_polynomial = None
         self._h_star_vector = None
+        self._h_star_vector2 = None
         self._degree = None
 
         self._full_dim_projection = None
@@ -762,6 +764,42 @@ class Polytope:
             )
 
         return self._h_star_vector
+
+    @property
+    def h_star_vector2(self):
+        """
+        Get the h*-vector of the polytope
+        """
+        if self._h_star_vector2 is None:
+            self._h_star_vector2 = [0 for _ in range(self.ambient_dim + 1)]
+            for i, simplex_ids in enumerate(self.triangulation):
+                verts = [self.vertices[i] for i in simplex_ids]
+                simplex = Simplex(vertices=verts)
+                if i == 0:
+                    ref_pt = simplex.barycenter
+                special_gens_ids = []
+                for facet, lineq in zip(simplex.facets, simplex.linear_inequalities):
+                    for v_id in range(len(verts)):
+                        if v_id not in facet:
+                            break
+                    if lineq.evaluate(ref_pt) < 0:
+                        special_gens_ids.append(v_id)
+
+                if i == 0:
+                    assert len(special_gens_ids) == 0
+
+                hop = HalfOpenParallelotope(
+                    generators=[Point([1] + list(v)) for v in simplex.vertices],
+                    special_gens_ids=special_gens_ids,
+                )
+                pts_hop = [pt for pt in hop.get_integer_points()]
+
+                for pt in pts_hop:
+                    self._h_star_vector2[pt[0]] += 1
+
+            self._h_star_vector2 = tuple(self._h_star_vector2)
+
+        return self._h_star_vector2
 
     @property
     def degree(self):
