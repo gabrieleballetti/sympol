@@ -4,7 +4,7 @@ import cdd
 from scipy.spatial import Delaunay
 
 
-from sympy import Abs, factorial, gcd, lcm, Number, Matrix, Poly, Rational
+from sympy import Abs, factorial, gcd, lcm, Number, Matrix, Poly, Rational, sqrt
 from sympy.abc import x
 from sympy.matrices import zeros
 from sympy.matrices.normalforms import hermite_normal_form
@@ -776,14 +776,23 @@ class Polytope:
                 verts = [self.vertices[i] for i in simplex_ids]
                 simplex = Simplex(vertices=verts)
                 if i == 0:
-                    ref_pt = simplex.barycenter
+                    weights = [pow(2, Rational(1, i + 2)) for i in range(len(verts))]
+                    ref_pt = self._origin()
+                    for v, w in zip(verts, weights):
+                        ref_pt += v * w
+                    ref_pt /= sum(weights)
                 special_gens_ids = []
                 for facet, lineq in zip(simplex.facets, simplex.linear_inequalities):
                     for v_id in range(len(verts)):
                         if v_id not in facet:
+                            assert lineq.evaluate(verts[v_id]) != 0
                             break
+                        else:
+                            assert lineq.evaluate(verts[v_id]) == 0
                     if lineq.evaluate(ref_pt) < 0:
                         special_gens_ids.append(v_id)
+                    else:
+                        assert lineq.evaluate(ref_pt) != 0
 
                 if i == 0:
                     assert len(special_gens_ids) == 0

@@ -12,6 +12,7 @@ cpdef tuple get_parallelotope_points_np(
         DTYPE_t det,
         cnp.ndarray[DTYPE_t, ndim=2] VDinv,
         cnp.ndarray[DTYPE_t, ndim=2] R,
+        cnp.ndarray[DTYPE_t, ndim=1] t,
         int height=-1,
     ):
     """
@@ -24,6 +25,7 @@ cpdef tuple get_parallelotope_points_np(
     VDinv: the inverse of the matrix VD, where D is the diagonal matrix
         in the Smith normal form of R
     R: the matrix whose columns generate the parallelotope
+    t: the translation vector of the parallelotope
     height: if given, only return points with the given "height" (= first coordinate)
     """
     cdef int i, j
@@ -43,7 +45,7 @@ cpdef tuple get_parallelotope_points_np(
             s = 0
             for j in range(dim):
                 s += R[i, j] * q_times_d[j]
-            gen[i] = s / det
+            gen[i] = s / det + t[i]
             if i == 0 and height >= 0 and gen[0] != height:
                 break
         else:
