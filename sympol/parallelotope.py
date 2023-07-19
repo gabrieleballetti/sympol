@@ -80,6 +80,7 @@ class HalfOpenParallelotope:
         to speed up the computation of the integer points enumeration.
         """
         if self._k is None:
+            self._k = 0
             for i, d_i in enumerate(self.snf):
                 if d_i != 1:
                     self._k = i
@@ -106,28 +107,11 @@ class HalfOpenParallelotope:
         # entries in the range [0, self._det)
         self._v_d_inv = v * d_inv % self._det
 
-    def get_integer_points(self, height=-1, count_only=False):
+    def get_integer_points(self, height=-1, count_only=False, use_sympy=False):
         """
         Returns the number of integer points in the half-open parallelotope.
         """
-        try:
-            # raise OverflowError
-            pts, h = get_parallelotope_points_np(
-                snf=np.array(self.snf, dtype=np.int64),
-                det=self.det,
-                VDinv=np.array(self.v_d_inv, dtype=np.int64),
-                k=self.k,
-                R=np.array(self.m, dtype=np.int64),
-                t=np.array(self.t, dtype=np.int64),
-                height=height,
-                count_only=count_only,
-            )
-        except OverflowError as e:
-            # This can be uset to allow to fallback in the sympy implementation if
-            # there is a failure due to overflow. But in practice this will be too slow
-            # to be useful in most of the cases. Can still be used for debugging by
-            # commenting out the following line.
-            raise OverflowError(e)
+        if use_sympy:
             pts, h = get_parallelotope_points_simpy(
                 snf=self.snf,
                 det=self.det,
@@ -135,6 +119,17 @@ class HalfOpenParallelotope:
                 k=self.k,
                 R=self.m,
                 t=self.t,
+                height=height,
+                count_only=count_only,
+            )
+        else:
+            pts, h = get_parallelotope_points_np(
+                snf=np.array(self.snf, dtype=np.int64),
+                det=self.det,
+                VDinv=np.array(self.v_d_inv, dtype=np.int64),
+                k=self.k,
+                R=np.array(self.m, dtype=np.int64),
+                t=np.array(self.t, dtype=np.int64),
                 height=height,
                 count_only=count_only,
             )

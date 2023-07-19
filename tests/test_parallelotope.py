@@ -1,5 +1,4 @@
 import pytest
-import numpy as np
 from sympy import Matrix
 from sympol.parallelotope import HalfOpenParallelotope
 from sympol.point_list import PointList
@@ -42,3 +41,22 @@ def test_integer_points(height, count_only):
         else:
             assert h == (0, 1, 0)
             assert set([tuple(p) for p in pts]) == set({(1, 0, 0)})
+
+
+def test_integer_points_consistency():
+    """
+    Check that the two methods (numpy and sympy) give the same results.
+    """
+    generators = PointList(
+        [
+            [1, 1, 1, 1, 0],
+            [1, 0, 0, 0, 0],
+            [1, 1, 1, 0, 0],
+            [1, 1, 0, 1, 1],
+        ]
+    )
+    hop = HalfOpenParallelotope(generators)
+    pts1, h1 = hop.get_integer_points(use_sympy=True)
+    pts2, h2 = hop.get_integer_points(use_sympy=False)
+    assert h1 == h2
+    assert set([tuple(pt) for pt in pts1]) == set([tuple(pt) for pt in pts2])
