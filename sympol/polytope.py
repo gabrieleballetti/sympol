@@ -775,33 +775,36 @@ class Polytope:
             for i, simplex_ids in enumerate(self.triangulation):
                 verts = [self.vertices[i] for i in simplex_ids]
                 simplex = Simplex(vertices=verts)
-                if i == 0:
-                    weights = [pow(2, Rational(1, i + 2)) for i in range(len(verts))]
-                    ref_pt = self._origin()
-                    for v, w in zip(verts, weights):
-                        ref_pt += v * w
-                    ref_pt /= sum(weights)
                 special_gens_ids = []
-                for facet, lineq in zip(simplex.facets, simplex.linear_inequalities):
-                    for v_id in range(len(verts)):
-                        if v_id not in facet:
-                            assert lineq.evaluate(verts[v_id]) != 0
-                            break
-                        else:
-                            assert lineq.evaluate(verts[v_id]) == 0
-                    if lineq.evaluate(ref_pt) < 0:
-                        special_gens_ids.append(v_id)
-                    else:
-                        assert lineq.evaluate(ref_pt) != 0
-
-                if i == 0:
-                    assert len(special_gens_ids) == 0
+                if len(self.triangulation) > 1:
+                    if i == 0:
+                        # Define a reference point in the first simplex of the
+                        # triangulation, make sure its coordinates do not satisfy
+                        # any rational linear relations. This ensures that any of the
+                        # inequalities below will not evaluate to zero at this point.
+                        weights = [2 ** Rational(1, i + 2) for i in range(len(verts))]
+                        ref_pt = self._origin()
+                        for v, w in zip(verts, weights):
+                            ref_pt += v * w
+                        ref_pt /= sum(weights)
+                    for f, lineq in zip(simplex.facets, simplex.linear_inequalities):
+                        # find the vertex that is not in the facet
+                        for v_id in range(len(verts)):
+                            if v_id not in f:
+                                break
+                        if lineq.evaluate(ref_pt) < 0:
+                            special_gens_ids.append(v_id)
 
                 hop = HalfOpenParallelotope(
                     generators=[Point([1] + list(v)) for v in simplex.vertices],
                     special_gens_ids=special_gens_ids,
                 )
+                hop._calculate_smith_normal_form()
+                import time
+
+                start = time.time()
                 pts_hop = [pt for pt in hop.get_integer_points()]
+                self.time = time.time() - start
 
                 for pt in pts_hop:
                     self._h_star_vector2[pt[0]] += 1
