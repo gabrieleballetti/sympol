@@ -152,6 +152,15 @@ def test_triangulation_lower_dimensional_polytope():
     assert p.triangulation == (frozenset({0, 1, 3}), frozenset({0, 2, 3}))
 
 
+def test_triangulation_one_dimensional_polytope():
+    """
+    Test that the triangulation is correct
+    """
+    p = Polytope([[0], [1]])
+
+    assert p.triangulation == (frozenset({0, 1}),)
+
+
 def test_get_volume_segment():
     """
     Test that the volume is correct

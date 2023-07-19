@@ -101,7 +101,6 @@ class Polytope:
         self._ehrhart_coefficients = None
         self._h_star_polynomial = None
         self._h_star_vector = None
-        self._h_star_vector2 = None
         self._degree = None
 
         self._full_dim_projection = None
@@ -489,7 +488,12 @@ class Polytope:
         if self._triangulation is None:
             # if the polytope is not full-dimensional, we need to project it
             # to a full-dimensional subspace
-            if self.is_full_dim():
+            if self.dim < 2:
+                # scipy.spatial.Delaunay needs at least 2d points
+                self._triangulation = tuple(
+                    [frozenset({i for i, _ in enumerate(self.vertices)})]
+                )
+            elif self.is_full_dim():
                 delaunay_triangulation = Delaunay(np.array(self.vertices))
                 self._triangulation = tuple(
                     [
@@ -738,16 +742,27 @@ class Polytope:
                     "h*-polynomial is only implemented for lattice polytopes"
                 )
 
-            self._h_star_polynomial = sum(
-                [
-                    self.ehrhart_coefficients[i]
-                    * _eulerian_poly(i, x)
-                    * (1 - x) ** (self.dim - i)
-                    for i in range(self.dim + 1)
-                ]
-            ).simplify()
+            self._h_star_polynomial = Poly(
+                sum([h_i * x**i for i, h_i in enumerate(self.h_star_vector)]), x
+            )
 
         return self._h_star_polynomial
+
+    # @property
+    # def h_star_vector(self):
+    #     """
+    #     Get the h*-vector of the polytope
+    #     """
+    #     if self._h_star_vector is None:
+    #         self._h_star_vector = tuple(
+    #             [1]
+    #             + [
+    #                 self.h_star_polynomial.coeff_monomial(x**d)
+    #                 for d in range(1, self.dim + 1)
+    #             ]
+    #         )
+
+    #     return self._h_star_vector
 
     @property
     def h_star_vector(self):
@@ -755,38 +770,22 @@ class Polytope:
         Get the h*-vector of the polytope
         """
         if self._h_star_vector is None:
-            self._h_star_vector = tuple(
-                [1]
-                + [
-                    self.h_star_polynomial.coeff_monomial(x**d)
-                    for d in range(1, self.dim + 1)
-                ]
-            )
-
-        return self._h_star_vector
-
-    @property
-    def h_star_vector2(self):
-        """
-        Get the h*-vector of the polytope
-        """
-        if self._h_star_vector2 is None:
-            self._h_star_vector2 = [0 for _ in range(self.ambient_dim + 1)]
+            self._h_star_vector = [0 for _ in range(self.ambient_dim + 1)]
             for i, simplex_ids in enumerate(self.triangulation):
                 verts = [self.vertices[i] for i in simplex_ids]
                 simplex = Simplex(vertices=verts)
                 special_gens_ids = []
-                if len(self.triangulation) > 1:
-                    if i == 0:
-                        # Define a reference point in the first simplex of the
-                        # triangulation, make sure its coordinates do not satisfy
-                        # any rational linear relations. This ensures that any of the
-                        # inequalities below will not evaluate to zero at this point.
-                        weights = [2 ** Rational(1, i + 2) for i in range(len(verts))]
-                        ref_pt = self._origin()
-                        for v, w in zip(verts, weights):
-                            ref_pt += v * w
-                        ref_pt /= sum(weights)
+                if i == 0:
+                    # Define a reference point in the first simplex of the
+                    # triangulation, make sure its coordinates do not satisfy
+                    # any rational linear relations. This ensures that any of the
+                    # inequalities below will not evaluate to zero at this point.
+                    weights = [2 ** Rational(1, i + 2) for i in range(len(verts))]
+                    ref_pt = self._origin()
+                    for v, w in zip(verts, weights):
+                        ref_pt += v * w
+                    ref_pt /= sum(weights)
+                else:
                     for f, lineq in zip(simplex.facets, simplex.linear_inequalities):
                         # find the vertex that is not in the facet
                         for v_id in range(len(verts)):
@@ -800,18 +799,15 @@ class Polytope:
                     special_gens_ids=special_gens_ids,
                 )
                 hop._calculate_smith_normal_form()
-                import time
 
-                start = time.time()
-                pts_hop = [pt for pt in hop.get_integer_points()]
-                self.time = time.time() - start
+                _, delta_h = [pt for pt in hop.get_integer_points(count_only=True)]
 
-                for pt in pts_hop:
-                    self._h_star_vector2[pt[0]] += 1
+                for i, h_i in enumerate(delta_h):
+                    self._h_star_vector[i] += h_i
 
-            self._h_star_vector2 = tuple(self._h_star_vector2)
+            self._h_star_vector = tuple(self._h_star_vector)
 
-        return self._h_star_vector2
+        return self._h_star_vector
 
     @property
     def degree(self):
@@ -1169,6 +1165,20 @@ class Polytope:
         # (in that case _n_interior_points would be None and we do not need to
         # know the exact number)
         return self._n_interior_points == n
+
+    def _ehrhart_to_h_star_polynomial(self):
+        """
+        Get the h*-polynomial from the h*-vector. This is only used in
+        tests right now.
+        """
+        return sum(
+            [
+                self.ehrhart_coefficients[i]
+                * _eulerian_poly(i, x)
+                * (1 - x) ** (self.dim - i)
+                for i in range(self.dim + 1)
+            ]
+        ).simplify()
 
     # Polytope operations
 
