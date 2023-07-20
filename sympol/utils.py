@@ -1,5 +1,5 @@
 from cdd import Fraction
-from sympy import binomial, Poly, Rational
+from sympy import binomial, factorial, Poly, Rational
 
 
 def _cdd_fraction_to_simpy_rational(frac):
@@ -105,3 +105,17 @@ def _eulerian_poly(n, x):
             + x
         )
     return Poly(sum([_eulerian_number(n, k - 1) * x**k for k in range(1, n + 1)]))
+
+
+def _binomial_polynomial(d, k, x):
+    """
+    Calculate the binomial polynomial binomial(x + k, d), with x as the variable
+    """
+    # binomial(x + k, d) = (x+k)! / (d! * (x+k-d)!) =
+    #                    = (x+k) * (x+k-1) * ... * (x+k-d+1) / d!
+
+    poly = Poly(Rational(1, factorial(d)), x, domain="QQ")
+    for i in range(d):
+        poly *= Poly(x + k - i, x)
+
+    return poly

@@ -8,7 +8,6 @@ from sympy import Abs, factorial, gcd, lcm, Number, Matrix, Poly, Rational, sqrt
 from sympy.abc import x
 from sympy.matrices import zeros
 from sympy.matrices.normalforms import hermite_normal_form
-from sympy.polys.polyfuncs import interpolate
 from sympol.cython_utils import _sum_of_points
 from sympol.integer_points import _find_integer_points
 from sympol.isomorphism import get_normal_form
@@ -16,7 +15,12 @@ from sympol.parallelotope import HalfOpenParallelotope
 from sympol.point import Point
 from sympol.point_list import PointList
 from sympol.lineq import LinIneq
-from sympol.utils import _cdd_fraction_to_simpy_rational, _eulerian_poly, is_unimodal
+from sympol.utils import (
+    _binomial_polynomial,
+    _cdd_fraction_to_simpy_rational,
+    _eulerian_poly,
+    is_unimodal,
+)
 
 
 class Polytope:
@@ -83,6 +87,7 @@ class Polytope:
         self._vertex_facet_pairing_matrix = None
 
         self._triangulation = None
+        self._half_open_decomposition = None
         self._induced_boundary_triangulation = None
         self._volume = None
         self._normalized_volume = None
@@ -507,6 +512,43 @@ class Polytope:
         return self._triangulation
 
     @property
+    def half_open_decomposition(self):
+        """
+        Get the half open decomposition of the polytope. This is a tuple of
+        vertices ids, indicating - for each simplex in the triangulation - which
+        facets (opposite to the vertices) are missing from such simplex.
+        Their order is the same as the order of the simplices in the triangulation.
+        """
+        if self._half_open_decomposition is None:
+            self._half_open_decomposition = []
+            for i, simplex_ids in enumerate(self.triangulation):
+                verts = [self.vertices[i] for i in simplex_ids]
+                simplex = Simplex(vertices=verts)
+                special_gens_ids = []
+                if i == 0:
+                    # Define a reference point in the first simplex of the
+                    # triangulation, make sure its coordinates do not satisfy
+                    # any rational linear relations. This ensures that any of the
+                    # inequalities below will not evaluate to zero at this point.
+                    weights = [2 ** Rational(1, i + 2) for i in range(len(verts))]
+                    ref_pt = self._origin()
+                    for v, w in zip(verts, weights):
+                        ref_pt += v * w
+                    ref_pt /= sum(weights)
+                else:
+                    for f, lineq in zip(simplex.facets, simplex.linear_inequalities):
+                        # find the vertex that is not in the facet
+                        for v_id in range(len(verts)):
+                            if v_id not in f:
+                                break
+                        if lineq.evaluate(ref_pt) < 0:
+                            special_gens_ids.append(v_id)
+                self._half_open_decomposition.append(frozenset(special_gens_ids))
+            self._half_open_decomposition = tuple(self._half_open_decomposition)
+
+        return self._half_open_decomposition
+
+    @property
     def induced_boundary_triangulation(self):
         """
         Get the triangulation of the boundary of the polytope induced by the
@@ -683,41 +725,13 @@ class Polytope:
                     "Ehrhart polynomial is only implemented for lattice polytopes"
                 )
 
-            self._ehrhart_polynomial = Poly(1, x, domain="QQ")
-
-            if self.dim == 0:
-                return self._ehrhart_polynomial
-
-            # manually add the coefficient c_d
-            self._ehrhart_polynomial += self.volume * x**self.dim
-
-            if self.dim == 1:
-                return self._ehrhart_polynomial
-
-            # manually add the coefficient c_{d-1}
-            # (it is generally faster than determining it through interpolation)
-            self._ehrhart_polynomial += (
-                Rational(1, 2) * self.boundary_volume * x ** (self.dim - 1)
+            self._ehrhart_polynomial = sum(
+                [
+                    h_i * _binomial_polynomial(self.dim, self.dim - i, x)
+                    for i, h_i in enumerate(self.h_star_vector)
+                    if h_i != 0
+                ]
             )
-
-            if self.dim == 2:
-                return self._ehrhart_polynomial
-
-            values_needed = self.dim - 2
-            values = {0: 0}
-            while values_needed > 0:
-                k = (self.dim - values_needed) // 2
-                dilation = self * k if k > 1 else self
-
-                # there's no additional computation to count also interior points
-                # so we can add them both at the same time
-                values[k] = dilation.n_integer_points - self._ehrhart_polynomial.eval(k)
-                values[-k] = (-1) ** (
-                    self.dim
-                ) * dilation.n_interior_points - self._ehrhart_polynomial.eval(-k)
-                values_needed -= 2
-
-            self._ehrhart_polynomial += interpolate(values, x)
 
         return self._ehrhart_polynomial
 
@@ -748,22 +762,6 @@ class Polytope:
 
         return self._h_star_polynomial
 
-    # @property
-    # def h_star_vector(self):
-    #     """
-    #     Get the h*-vector of the polytope
-    #     """
-    #     if self._h_star_vector is None:
-    #         self._h_star_vector = tuple(
-    #             [1]
-    #             + [
-    #                 self.h_star_polynomial.coeff_monomial(x**d)
-    #                 for d in range(1, self.dim + 1)
-    #             ]
-    #         )
-
-    #     return self._h_star_vector
-
     @property
     def h_star_vector(self):
         """
@@ -771,31 +769,13 @@ class Polytope:
         """
         if self._h_star_vector is None:
             self._h_star_vector = [0 for _ in range(self.ambient_dim + 1)]
-            for i, simplex_ids in enumerate(self.triangulation):
-                verts = [self.vertices[i] for i in simplex_ids]
-                simplex = Simplex(vertices=verts)
-                special_gens_ids = []
-                if i == 0:
-                    # Define a reference point in the first simplex of the
-                    # triangulation, make sure its coordinates do not satisfy
-                    # any rational linear relations. This ensures that any of the
-                    # inequalities below will not evaluate to zero at this point.
-                    weights = [2 ** Rational(1, i + 2) for i in range(len(verts))]
-                    ref_pt = self._origin()
-                    for v, w in zip(verts, weights):
-                        ref_pt += v * w
-                    ref_pt /= sum(weights)
-                else:
-                    for f, lineq in zip(simplex.facets, simplex.linear_inequalities):
-                        # find the vertex that is not in the facet
-                        for v_id in range(len(verts)):
-                            if v_id not in f:
-                                break
-                        if lineq.evaluate(ref_pt) < 0:
-                            special_gens_ids.append(v_id)
-
+            for verts_ids, special_gens_ids in zip(
+                self.triangulation, self.half_open_decomposition
+            ):
                 hop = HalfOpenParallelotope(
-                    generators=[Point([1] + list(v)) for v in simplex.vertices],
+                    generators=[
+                        Point([1] + list(self.vertices[v_id])) for v_id in verts_ids
+                    ],
                     special_gens_ids=special_gens_ids,
                 )
                 hop._calculate_smith_normal_form()
@@ -1420,6 +1400,16 @@ class Simplex(Polytope):
             self._triangulation = tuple([frozenset({i for i in range(self.dim + 1)})])
 
         return self._triangulation
+
+    @property
+    def half_open_decomposition(self):
+        """
+        Half open decomposition of the simplex
+        """
+        if self._half_open_decomposition is None:
+            self._half_open_decomposition = tuple([frozenset({})])
+
+        return self._half_open_decomposition
 
     def barycentric_coordinates(self, point: Point):
         """

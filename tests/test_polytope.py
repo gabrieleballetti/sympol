@@ -130,6 +130,37 @@ def test_triangulation():
     assert p.triangulation == (frozenset({0, 1, 3}), frozenset({0, 2, 3}))
 
 
+def test_triangulation_simplex():
+    """
+    Test that the triangulation is correct for a simplex (as it is not explicitely
+    calculated)
+    """
+    p = Polytope.unimodular_simplex(2)
+    p._make_simplex()
+
+    assert p.triangulation == (frozenset({0, 1, 2}),)
+
+
+def test_half_open_decomposition():
+    """
+    Test that the half-open decomposition is correct
+    """
+    p = Polytope.cube(2)
+
+    assert p.half_open_decomposition == (frozenset({}), frozenset({1}))
+
+
+def test_half_open_decomposition_simplex():
+    """
+    Test that the half-open decomposition is correct for a simplex
+    (as it is not explicitely calculated)
+    """
+    p = Polytope.unimodular_simplex(2)
+    p._make_simplex()
+
+    assert p.half_open_decomposition == (frozenset({}),)
+
+
 def test_induced_boundary_triangulation():
     """
     Test that the triangulation of the boundary of a polytope induced
