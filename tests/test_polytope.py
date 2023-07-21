@@ -3,6 +3,7 @@ from unittest.mock import MagicMock
 from sympy import Matrix, Poly, Rational
 from sympy.abc import x
 
+from sympol.parallelotope import HalfOpenParallelotope
 from sympol.point import Point
 from sympol.point_list import PointList
 from sympol.polytope import Polytope, Simplex
@@ -759,6 +760,36 @@ def test_integer_points():
     assert c2.n_interior_points == 1
     assert c2.n_boundary_points == 26
     assert c2.interior_points == PointList([[1, 1, 1]])
+
+
+def test_integer_points_consistency():
+    """
+    Test that the integer/interior/boundary points of a polytope are consistent
+    to what is obtained by looking in the parallelotopes over the half-open
+    decomposition.
+    """
+    p = Polytope.cube(3)
+
+    n_pts = 0
+    pts = []
+
+    for verts_ids, special_gens_ids in zip(p.triangulation, p.half_open_decomposition):
+        hop = HalfOpenParallelotope(
+            generators=[Point([1] + list(p.vertices[v_id])) for v_id in verts_ids],
+            special_gens_ids=special_gens_ids,
+        )
+
+        pts_parallelotope, _ = hop.get_integer_points(height=1)
+        n_pts += len(pts_parallelotope)
+        pts += [Point(pt[1:]) for pt in pts_parallelotope]
+
+    # compensate for missing vertices
+    n_pts += p.dim + 1
+    for v_id in p.triangulation[0]:
+        pts.append(Point(p.vertices[v_id]))
+
+    assert p.n_integer_points == n_pts
+    assert set(p.integer_points) == set(pts)
 
 
 def test_has_n_interior_points():

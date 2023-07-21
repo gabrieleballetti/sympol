@@ -778,7 +778,6 @@ class Polytope:
                     ],
                     special_gens_ids=special_gens_ids,
                 )
-                hop._calculate_smith_normal_form()
 
                 _, delta_h = [pt for pt in hop.get_integer_points(count_only=True)]
 
