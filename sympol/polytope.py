@@ -4,11 +4,13 @@ import cdd
 from scipy.spatial import Delaunay
 
 
-from sympy import Abs, factorial, gcd, lcm, Number, Matrix, Poly, Rational, sqrt
+from sympy import Abs, factorial, gcd, lcm, Number, Matrix, Poly, Rational
 from sympy.abc import x
 from sympy.matrices import zeros
 from sympy.matrices.normalforms import hermite_normal_form
 from sympol.cython_utils import _sum_of_points
+
+from sympol.hilbert_basis import get_hilbert_basis_np
 from sympol.integer_points import _find_integer_points
 from sympol.isomorphism import get_normal_form
 from sympol.parallelotope import HalfOpenParallelotope
@@ -107,6 +109,9 @@ class Polytope:
         self._h_star_polynomial = None
         self._h_star_vector = None
         self._degree = None
+
+        self._half_open_parallelotopes_pts = None
+        self._hilbert_basis = None
 
         self._full_dim_projection = None
         self._normal_form = None
@@ -769,20 +774,27 @@ class Polytope:
         """
         if self._h_star_vector is None:
             self._h_star_vector = [0 for _ in range(self.ambient_dim + 1)]
-            for verts_ids, special_gens_ids in zip(
-                self.triangulation, self.half_open_decomposition
-            ):
-                hop = HalfOpenParallelotope(
-                    generators=[
-                        Point([1] + list(self.vertices[v_id])) for v_id in verts_ids
-                    ],
-                    special_gens_ids=special_gens_ids,
-                )
 
-                _, delta_h = [pt for pt in hop.get_integer_points(count_only=True)]
+            if self._half_open_parallelotopes_pts is not None:
+                # if available, use the half-open parallelotopes points to calculate
+                # the h*-vector
+                for pt in self._half_open_parallelotopes_pts:
+                    self._h_star_vector[pt[0]] += 1
+            else:
+                for verts_ids, special_gens_ids in zip(
+                    self.triangulation, self.half_open_decomposition
+                ):
+                    hop = HalfOpenParallelotope(
+                        generators=[
+                            Point([1] + list(self.vertices[v_id])) for v_id in verts_ids
+                        ],
+                        special_gens_ids=special_gens_ids,
+                    )
 
-                for i, h_i in enumerate(delta_h):
-                    self._h_star_vector[i] += h_i
+                    _, delta_h = [pt for pt in hop.get_integer_points(count_only=True)]
+
+                    for i, h_i in enumerate(delta_h):
+                        self._h_star_vector[i] += h_i
 
             self._h_star_vector = tuple(self._h_star_vector)
 
@@ -797,6 +809,42 @@ class Polytope:
             self._degree = self.h_star_polynomial.degree()
 
         return self._degree
+
+    @property
+    def half_open_parallelotopes_pts(self):
+        """
+        Return all the points in the (half-open) parallelotopes of the triangulation
+        of the polytope. This can be seen as a multi-graded version of the h*-vector.
+        """
+        if self._half_open_parallelotopes_pts is None:
+            self._half_open_parallelotopes_pts = []
+            for verts_ids, special_gens_ids in zip(
+                self.triangulation, self.half_open_decomposition
+            ):
+                hop = HalfOpenParallelotope(
+                    generators=[
+                        Point([1] + list(self.vertices[v_id])) for v_id in verts_ids
+                    ],
+                    special_gens_ids=special_gens_ids,
+                )
+                pts, _ = hop.get_integer_points()
+                self._half_open_parallelotopes_pts += [Point(pt) for pt in pts]
+            self._half_open_parallelotopes_pts = tuple(
+                self._half_open_parallelotopes_pts
+            )
+
+        return self._half_open_parallelotopes_pts
+
+    @property
+    def hilbert_basis(self):
+        """
+        Return the Hilbert basis of the semigroup of the integer points in the cone
+        positively spanned by {1} x P.
+        """
+        if self._hilbert_basis is None:
+            self._hilbert_basis = self._get_hilbert_basis()
+
+        return self._hilbert_basis
 
     @property
     def is_simplicial(self):
@@ -932,15 +980,13 @@ class Polytope:
         property is also called integrally closed.
         """
         if self._is_idp is None:
-            self._is_idp = True
-            pts = np.array([pt.tolist() for pt in self.integer_points], dtype=np.int64)
-            gen_pts = np.array(pts, dtype=np.int64)
-            for d in range(2, self.dim):
-                n_pts = self.ehrhart_polynomial.eval(d)
-                gen_pts = _sum_of_points(pts, gen_pts)
-                if len(gen_pts) != n_pts:
-                    self._is_idp = False
-                    break
+            hilbert_basis = self._get_hilbert_basis(stop_at_height=2)
+
+            # check if the last element of the hilbert basis is at height >= 2
+            if hilbert_basis[-1][0] >= 2:
+                self._is_idp = False
+            else:
+                self._is_idp = True
 
         return self._is_idp
 
@@ -1158,6 +1204,39 @@ class Polytope:
                 for i in range(self.dim + 1)
             ]
         ).simplify()
+
+    def _get_hilbert_basis(self, stop_at_height=-1):
+        """
+        Get the Hilbert basis of the semigroup of the integer points in the cone
+        positively spanned by {1} x P. If stop_at_height is set to a positive
+        integer, the algorithm will stop when an irreducible point at height
+        greater than or equal to stop_at_height is found.
+        """
+        if not self.is_lattice_polytope:
+            raise ValueError("Hilbert basis is only implemented for lattice polytopes")
+
+        # a (possibly redundant) set of generators for the semigroup is given by
+        # the half-open parallelotopes points, except the orgin (assumed to
+        # be the first point), plus the missing vertices of the first simplex
+        # in the triangulation of the polytope
+        generators = np.array(self.half_open_parallelotopes_pts[1:], dtype=np.int64)
+        for v_id in self.triangulation[0]:
+            generators = np.vstack(
+                (
+                    generators,
+                    np.array([1] + list(self.vertices[v_id]), dtype=np.int64),
+                )
+            )
+
+        hilbert_basis = tuple(
+            get_hilbert_basis_np(
+                generators=generators,
+                inequalities=np.array(self.cdd_inequalities, dtype=np.int64),
+                stop_at_height=stop_at_height,
+            )
+        )
+
+        return hilbert_basis
 
     # Polytope operations
 

@@ -882,6 +882,74 @@ def test_degree():
     assert (Polytope.cube(3) * 2).degree == 3
 
 
+def test_half_open_parallelotopes_pts():
+    """
+    Test that the half-open parallelotopes are calculated correctly
+    """
+    p = Polytope.cube(3)
+
+    assert len([pt for pt in p.half_open_parallelotopes_pts if pt[0] == 0]) == 1
+    assert len([pt for pt in p.half_open_parallelotopes_pts if pt[0] == 1]) == 4
+    assert len([pt for pt in p.half_open_parallelotopes_pts if pt[0] == 2]) == 1
+
+
+def test_avoid_parallelotopes_pts_recomputation():
+    """
+    Test that the half-open parallelotopes are not recomputed if available.
+    Check this by providing a fake half_open_parallelotopes_pts property,
+    and make sure that the h*-vector is based on that (and hence wrong).
+    """
+    p = Polytope.unimodular_simplex(2)
+
+    p._half_open_parallelotopes_pts = [
+        Point([0, 0, 0]),
+        Point([1, 0, 0]),
+        Point([1, 1, 0]),
+        Point([2, 0, 0]),
+    ]
+
+    assert p.h_star_vector == (1, 2, 1)  # instead of (1, 0, 0)
+
+
+def test_hilbert_basis():
+    """
+    Test that the Hilbert basis is calculated correctly
+    """
+    p = Polytope.cube(3)
+    assert len(p.hilbert_basis) == p.n_integer_points
+
+    p = Polytope(
+        [
+            [0, 0, 0],
+            [1, 0, 0],
+            [0, 1, 0],
+            [1, 1, 2],
+        ]
+    )
+    assert len(p.hilbert_basis) == p.n_integer_points + 1
+
+
+@pytest.mark.parametrize("stop_at_height", [-1, 2])
+def test_get_hilbert_basis_stopped(stop_at_height):
+    """
+    Test that the method _get_hilbert_basis stops correctly if requested
+    """
+    p = Polytope(
+        [
+            [0, 0, 0],
+            [1, 0, 0],
+            [0, 1, 0],
+            [1, 1, 3],
+        ]
+    )
+    hb = p._get_hilbert_basis(stop_at_height=stop_at_height)
+
+    if stop_at_height == -1:
+        assert len(hb) == p.n_integer_points + 2
+    else:
+        assert len(hb) == p.n_integer_points + 1
+
+
 def test_is_simplicial():
     """
     Test the is_simplicial property
