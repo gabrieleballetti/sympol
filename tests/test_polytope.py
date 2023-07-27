@@ -1,8 +1,10 @@
 import pytest
 from unittest.mock import MagicMock
+import numpy as np
 from sympy import Matrix, Poly, Rational
 from sympy.abc import x
 
+from sympol.lineq import LinIneq
 from sympol.parallelotope import HalfOpenParallelotope
 from sympol.point import Point
 from sympol.point_list import PointList
@@ -442,6 +444,17 @@ def test_linear_inequalities_rational_coeffs():
     p = Polytope.unimodular_simplex(dim=2) * Rational(1, 2)
     assert p.linear_inequalities[0].normal == Point([-1, -1])
     assert p.linear_inequalities[0].rhs == -Rational(1, 2)
+
+
+def test_homogeneous_inequalities():
+    """
+    Test that the homogenous_inequalities are correctly calculated and
+    transformed into integers
+    """
+    p = Polytope([[0, 0, 0], [0, 3, 2], [1, 0, 0], [1, 1, 0]])
+
+    expected = np.array([[2, -2, 0, -1], [0, 2, -2, 3], [0, 0, 0, 1], [0, 0, 2, -3]])
+    assert np.array_equal(p.homogeneous_inequalities, expected)
 
 
 def test_facets():
@@ -1084,11 +1097,16 @@ def test_is_idp():
     """
     Test the is_idp property
     """
+
+    p = Polytope([[0, 0, 0], [1, 0, 0], [0, 1, 0], [1, 1, 2]])
+    assert not p.is_idp # hilbert basis not calculated, index of the points used
+
     p = Polytope([[0, 0, 0], [1, 0, 0], [0, 1, 0], [1, 1, 2], [0, 0, -1]])
     assert p.is_idp
 
     p = Polytope([[0, 0, 0], [1, 0, 0], [0, 1, 0], [1, 1, 3], [0, 0, -1]])
     assert not p.is_idp
+
 
 
 def test_is_smooth():

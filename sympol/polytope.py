@@ -63,6 +63,7 @@ class Polytope:
         self._dim = dim
 
         self._linear_inequalities = None
+        self._homogeneous_inequalities = None
 
         self._vertices = vertices
         self._facets = None
@@ -266,9 +267,52 @@ class Polytope:
         Get the defining inequalities of the polytope
         """
         if self._linear_inequalities is None:
-            self._get_linear_inequalities()
+            self._linear_inequalities = []
+            for i, ineq in enumerate(self.cdd_inequalities):
+                # convert cdd rational to sympy rational
+                ineq = [_cdd_fraction_to_simpy_rational(coeff) for coeff in ineq]
+
+                # make the normal integer and primitive
+                lcm_ineq = lcm([rat_coeff.q for rat_coeff in ineq[1:]])
+                ineq = [rat_coeff * Abs(lcm_ineq) for rat_coeff in ineq]
+
+                gcd_ineq = gcd([int_coeff for int_coeff in ineq[1:]])
+                ineq = [int_coeff / Abs(gcd_ineq) for int_coeff in ineq]
+                self._linear_inequalities.append(
+                    LinIneq(
+                        normal=Point(ineq[1:]),
+                        rhs=-ineq[0],
+                        is_equality=i in self.cdd_equality_ids,
+                    )
+                )
 
         return self._linear_inequalities
+
+    @property
+    def homogeneous_inequalities(self):
+        """
+        Get the defining homogeneous inequalities of the polytope as a numpy array
+        """
+        if self._homogeneous_inequalities is None:
+            # init empty array of a given size
+            n_rows = self.cdd_inequalities.row_size
+            n_cols = self.cdd_inequalities.col_size
+            self._homogeneous_inequalities = np.empty(
+                shape=(n_rows, n_cols), dtype=object
+            )
+            for i, ineq in enumerate(self.cdd_inequalities):
+                # convert cdd rational to sympy rational
+                ineq = [_cdd_fraction_to_simpy_rational(coeff) for coeff in ineq]
+
+                # make the normal integer and primitive
+                lcm_ineq = lcm([rat_coeff.q for rat_coeff in ineq])
+                ineq = [rat_coeff * Abs(lcm_ineq) for rat_coeff in ineq]
+
+                gcd_ineq = gcd([int_coeff for int_coeff in ineq])
+                ineq = [int_coeff / Abs(gcd_ineq) for int_coeff in ineq]
+                self._homogeneous_inequalities[i] = ineq
+
+        return self._homogeneous_inequalities
 
     @property
     def facets(self):
@@ -980,13 +1024,24 @@ class Polytope:
         property is also called integrally closed.
         """
         if self._is_idp is None:
-            hilbert_basis = self._get_hilbert_basis(stop_at_height=2)
-
-            # check if the last element of the hilbert basis is at height >= 2
-            if hilbert_basis[-1][0] >= 2:
+            # a quicker check is to check that the lattice points of the polytope
+            # span the whole lattice (note that the half-open parallelotopes points
+            # need to be calculated anyway for the hilbert basis). This is a necessary
+            # condition for IDP-ness, but not sufficient.
+            index = PointList(
+                [v for v in self.vertices]
+                + [pt[1:] for pt in self.half_open_parallelotopes_pts if pt[0] == 1]
+            ).index
+            if index > 1:
                 self._is_idp = False
             else:
-                self._is_idp = True
+                hilbert_basis = self._get_hilbert_basis(stop_at_height=2)
+
+                # check if the last element of the hilbert basis is at height >= 2
+                if hilbert_basis[-1][0] >= 2:
+                    self._is_idp = False
+                else:
+                    self._is_idp = True
 
         return self._is_idp
 
@@ -1029,31 +1084,6 @@ class Polytope:
         """
         # TODO
         pass
-
-    def _get_linear_inequalities(self):
-        """
-        Get the linear inequalities of the polytope from cdd_polyhedron
-        """
-
-        self._linear_inequalities = []
-
-        for i, ineq in enumerate(self.cdd_inequalities):
-            # convert cdd rational to sympy rational
-            ineq = [_cdd_fraction_to_simpy_rational(coeff) for coeff in ineq]
-
-            # make the normal integer and primitive
-            lcm_ineq = lcm([rat_coeff.q for rat_coeff in ineq[1:]])
-            ineq = [rat_coeff * Abs(lcm_ineq) for rat_coeff in ineq]
-
-            gcd_ineq = gcd([int_coeff for int_coeff in ineq[1:]])
-            ineq = [int_coeff / Abs(gcd_ineq) for int_coeff in ineq]
-            self._linear_inequalities.append(
-                LinIneq(
-                    normal=Point(ineq[1:]),
-                    rhs=-ineq[0],
-                    is_equality=i in self.cdd_equality_ids,
-                )
-            )
 
     def _calculate_volume(self):
         """
@@ -1231,7 +1261,7 @@ class Polytope:
         hilbert_basis = tuple(
             get_hilbert_basis_np(
                 generators=generators,
-                inequalities=np.array(self.cdd_inequalities, dtype=np.int64),
+                inequalities=self.homogeneous_inequalities.astype(np.int64),
                 stop_at_height=stop_at_height,
             )
         )
