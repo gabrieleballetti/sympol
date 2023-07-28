@@ -1095,18 +1095,20 @@ def test_has_unimodal_h_star_vector():
 
 def test_is_idp():
     """
-    Test the is_idp property
+    Test the is_idp property. In the first two cases by computing the Hilbert
+    basis, in the third case by noting that the pattice points span a sublattice
+    of index > 1.
     """
-
-    p = Polytope([[0, 0, 0], [1, 0, 0], [0, 1, 0], [1, 1, 2]])
-    assert not p.is_idp # hilbert basis not calculated, index of the points used
-
     p = Polytope([[0, 0, 0], [1, 0, 0], [0, 1, 0], [1, 1, 2], [0, 0, -1]])
     assert p.is_idp
 
     p = Polytope([[0, 0, 0], [1, 0, 0], [0, 1, 0], [1, 1, 3], [0, 0, -1]])
     assert not p.is_idp
 
+    p = Polytope([[0, 0, 0], [1, 0, 0], [0, 1, 0], [1, 1, 2]])
+    p._get_hilbert_basis = MagicMock()
+    assert not p.is_idp
+    assert p._get_hilbert_basis.call_count == 0  # no need to compute the Hilbert basis
 
 
 def test_is_smooth():
