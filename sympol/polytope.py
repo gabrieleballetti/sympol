@@ -62,7 +62,7 @@ class Polytope:
 
         self._dim = dim
 
-        self._linear_inequalities = None
+        self._inequalities = None
         self._homogeneous_inequalities = None
 
         self._vertices = vertices
@@ -171,7 +171,7 @@ class Polytope:
         if self._cdd_polyhedron is None:
             if self._vertices is not None or self._points is not None:
                 self._get_cdd_polyhedron_from_points()
-            elif self._linear_inequalities is not None:
+            elif self._inequalities is not None:
                 self._get_cdd_polyhedron_from_inequalities()
             else:
                 raise ValueError("No points or inequalities given")
@@ -262,12 +262,12 @@ class Polytope:
         return self._vertices
 
     @property
-    def linear_inequalities(self):
+    def inequalities(self):
         """
         Get the defining inequalities of the polytope
         """
-        if self._linear_inequalities is None:
-            self._linear_inequalities = []
+        if self._inequalities is None:
+            self._inequalities = []
             for i, ineq in enumerate(self.cdd_inequalities):
                 # convert cdd rational to sympy rational
                 ineq = [_cdd_fraction_to_simpy_rational(coeff) for coeff in ineq]
@@ -278,7 +278,7 @@ class Polytope:
 
                 gcd_ineq = gcd([int_coeff for int_coeff in ineq[1:]])
                 ineq = [int_coeff / Abs(gcd_ineq) for int_coeff in ineq]
-                self._linear_inequalities.append(
+                self._inequalities.append(
                     LinIneq(
                         normal=Point(ineq[1:]),
                         rhs=-ineq[0],
@@ -286,7 +286,7 @@ class Polytope:
                     )
                 )
 
-        return self._linear_inequalities
+        return self._inequalities
 
     @property
     def homogeneous_inequalities(self):
@@ -519,7 +519,7 @@ class Polytope:
         if self._vertex_facet_pairing_matrix is None:
             self._vertex_facet_pairing_matrix = zeros(self.n_facets, self.n_vertices)
             for i, lineq in enumerate(
-                [h for h in self.linear_inequalities if not h.is_equality]
+                [h for h in self.inequalities if not h.is_equality]
             ):
                 for j, vertex in enumerate(self.vertices):
                     self._vertex_facet_pairing_matrix[i, j] = lineq.evaluate(vertex)
@@ -585,7 +585,7 @@ class Polytope:
                         ref_pt += v * w
                     ref_pt /= sum(weights)
                 else:
-                    for f, lineq in zip(simplex.facets, simplex.linear_inequalities):
+                    for f, lineq in zip(simplex.facets, simplex.inequalities):
                         # find the vertex that is not in the facet
                         for v_id in range(len(verts)):
                             if v_id not in f:
@@ -972,7 +972,7 @@ class Polytope:
         if self._is_reflexive is None:
             self._is_reflexive = self.is_canonical and all(
                 le.evaluate(self._origin()) == 1
-                for le in self.linear_inequalities
+                for le in self.inequalities
                 if not le.is_equality
             )
 
@@ -1204,7 +1204,7 @@ class Polytope:
         Return the linear inequalities of the polytope as a numpy array
         """
         return np.array(
-            [ineq.normal.tolist() + [-ineq.rhs] for ineq in self.linear_inequalities],
+            [ineq.normal.tolist() + [-ineq.rhs] for ineq in self.inequalities],
             dtype=np.int64,
         )
 
@@ -1406,7 +1406,7 @@ class Polytope:
         only checking the ralative interior
         """
         if isinstance(other, Point):
-            for lineq in self.linear_inequalities:
+            for lineq in self.inequalities:
                 if lineq.is_equality:
                     if lineq.evaluate(other) != 0:
                         return False

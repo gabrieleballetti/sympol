@@ -418,32 +418,32 @@ def test_lower_dim_polytope_contains_polytope():
     assert not (p * 2).contains(p * 3)
 
 
-def test_linear_inequalities():
+def test_inequalities():
     """
-    Test that the linear_inequalities of a cube are six and are
+    Test that the inequalities of a cube are six and are
     at distance one from the origin
     """
     polytope = Polytope.cube(3) * 2 - Point([1, 1, 1])
 
-    assert len(polytope.linear_inequalities) == 6
+    assert len(polytope.inequalities) == 6
 
     origin = Point([0, 0, 0])
-    for lineq in polytope.linear_inequalities:
+    for lineq in polytope.inequalities:
         assert lineq.evaluate(origin) == 1
 
     simplex = Polytope.unimodular_simplex(3)
-    assert len(simplex.linear_inequalities) == 4
-    for lineq in simplex.linear_inequalities:
+    assert len(simplex.inequalities) == 4
+    for lineq in simplex.inequalities:
         assert lineq.evaluate(origin) == 1 or lineq.evaluate(origin) == 0
 
 
-def test_linear_inequalities_rational_coeffs():
+def test_inequalities_rational_coeffs():
     """
     Test that rational coefficients are correctly passed from cdd to sympy
     """
     p = Polytope.unimodular_simplex(dim=2) * Rational(1, 2)
-    assert p.linear_inequalities[0].normal == Point([-1, -1])
-    assert p.linear_inequalities[0].rhs == -Rational(1, 2)
+    assert p.inequalities[0].normal == Point([-1, -1])
+    assert p.inequalities[0].rhs == -Rational(1, 2)
 
 
 def test_homogeneous_inequalities():
@@ -826,7 +826,7 @@ def test_boundary_points_facets():
     p = Polytope.cube(3)
 
     for pt, f_ids in zip(p.boundary_points, p.boundary_points_facets):
-        for j, lineq in enumerate(p.linear_inequalities):
+        for j, lineq in enumerate(p.inequalities):
             if lineq.evaluate(pt) == 0:
                 assert j in f_ids
             else:
@@ -1254,7 +1254,7 @@ def test_lower_dimensional_polytope():
     )
 
     p = Polytope(verts)
-    eqs = [lin_eq.is_equality for lin_eq in p.linear_inequalities]
+    eqs = [lin_eq.is_equality for lin_eq in p.inequalities]
     assert len(eqs) > 0
 
 
