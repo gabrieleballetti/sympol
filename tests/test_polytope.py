@@ -11,6 +11,13 @@ from sympol.point_list import PointList
 from sympol.polytope import Polytope, Simplex
 
 
+def _arrays_equal_up_to_row_permutation(a, b):
+    """
+    Check that two arrays are exactly equal up to row permutation
+    """
+    return np.array_equal(np.sort(a, axis=0), np.sort(b, axis=0))
+
+
 def test_init_from_points():
     """
     Test initialization of a polytope from a list of points
@@ -122,6 +129,57 @@ def test_rational_vertices_precision():
     polytope = Polytope(verts)
 
     assert polytope.vertices == PointList(verts)
+
+
+def test_inequalities():
+    """
+    Test that the inequalities of a cube are correctly tranformed from cdd
+    format to sympy format.
+    """
+    p = Polytope.cube(3) * Rational(1, 2)
+
+    expected = np.array(
+        [
+            [0, 1, 0, 0],
+            [0, 0, 1, 0],
+            [0, 0, 0, 1],
+            [Rational(1, 2), -1, 0, 0],
+            [Rational(1, 2), 0, -1, 0],
+            [Rational(1, 2), 0, 0, -1],
+        ]
+    )
+
+    assert _arrays_equal_up_to_row_permutation(p.inequalities, expected)
+
+
+def test_homogeneous_inequalities():
+    """
+    Test that the homogenous_inequalities are correctly calculated.
+    """
+    p = Polytope.cube(3) * Rational(1, 2)
+
+    expected = np.array(
+        [
+            [0, 1, 0, 0],
+            [0, 0, 1, 0],
+            [0, 0, 0, 1],
+            [1, -2, 0, 0],
+            [1, 0, -2, 0],
+            [1, 0, 0, -2],
+        ]
+    )
+
+    assert _arrays_equal_up_to_row_permutation(p.homogeneous_inequalities, expected)
+
+
+def test_is_eq():
+    """
+    Test that the inequalities are properly categorized into equalities and
+    inequalities.
+    """
+    p = Polytope([[0, 0, 0], [1, 0, 0], [0, 1, 0]])
+
+    assert np.array_equal(p.is_eq, np.array([0, 0, 0, 1], dtype=np.int8))
 
 
 def test_triangulation():
@@ -416,45 +474,6 @@ def test_lower_dim_polytope_contains_polytope():
     assert (p * 2).contains(p)
     assert (p * 2).contains(p * 2)
     assert not (p * 2).contains(p * 3)
-
-
-def test_inequalities():
-    """
-    Test that the inequalities of a cube are six and are
-    at distance one from the origin
-    """
-    polytope = Polytope.cube(3) * 2 - Point([1, 1, 1])
-
-    assert len(polytope.inequalities) == 6
-
-    origin = Point([0, 0, 0])
-    for lineq in polytope.inequalities:
-        assert lineq.evaluate(origin) == 1
-
-    simplex = Polytope.unimodular_simplex(3)
-    assert len(simplex.inequalities) == 4
-    for lineq in simplex.inequalities:
-        assert lineq.evaluate(origin) == 1 or lineq.evaluate(origin) == 0
-
-
-def test_inequalities_rational_coeffs():
-    """
-    Test that rational coefficients are correctly passed from cdd to sympy
-    """
-    p = Polytope.unimodular_simplex(dim=2) * Rational(1, 2)
-    assert p.inequalities[0].normal == Point([-1, -1])
-    assert p.inequalities[0].rhs == -Rational(1, 2)
-
-
-def test_homogeneous_inequalities():
-    """
-    Test that the homogenous_inequalities are correctly calculated and
-    transformed into integers
-    """
-    p = Polytope([[0, 0, 0], [0, 3, 2], [1, 0, 0], [1, 1, 0]])
-
-    expected = np.array([[2, -2, 0, -1], [0, 2, -2, 3], [0, 0, 0, 1], [0, 0, 2, -3]])
-    assert np.array_equal(p.homogeneous_inequalities, expected)
 
 
 def test_facets():
@@ -1240,6 +1259,27 @@ def test_get_cdd_polyhedron_from_points():
     polytope = Polytope(points)
     polytope._get_cdd_polyhedron_from_points()
     assert polytope._cdd_polyhedron is not None
+
+
+def test_cdd_inequalities():
+    """
+    Test that the inequalities are correctly converted to cdd format
+    """
+    points = [
+        [0, 0, 0],
+        [Rational(1, 7), 0, 0],
+        [0, Rational(1, 7), 0],
+        [0, 0, Rational(1, 7)],
+    ]
+    polytope = Polytope(points)
+    polytope._get_cdd_polyhedron_from_points()
+    assert polytope._cdd_polyhedron is not None
+    assert polytope._cdd_polyhedron.inequalities == [
+        [0, 0, 0, 1],
+        [0, 0, 1, 0],
+        [0, 1, 0, 0],
+        [1, 0, 0, 0],
+    ]
 
 
 def test_lower_dimensional_polytope():

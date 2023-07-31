@@ -8,7 +8,6 @@ from sympy import Abs, factorial, gcd, lcm, Number, Matrix, Poly, Rational
 from sympy.abc import x
 from sympy.matrices import zeros
 from sympy.matrices.normalforms import hermite_normal_form
-from sympol.cython_utils import _sum_of_points
 
 from sympol.hilbert_basis import get_hilbert_basis_np
 from sympol.integer_points import _find_integer_points
@@ -16,7 +15,6 @@ from sympol.isomorphism import get_normal_form
 from sympol.parallelotope import HalfOpenParallelotope
 from sympol.point import Point
 from sympol.point_list import PointList
-from sympol.lineq import LinIneq
 from sympol.utils import (
     _binomial_polynomial,
     _cdd_fraction_to_simpy_rational,
@@ -64,6 +62,7 @@ class Polytope:
 
         self._inequalities = None
         self._homogeneous_inequalities = None
+        self._is_eq = None
 
         self._vertices = vertices
         self._facets = None
@@ -80,7 +79,6 @@ class Polytope:
 
         self._cdd_polyhedron = None
         self._cdd_inequalities = None
-        self._cdd_equality_ids = None
         self._cdd_vertex_adjacency = None
         self._cdd_facet_adjacency = None
         self._cdd_vertex_facet_incidence = None
@@ -181,27 +179,18 @@ class Polytope:
     @property
     def cdd_inequalities(self):
         """
-        Get the cdd inequalities of the polytope
+        Get the output from cdd_polyhedron.get_inequalities()
         """
         if self._cdd_inequalities is None:
             self._cdd_inequalities = self.cdd_polyhedron.get_inequalities()
 
-            # check if we have redunancies
+            # TODO: this check should be safe to remove as long as polytope
+            # is always initialized with a list of points
             r1, r2 = self._cdd_inequalities.copy().canonicalize()
             assert r1 == (frozenset({}))
             assert r2 == frozenset({})
 
         return self._cdd_inequalities
-
-    @property
-    def cdd_equality_ids(self):
-        """
-        Get the indices of the cdd inequalities that are actually equalities
-        """
-        if self._cdd_equality_ids is None:
-            self._cdd_equality_ids = self.cdd_inequalities.lin_set
-
-        return self._cdd_equality_ids
 
     @property
     def cdd_vertex_facet_incidence(self):
@@ -264,10 +253,15 @@ class Polytope:
     @property
     def inequalities(self):
         """
-        Get the defining inequalities of the polytope
+        Get the defining inequalities of the polytope as a numpy array [-b A]
+        such that the polytope is defined by {x | Ax >= b}.
+        This is a copy of cdd_inequalities where each normal is expressed
+        by integers and is primitive (the right hand b side might be rational).
         """
         if self._inequalities is None:
-            self._inequalities = []
+            n_rows = self.cdd_inequalities.row_size
+            n_cols = self.cdd_inequalities.col_size
+            self._inequalities = np.empty(shape=(n_rows, n_cols), dtype=object)
             for i, ineq in enumerate(self.cdd_inequalities):
                 # convert cdd rational to sympy rational
                 ineq = [_cdd_fraction_to_simpy_rational(coeff) for coeff in ineq]
@@ -278,41 +272,34 @@ class Polytope:
 
                 gcd_ineq = gcd([int_coeff for int_coeff in ineq[1:]])
                 ineq = [int_coeff / Abs(gcd_ineq) for int_coeff in ineq]
-                self._inequalities.append(
-                    LinIneq(
-                        normal=Point(ineq[1:]),
-                        rhs=-ineq[0],
-                        is_equality=i in self.cdd_equality_ids,
-                    )
-                )
+                self._inequalities[i] = ineq
 
         return self._inequalities
 
     @property
     def homogeneous_inequalities(self):
         """
-        Get the defining homogeneous inequalities of the polytope as a numpy array
+        Get the defining homogeneous inequalities of the polytope as a numpy array.
+        This is a copy of cdd_inequalities where each line (inequality) is expressed
+        by integers and is primitive.
         """
         if self._homogeneous_inequalities is None:
-            # init empty array of a given size
-            n_rows = self.cdd_inequalities.row_size
-            n_cols = self.cdd_inequalities.col_size
-            self._homogeneous_inequalities = np.empty(
-                shape=(n_rows, n_cols), dtype=object
-            )
-            for i, ineq in enumerate(self.cdd_inequalities):
-                # convert cdd rational to sympy rational
-                ineq = [_cdd_fraction_to_simpy_rational(coeff) for coeff in ineq]
-
-                # make the normal integer and primitive
-                lcm_ineq = lcm([rat_coeff.q for rat_coeff in ineq])
-                ineq = [rat_coeff * Abs(lcm_ineq) for rat_coeff in ineq]
-
-                gcd_ineq = gcd([int_coeff for int_coeff in ineq])
-                ineq = [int_coeff / Abs(gcd_ineq) for int_coeff in ineq]
-                self._homogeneous_inequalities[i] = ineq
+            self._homogeneous_inequalities = np.empty_like(self.inequalities)
+            for i, ineq in enumerate(self.inequalities):
+                self._homogeneous_inequalities[i] = ineq * ineq[0].q
 
         return self._homogeneous_inequalities
+
+    @property
+    def is_eq(self):
+        """
+        For each inequality, store 0 if it is an equality, 1 otherwise
+        """
+        if self._is_eq is None:
+            self._is_eq = np.zeros(shape=self.cdd_inequalities.col_size, dtype=np.int8)
+            self._is_eq[list(self.cdd_inequalities.lin_set)] = 1
+
+        return self._is_eq
 
     @property
     def facets(self):
@@ -1406,14 +1393,14 @@ class Polytope:
         only checking the ralative interior
         """
         if isinstance(other, Point):
-            for lineq in self.inequalities:
-                if lineq.is_equality:
-                    if lineq.evaluate(other) != 0:
-                        return False
-                else:
+            for lineq, is_ineq in zip(self.inequalities, self.is_eq):
+                if is_ineq:
                     if not strict and lineq.evaluate(other) < 0:
                         return False
                     if strict and lineq.evaluate(other) <= 0:
+                        return False
+                else:
+                    if lineq.evaluate(other) != 0:
                         return False
             return True
 
