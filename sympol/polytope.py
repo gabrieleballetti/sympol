@@ -63,6 +63,7 @@ class Polytope:
         self._inequalities = None
         self._homogeneous_inequalities = None
         self._is_eq = None
+        self._n_inequalities = None
 
         self._vertices = vertices
         self._facets = None
@@ -81,7 +82,6 @@ class Polytope:
         self._cdd_inequalities = None
         self._cdd_vertex_adjacency = None
         self._cdd_facet_adjacency = None
-        self._cdd_vertex_facet_incidence = None
 
         self._vertex_adjacency_matrix = None
         self._vertex_facet_matrix = None
@@ -193,19 +193,6 @@ class Polytope:
         return self._cdd_inequalities
 
     @property
-    def cdd_vertex_facet_incidence(self):
-        """
-        Get the cdd vertex facet incidence output
-        """
-        if self._cdd_vertex_facet_incidence is None:
-            # make sure vertices and inequalities are calculated (and simplified)
-            _ = self.vertices
-            _ = self.cdd_inequalities
-            self._cdd_vertex_facet_incidence = self.cdd_polyhedron.get_incidence()
-
-        return self._cdd_vertex_facet_incidence
-
-    @property
     def cdd_vertex_adjacency(self):
         """
         Get the cdd vertex adjacency output
@@ -296,22 +283,31 @@ class Polytope:
         For each inequality, store 0 if it is an equality, 1 otherwise
         """
         if self._is_eq is None:
-            self._is_eq = np.zeros(shape=self.cdd_inequalities.col_size, dtype=np.int8)
-            self._is_eq[list(self.cdd_inequalities.lin_set)] = 1
+            self._is_eq = np.zeros(shape=self.cdd_inequalities.row_size, dtype=bool)
+            self._is_eq[list(self.cdd_inequalities.lin_set)] = True
 
         return self._is_eq
 
     @property
+    def n_inequalities(self):
+        """
+        Get the number of inequalities of the polytope
+        """
+        if self._n_inequalities is None:
+            self._n_inequalities = self.inequalities.shape[0]
+
+        return self._n_inequalities
+
+    @property
     def facets(self):
         """
-        Get the facets of the polytope (dim(P)-1 dimensional faces)
+        Get the facets of the polytope.
         """
         if self._facets is None:
             self._facets = tuple(
                 [
-                    f
-                    for i, f in enumerate(self.cdd_vertex_facet_incidence)
-                    if i not in self.cdd_equality_ids
+                    frozenset(np.where(row)[0])
+                    for row in self.vertex_facet_matrix[~self.is_eq]
                 ]
             )
 
@@ -430,7 +426,7 @@ class Polytope:
         Get the number of facets of the polytope
         """
         if self._n_facets is None:
-            self._n_facets = len(self.facets)
+            self._n_facets = self.inequalities.shape[0] - sum(self.is_eq)
 
         return self._n_facets
 
@@ -486,14 +482,19 @@ class Polytope:
         """
         Get the vertex facet incidence matrix of the polytope:
             m_ij = 1 if vertex j is in facet i,
-            m_ij = 0 otherwise
+            m_ij = 0 otherwise.
         """
         if self._vertex_facet_matrix is None:
-            self._vertex_facet_matrix = zeros(self.n_facets, self.n_vertices)
-
-            for i, facet in enumerate(self.facets):
+            # This initializes (and possibly simplifies inequalities and vertices).
+            self._vertex_facet_matrix = np.zeros(
+                shape=(self.n_facets, self.n_vertices), dtype=bool
+            )
+            _cdd_vertex_facet_incidence = np.array(self.cdd_polyhedron.get_incidence())[
+                ~self.is_eq
+            ]
+            for i, facet in enumerate(_cdd_vertex_facet_incidence):
                 for j in facet:
-                    self._vertex_facet_matrix[i, j] = 1
+                    self._vertex_facet_matrix[i, j] = True
 
         return self._vertex_facet_matrix
 
@@ -503,13 +504,14 @@ class Polytope:
         Get the vertex facet pairing matrix of the polytope:
             m_ij = <F_j, v_i> (distance of vertex j to facet i)
         """
+        # TODO: no need to reconvert vertices to arry once they are already
+        # a np.array
         if self._vertex_facet_pairing_matrix is None:
-            self._vertex_facet_pairing_matrix = zeros(self.n_facets, self.n_vertices)
-            for i, lineq in enumerate(
-                [h for h in self.inequalities if not h.is_equality]
-            ):
-                for j, vertex in enumerate(self.vertices):
-                    self._vertex_facet_pairing_matrix[i, j] = lineq.evaluate(vertex)
+            self._vertex_facet_pairing_matrix = (
+                self.inequalities[~self.is_eq, 1:]
+                @ np.array(self.vertices, dtype=object).T
+                + self.inequalities[~self.is_eq, :1]
+            )
 
         return self._vertex_facet_pairing_matrix
 
@@ -1390,18 +1392,26 @@ class Polytope:
     def contains(self, other, strict=False):
         """
         Check if the polytope contains a point or another polytope, optionally
-        only checking the ralative interior
+        only checking the relative interior
         """
         if isinstance(other, Point):
-            for lineq, is_ineq in zip(self.inequalities, self.is_eq):
-                if is_ineq:
-                    if not strict and lineq.evaluate(other) < 0:
-                        return False
-                    if strict and lineq.evaluate(other) <= 0:
-                        return False
-                else:
-                    if lineq.evaluate(other) != 0:
-                        return False
+            if np.any(
+                np.dot(self.inequalities[self.is_eq, 1:], other)
+                != -self.inequalities[self.is_eq, 0]
+            ):
+                return False
+            if strict:
+                if np.any(
+                    np.dot(self.inequalities[~self.is_eq, 1:], other)
+                    <= -self.inequalities[~self.is_eq, 0]
+                ):
+                    return False
+            else:
+                if np.any(
+                    np.dot(self.inequalities[~self.is_eq, 1:], other)
+                    < -self.inequalities[~self.is_eq, 0]
+                ):
+                    return False
             return True
 
         if isinstance(other, Polytope):

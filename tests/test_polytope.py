@@ -179,7 +179,7 @@ def test_is_eq():
     """
     p = Polytope([[0, 0, 0], [1, 0, 0], [0, 1, 0]])
 
-    assert np.array_equal(p.is_eq, np.array([0, 0, 0, 1], dtype=np.int8))
+    assert np.array_equal(p.is_eq, np.array([False, False, False, True], dtype=bool))
 
 
 def test_triangulation():
@@ -478,8 +478,7 @@ def test_lower_dim_polytope_contains_polytope():
 
 def test_facets():
     """
-    Test that the facets of a cube are six and are
-    at distance one from the origin
+    Test that the facets of a cube are six and of the right shape
     """
     p = Polytope.cube(3)
 
@@ -598,14 +597,14 @@ def test_vertex_facet_matrix():
     """
     polytope = Polytope.unimodular_simplex(dim=2)
 
-    expected_matrix = Matrix(
+    expected = np.array(
         [
-            [0, 1, 1],
-            [1, 0, 1],
-            [1, 1, 0],
+            [False, True, True],
+            [True, False, True],
+            [True, True, False],
         ]
     )
-    assert polytope.vertex_facet_matrix == expected_matrix
+    assert _arrays_equal_up_to_row_permutation(polytope.vertex_facet_matrix, expected)
 
 
 def test_vertex_facet_pairing_matrix():
@@ -623,7 +622,7 @@ def test_vertex_facet_pairing_matrix():
     ]
     polytope = Polytope(vertices)
 
-    expected = Matrix(
+    expected = np.array(
         [
             [2, 0, 1, 0, 0, 2, 1],
             [1, 0, 0, 0, 1, 2, 2],
@@ -637,7 +636,7 @@ def test_vertex_facet_pairing_matrix():
             [0, 0, 1, 2, 0, 2, 1],
         ]
     )
-    assert polytope.vertex_facet_pairing_matrix == expected
+    assert np.array_equal(polytope.vertex_facet_pairing_matrix, expected)
 
 
 def test_vertex_facet_matrix_low_dimensional_polytope():
@@ -647,16 +646,12 @@ def test_vertex_facet_matrix_low_dimensional_polytope():
     verts = [[0, 0, 1], [7, 4, 19], [5, 3, 14], [12, 7, 32]]
     square = Polytope(verts)
 
-    expected_vfm = Matrix(
-        [
-            [1, 0, 1, 0],
-            [1, 1, 0, 0],
-            [0, 1, 0, 1],
-            [0, 0, 1, 1],
-        ]
+    expected_vfm = np.array(
+        [[1, 0, 1, 0], [1, 1, 0, 0], [0, 1, 0, 1], [0, 0, 1, 1]],
+        dtype=bool,
     )
 
-    expected_vfpm = Matrix(
+    expected_vfpm = np.array(
         [
             [0, 1, 0, 1],
             [0, 0, 1, 1],
@@ -664,8 +659,8 @@ def test_vertex_facet_matrix_low_dimensional_polytope():
             [1, 1, 0, 0],
         ]
     )
-    assert square.vertex_facet_matrix == expected_vfm
-    assert square.vertex_facet_pairing_matrix == expected_vfpm
+    assert np.array_equal(square.vertex_facet_matrix, expected_vfm)
+    assert np.array_equal(square.vertex_facet_pairing_matrix, expected_vfpm)
 
 
 def test_vertex_facet_pairing_matrix_is_nonnegative():
@@ -673,7 +668,7 @@ def test_vertex_facet_pairing_matrix_is_nonnegative():
     Test that the vertex facet pairing matrix is nonnegative
     """
     p = Polytope.random_lattice_polytope(dim=4, n_vertices=10, min=-5, max=5)
-    assert min(p.vertex_facet_pairing_matrix) >= 0
+    assert np.all((p.vertex_facet_pairing_matrix) >= 0)
 
 
 def test_vertex_facet_pairing_matrix_low_dimensional_polytope():
@@ -686,7 +681,7 @@ def test_vertex_facet_pairing_matrix_low_dimensional_polytope():
     verts = [[0, 0, 1], [1, 0, 6], [0, 1, 5], [1, 1, 10]]
     square = Polytope(verts)
 
-    expected = Matrix(
+    expected = np.array(
         [
             [0, 0, 1, 1],
             [0, 1, 0, 1],
@@ -694,7 +689,7 @@ def test_vertex_facet_pairing_matrix_low_dimensional_polytope():
             [1, 0, 1, 0],
         ]
     )
-    assert square.vertex_facet_pairing_matrix == expected
+    assert np.array_equal(square.vertex_facet_pairing_matrix, expected)
 
 
 def test_normal_form():
