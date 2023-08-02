@@ -4,7 +4,6 @@ import numpy as np
 from sympy import Matrix, Poly, Rational
 from sympy.abc import x
 
-from sympol.lineq import LinIneq
 from sympol.parallelotope import HalfOpenParallelotope
 from sympol.point import Point
 from sympol.point_configuration import PointConfiguration
