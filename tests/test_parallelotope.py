@@ -1,14 +1,14 @@
 import pytest
 from sympy import Matrix
 from sympol.parallelotope import HalfOpenParallelotope
-from sympol.point_list import PointList
+from sympol.point_configuration import PointConfiguration
 
 
 def test_smith_normal_form():
     """
     Test calculation of Smith normal form of generator matrix.
     """
-    generators = PointList([[1, -1, -1], [1, 1, 0], [1, 0, 1]])
+    generators = PointConfiguration([[1, -1, -1], [1, 1, 0], [1, 0, 1]])
     hop = HalfOpenParallelotope(generators)
     assert hop.m == Matrix([[1, 1, 1], [-1, 1, 0], [-1, 0, 1]])
     assert hop.snf == [1, 1, 3]
@@ -22,7 +22,7 @@ def test_integer_points(height, count_only):
     """
     Test calculation of number of integer points.
     """
-    generators = PointList([[1, -1, -1], [1, 1, 0], [1, 0, 1]])
+    generators = PointConfiguration([[1, -1, -1], [1, 1, 0], [1, 0, 1]])
     hop = HalfOpenParallelotope(generators)
     pts, h = hop.get_integer_points(count_only=count_only, height=height)
     if height == -1:
@@ -47,7 +47,7 @@ def test_integer_points_consistency():
     """
     Check that the two methods (numpy and sympy) give the same results.
     """
-    generators = PointList(
+    generators = PointConfiguration(
         [
             [1, 1, 1, 1, 0],
             [1, 0, 0, 0, 0],

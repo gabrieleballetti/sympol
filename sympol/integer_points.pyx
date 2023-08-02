@@ -33,7 +33,7 @@ def _find_integer_points(
     box_min = box_min[diameter_index]
     box_max = box_max[diameter_index]
     # Inequalities must also have their coordinates permuted
-    ineqs[:, :-1] = ineqs[:, diameter_index]
+    ineqs[:, 1:] = ineqs[:, diameter_index + 1]
     # Find all lattice points and apply the inverse permutation
     cdef cnp.int64_t num_points = 0
     cdef cnp.int64_t num_interior_points = 0
@@ -46,19 +46,19 @@ def _find_integer_points(
     cdef int inc
     cdef bint forced_stop = False
     while True:
-        tmp_v = ineqs[:, 1:-1].dot(p[1:]) + ineqs[:, -1] if dim > 1 else ineqs[:, -1]
+        tmp_v = ineqs[:, 2:].dot(p[1:]) + ineqs[:, 0] if dim > 1 else ineqs[:, 0]
         i_min = box_min[0]
         i_max = box_max[0]
         ii_min = i_min
         ii_max = i_max
         # Find the lower bound for the allowed region
         while i_min <= i_max:
-            if all(i_min * ineqs[i, 0] + tmp_v[i] >= 0 for i in range(len(tmp_v))):
+            if all(i_min * ineqs[i, 1] + tmp_v[i] >= 0 for i in range(len(tmp_v))):
                 # i_min is in the polytope
-                if any(i_min * ineqs[i, 0] + tmp_v[i] == 0 for i in range(len(tmp_v))):
+                if any(i_min * ineqs[i, 1] + tmp_v[i] == 0 for i in range(len(tmp_v))):
                     # i_min is a boundary point, we need to go further to find interior p
                     ii_min = i_min + 1
-                    if any(ii_min * ineqs[i, 0] + tmp_v[i] == 0 for i in range(len(tmp_v))):
+                    if any(ii_min * ineqs[i, 1] + tmp_v[i] == 0 for i in range(len(tmp_v))):
                         # ii_min is also a boundary point, this line will not intersect
                         # the interior of the polytope
                         ii_min = box_max[0] + 1
@@ -68,12 +68,12 @@ def _find_integer_points(
 
         # Find the upper bound for the allowed region
         while i_min <= i_max:
-            if all(i_max * ineqs[i, 0] + tmp_v[i] >= 0 for i in range(len(tmp_v))):
+            if all(i_max * ineqs[i, 1] + tmp_v[i] >= 0 for i in range(len(tmp_v))):
                 # i_max is in the polytope
-                if any(i_max * ineqs[i, 0] + tmp_v[i] == 0 for i in range(len(tmp_v))):
+                if any(i_max * ineqs[i, 1] + tmp_v[i] == 0 for i in range(len(tmp_v))):
                     # i_max is a boundary point, we need to go further to find interior p
                     ii_max = i_max - 1
-                    if any(ii_max * ineqs[i, 0] + tmp_v[i] == 0 for i in range(len(tmp_v))):
+                    if any(ii_max * ineqs[i, 1] + tmp_v[i] == 0 for i in range(len(tmp_v))):
                         # ii_max is also a boundary point, this line will not intersect
                         # the interior of the polytope
                         ii_max = box_min[0] - 1
@@ -95,7 +95,7 @@ def _find_integer_points(
                 else:
                     boundary_points.append(np.array(p)[orig_perm])
                     saturated = frozenset(
-                        j for j in range(len(tmp_v)) if i * ineqs[j, 0] + tmp_v[j] == 0
+                        j for j in range(len(tmp_v)) if i * ineqs[j, 1] + tmp_v[j] == 0
                     )
                     saturated_facets.append(saturated)
                 i += 1

@@ -5,7 +5,7 @@ from sympy.matrices.normalforms import smith_normal_form
 from sympol.point import Point
 
 
-class PointList(Array):
+class PointConfiguration(Array):
     """
     Point list class based on sympy Array
     """
@@ -35,7 +35,7 @@ class PointList(Array):
         if isinstance(index, int):
             return Point(super().__getitem__(index))
         elif isinstance(index, slice):
-            return PointList(super().__getitem__(index))
+            return PointConfiguration(super().__getitem__(index))
         else:
             return super().__getitem__(index)
 
@@ -44,7 +44,7 @@ class PointList(Array):
         Overload the + operator to add allow translation by a vector
         """
         if isinstance(other, NDimArray) and self.shape[1] == other.shape[0]:
-            return PointList([p + other for p in self])
+            return PointConfiguration([p + other for p in self])
         return super().__add__(other)
 
     def __sub__(self, other):
@@ -52,7 +52,7 @@ class PointList(Array):
         Overload the - operator to add allow translation by a vector
         """
         if isinstance(other, NDimArray) and self.shape[1] == other.shape[0]:
-            return PointList([p - other for p in self])
+            return PointConfiguration([p - other for p in self])
         return super().__sub__(other)
 
     def __mul__(self, other):
@@ -60,7 +60,7 @@ class PointList(Array):
         Overload the * operator to allow scaling by a scalar
         """
         if isinstance(other, (int, float)):
-            return PointList([p * other for p in self])
+            return PointConfiguration([p * other for p in self])
         return super().__mul__(other)
 
     def tolist(self):

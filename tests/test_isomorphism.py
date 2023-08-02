@@ -8,7 +8,7 @@ from sympol.isomorphism import (
     # _find_canonical_permutation_and_automorphisms,
 )
 from sympol.point import Point
-from sympol.point_list import PointList
+from sympol.point_configuration import PointConfiguration
 from sympol.polytope import Polytope
 
 
@@ -101,7 +101,7 @@ def test_normal_form():
 #     Test that is_automorphism returns True for a coord permutation
 #     """
 
-#     input_list = PointList(
+#     input_list = PointConfiguration(
 #         [
 #             [-1, -1, -1],
 #             [-1, -1, 1],
@@ -123,7 +123,7 @@ def test_normal_form():
 #     equivalent lists
 #     """
 
-#     input_list = PointList(
+#     input_list = PointConfiguration(
 #         [
 #             [-1, -1, -1],
 #             [-1, -1, 1],
@@ -138,7 +138,7 @@ def test_normal_form():
 
 #     matrix_input = Matrix(input_list)
 #     unim_eq_map = Matrix([[2, 5, 0], [1, 3, 0], [0, 0, -1]])
-#     output_list = PointList((matrix_input * unim_eq_map).tolist())
+#     output_list = PointConfiguration((matrix_input * unim_eq_map).tolist())
 #     output_list = output_list + Point([2, 6, -1])
 
 #     assert _is_automorphism(input_list, output_list)
@@ -150,7 +150,7 @@ def test_normal_form():
 #     equivalent lists
 #     """
 
-#     input_list = PointList(
+#     input_list = PointConfiguration(
 #         [
 #             [-1, -1, -1],
 #             [-1, -1, 1],
@@ -165,7 +165,7 @@ def test_normal_form():
 
 #     matrix_input = Matrix(input_list)
 #     unim_eq_map = Matrix([[1, 5, 0], [1, 3, 0], [0, 0, -1]])
-#     output_list = PointList((matrix_input * unim_eq_map).tolist())
+#     output_list = PointConfiguration((matrix_input * unim_eq_map).tolist())
 #     output_list = output_list + Point([2, 6, -1])
 
 #     assert not _is_automorphism(input_list, output_list)

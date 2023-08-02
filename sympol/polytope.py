@@ -14,7 +14,7 @@ from sympol.integer_points import _find_integer_points
 from sympol.isomorphism import get_normal_form
 from sympol.parallelotope import HalfOpenParallelotope
 from sympol.point import Point
-from sympol.point_list import PointList
+from sympol.point_configuration import PointConfiguration
 from sympol.utils import (
     _binomial_polynomial,
     _cdd_fraction_to_simpy_rational,
@@ -47,14 +47,14 @@ class Polytope:
             raise ValueError("Vertices cannot be empty")
 
         if vertices is not None:
-            vertices = PointList(vertices)
+            vertices = PointConfiguration(vertices)
         else:
             vertices = None
 
         if points is not None:
-            self._points = PointList(points)
+            self._points = PointConfiguration(points)
         else:
-            self._points = PointList(vertices)
+            self._points = PointConfiguration(vertices)
 
         self._ambient_dim = self._points[0].ambient_dimension
 
@@ -229,7 +229,7 @@ class Polytope:
             mat_gens.canonicalize()
             self._cdd_polyhedron = cdd.Polyhedron(mat_gens)
 
-            self._vertices = PointList([p[1:] for p in mat_gens])
+            self._vertices = PointConfiguration([p[1:] for p in mat_gens])
 
             # check if the polytope is a simplex
             if self.is_simplex():
@@ -264,6 +264,44 @@ class Polytope:
         return self._inequalities
 
     @property
+    def is_eq(self):
+        """
+        For each inequality, store 0 if it is an equality, 1 otherwise
+        """
+        if self._is_eq is None:
+            self._is_eq = np.zeros(shape=self.cdd_inequalities.row_size, dtype=bool)
+            self._is_eq[list(self.cdd_inequalities.lin_set)] = True
+
+        return self._is_eq
+
+    @property
+    def _ineqs(self):
+        """
+        Return the "actual" inequalities of the polytope. The property self.inequalities
+        includes both the inequalities [-b A] and the equalities [-b' A'] such that
+        the polytope is defined by {x | Ax >= b, A'x = b'}. This property returns only
+        the inequalities [-b A].
+        """
+        return self.inequalities[~self.is_eq]
+
+    @property
+    def _eqs(self):
+        """
+        Return the "actual" equalities of the polytope. The property self.inequalities
+        includes both the inequalities [-b A] and the equalities [-b' A'] such that
+        the polytope is defined by {x | Ax >= b, A'x = b'}. This property returns only
+        the equalities [-b' A'].
+        """
+        return self.inequalities[self.is_eq]
+
+    @property
+    def facet_normal(self, facet_id):
+        """
+        Get the normal of a facet given its id.
+        """
+        return self.inequalities[facet_id][1:]
+
+    @property
     def homogeneous_inequalities(self):
         """
         Get the defining homogeneous inequalities of the polytope as a numpy array.
@@ -276,17 +314,6 @@ class Polytope:
                 self._homogeneous_inequalities[i] = ineq * ineq[0].q
 
         return self._homogeneous_inequalities
-
-    @property
-    def is_eq(self):
-        """
-        For each inequality, store 0 if it is an equality, 1 otherwise
-        """
-        if self._is_eq is None:
-            self._is_eq = np.zeros(shape=self.cdd_inequalities.row_size, dtype=bool)
-            self._is_eq[list(self.cdd_inequalities.lin_set)] = True
-
-        return self._is_eq
 
     @property
     def n_inequalities(self):
@@ -305,10 +332,7 @@ class Polytope:
         """
         if self._facets is None:
             self._facets = tuple(
-                [
-                    frozenset(np.where(row)[0])
-                    for row in self.vertex_facet_matrix[~self.is_eq]
-                ]
+                [frozenset(np.where(row)[0]) for row in self.vertex_facet_matrix]
             )
 
         return self._facets
@@ -508,9 +532,8 @@ class Polytope:
         # a np.array
         if self._vertex_facet_pairing_matrix is None:
             self._vertex_facet_pairing_matrix = (
-                self.inequalities[~self.is_eq, 1:]
-                @ np.array(self.vertices, dtype=object).T
-                + self.inequalities[~self.is_eq, :1]
+                self._ineqs[:, 1:] @ np.array(self.vertices, dtype=object).T
+                + self._ineqs[:, :1]
             )
 
         return self._vertex_facet_pairing_matrix
@@ -574,12 +597,10 @@ class Polytope:
                         ref_pt += v * w
                     ref_pt /= sum(weights)
                 else:
-                    for f, lineq in zip(simplex.facets, simplex.inequalities):
+                    for facet_id, ineq in enumerate(simplex.inequalities):
                         # find the vertex that is not in the facet
-                        for v_id in range(len(verts)):
-                            if v_id not in f:
-                                break
-                        if lineq.evaluate(ref_pt) < 0:
+                        v_id = simplex.opposite_vertex(facet_id)
+                        if np.dot(ineq[1:], ref_pt) + ineq[0] < 0:
                             special_gens_ids.append(v_id)
                 self._half_open_decomposition.append(frozenset(special_gens_ids))
             self._half_open_decomposition = tuple(self._half_open_decomposition)
@@ -599,7 +620,7 @@ class Polytope:
                     for s in self.triangulation
                     for f in self.facets
                     if len(ss := f.intersection(s)) == self.dim
-                    and PointList([self.vertices[i] for i in ss]).affine_rank
+                    and PointConfiguration([self.vertices[i] for i in ss]).affine_rank
                     == self.dim - 1
                 ]
             )
@@ -689,7 +710,7 @@ class Polytope:
             _integer_points = [pt for pt in self.boundary_points]
             if self.n_interior_points > 0:
                 _integer_points += [pt for pt in self.interior_points]
-            self._integer_points = PointList(_integer_points)
+            self._integer_points = PointConfiguration(_integer_points)
         return self._integer_points
 
     @property
@@ -959,11 +980,16 @@ class Polytope:
         Check if the polytope is reflexive
         """
         if self._is_reflexive is None:
-            self._is_reflexive = self.is_canonical and all(
-                le.evaluate(self._origin()) == 1
-                for le in self.inequalities
-                if not le.is_equality
-            )
+            if not self.is_canonical:
+                self._is_reflexive = False
+                return False
+
+            # check that all the facets are at distance 1 from the origin
+            for ineqs in self.inequalities:
+                if ineqs[0] != 1:
+                    self._is_reflexive = False
+                    return False
+            self._is_reflexive = True
 
         return self._is_reflexive
 
@@ -1017,7 +1043,7 @@ class Polytope:
             # span the whole lattice (note that the half-open parallelotopes points
             # need to be calculated anyway for the hilbert basis). This is a necessary
             # condition for IDP-ness, but not sufficient.
-            index = PointList(
+            index = PointConfiguration(
                 [v for v in self.vertices]
                 + [pt[1:] for pt in self.half_open_parallelotopes_pts if pt[0] == 1]
             ).index
@@ -1117,8 +1143,8 @@ class Polytope:
 
     def _get_integer_points(self, count_only=False, stop_at_interior=-1):
         """
-        Get the integer points, or optionally just the count, and populate the
-        correct properties
+        Get the integer points, or optionally just enumerate them, and populate the
+        correct properties. This is done with a conversion to int64.
         """
         if not self.is_full_dim():
             raise ValueError("polytope must be full-dimensional")
@@ -1130,8 +1156,8 @@ class Polytope:
             _n_interior_points,
             forced_stop,
         ) = _find_integer_points(
-            verts=self._verts_as_np_array(),
-            ineqs=self._ineqs_as_np_array(),
+            verts=np.array(self.vertices, dtype=np.int64),
+            ineqs=self.homogeneous_inequalities.astype(np.int64),
             dim=self.dim,
             count_only=count_only,
             stop_at_interior=stop_at_interior,
@@ -1142,8 +1168,8 @@ class Polytope:
             return
 
         if not count_only:
-            self._interior_points = PointList(_interior_points)
-            self._boundary_points = PointList(_boundary_points)
+            self._interior_points = PointConfiguration(_interior_points)
+            self._boundary_points = PointConfiguration(_boundary_points)
         self._boundary_points_facets = _boundary_points_facets
         self._n_integer_points = _n_integer_points
         self._n_interior_points = _n_interior_points
@@ -1181,21 +1207,6 @@ class Polytope:
         Get the neighbors of a vertex
         """
         return self.cdd_vertex_adjacency[vertex_id]
-
-    def _verts_as_np_array(self):
-        """
-        Return the vertices of the polytope as a numpy array
-        """
-        return np.array(self.vertices, dtype=np.int64)
-
-    def _ineqs_as_np_array(self):
-        """
-        Return the linear inequalities of the polytope as a numpy array
-        """
-        return np.array(
-            [ineq.normal.tolist() + [-ineq.rhs] for ineq in self.inequalities],
-            dtype=np.int64,
-        )
 
     def has_n_interior_points(self, n):
         """
@@ -1395,22 +1406,13 @@ class Polytope:
         only checking the relative interior
         """
         if isinstance(other, Point):
-            if np.any(
-                np.dot(self.inequalities[self.is_eq, 1:], other)
-                != -self.inequalities[self.is_eq, 0]
-            ):
+            if np.any(np.dot(self._eqs[:, 1:], other) != -self._eqs[:, 0]):
                 return False
             if strict:
-                if np.any(
-                    np.dot(self.inequalities[~self.is_eq, 1:], other)
-                    <= -self.inequalities[~self.is_eq, 0]
-                ):
+                if np.any(np.dot(self._ineqs[:, 1:], other) <= -self._ineqs[:, 0]):
                     return False
             else:
-                if np.any(
-                    np.dot(self.inequalities[~self.is_eq, 1:], other)
-                    < -self.inequalities[~self.is_eq, 0]
-                ):
+                if np.any(np.dot(self._ineqs[:, 1:], other) < -self._ineqs[:, 0]):
                     return False
             return True
 
@@ -1516,15 +1518,13 @@ class Simplex(Polytope):
 
         return self._half_open_decomposition
 
-    def barycentric_coordinates(self, point: Point):
-        """
-        Return the barycentric coordinates of a point in the simplex, or the
-        barycentric coordinates of the origin if no point is given
-        """
-        m = Matrix([[1] + v.tolist() for v in self.vertices]).T
-        b = m.LUsolve(Matrix([1] + point.tolist()))
+    # Simplex-specific properties and methods
 
-        return b.flat()
+    def opposite_vertex(self, facet_id):
+        """
+        Get the opposite vertex of a facet
+        """
+        return np.where(self.vertex_facet_matrix[facet_id] == 0)[0][0]
 
     @property
     def weights(self):
@@ -1541,3 +1541,13 @@ class Simplex(Polytope):
             self._weights = [i / gcd_b for i in b]
 
         return self._weights
+
+    def barycentric_coordinates(self, point: Point):
+        """
+        Return the barycentric coordinates of a point in the simplex, or the
+        barycentric coordinates of the origin if no point is given
+        """
+        m = Matrix([[1] + v.tolist() for v in self.vertices]).T
+        b = m.LUsolve(Matrix([1] + point.tolist()))
+
+        return b.flat()

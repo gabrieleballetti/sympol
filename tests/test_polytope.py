@@ -7,7 +7,7 @@ from sympy.abc import x
 from sympol.lineq import LinIneq
 from sympol.parallelotope import HalfOpenParallelotope
 from sympol.point import Point
-from sympol.point_list import PointList
+from sympol.point_configuration import PointConfiguration
 from sympol.polytope import Polytope, Simplex
 
 
@@ -31,7 +31,7 @@ def test_init_from_points():
     ]
     polytope = Polytope(points)
 
-    assert polytope.points == PointList(points)
+    assert polytope.points == PointConfiguration(points)
     assert polytope.ambient_dim == 3
 
     # check correct dimension initialization
@@ -41,8 +41,8 @@ def test_init_from_points():
 
     # check correct vertices initialization
     assert polytope._vertices is None
-    assert polytope.vertices == PointList(points[:-1])
-    assert polytope._vertices == PointList(points[:-1])
+    assert polytope.vertices == PointConfiguration(points[:-1])
+    assert polytope._vertices == PointConfiguration(points[:-1])
 
 
 def test_init_from_vertices():
@@ -56,8 +56,8 @@ def test_init_from_vertices():
         [0, 0, 1],
     ]
     polytope = Polytope(vertices=vertices)
-    assert polytope._points == PointList(vertices)
-    assert polytope.points == PointList(vertices)
+    assert polytope._points == PointConfiguration(vertices)
+    assert polytope.points == PointConfiguration(vertices)
     assert polytope.ambient_dim == 3
 
     # check correct dimension initialization
@@ -66,8 +66,8 @@ def test_init_from_vertices():
     assert polytope._dim == 3
 
     # check correct vertices initialization
-    assert polytope._vertices == PointList(vertices)
-    assert polytope.vertices == PointList(vertices)
+    assert polytope._vertices == PointConfiguration(vertices)
+    assert polytope.vertices == PointConfiguration(vertices)
 
 
 def test_init_from_points_and_vertices():
@@ -84,7 +84,7 @@ def test_init_from_points_and_vertices():
     vertices = points[:-1]
     polytope = Polytope(points, vertices=vertices)
 
-    assert polytope.points == PointList(points)
+    assert polytope.points == PointConfiguration(points)
     assert polytope.ambient_dim == 3
 
     # check correct dimension initialization
@@ -93,7 +93,7 @@ def test_init_from_points_and_vertices():
     assert polytope._dim == 3
 
     # check correct vertices initialization
-    assert polytope._vertices == PointList(vertices)
+    assert polytope._vertices == PointConfiguration(vertices)
 
 
 def test_vertices():
@@ -105,7 +105,7 @@ def test_vertices():
     points = verts + [mid]
     polytope = Polytope(points)
 
-    assert polytope.vertices == PointList(verts)
+    assert polytope.vertices == PointConfiguration(verts)
 
 
 def test_redundant_vertices():
@@ -128,7 +128,7 @@ def test_rational_vertices_precision():
     ]
     polytope = Polytope(verts)
 
-    assert polytope.vertices == PointList(verts)
+    assert polytope.vertices == PointConfiguration(verts)
 
 
 def test_inequalities():
@@ -356,7 +356,7 @@ def test_translation():
     """
     polytope = Polytope.cube(3) + Point([1, 1, 1])
 
-    assert polytope.vertices == PointList(
+    assert polytope.vertices == PointConfiguration(
         [
             [1, 1, 1],
             [1, 1, 2],
@@ -376,7 +376,7 @@ def test_dilation():
     """
     polytope = Polytope.cube(3) * 2
 
-    assert polytope.vertices == PointList(
+    assert polytope.vertices == PointConfiguration(
         [
             [0, 0, 0],
             [0, 0, 2],
@@ -396,7 +396,7 @@ def test_translation_and_dilation():
     """
     polytope = Polytope.cube(3) * 2 - Point([1, 1, 1])
 
-    assert polytope.vertices == PointList(
+    assert polytope.vertices == PointConfiguration(
         [
             [-1, -1, -1],
             [-1, -1, 1],
@@ -453,7 +453,7 @@ def test_contains_polytope(strict):
     assert p.contains(p2, strict)
 
     # check that vertices are not used if not available
-    pts = PointList([[a**1, a**2, a**3] for a in range(100)])
+    pts = PointConfiguration([[a**1, a**2, a**3] for a in range(100)])
     p3 = Polytope(pts)
     assert not p.contains(p3)
     assert p3._vertices is None
@@ -777,7 +777,7 @@ def test_integer_points():
     assert s4.n_integer_points == 35
     assert s4.n_interior_points == 1
     assert s4.n_boundary_points == 34
-    assert s4.interior_points == PointList([[1, 1, 1]])
+    assert s4.interior_points == PointConfiguration([[1, 1, 1]])
 
     assert set([pt for pt in c.integer_points]) == set([pt for pt in c.vertices])
     assert c.n_interior_points == 0
@@ -786,7 +786,7 @@ def test_integer_points():
     assert c2.n_integer_points == 27
     assert c2.n_interior_points == 1
     assert c2.n_boundary_points == 26
-    assert c2.interior_points == PointList([[1, 1, 1]])
+    assert c2.interior_points == PointConfiguration([[1, 1, 1]])
 
 
 def test_integer_points_consistency():
@@ -840,8 +840,8 @@ def test_boundary_points_facets():
     p = Polytope.cube(3)
 
     for pt, f_ids in zip(p.boundary_points, p.boundary_points_facets):
-        for j, lineq in enumerate(p.inequalities):
-            if lineq.evaluate(pt) == 0:
+        for j, ineq in enumerate(p.inequalities):
+            if np.dot(ineq[1:], pt) + ineq[0] == 0:
                 assert j in f_ids
             else:
                 assert j not in f_ids
@@ -1181,7 +1181,7 @@ def test_unimodular_simplex():
     """
     simplex = Polytope.unimodular_simplex(3)
 
-    expected_vertices = PointList(
+    expected_vertices = PointConfiguration(
         [
             [0, 0, 0],
             [1, 0, 0],
@@ -1201,7 +1201,7 @@ def test_cube():
     """
     cube = Polytope.cube(3)
 
-    expected_vertices = PointList(
+    expected_vertices = PointConfiguration(
         [
             [0, 0, 0],
             [0, 0, 1],
@@ -1225,7 +1225,7 @@ def test_cross_polytope():
     """
     cross = Polytope.cross_polytope(3)
 
-    expected_vertices = PointList(
+    expected_vertices = PointConfiguration(
         [
             [1, 0, 0],
             [-1, 0, 0],
@@ -1256,32 +1256,11 @@ def test_get_cdd_polyhedron_from_points():
     assert polytope._cdd_polyhedron is not None
 
 
-def test_cdd_inequalities():
-    """
-    Test that the inequalities are correctly converted to cdd format
-    """
-    points = [
-        [0, 0, 0],
-        [Rational(1, 7), 0, 0],
-        [0, Rational(1, 7), 0],
-        [0, 0, Rational(1, 7)],
-    ]
-    polytope = Polytope(points)
-    polytope._get_cdd_polyhedron_from_points()
-    assert polytope._cdd_polyhedron is not None
-    assert polytope._cdd_polyhedron.inequalities == [
-        [0, 0, 0, 1],
-        [0, 0, 1, 0],
-        [0, 1, 0, 0],
-        [1, 0, 0, 0],
-    ]
-
-
 def test_lower_dimensional_polytope():
     """
-    Test that the lower dimensional polytope is correctly constructed
+    Test that a lower dimensional polytope is correctly constructed
     """
-    verts = PointList(
+    verts = PointConfiguration(
         [
             [0, 0, 0],
             [1, 1, 0],
@@ -1289,8 +1268,7 @@ def test_lower_dimensional_polytope():
     )
 
     p = Polytope(verts)
-    eqs = [lin_eq.is_equality for lin_eq in p.inequalities]
-    assert len(eqs) > 0
+    assert p._eqs.shape[0] > 0
 
 
 def test_simplex_conversion():
@@ -1324,6 +1302,16 @@ def test_barycentric_coordinates():
         0,
         Rational(1, 3),
     ]
+
+
+def test_opposite_vertex():
+    """
+    Test that the opposite vertex is correctly calculated
+    """
+    s = Simplex.unimodular_simplex(3)
+
+    for facet_id, facet in enumerate(s.facets):
+        assert s.opposite_vertex(facet_id) not in facet
 
 
 def test_weights():

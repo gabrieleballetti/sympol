@@ -4,7 +4,7 @@ from igraph import Graph
 from sympy import Matrix
 from sympy.matrices.normalforms import hermite_normal_form
 
-from sympol.point_list import PointList
+from sympol.point_configuration import PointConfiguration
 
 
 class VertexType(Enum):
@@ -50,7 +50,7 @@ def get_normal_form(polytope, affine=False):
         if affine:
             for v in permuted_verts:
                 candidate_normal_form = hermite_normal_form(
-                    Matrix(PointList(permuted_verts) - v)
+                    Matrix(PointConfiguration(permuted_verts) - v)
                 )
                 compare_tuple = tuple(candidate_normal_form.flat())
                 if normal_form is None or compare_tuple < min_compare_tuple:
@@ -63,7 +63,7 @@ def get_normal_form(polytope, affine=False):
                 normal_form = candidate_normal_form
                 min_compare_tuple = compare_tuple
 
-    return PointList(normal_form)
+    return PointConfiguration(normal_form)
 
 
 def _get_vertex_facet_pairing_graph(polytope):
@@ -82,14 +82,14 @@ def _get_vertex_facet_pairing_graph(polytope):
         polytope.n_facets,
         attributes={
             "type": [VertexType.FACET for _ in range(polytope.n_facets)],
-            "color": [-max(vfpm.row(i).flat()) for i in range(polytope.n_facets)],
+            "color": [-max(vfpm[i, :]) for i in range(polytope.n_facets)],
         },
     )
     graph.add_vertices(
         polytope.n_vertices,
         attributes={
             "type": [VertexType.VERTEX for _ in range(polytope.n_vertices)],
-            "color": [max(vfpm.col(j).flat()) for j in range(polytope.n_vertices)],
+            "color": [max(vfpm[:, j]) for j in range(polytope.n_vertices)],
             "point": [v for v in polytope.vertices],
         },
     )
@@ -103,7 +103,7 @@ def _get_vertex_facet_pairing_graph(polytope):
 
 
 # NOTE: This is not used in the current implementation
-# def _is_automorphism(input_list: PointList, output_list: PointList):
+# def _is_automorphism(input_list: PointConfiguration, output_list: PointConfiguration):
 #     """
 #     Check if the mapping between two lists of points can be extended to an
 #     affine unimodular map

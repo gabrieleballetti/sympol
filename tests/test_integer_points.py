@@ -1,4 +1,5 @@
 import pytest
+import numpy as np
 
 from sympol.integer_points import _find_integer_points
 from sympol.polytope import Polytope
@@ -26,8 +27,8 @@ def test_integer_points(count_only):
         n_interior_points,
         forced_stop,
     ) = _find_integer_points(
-        verts=p._verts_as_np_array(),
-        ineqs=p._ineqs_as_np_array(),
+        verts=np.array(p.vertices, dtype=np.int64),
+        ineqs=p.inequalities.astype(np.int64),
         dim=p.dim,
         count_only=count_only,
     )
@@ -57,8 +58,8 @@ def test_integer_points_consistency():
         n_interior_points,
         forced_stop,
     ) = _find_integer_points(
-        verts=p._verts_as_np_array(),
-        ineqs=p._ineqs_as_np_array(),
+        verts=np.array(p.vertices, dtype=np.int64),
+        ineqs=p.inequalities.astype(np.int64),
         dim=p.dim,
         count_only=False,
     )
@@ -96,8 +97,8 @@ def test_stop_at_max_points(count_only, interior):
         n_interior_points,
         forced_stop,
     ) = _find_integer_points(
-        verts=p._verts_as_np_array(),
-        ineqs=p._ineqs_as_np_array(),
+        verts=np.array(p.vertices, dtype=np.int64),
+        ineqs=p.inequalities.astype(np.int64),
         dim=p.dim,
         count_only=count_only,
         stop_at=-1 if interior else 10,
