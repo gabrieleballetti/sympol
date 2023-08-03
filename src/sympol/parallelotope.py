@@ -166,7 +166,7 @@ def get_parallelotope_points_simpy(
             s = 0
             for j in range(dim):
                 s += R[i, j] * q_times_d[j]
-            gen[i] = s / det + t[i]
+            gen[i] = s // det + t[i]
             if i == 0:
                 if height >= 0 and gen[0] != height:
                     break

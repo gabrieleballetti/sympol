@@ -1,0 +1,30 @@
+[build-system]
+requires = [
+    "cython>=0.29.35",
+    "igraph>=0.10.4",
+    "numpy>=1.24.3",
+    "pycddlib>=2.1.6",
+    "scipy>=0.12.0",
+    "setuptools>=61.0",
+    "sympy>=1.12"
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sympol"
+version = "0.0.1"
+authors = [
+  { name="Gabriele Balletti", email="gabriele.balletti@gmail.com" },
+]
+description = "A *simple* discrete geometry and integer optimization library for Python."
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GPL-3.0-only",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/gabrieleballetti/sympol"
+"Bug Tracker" = "https://github.com/gabrieleballetti/sympol/issues"
