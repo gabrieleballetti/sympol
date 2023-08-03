@@ -674,8 +674,6 @@ def test_vertex_facet_pairing_matrix_low_dimensional_polytope():
     """
     Test calculation of the vertex facet pairing matrix of a non-full-dimensional
     polytope
-    TODO: Is this guaranteed to work or should we project to a full-dimensional
-    polytope in a lower dimension?
     """
     verts = [[0, 0, 1], [1, 0, 6], [0, 1, 5], [1, 1, 10]]
     square = Polytope(verts)

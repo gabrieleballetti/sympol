@@ -1293,7 +1293,7 @@ class Polytope:
         """
         Return the the difference of self and other:
             - the translation of self by -other if other is a Point
-            - the Minkowski difference of self and other if other is a Polytope (TODO)
+            - the Minkowski difference of self and -other if other is a Polytope (TODO)
         """
         return self + (-other)
 
