@@ -761,7 +761,7 @@ def test_integer_points():
     c = Polytope.cube(3)
     c2 = c * 2
 
-    assert set([pt for pt in s.integer_points]) == set([pt for pt in s.vertices])
+    assert _arrays_equal_up_to_row_permutation(s.integer_points, s.vertices)
     assert s.n_interior_points == 0
     assert s.n_boundary_points == 4
 
@@ -778,7 +778,7 @@ def test_integer_points():
     assert s4.n_boundary_points == 34
     assert s4.interior_points == PointConfiguration([[1, 1, 1]])
 
-    assert set([pt for pt in c.integer_points]) == set([pt for pt in c.vertices])
+    assert _arrays_equal_up_to_row_permutation(c.integer_points, c.vertices)
     assert c.n_interior_points == 0
     assert c.n_boundary_points == 8
 
@@ -815,7 +815,7 @@ def test_integer_points_consistency():
         pts.append(Point(p.vertices[v_id]))
 
     assert p.n_integer_points == n_pts
-    assert set(p.integer_points) == set(pts)
+    assert _arrays_equal_up_to_row_permutation(p.integer_points, pts)
 
 
 def test_has_n_interior_points():
@@ -1139,8 +1139,9 @@ def test_free_sum():
     """
     Test the free_sum method
     """
-    assert set(Polytope.cube(1).free_sum(Polytope.cube(1)).vertices) == set(
-        [Point((0, 0)), Point((0, 1)), Point((1, 0))]
+    assert _arrays_equal_up_to_row_permutation(
+        Polytope.cube(1).free_sum(Polytope.cube(1)).vertices,
+        PointConfiguration([[0, 0], [0, 1], [1, 0]]),
     )
 
     with pytest.raises(TypeError):
@@ -1213,7 +1214,7 @@ def test_cube():
         ]
     )
 
-    assert set(cube.vertices) == set(expected_vertices)
+    assert _arrays_equal_up_to_row_permutation(cube.vertices, expected_vertices)
     assert cube.volume == 1
     assert cube.normalized_volume == 6
 
@@ -1235,7 +1236,7 @@ def test_cross_polytope():
         ]
     )
 
-    assert set(cross.vertices) == set(expected_vertices)
+    assert _arrays_equal_up_to_row_permutation(cross.vertices, expected_vertices)
     assert cross.volume == Rational(4, 3)
     assert cross.normalized_volume == 8
 

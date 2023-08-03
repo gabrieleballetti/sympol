@@ -1156,8 +1156,8 @@ class Polytope:
             _n_interior_points,
             forced_stop,
         ) = _find_integer_points(
-            verts=np.array(self.vertices, dtype=np.int64),
-            ineqs=self.homogeneous_inequalities.astype(np.int64),
+            verts=self.vertices.view(np.ndarray).astype(np.int64),
+            ineqs=self.homogeneous_inequalities.view(np.ndarray).astype(np.int64),
             dim=self.dim,
             count_only=count_only,
             stop_at_interior=stop_at_interior,
@@ -1261,7 +1261,9 @@ class Polytope:
         hilbert_basis = tuple(
             get_hilbert_basis_np(
                 generators=generators,
-                inequalities=self.homogeneous_inequalities.astype(np.int64),
+                inequalities=self.homogeneous_inequalities.view(np.ndarray).astype(
+                    np.int64
+                ),
                 stop_at_height=stop_at_height,
             )
         )
@@ -1335,7 +1337,7 @@ class Polytope:
         verts += [[0] * self.ambient_dim + v.tolist() for v in other.vertices]
 
         # make set to quickly remove duplicates (can only be origin)
-        verts = set(map(tuple, verts))
+        verts = list(set(map(tuple, verts)))
 
         return Polytope(vertices=verts)
 
@@ -1379,7 +1381,7 @@ class Polytope:
         if dist == 0:
             return self
 
-        new_verts = set()
+        new_verts = []
         recompute = False
         for v_id in range(self.n_vertices):
             v = self.vertices[v_id]
@@ -1394,7 +1396,9 @@ class Polytope:
                 if dist > vs_gcd // 2:
                     raise ValueError("Trying to chisel too greedily and too deep.")
                 w = vs_dir / vs_gcd
-                new_verts.add(v + w * dist)
+                pt = v + w * dist
+                if pt not in new_verts:
+                    new_verts.append(pt)
 
         return Polytope(new_verts) if recompute else Polytope(vertices=new_verts)
 

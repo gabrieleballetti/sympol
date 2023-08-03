@@ -1,25 +1,33 @@
 import numpy as np
-from sympy import Abs, Array, Matrix, NDimArray, prod, ZZ
+from sympy import Abs, Matrix, NDimArray, prod, ZZ, Rational
 from sympy.matrices.normalforms import smith_normal_form
 
 from sympol.point import Point
 
 
-class PointConfiguration(Array):
+class PointConfiguration(np.ndarray):
     """
-    Point list class based on sympy Array
+    A class for representing a point configuration, which is just a list of points
     """
+
+    def __new__(cls, data):
+        make_sympy_rational = np.vectorize(lambda x: Rational(x))
+        _arr = np.array(data)
+        if _arr.ndim == 1:
+            _arr = _arr.reshape(0, 0)
+        elif _arr.ndim > 2:
+            if all([i == 1 for i in _arr.shape[2:]]):
+                _arr = _arr.reshape(*_arr.shape[:2])
+            else:
+                raise ValueError("Point configuration must be a rank 2 array at most.")
+        if _arr.size > 0:
+            _arr = make_sympy_rational(_arr)
+        return _arr.view(cls)
 
     def __init__(self, iterable, shape=None, **kwargs):
         """
         Initialize a point list
         """
-        if self.rank() > 2:
-            # Attempt to convert to a rank 2 array
-            if all([i == 1 for i in self.shape[2:]]):
-                self = self.reshape(*self.shape[:2])
-            else:
-                raise ValueError("Point list must be a rank 2 array at most")
 
         self._ambient_dimension = None
         self._hom_rank = None
@@ -38,6 +46,27 @@ class PointConfiguration(Array):
             return PointConfiguration(super().__getitem__(index))
         else:
             return super().__getitem__(index)
+
+    def __eq__(self, other):
+        """
+        Override the == operator for the PointConfiguration class.
+        """
+        if isinstance(other, PointConfiguration):
+            return np.array_equal(self, other)
+        else:
+            return super().__eq__(other)
+
+    def __ne__(self, other):
+        """
+        Override the != operator for the PointConfiguration class.
+        """
+        return not self.__eq__(other)
+
+    def __hash__(self):
+        """
+        Override the hash method for the PointConfiguration class.
+        """
+        return tuple(map(tuple, self)).__hash__()
 
     def __add__(self, other):
         """

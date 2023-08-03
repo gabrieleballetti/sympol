@@ -1,3 +1,4 @@
+import numpy as np
 from sympy import Rational
 from sympol.point import Point
 from sympol.point_configuration import PointConfiguration
@@ -15,6 +16,25 @@ def test_init():
     assert point_list[1] == Point([1, 0, 0])
     assert point_list[2] == Point([0, 1, 0])
     assert point_list[3] == Point([0, 0, 1])
+
+
+def test_empty_init():
+    """
+    Test initialization of an empty point list
+    """
+    point_list = PointConfiguration([])
+
+    assert point_list.shape == (0, 0)
+
+
+def test_higher_rank_init():
+    """
+    Test initialization of a point list with rank greater than the ambient dimension
+    """
+    data = np.zeros((3, 3, 1))
+    point_list = PointConfiguration(data)
+
+    assert point_list.shape == (3, 3)
 
 
 def test_affine_rank():
@@ -78,3 +98,22 @@ def test_index():
     ]
     point_list = PointConfiguration(points)
     assert point_list.index == 1
+
+
+def test_can_make_set():
+    """
+    Test that a point is hashable and can therefore be put in a set.
+    """
+    test_set = set([PointConfiguration([[1, 3]]), PointConfiguration([[1, 3]])])
+
+    assert len(test_set) == 1
+
+
+def test_conversion_to_int64():
+    """
+    Test that a PointConfiguration can be converted to np.int64 type
+    """
+    pts = PointConfiguration([[1, 3], [2, 4]])
+    pts_int64 = pts.view(np.ndarray).astype(np.int64)
+
+    assert pts_int64.dtype == np.int64

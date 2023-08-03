@@ -27,8 +27,8 @@ def test_integer_points(count_only):
         n_interior_points,
         forced_stop,
     ) = _find_integer_points(
-        verts=np.array(p.vertices, dtype=np.int64),
-        ineqs=p.inequalities.astype(np.int64),
+        verts=p.vertices.view(np.ndarray).view(np.ndarray).astype(np.int64),
+        ineqs=p.inequalities.view(np.ndarray).view(np.ndarray).astype(np.int64),
         dim=p.dim,
         count_only=count_only,
     )
@@ -58,8 +58,8 @@ def test_integer_points_consistency():
         n_interior_points,
         forced_stop,
     ) = _find_integer_points(
-        verts=np.array(p.vertices, dtype=np.int64),
-        ineqs=p.inequalities.astype(np.int64),
+        verts=p.vertices.view(np.ndarray).astype(np.int64),
+        ineqs=p.inequalities.view(np.ndarray).astype(np.int64),
         dim=p.dim,
         count_only=False,
     )
@@ -97,8 +97,8 @@ def test_stop_at_max_points(count_only, interior):
         n_interior_points,
         forced_stop,
     ) = _find_integer_points(
-        verts=np.array(p.vertices, dtype=np.int64),
-        ineqs=p.inequalities.astype(np.int64),
+        verts=p.vertices.view(np.ndarray).astype(np.int64),
+        ineqs=p.inequalities.view(np.ndarray).astype(np.int64),
         dim=p.dim,
         count_only=count_only,
         stop_at=-1 if interior else 10,
