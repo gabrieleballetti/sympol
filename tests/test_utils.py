@@ -1,8 +1,10 @@
+import numpy as np
 from cdd import Fraction
 from sympy import Poly, Rational
 from sympy.abc import x
 from sympol.utils import (
     _cdd_fraction_to_simpy_rational,
+    _np_cartesian_product,
     is_unimodal,
     _eulerian_number,
     _eulerian_poly,
@@ -20,6 +22,19 @@ def test_cdd_fraction_to_simpy_rational():
     n = 10**100
     frac = _cdd_fraction_to_simpy_rational(n)
     assert frac == Rational(10**100)
+
+
+def test_np_cartesian_product():
+    """
+    Test that the cartesian product of two iterables is correctly calculated.
+    """
+    a = np.array([[0, 1], [2, 3]])
+    b = np.array([[4], [5]])
+
+    assert np.array_equal(
+        _np_cartesian_product(a, b),
+        np.array([[0, 1, 4], [0, 1, 5], [2, 3, 4], [2, 3, 5]]),
+    )
 
 
 def test_is_unimodal():

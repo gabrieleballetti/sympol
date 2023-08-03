@@ -84,13 +84,13 @@ class PointConfiguration(np.ndarray):
             return PointConfiguration([p - other for p in self])
         return super().__sub__(other)
 
-    def __mul__(self, other):
-        """
-        Overload the * operator to allow scaling by a scalar
-        """
-        if isinstance(other, (int, float)):
-            return PointConfiguration([p * other for p in self])
-        return super().__mul__(other)
+    # def __mul__(self, other):
+    #     """
+    #     Overload the * operator to allow scaling by a scalar
+    #     """
+    #     if isinstance(other, (int, float)):
+    #         return PointConfiguration([p * other for p in self])
+    #     return super().__mul__(other)
 
     def tolist(self):
         """

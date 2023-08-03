@@ -19,6 +19,7 @@ from sympol.utils import (
     _binomial_polynomial,
     _cdd_fraction_to_simpy_rational,
     _eulerian_poly,
+    _np_cartesian_product,
     is_unimodal,
 )
 
@@ -186,9 +187,9 @@ class Polytope:
 
             # TODO: this check should be safe to remove as long as polytope
             # is always initialized with a list of points
-            r1, r2 = self._cdd_inequalities.copy().canonicalize()
-            assert r1 == (frozenset({}))
-            assert r2 == frozenset({})
+            # r1, r2 = self._cdd_inequalities.copy().canonicalize()
+            # assert r1 == (frozenset({}))
+            # assert r2 == frozenset({})
 
         return self._cdd_inequalities
 
@@ -528,11 +529,9 @@ class Polytope:
         Get the vertex facet pairing matrix of the polytope:
             m_ij = <F_j, v_i> (distance of vertex j to facet i)
         """
-        # TODO: no need to reconvert vertices to arry once they are already
-        # a np.array
         if self._vertex_facet_pairing_matrix is None:
             self._vertex_facet_pairing_matrix = (
-                self._ineqs[:, 1:] @ np.array(self.vertices, dtype=object).T
+                self._ineqs[:, 1:] @ self.vertices.view(np.ndarray).T
                 + self._ineqs[:, :1]
             )
 
@@ -932,8 +931,8 @@ class Polytope:
         Check if the polytope is a lattice polytope
         """
         if self._is_lattice_polytope is None:
-            self._is_lattice_polytope = all(
-                [all([i.is_integer for i in v]) for v in self.vertices]
+            self._is_lattice_polytope = np.all(
+                np.vectorize(lambda x: x.is_Integer)(self.vertices.view(np.ndarray))
             )
 
         return self._is_lattice_polytope
@@ -1315,10 +1314,7 @@ class Polytope:
             return Polytope(vertices=verts)
 
         if isinstance(other, Polytope):
-            verts = []
-            for v1 in self.vertices:
-                for v2 in other.vertices:
-                    verts.append(v1.tolist() + v2.tolist())
+            verts = _np_cartesian_product(self.vertices, other.vertices)
             return Polytope(vertices=verts)
 
         raise TypeError(
@@ -1461,11 +1457,8 @@ class Polytope:
         if not isinstance(dim, int) or dim < 1:
             raise ValueError("Dimension must be a positive integer")
 
-        segment_verts = [[0], [1]]
-        cube = cls(vertices=segment_verts)
-
-        for _ in range(dim - 1):
-            cube = cube * cls(vertices=segment_verts)
+        segment_verts = np.array([[0], [1]])
+        cube = cls(vertices=_np_cartesian_product(*[segment_verts] * dim))
 
         return cube
 

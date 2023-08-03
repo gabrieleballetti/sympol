@@ -1,3 +1,5 @@
+import numpy as np
+from itertools import product
 from cdd import Fraction
 from sympy import binomial, factorial, Poly, Rational
 
@@ -13,6 +15,22 @@ def _cdd_fraction_to_simpy_rational(frac):
         return Rational(frac.numerator, frac.denominator)
 
     raise TypeError("Expected a cddlib Fraction or an int")
+
+
+def _np_cartesian_product(*arrays):
+    """
+    Return the cartesian product of a list of arrays.
+    """
+    prod = np.empty(
+        shape=(
+            np.prod([a.shape[0] for a in arrays]),
+            sum(a.shape[1] for a in arrays),
+        )
+    )
+    for i, arrs in enumerate(product(*arrays)):
+        prod[i] = np.concatenate(arrs)
+
+    return prod
 
 
 def is_unimodal(iterable):
