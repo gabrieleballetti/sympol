@@ -1425,7 +1425,7 @@ typedef struct {
 
 /* #### Code section: numeric_typedefs ### */
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":730
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":730
  * # in Cython to enable them only on the right systems.
  * 
  * ctypedef npy_int8       int8_t             # <<<<<<<<<<<<<<
@@ -1434,7 +1434,7 @@ typedef struct {
  */
 typedef npy_int8 __pyx_t_5numpy_int8_t;
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":731
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":731
  * 
  * ctypedef npy_int8       int8_t
  * ctypedef npy_int16      int16_t             # <<<<<<<<<<<<<<
@@ -1443,7 +1443,7 @@ typedef npy_int8 __pyx_t_5numpy_int8_t;
  */
 typedef npy_int16 __pyx_t_5numpy_int16_t;
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":732
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":732
  * ctypedef npy_int8       int8_t
  * ctypedef npy_int16      int16_t
  * ctypedef npy_int32      int32_t             # <<<<<<<<<<<<<<
@@ -1452,7 +1452,7 @@ typedef npy_int16 __pyx_t_5numpy_int16_t;
  */
 typedef npy_int32 __pyx_t_5numpy_int32_t;
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":733
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":733
  * ctypedef npy_int16      int16_t
  * ctypedef npy_int32      int32_t
  * ctypedef npy_int64      int64_t             # <<<<<<<<<<<<<<
@@ -1461,7 +1461,7 @@ typedef npy_int32 __pyx_t_5numpy_int32_t;
  */
 typedef npy_int64 __pyx_t_5numpy_int64_t;
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":737
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":737
  * #ctypedef npy_int128     int128_t
  * 
  * ctypedef npy_uint8      uint8_t             # <<<<<<<<<<<<<<
@@ -1470,7 +1470,7 @@ typedef npy_int64 __pyx_t_5numpy_int64_t;
  */
 typedef npy_uint8 __pyx_t_5numpy_uint8_t;
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":738
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":738
  * 
  * ctypedef npy_uint8      uint8_t
  * ctypedef npy_uint16     uint16_t             # <<<<<<<<<<<<<<
@@ -1479,7 +1479,7 @@ typedef npy_uint8 __pyx_t_5numpy_uint8_t;
  */
 typedef npy_uint16 __pyx_t_5numpy_uint16_t;
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":739
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":739
  * ctypedef npy_uint8      uint8_t
  * ctypedef npy_uint16     uint16_t
  * ctypedef npy_uint32     uint32_t             # <<<<<<<<<<<<<<
@@ -1488,7 +1488,7 @@ typedef npy_uint16 __pyx_t_5numpy_uint16_t;
  */
 typedef npy_uint32 __pyx_t_5numpy_uint32_t;
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":740
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":740
  * ctypedef npy_uint16     uint16_t
  * ctypedef npy_uint32     uint32_t
  * ctypedef npy_uint64     uint64_t             # <<<<<<<<<<<<<<
@@ -1497,7 +1497,7 @@ typedef npy_uint32 __pyx_t_5numpy_uint32_t;
  */
 typedef npy_uint64 __pyx_t_5numpy_uint64_t;
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":744
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":744
  * #ctypedef npy_uint128    uint128_t
  * 
  * ctypedef npy_float32    float32_t             # <<<<<<<<<<<<<<
@@ -1506,7 +1506,7 @@ typedef npy_uint64 __pyx_t_5numpy_uint64_t;
  */
 typedef npy_float32 __pyx_t_5numpy_float32_t;
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":745
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":745
  * 
  * ctypedef npy_float32    float32_t
  * ctypedef npy_float64    float64_t             # <<<<<<<<<<<<<<
@@ -1515,7 +1515,7 @@ typedef npy_float32 __pyx_t_5numpy_float32_t;
  */
 typedef npy_float64 __pyx_t_5numpy_float64_t;
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":754
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":754
  * # The int types are mapped a bit surprising --
  * # numpy.int corresponds to 'l' and numpy.long to 'q'
  * ctypedef npy_long       int_t             # <<<<<<<<<<<<<<
@@ -1524,7 +1524,7 @@ typedef npy_float64 __pyx_t_5numpy_float64_t;
  */
 typedef npy_long __pyx_t_5numpy_int_t;
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":755
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":755
  * # numpy.int corresponds to 'l' and numpy.long to 'q'
  * ctypedef npy_long       int_t
  * ctypedef npy_longlong   longlong_t             # <<<<<<<<<<<<<<
@@ -1533,7 +1533,7 @@ typedef npy_long __pyx_t_5numpy_int_t;
  */
 typedef npy_longlong __pyx_t_5numpy_longlong_t;
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":757
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":757
  * ctypedef npy_longlong   longlong_t
  * 
  * ctypedef npy_ulong      uint_t             # <<<<<<<<<<<<<<
@@ -1542,7 +1542,7 @@ typedef npy_longlong __pyx_t_5numpy_longlong_t;
  */
 typedef npy_ulong __pyx_t_5numpy_uint_t;
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":758
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":758
  * 
  * ctypedef npy_ulong      uint_t
  * ctypedef npy_ulonglong  ulonglong_t             # <<<<<<<<<<<<<<
@@ -1551,7 +1551,7 @@ typedef npy_ulong __pyx_t_5numpy_uint_t;
  */
 typedef npy_ulonglong __pyx_t_5numpy_ulonglong_t;
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":760
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":760
  * ctypedef npy_ulonglong  ulonglong_t
  * 
  * ctypedef npy_intp       intp_t             # <<<<<<<<<<<<<<
@@ -1560,7 +1560,7 @@ typedef npy_ulonglong __pyx_t_5numpy_ulonglong_t;
  */
 typedef npy_intp __pyx_t_5numpy_intp_t;
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":761
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":761
  * 
  * ctypedef npy_intp       intp_t
  * ctypedef npy_uintp      uintp_t             # <<<<<<<<<<<<<<
@@ -1569,7 +1569,7 @@ typedef npy_intp __pyx_t_5numpy_intp_t;
  */
 typedef npy_uintp __pyx_t_5numpy_uintp_t;
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":763
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":763
  * ctypedef npy_uintp      uintp_t
  * 
  * ctypedef npy_double     float_t             # <<<<<<<<<<<<<<
@@ -1578,7 +1578,7 @@ typedef npy_uintp __pyx_t_5numpy_uintp_t;
  */
 typedef npy_double __pyx_t_5numpy_float_t;
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":764
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":764
  * 
  * ctypedef npy_double     float_t
  * ctypedef npy_double     double_t             # <<<<<<<<<<<<<<
@@ -1587,7 +1587,7 @@ typedef npy_double __pyx_t_5numpy_float_t;
  */
 typedef npy_double __pyx_t_5numpy_double_t;
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":765
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":765
  * ctypedef npy_double     float_t
  * ctypedef npy_double     double_t
  * ctypedef npy_longdouble longdouble_t             # <<<<<<<<<<<<<<
@@ -1601,7 +1601,7 @@ typedef npy_longdouble __pyx_t_5numpy_longdouble_t;
  * 
  * ctypedef cnp.int64_t DTYPE_t             # <<<<<<<<<<<<<<
  * 
- * def _find_integer_points(
+ * def find_integer_points(
  */
 typedef __pyx_t_5numpy_int64_t __pyx_t_6sympol_14integer_points_DTYPE_t;
 /* #### Code section: complex_type_declarations ### */
@@ -1632,7 +1632,7 @@ static CYTHON_INLINE __pyx_t_double_complex __pyx_t_double_complex_from_parts(do
 /* #### Code section: type_declarations ### */
 
 /*--- Type declarations ---*/
-struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct___find_integer_points;
+struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct__find_integer_points;
 struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct_1_genexpr;
 struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct_2_genexpr;
 struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct_3_genexpr;
@@ -1641,7 +1641,7 @@ struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct_5_genexpr;
 struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct_6_genexpr;
 struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct_7_genexpr;
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":767
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":767
  * ctypedef npy_longdouble longdouble_t
  * 
  * ctypedef npy_cfloat      cfloat_t             # <<<<<<<<<<<<<<
@@ -1650,7 +1650,7 @@ struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct_7_genexpr;
  */
 typedef npy_cfloat __pyx_t_5numpy_cfloat_t;
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":768
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":768
  * 
  * ctypedef npy_cfloat      cfloat_t
  * ctypedef npy_cdouble     cdouble_t             # <<<<<<<<<<<<<<
@@ -1659,7 +1659,7 @@ typedef npy_cfloat __pyx_t_5numpy_cfloat_t;
  */
 typedef npy_cdouble __pyx_t_5numpy_cdouble_t;
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":769
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":769
  * ctypedef npy_cfloat      cfloat_t
  * ctypedef npy_cdouble     cdouble_t
  * ctypedef npy_clongdouble clongdouble_t             # <<<<<<<<<<<<<<
@@ -1668,7 +1668,7 @@ typedef npy_cdouble __pyx_t_5numpy_cdouble_t;
  */
 typedef npy_clongdouble __pyx_t_5numpy_clongdouble_t;
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":771
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":771
  * ctypedef npy_clongdouble clongdouble_t
  * 
  * ctypedef npy_cdouble     complex_t             # <<<<<<<<<<<<<<
@@ -1680,11 +1680,11 @@ typedef npy_cdouble __pyx_t_5numpy_complex_t;
 /* "sympol/integer_points.pyx":8
  * ctypedef cnp.int64_t DTYPE_t
  * 
- * def _find_integer_points(             # <<<<<<<<<<<<<<
+ * def find_integer_points(             # <<<<<<<<<<<<<<
  *         cnp.ndarray[DTYPE_t, ndim=2] verts,
  *         cnp.ndarray ineqs,
  */
-struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct___find_integer_points {
+struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct__find_integer_points {
   PyObject_HEAD
   __pyx_t_6sympol_14integer_points_DTYPE_t __pyx_v_i;
   __pyx_t_6sympol_14integer_points_DTYPE_t __pyx_v_i_max;
@@ -1705,7 +1705,7 @@ struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct___find_integer_poin
  */
 struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct_1_genexpr {
   PyObject_HEAD
-  struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct___find_integer_points *__pyx_outer_scope;
+  struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct__find_integer_points *__pyx_outer_scope;
   Py_ssize_t __pyx_genexpr_arg_0;
   Py_ssize_t __pyx_v_i;
 };
@@ -1720,7 +1720,7 @@ struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct_1_genexpr {
  */
 struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct_2_genexpr {
   PyObject_HEAD
-  struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct___find_integer_points *__pyx_outer_scope;
+  struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct__find_integer_points *__pyx_outer_scope;
   Py_ssize_t __pyx_genexpr_arg_0;
   Py_ssize_t __pyx_v_i;
 };
@@ -1735,7 +1735,7 @@ struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct_2_genexpr {
  */
 struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct_3_genexpr {
   PyObject_HEAD
-  struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct___find_integer_points *__pyx_outer_scope;
+  struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct__find_integer_points *__pyx_outer_scope;
   Py_ssize_t __pyx_genexpr_arg_0;
   Py_ssize_t __pyx_v_i;
 };
@@ -1750,7 +1750,7 @@ struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct_3_genexpr {
  */
 struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct_4_genexpr {
   PyObject_HEAD
-  struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct___find_integer_points *__pyx_outer_scope;
+  struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct__find_integer_points *__pyx_outer_scope;
   Py_ssize_t __pyx_genexpr_arg_0;
   Py_ssize_t __pyx_v_i;
 };
@@ -1765,7 +1765,7 @@ struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct_4_genexpr {
  */
 struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct_5_genexpr {
   PyObject_HEAD
-  struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct___find_integer_points *__pyx_outer_scope;
+  struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct__find_integer_points *__pyx_outer_scope;
   Py_ssize_t __pyx_genexpr_arg_0;
   Py_ssize_t __pyx_v_i;
 };
@@ -1780,7 +1780,7 @@ struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct_5_genexpr {
  */
 struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct_6_genexpr {
   PyObject_HEAD
-  struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct___find_integer_points *__pyx_outer_scope;
+  struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct__find_integer_points *__pyx_outer_scope;
   Py_ssize_t __pyx_genexpr_arg_0;
   Py_ssize_t __pyx_v_i;
 };
@@ -1795,7 +1795,7 @@ struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct_6_genexpr {
  */
 struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct_7_genexpr {
   PyObject_HEAD
-  struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct___find_integer_points *__pyx_outer_scope;
+  struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct__find_integer_points *__pyx_outer_scope;
   Py_ssize_t __pyx_genexpr_arg_0;
   Py_ssize_t __pyx_v_j;
   Py_ssize_t __pyx_t_0;
@@ -2854,24 +2854,24 @@ static const char __pyx_k_stop_at_interior[] = "stop_at_interior";
 static const char __pyx_k_asyncio_coroutines[] = "asyncio.coroutines";
 static const char __pyx_k_cline_in_traceback[] = "cline_in_traceback";
 static const char __pyx_k_boundary_points_arr[] = "boundary_points_arr";
-static const char __pyx_k_find_integer_points[] = "_find_integer_points";
+static const char __pyx_k_find_integer_points[] = "find_integer_points";
 static const char __pyx_k_interior_points_arr[] = "interior_points_arr";
 static const char __pyx_k_num_interior_points[] = "num_interior_points";
 static const char __pyx_k_sympol_integer_points[] = "sympol.integer_points";
 static const char __pyx_k_src_sympol_integer_points_pyx[] = "src\\sympol\\integer_points.pyx";
-static const char __pyx_k_find_integer_points_locals_gene[] = "_find_integer_points.<locals>.genexpr";
 static const char __pyx_k_numpy_core_multiarray_failed_to[] = "numpy.core.multiarray failed to import";
+static const char __pyx_k_find_integer_points_locals_genex[] = "find_integer_points.<locals>.genexpr";
 static const char __pyx_k_numpy_core_umath_failed_to_impor[] = "numpy.core.umath failed to import";
 /* #### Code section: decls ### */
-static PyObject *__pyx_pf_6sympol_14integer_points_20_find_integer_points_genexpr(PyObject *__pyx_self, Py_ssize_t __pyx_genexpr_arg_0); /* proto */
-static PyObject *__pyx_pf_6sympol_14integer_points_20_find_integer_points_3genexpr(PyObject *__pyx_self, Py_ssize_t __pyx_genexpr_arg_0); /* proto */
-static PyObject *__pyx_pf_6sympol_14integer_points_20_find_integer_points_6genexpr(PyObject *__pyx_self, Py_ssize_t __pyx_genexpr_arg_0); /* proto */
-static PyObject *__pyx_pf_6sympol_14integer_points_20_find_integer_points_9genexpr(PyObject *__pyx_self, Py_ssize_t __pyx_genexpr_arg_0); /* proto */
-static PyObject *__pyx_pf_6sympol_14integer_points_20_find_integer_points_12genexpr(PyObject *__pyx_self, Py_ssize_t __pyx_genexpr_arg_0); /* proto */
-static PyObject *__pyx_pf_6sympol_14integer_points_20_find_integer_points_15genexpr(PyObject *__pyx_self, Py_ssize_t __pyx_genexpr_arg_0); /* proto */
-static PyObject *__pyx_pf_6sympol_14integer_points_20_find_integer_points_18genexpr(PyObject *__pyx_self, Py_ssize_t __pyx_genexpr_arg_0); /* proto */
-static PyObject *__pyx_pf_6sympol_14integer_points__find_integer_points(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_verts, PyArrayObject *__pyx_v_ineqs, int __pyx_v_dim, int __pyx_v_count_only, int __pyx_v_stop_at, int __pyx_v_stop_at_interior); /* proto */
-static PyObject *__pyx_tp_new_6sympol_14integer_points___pyx_scope_struct___find_integer_points(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
+static PyObject *__pyx_pf_6sympol_14integer_points_19find_integer_points_genexpr(PyObject *__pyx_self, Py_ssize_t __pyx_genexpr_arg_0); /* proto */
+static PyObject *__pyx_pf_6sympol_14integer_points_19find_integer_points_3genexpr(PyObject *__pyx_self, Py_ssize_t __pyx_genexpr_arg_0); /* proto */
+static PyObject *__pyx_pf_6sympol_14integer_points_19find_integer_points_6genexpr(PyObject *__pyx_self, Py_ssize_t __pyx_genexpr_arg_0); /* proto */
+static PyObject *__pyx_pf_6sympol_14integer_points_19find_integer_points_9genexpr(PyObject *__pyx_self, Py_ssize_t __pyx_genexpr_arg_0); /* proto */
+static PyObject *__pyx_pf_6sympol_14integer_points_19find_integer_points_12genexpr(PyObject *__pyx_self, Py_ssize_t __pyx_genexpr_arg_0); /* proto */
+static PyObject *__pyx_pf_6sympol_14integer_points_19find_integer_points_15genexpr(PyObject *__pyx_self, Py_ssize_t __pyx_genexpr_arg_0); /* proto */
+static PyObject *__pyx_pf_6sympol_14integer_points_19find_integer_points_18genexpr(PyObject *__pyx_self, Py_ssize_t __pyx_genexpr_arg_0); /* proto */
+static PyObject *__pyx_pf_6sympol_14integer_points_find_integer_points(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_verts, PyArrayObject *__pyx_v_ineqs, int __pyx_v_dim, int __pyx_v_count_only, int __pyx_v_stop_at, int __pyx_v_stop_at_interior); /* proto */
+static PyObject *__pyx_tp_new_6sympol_14integer_points___pyx_scope_struct__find_integer_points(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_tp_new_6sympol_14integer_points___pyx_scope_struct_1_genexpr(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_tp_new_6sympol_14integer_points___pyx_scope_struct_2_genexpr(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_tp_new_6sympol_14integer_points___pyx_scope_struct_3_genexpr(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
@@ -2941,7 +2941,7 @@ typedef struct {
   PyTypeObject *__pyx_ptype_5numpy_character;
   PyTypeObject *__pyx_ptype_5numpy_ufunc;
   #if CYTHON_USE_MODULE_STATE
-  PyObject *__pyx_type_6sympol_14integer_points___pyx_scope_struct___find_integer_points;
+  PyObject *__pyx_type_6sympol_14integer_points___pyx_scope_struct__find_integer_points;
   PyObject *__pyx_type_6sympol_14integer_points___pyx_scope_struct_1_genexpr;
   PyObject *__pyx_type_6sympol_14integer_points___pyx_scope_struct_2_genexpr;
   PyObject *__pyx_type_6sympol_14integer_points___pyx_scope_struct_3_genexpr;
@@ -2950,7 +2950,7 @@ typedef struct {
   PyObject *__pyx_type_6sympol_14integer_points___pyx_scope_struct_6_genexpr;
   PyObject *__pyx_type_6sympol_14integer_points___pyx_scope_struct_7_genexpr;
   #endif
-  PyTypeObject *__pyx_ptype_6sympol_14integer_points___pyx_scope_struct___find_integer_points;
+  PyTypeObject *__pyx_ptype_6sympol_14integer_points___pyx_scope_struct__find_integer_points;
   PyTypeObject *__pyx_ptype_6sympol_14integer_points___pyx_scope_struct_1_genexpr;
   PyTypeObject *__pyx_ptype_6sympol_14integer_points___pyx_scope_struct_2_genexpr;
   PyTypeObject *__pyx_ptype_6sympol_14integer_points___pyx_scope_struct_3_genexpr;
@@ -2983,7 +2983,7 @@ typedef struct {
   PyObject *__pyx_kp_u_enable;
   PyObject *__pyx_n_s_enumerate;
   PyObject *__pyx_n_s_find_integer_points;
-  PyObject *__pyx_n_s_find_integer_points_locals_gene;
+  PyObject *__pyx_n_s_find_integer_points_locals_genex;
   PyObject *__pyx_n_s_forced_stop;
   PyObject *__pyx_kp_u_gc;
   PyObject *__pyx_n_s_genexpr;
@@ -3102,8 +3102,8 @@ static int __pyx_m_clear(PyObject *m) {
   Py_CLEAR(clear_module_state->__pyx_ptype_5numpy_flexible);
   Py_CLEAR(clear_module_state->__pyx_ptype_5numpy_character);
   Py_CLEAR(clear_module_state->__pyx_ptype_5numpy_ufunc);
-  Py_CLEAR(clear_module_state->__pyx_ptype_6sympol_14integer_points___pyx_scope_struct___find_integer_points);
-  Py_CLEAR(clear_module_state->__pyx_type_6sympol_14integer_points___pyx_scope_struct___find_integer_points);
+  Py_CLEAR(clear_module_state->__pyx_ptype_6sympol_14integer_points___pyx_scope_struct__find_integer_points);
+  Py_CLEAR(clear_module_state->__pyx_type_6sympol_14integer_points___pyx_scope_struct__find_integer_points);
   Py_CLEAR(clear_module_state->__pyx_ptype_6sympol_14integer_points___pyx_scope_struct_1_genexpr);
   Py_CLEAR(clear_module_state->__pyx_type_6sympol_14integer_points___pyx_scope_struct_1_genexpr);
   Py_CLEAR(clear_module_state->__pyx_ptype_6sympol_14integer_points___pyx_scope_struct_2_genexpr);
@@ -3143,7 +3143,7 @@ static int __pyx_m_clear(PyObject *m) {
   Py_CLEAR(clear_module_state->__pyx_kp_u_enable);
   Py_CLEAR(clear_module_state->__pyx_n_s_enumerate);
   Py_CLEAR(clear_module_state->__pyx_n_s_find_integer_points);
-  Py_CLEAR(clear_module_state->__pyx_n_s_find_integer_points_locals_gene);
+  Py_CLEAR(clear_module_state->__pyx_n_s_find_integer_points_locals_genex);
   Py_CLEAR(clear_module_state->__pyx_n_s_forced_stop);
   Py_CLEAR(clear_module_state->__pyx_kp_u_gc);
   Py_CLEAR(clear_module_state->__pyx_n_s_genexpr);
@@ -3240,8 +3240,8 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
   Py_VISIT(traverse_module_state->__pyx_ptype_5numpy_flexible);
   Py_VISIT(traverse_module_state->__pyx_ptype_5numpy_character);
   Py_VISIT(traverse_module_state->__pyx_ptype_5numpy_ufunc);
-  Py_VISIT(traverse_module_state->__pyx_ptype_6sympol_14integer_points___pyx_scope_struct___find_integer_points);
-  Py_VISIT(traverse_module_state->__pyx_type_6sympol_14integer_points___pyx_scope_struct___find_integer_points);
+  Py_VISIT(traverse_module_state->__pyx_ptype_6sympol_14integer_points___pyx_scope_struct__find_integer_points);
+  Py_VISIT(traverse_module_state->__pyx_type_6sympol_14integer_points___pyx_scope_struct__find_integer_points);
   Py_VISIT(traverse_module_state->__pyx_ptype_6sympol_14integer_points___pyx_scope_struct_1_genexpr);
   Py_VISIT(traverse_module_state->__pyx_type_6sympol_14integer_points___pyx_scope_struct_1_genexpr);
   Py_VISIT(traverse_module_state->__pyx_ptype_6sympol_14integer_points___pyx_scope_struct_2_genexpr);
@@ -3281,7 +3281,7 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
   Py_VISIT(traverse_module_state->__pyx_kp_u_enable);
   Py_VISIT(traverse_module_state->__pyx_n_s_enumerate);
   Py_VISIT(traverse_module_state->__pyx_n_s_find_integer_points);
-  Py_VISIT(traverse_module_state->__pyx_n_s_find_integer_points_locals_gene);
+  Py_VISIT(traverse_module_state->__pyx_n_s_find_integer_points_locals_genex);
   Py_VISIT(traverse_module_state->__pyx_n_s_forced_stop);
   Py_VISIT(traverse_module_state->__pyx_kp_u_gc);
   Py_VISIT(traverse_module_state->__pyx_n_s_genexpr);
@@ -3405,7 +3405,7 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
 #define __pyx_ptype_5numpy_character __pyx_mstate_global->__pyx_ptype_5numpy_character
 #define __pyx_ptype_5numpy_ufunc __pyx_mstate_global->__pyx_ptype_5numpy_ufunc
 #if CYTHON_USE_MODULE_STATE
-#define __pyx_type_6sympol_14integer_points___pyx_scope_struct___find_integer_points __pyx_mstate_global->__pyx_type_6sympol_14integer_points___pyx_scope_struct___find_integer_points
+#define __pyx_type_6sympol_14integer_points___pyx_scope_struct__find_integer_points __pyx_mstate_global->__pyx_type_6sympol_14integer_points___pyx_scope_struct__find_integer_points
 #define __pyx_type_6sympol_14integer_points___pyx_scope_struct_1_genexpr __pyx_mstate_global->__pyx_type_6sympol_14integer_points___pyx_scope_struct_1_genexpr
 #define __pyx_type_6sympol_14integer_points___pyx_scope_struct_2_genexpr __pyx_mstate_global->__pyx_type_6sympol_14integer_points___pyx_scope_struct_2_genexpr
 #define __pyx_type_6sympol_14integer_points___pyx_scope_struct_3_genexpr __pyx_mstate_global->__pyx_type_6sympol_14integer_points___pyx_scope_struct_3_genexpr
@@ -3414,7 +3414,7 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
 #define __pyx_type_6sympol_14integer_points___pyx_scope_struct_6_genexpr __pyx_mstate_global->__pyx_type_6sympol_14integer_points___pyx_scope_struct_6_genexpr
 #define __pyx_type_6sympol_14integer_points___pyx_scope_struct_7_genexpr __pyx_mstate_global->__pyx_type_6sympol_14integer_points___pyx_scope_struct_7_genexpr
 #endif
-#define __pyx_ptype_6sympol_14integer_points___pyx_scope_struct___find_integer_points __pyx_mstate_global->__pyx_ptype_6sympol_14integer_points___pyx_scope_struct___find_integer_points
+#define __pyx_ptype_6sympol_14integer_points___pyx_scope_struct__find_integer_points __pyx_mstate_global->__pyx_ptype_6sympol_14integer_points___pyx_scope_struct__find_integer_points
 #define __pyx_ptype_6sympol_14integer_points___pyx_scope_struct_1_genexpr __pyx_mstate_global->__pyx_ptype_6sympol_14integer_points___pyx_scope_struct_1_genexpr
 #define __pyx_ptype_6sympol_14integer_points___pyx_scope_struct_2_genexpr __pyx_mstate_global->__pyx_ptype_6sympol_14integer_points___pyx_scope_struct_2_genexpr
 #define __pyx_ptype_6sympol_14integer_points___pyx_scope_struct_3_genexpr __pyx_mstate_global->__pyx_ptype_6sympol_14integer_points___pyx_scope_struct_3_genexpr
@@ -3447,7 +3447,7 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
 #define __pyx_kp_u_enable __pyx_mstate_global->__pyx_kp_u_enable
 #define __pyx_n_s_enumerate __pyx_mstate_global->__pyx_n_s_enumerate
 #define __pyx_n_s_find_integer_points __pyx_mstate_global->__pyx_n_s_find_integer_points
-#define __pyx_n_s_find_integer_points_locals_gene __pyx_mstate_global->__pyx_n_s_find_integer_points_locals_gene
+#define __pyx_n_s_find_integer_points_locals_genex __pyx_mstate_global->__pyx_n_s_find_integer_points_locals_genex
 #define __pyx_n_s_forced_stop __pyx_mstate_global->__pyx_n_s_forced_stop
 #define __pyx_kp_u_gc __pyx_mstate_global->__pyx_kp_u_gc
 #define __pyx_n_s_genexpr __pyx_mstate_global->__pyx_n_s_genexpr
@@ -3510,7 +3510,7 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
 #define __pyx_codeobj__12 __pyx_mstate_global->__pyx_codeobj__12
 /* #### Code section: module_code ### */
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":245
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":245
  * 
  *         @property
  *         cdef inline PyObject* base(self) nogil:             # <<<<<<<<<<<<<<
@@ -3521,7 +3521,7 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
 static CYTHON_INLINE PyObject *__pyx_f_5numpy_7ndarray_4base_base(PyArrayObject *__pyx_v_self) {
   PyObject *__pyx_r;
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":248
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":248
  *             """Returns a borrowed reference to the object owning the data/memory.
  *             """
  *             return PyArray_BASE(self)             # <<<<<<<<<<<<<<
@@ -3531,7 +3531,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_7ndarray_4base_base(PyArrayObject 
   __pyx_r = PyArray_BASE(__pyx_v_self);
   goto __pyx_L0;
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":245
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":245
  * 
  *         @property
  *         cdef inline PyObject* base(self) nogil:             # <<<<<<<<<<<<<<
@@ -3544,7 +3544,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_7ndarray_4base_base(PyArrayObject 
   return __pyx_r;
 }
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":251
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":251
  * 
  *         @property
  *         cdef inline dtype descr(self):             # <<<<<<<<<<<<<<
@@ -3558,7 +3558,7 @@ static CYTHON_INLINE PyArray_Descr *__pyx_f_5numpy_7ndarray_5descr_descr(PyArray
   PyArray_Descr *__pyx_t_1;
   __Pyx_RefNannySetupContext("descr", 0);
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":254
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":254
  *             """Returns an owned reference to the dtype of the array.
  *             """
  *             return <dtype>PyArray_DESCR(self)             # <<<<<<<<<<<<<<
@@ -3571,7 +3571,7 @@ static CYTHON_INLINE PyArray_Descr *__pyx_f_5numpy_7ndarray_5descr_descr(PyArray
   __pyx_r = ((PyArray_Descr *)__pyx_t_1);
   goto __pyx_L0;
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":251
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":251
  * 
  *         @property
  *         cdef inline dtype descr(self):             # <<<<<<<<<<<<<<
@@ -3586,7 +3586,7 @@ static CYTHON_INLINE PyArray_Descr *__pyx_f_5numpy_7ndarray_5descr_descr(PyArray
   return __pyx_r;
 }
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":257
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":257
  * 
  *         @property
  *         cdef inline int ndim(self) nogil:             # <<<<<<<<<<<<<<
@@ -3597,7 +3597,7 @@ static CYTHON_INLINE PyArray_Descr *__pyx_f_5numpy_7ndarray_5descr_descr(PyArray
 static CYTHON_INLINE int __pyx_f_5numpy_7ndarray_4ndim_ndim(PyArrayObject *__pyx_v_self) {
   int __pyx_r;
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":260
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":260
  *             """Returns the number of dimensions in the array.
  *             """
  *             return PyArray_NDIM(self)             # <<<<<<<<<<<<<<
@@ -3607,7 +3607,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_7ndarray_4ndim_ndim(PyArrayObject *__pyx
   __pyx_r = PyArray_NDIM(__pyx_v_self);
   goto __pyx_L0;
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":257
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":257
  * 
  *         @property
  *         cdef inline int ndim(self) nogil:             # <<<<<<<<<<<<<<
@@ -3620,7 +3620,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_7ndarray_4ndim_ndim(PyArrayObject *__pyx
   return __pyx_r;
 }
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":263
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":263
  * 
  *         @property
  *         cdef inline npy_intp *shape(self) nogil:             # <<<<<<<<<<<<<<
@@ -3631,7 +3631,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_7ndarray_4ndim_ndim(PyArrayObject *__pyx
 static CYTHON_INLINE npy_intp *__pyx_f_5numpy_7ndarray_5shape_shape(PyArrayObject *__pyx_v_self) {
   npy_intp *__pyx_r;
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":268
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":268
  *             Can return NULL for 0-dimensional arrays.
  *             """
  *             return PyArray_DIMS(self)             # <<<<<<<<<<<<<<
@@ -3641,7 +3641,7 @@ static CYTHON_INLINE npy_intp *__pyx_f_5numpy_7ndarray_5shape_shape(PyArrayObjec
   __pyx_r = PyArray_DIMS(__pyx_v_self);
   goto __pyx_L0;
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":263
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":263
  * 
  *         @property
  *         cdef inline npy_intp *shape(self) nogil:             # <<<<<<<<<<<<<<
@@ -3654,7 +3654,7 @@ static CYTHON_INLINE npy_intp *__pyx_f_5numpy_7ndarray_5shape_shape(PyArrayObjec
   return __pyx_r;
 }
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":271
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":271
  * 
  *         @property
  *         cdef inline npy_intp *strides(self) nogil:             # <<<<<<<<<<<<<<
@@ -3665,7 +3665,7 @@ static CYTHON_INLINE npy_intp *__pyx_f_5numpy_7ndarray_5shape_shape(PyArrayObjec
 static CYTHON_INLINE npy_intp *__pyx_f_5numpy_7ndarray_7strides_strides(PyArrayObject *__pyx_v_self) {
   npy_intp *__pyx_r;
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":275
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":275
  *             The number of elements matches the number of dimensions of the array (ndim).
  *             """
  *             return PyArray_STRIDES(self)             # <<<<<<<<<<<<<<
@@ -3675,7 +3675,7 @@ static CYTHON_INLINE npy_intp *__pyx_f_5numpy_7ndarray_7strides_strides(PyArrayO
   __pyx_r = PyArray_STRIDES(__pyx_v_self);
   goto __pyx_L0;
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":271
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":271
  * 
  *         @property
  *         cdef inline npy_intp *strides(self) nogil:             # <<<<<<<<<<<<<<
@@ -3688,7 +3688,7 @@ static CYTHON_INLINE npy_intp *__pyx_f_5numpy_7ndarray_7strides_strides(PyArrayO
   return __pyx_r;
 }
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":278
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":278
  * 
  *         @property
  *         cdef inline npy_intp size(self) nogil:             # <<<<<<<<<<<<<<
@@ -3699,7 +3699,7 @@ static CYTHON_INLINE npy_intp *__pyx_f_5numpy_7ndarray_7strides_strides(PyArrayO
 static CYTHON_INLINE npy_intp __pyx_f_5numpy_7ndarray_4size_size(PyArrayObject *__pyx_v_self) {
   npy_intp __pyx_r;
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":281
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":281
  *             """Returns the total size (in number of elements) of the array.
  *             """
  *             return PyArray_SIZE(self)             # <<<<<<<<<<<<<<
@@ -3709,7 +3709,7 @@ static CYTHON_INLINE npy_intp __pyx_f_5numpy_7ndarray_4size_size(PyArrayObject *
   __pyx_r = PyArray_SIZE(__pyx_v_self);
   goto __pyx_L0;
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":278
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":278
  * 
  *         @property
  *         cdef inline npy_intp size(self) nogil:             # <<<<<<<<<<<<<<
@@ -3722,7 +3722,7 @@ static CYTHON_INLINE npy_intp __pyx_f_5numpy_7ndarray_4size_size(PyArrayObject *
   return __pyx_r;
 }
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":284
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":284
  * 
  *         @property
  *         cdef inline char* data(self) nogil:             # <<<<<<<<<<<<<<
@@ -3733,7 +3733,7 @@ static CYTHON_INLINE npy_intp __pyx_f_5numpy_7ndarray_4size_size(PyArrayObject *
 static CYTHON_INLINE char *__pyx_f_5numpy_7ndarray_4data_data(PyArrayObject *__pyx_v_self) {
   char *__pyx_r;
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":290
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":290
  *             of `PyArray_DATA()` instead, which returns a 'void*'.
  *             """
  *             return PyArray_BYTES(self)             # <<<<<<<<<<<<<<
@@ -3743,7 +3743,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy_7ndarray_4data_data(PyArrayObject *__p
   __pyx_r = PyArray_BYTES(__pyx_v_self);
   goto __pyx_L0;
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":284
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":284
  * 
  *         @property
  *         cdef inline char* data(self) nogil:             # <<<<<<<<<<<<<<
@@ -3756,7 +3756,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy_7ndarray_4data_data(PyArrayObject *__p
   return __pyx_r;
 }
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":773
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":773
  * ctypedef npy_cdouble     complex_t
  * 
  * cdef inline object PyArray_MultiIterNew1(a):             # <<<<<<<<<<<<<<
@@ -3773,7 +3773,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew1(PyObject *__
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("PyArray_MultiIterNew1", 0);
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":774
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":774
  * 
  * cdef inline object PyArray_MultiIterNew1(a):
  *     return PyArray_MultiIterNew(1, <void*>a)             # <<<<<<<<<<<<<<
@@ -3787,7 +3787,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew1(PyObject *__
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":773
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":773
  * ctypedef npy_cdouble     complex_t
  * 
  * cdef inline object PyArray_MultiIterNew1(a):             # <<<<<<<<<<<<<<
@@ -3806,7 +3806,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew1(PyObject *__
   return __pyx_r;
 }
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":776
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":776
  *     return PyArray_MultiIterNew(1, <void*>a)
  * 
  * cdef inline object PyArray_MultiIterNew2(a, b):             # <<<<<<<<<<<<<<
@@ -3823,7 +3823,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew2(PyObject *__
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("PyArray_MultiIterNew2", 0);
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":777
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":777
  * 
  * cdef inline object PyArray_MultiIterNew2(a, b):
  *     return PyArray_MultiIterNew(2, <void*>a, <void*>b)             # <<<<<<<<<<<<<<
@@ -3837,7 +3837,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew2(PyObject *__
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":776
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":776
  *     return PyArray_MultiIterNew(1, <void*>a)
  * 
  * cdef inline object PyArray_MultiIterNew2(a, b):             # <<<<<<<<<<<<<<
@@ -3856,7 +3856,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew2(PyObject *__
   return __pyx_r;
 }
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":779
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":779
  *     return PyArray_MultiIterNew(2, <void*>a, <void*>b)
  * 
  * cdef inline object PyArray_MultiIterNew3(a, b, c):             # <<<<<<<<<<<<<<
@@ -3873,7 +3873,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew3(PyObject *__
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("PyArray_MultiIterNew3", 0);
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":780
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":780
  * 
  * cdef inline object PyArray_MultiIterNew3(a, b, c):
  *     return PyArray_MultiIterNew(3, <void*>a, <void*>b, <void*> c)             # <<<<<<<<<<<<<<
@@ -3887,7 +3887,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew3(PyObject *__
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":779
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":779
  *     return PyArray_MultiIterNew(2, <void*>a, <void*>b)
  * 
  * cdef inline object PyArray_MultiIterNew3(a, b, c):             # <<<<<<<<<<<<<<
@@ -3906,7 +3906,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew3(PyObject *__
   return __pyx_r;
 }
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":782
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":782
  *     return PyArray_MultiIterNew(3, <void*>a, <void*>b, <void*> c)
  * 
  * cdef inline object PyArray_MultiIterNew4(a, b, c, d):             # <<<<<<<<<<<<<<
@@ -3923,7 +3923,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew4(PyObject *__
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("PyArray_MultiIterNew4", 0);
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":783
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":783
  * 
  * cdef inline object PyArray_MultiIterNew4(a, b, c, d):
  *     return PyArray_MultiIterNew(4, <void*>a, <void*>b, <void*>c, <void*> d)             # <<<<<<<<<<<<<<
@@ -3937,7 +3937,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew4(PyObject *__
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":782
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":782
  *     return PyArray_MultiIterNew(3, <void*>a, <void*>b, <void*> c)
  * 
  * cdef inline object PyArray_MultiIterNew4(a, b, c, d):             # <<<<<<<<<<<<<<
@@ -3956,7 +3956,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew4(PyObject *__
   return __pyx_r;
 }
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":785
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":785
  *     return PyArray_MultiIterNew(4, <void*>a, <void*>b, <void*>c, <void*> d)
  * 
  * cdef inline object PyArray_MultiIterNew5(a, b, c, d, e):             # <<<<<<<<<<<<<<
@@ -3973,7 +3973,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew5(PyObject *__
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("PyArray_MultiIterNew5", 0);
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":786
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":786
  * 
  * cdef inline object PyArray_MultiIterNew5(a, b, c, d, e):
  *     return PyArray_MultiIterNew(5, <void*>a, <void*>b, <void*>c, <void*> d, <void*> e)             # <<<<<<<<<<<<<<
@@ -3987,7 +3987,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew5(PyObject *__
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":785
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":785
  *     return PyArray_MultiIterNew(4, <void*>a, <void*>b, <void*>c, <void*> d)
  * 
  * cdef inline object PyArray_MultiIterNew5(a, b, c, d, e):             # <<<<<<<<<<<<<<
@@ -4006,7 +4006,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew5(PyObject *__
   return __pyx_r;
 }
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":788
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":788
  *     return PyArray_MultiIterNew(5, <void*>a, <void*>b, <void*>c, <void*> d, <void*> e)
  * 
  * cdef inline tuple PyDataType_SHAPE(dtype d):             # <<<<<<<<<<<<<<
@@ -4020,7 +4020,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyDataType_SHAPE(PyArray_Descr *__
   int __pyx_t_1;
   __Pyx_RefNannySetupContext("PyDataType_SHAPE", 0);
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":789
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":789
  * 
  * cdef inline tuple PyDataType_SHAPE(dtype d):
  *     if PyDataType_HASSUBARRAY(d):             # <<<<<<<<<<<<<<
@@ -4030,7 +4030,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyDataType_SHAPE(PyArray_Descr *__
   __pyx_t_1 = PyDataType_HASSUBARRAY(__pyx_v_d);
   if (__pyx_t_1) {
 
-    /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":790
+    /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":790
  * cdef inline tuple PyDataType_SHAPE(dtype d):
  *     if PyDataType_HASSUBARRAY(d):
  *         return <tuple>d.subarray.shape             # <<<<<<<<<<<<<<
@@ -4042,7 +4042,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyDataType_SHAPE(PyArray_Descr *__
     __pyx_r = ((PyObject*)__pyx_v_d->subarray->shape);
     goto __pyx_L0;
 
-    /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":789
+    /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":789
  * 
  * cdef inline tuple PyDataType_SHAPE(dtype d):
  *     if PyDataType_HASSUBARRAY(d):             # <<<<<<<<<<<<<<
@@ -4051,7 +4051,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyDataType_SHAPE(PyArray_Descr *__
  */
   }
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":792
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":792
  *         return <tuple>d.subarray.shape
  *     else:
  *         return ()             # <<<<<<<<<<<<<<
@@ -4065,7 +4065,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyDataType_SHAPE(PyArray_Descr *__
     goto __pyx_L0;
   }
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":788
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":788
  *     return PyArray_MultiIterNew(5, <void*>a, <void*>b, <void*>c, <void*> d, <void*> e)
  * 
  * cdef inline tuple PyDataType_SHAPE(dtype d):             # <<<<<<<<<<<<<<
@@ -4080,7 +4080,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyDataType_SHAPE(PyArray_Descr *__
   return __pyx_r;
 }
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":967
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":967
  *     int _import_umath() except -1
  * 
  * cdef inline void set_array_base(ndarray arr, object base):             # <<<<<<<<<<<<<<
@@ -4096,7 +4096,7 @@ static CYTHON_INLINE void __pyx_f_5numpy_set_array_base(PyArrayObject *__pyx_v_a
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("set_array_base", 0);
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":968
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":968
  * 
  * cdef inline void set_array_base(ndarray arr, object base):
  *     Py_INCREF(base) # important to do this before stealing the reference below!             # <<<<<<<<<<<<<<
@@ -4105,7 +4105,7 @@ static CYTHON_INLINE void __pyx_f_5numpy_set_array_base(PyArrayObject *__pyx_v_a
  */
   Py_INCREF(__pyx_v_base);
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":969
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":969
  * cdef inline void set_array_base(ndarray arr, object base):
  *     Py_INCREF(base) # important to do this before stealing the reference below!
  *     PyArray_SetBaseObject(arr, base)             # <<<<<<<<<<<<<<
@@ -4114,7 +4114,7 @@ static CYTHON_INLINE void __pyx_f_5numpy_set_array_base(PyArrayObject *__pyx_v_a
  */
   __pyx_t_1 = PyArray_SetBaseObject(__pyx_v_arr, __pyx_v_base); if (unlikely(__pyx_t_1 == ((int)-1))) __PYX_ERR(1, 969, __pyx_L1_error)
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":967
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":967
  *     int _import_umath() except -1
  * 
  * cdef inline void set_array_base(ndarray arr, object base):             # <<<<<<<<<<<<<<
@@ -4130,7 +4130,7 @@ static CYTHON_INLINE void __pyx_f_5numpy_set_array_base(PyArrayObject *__pyx_v_a
   __Pyx_RefNannyFinishContext();
 }
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":971
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":971
  *     PyArray_SetBaseObject(arr, base)
  * 
  * cdef inline object get_array_base(ndarray arr):             # <<<<<<<<<<<<<<
@@ -4145,7 +4145,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
   int __pyx_t_1;
   __Pyx_RefNannySetupContext("get_array_base", 0);
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":972
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":972
  * 
  * cdef inline object get_array_base(ndarray arr):
  *     base = PyArray_BASE(arr)             # <<<<<<<<<<<<<<
@@ -4154,7 +4154,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
  */
   __pyx_v_base = PyArray_BASE(__pyx_v_arr);
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":973
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":973
  * cdef inline object get_array_base(ndarray arr):
  *     base = PyArray_BASE(arr)
  *     if base is NULL:             # <<<<<<<<<<<<<<
@@ -4164,7 +4164,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
   __pyx_t_1 = (__pyx_v_base == NULL);
   if (__pyx_t_1) {
 
-    /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":974
+    /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":974
  *     base = PyArray_BASE(arr)
  *     if base is NULL:
  *         return None             # <<<<<<<<<<<<<<
@@ -4175,7 +4175,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
     __pyx_r = Py_None; __Pyx_INCREF(Py_None);
     goto __pyx_L0;
 
-    /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":973
+    /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":973
  * cdef inline object get_array_base(ndarray arr):
  *     base = PyArray_BASE(arr)
  *     if base is NULL:             # <<<<<<<<<<<<<<
@@ -4184,7 +4184,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
  */
   }
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":975
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":975
  *     if base is NULL:
  *         return None
  *     return <object>base             # <<<<<<<<<<<<<<
@@ -4196,7 +4196,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
   __pyx_r = ((PyObject *)__pyx_v_base);
   goto __pyx_L0;
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":971
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":971
  *     PyArray_SetBaseObject(arr, base)
  * 
  * cdef inline object get_array_base(ndarray arr):             # <<<<<<<<<<<<<<
@@ -4211,7 +4211,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
   return __pyx_r;
 }
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":979
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":979
  * # Versions of the import_* functions which are more suitable for
  * # Cython code.
  * cdef inline int import_array() except -1:             # <<<<<<<<<<<<<<
@@ -4235,7 +4235,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("import_array", 0);
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":980
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":980
  * # Cython code.
  * cdef inline int import_array() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -4251,7 +4251,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
     __Pyx_XGOTREF(__pyx_t_3);
     /*try:*/ {
 
-      /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":981
+      /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":981
  * cdef inline int import_array() except -1:
  *     try:
  *         __pyx_import_array()             # <<<<<<<<<<<<<<
@@ -4260,7 +4260,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
  */
       __pyx_t_4 = _import_array(); if (unlikely(__pyx_t_4 == ((int)-1))) __PYX_ERR(1, 981, __pyx_L3_error)
 
-      /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":980
+      /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":980
  * # Cython code.
  * cdef inline int import_array() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -4274,7 +4274,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
     goto __pyx_L8_try_end;
     __pyx_L3_error:;
 
-    /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":982
+    /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":982
  *     try:
  *         __pyx_import_array()
  *     except Exception:             # <<<<<<<<<<<<<<
@@ -4289,7 +4289,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
       __Pyx_XGOTREF(__pyx_t_6);
       __Pyx_XGOTREF(__pyx_t_7);
 
-      /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":983
+      /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":983
  *         __pyx_import_array()
  *     except Exception:
  *         raise ImportError("numpy.core.multiarray failed to import")             # <<<<<<<<<<<<<<
@@ -4304,7 +4304,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
     }
     goto __pyx_L5_except_error;
 
-    /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":980
+    /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":980
  * # Cython code.
  * cdef inline int import_array() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -4320,7 +4320,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
     __pyx_L8_try_end:;
   }
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":979
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":979
  * # Versions of the import_* functions which are more suitable for
  * # Cython code.
  * cdef inline int import_array() except -1:             # <<<<<<<<<<<<<<
@@ -4343,7 +4343,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
   return __pyx_r;
 }
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":985
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":985
  *         raise ImportError("numpy.core.multiarray failed to import")
  * 
  * cdef inline int import_umath() except -1:             # <<<<<<<<<<<<<<
@@ -4367,7 +4367,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("import_umath", 0);
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":986
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":986
  * 
  * cdef inline int import_umath() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -4383,7 +4383,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
     __Pyx_XGOTREF(__pyx_t_3);
     /*try:*/ {
 
-      /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":987
+      /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":987
  * cdef inline int import_umath() except -1:
  *     try:
  *         _import_umath()             # <<<<<<<<<<<<<<
@@ -4392,7 +4392,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
  */
       __pyx_t_4 = _import_umath(); if (unlikely(__pyx_t_4 == ((int)-1))) __PYX_ERR(1, 987, __pyx_L3_error)
 
-      /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":986
+      /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":986
  * 
  * cdef inline int import_umath() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -4406,7 +4406,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
     goto __pyx_L8_try_end;
     __pyx_L3_error:;
 
-    /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":988
+    /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":988
  *     try:
  *         _import_umath()
  *     except Exception:             # <<<<<<<<<<<<<<
@@ -4421,7 +4421,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
       __Pyx_XGOTREF(__pyx_t_6);
       __Pyx_XGOTREF(__pyx_t_7);
 
-      /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":989
+      /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":989
  *         _import_umath()
  *     except Exception:
  *         raise ImportError("numpy.core.umath failed to import")             # <<<<<<<<<<<<<<
@@ -4436,7 +4436,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
     }
     goto __pyx_L5_except_error;
 
-    /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":986
+    /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":986
  * 
  * cdef inline int import_umath() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -4452,7 +4452,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
     __pyx_L8_try_end:;
   }
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":985
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":985
  *         raise ImportError("numpy.core.multiarray failed to import")
  * 
  * cdef inline int import_umath() except -1:             # <<<<<<<<<<<<<<
@@ -4475,7 +4475,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
   return __pyx_r;
 }
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":991
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":991
  *         raise ImportError("numpy.core.umath failed to import")
  * 
  * cdef inline int import_ufunc() except -1:             # <<<<<<<<<<<<<<
@@ -4499,7 +4499,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("import_ufunc", 0);
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":992
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":992
  * 
  * cdef inline int import_ufunc() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -4515,7 +4515,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
     __Pyx_XGOTREF(__pyx_t_3);
     /*try:*/ {
 
-      /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":993
+      /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":993
  * cdef inline int import_ufunc() except -1:
  *     try:
  *         _import_umath()             # <<<<<<<<<<<<<<
@@ -4524,7 +4524,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
  */
       __pyx_t_4 = _import_umath(); if (unlikely(__pyx_t_4 == ((int)-1))) __PYX_ERR(1, 993, __pyx_L3_error)
 
-      /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":992
+      /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":992
  * 
  * cdef inline int import_ufunc() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -4538,7 +4538,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
     goto __pyx_L8_try_end;
     __pyx_L3_error:;
 
-    /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":994
+    /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":994
  *     try:
  *         _import_umath()
  *     except Exception:             # <<<<<<<<<<<<<<
@@ -4553,7 +4553,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
       __Pyx_XGOTREF(__pyx_t_6);
       __Pyx_XGOTREF(__pyx_t_7);
 
-      /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":995
+      /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":995
  *         _import_umath()
  *     except Exception:
  *         raise ImportError("numpy.core.umath failed to import")             # <<<<<<<<<<<<<<
@@ -4568,7 +4568,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
     }
     goto __pyx_L5_except_error;
 
-    /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":992
+    /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":992
  * 
  * cdef inline int import_ufunc() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -4584,7 +4584,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
     __pyx_L8_try_end:;
   }
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":991
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":991
  *         raise ImportError("numpy.core.umath failed to import")
  * 
  * cdef inline int import_ufunc() except -1:             # <<<<<<<<<<<<<<
@@ -4607,7 +4607,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
   return __pyx_r;
 }
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":998
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":998
  * 
  * 
  * cdef inline bint is_timedelta64_object(object obj):             # <<<<<<<<<<<<<<
@@ -4620,7 +4620,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_is_timedelta64_object(PyObject *__pyx_v_
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("is_timedelta64_object", 0);
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":1010
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":1010
  *     bool
  *     """
  *     return PyObject_TypeCheck(obj, &PyTimedeltaArrType_Type)             # <<<<<<<<<<<<<<
@@ -4630,7 +4630,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_is_timedelta64_object(PyObject *__pyx_v_
   __pyx_r = PyObject_TypeCheck(__pyx_v_obj, (&PyTimedeltaArrType_Type));
   goto __pyx_L0;
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":998
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":998
  * 
  * 
  * cdef inline bint is_timedelta64_object(object obj):             # <<<<<<<<<<<<<<
@@ -4644,7 +4644,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_is_timedelta64_object(PyObject *__pyx_v_
   return __pyx_r;
 }
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":1013
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":1013
  * 
  * 
  * cdef inline bint is_datetime64_object(object obj):             # <<<<<<<<<<<<<<
@@ -4657,7 +4657,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_is_datetime64_object(PyObject *__pyx_v_o
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("is_datetime64_object", 0);
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":1025
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":1025
  *     bool
  *     """
  *     return PyObject_TypeCheck(obj, &PyDatetimeArrType_Type)             # <<<<<<<<<<<<<<
@@ -4667,7 +4667,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_is_datetime64_object(PyObject *__pyx_v_o
   __pyx_r = PyObject_TypeCheck(__pyx_v_obj, (&PyDatetimeArrType_Type));
   goto __pyx_L0;
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":1013
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":1013
  * 
  * 
  * cdef inline bint is_datetime64_object(object obj):             # <<<<<<<<<<<<<<
@@ -4681,7 +4681,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_is_datetime64_object(PyObject *__pyx_v_o
   return __pyx_r;
 }
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":1028
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":1028
  * 
  * 
  * cdef inline npy_datetime get_datetime64_value(object obj) nogil:             # <<<<<<<<<<<<<<
@@ -4692,7 +4692,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_is_datetime64_object(PyObject *__pyx_v_o
 static CYTHON_INLINE npy_datetime __pyx_f_5numpy_get_datetime64_value(PyObject *__pyx_v_obj) {
   npy_datetime __pyx_r;
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":1035
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":1035
  *     also needed.  That can be found using `get_datetime64_unit`.
  *     """
  *     return (<PyDatetimeScalarObject*>obj).obval             # <<<<<<<<<<<<<<
@@ -4702,7 +4702,7 @@ static CYTHON_INLINE npy_datetime __pyx_f_5numpy_get_datetime64_value(PyObject *
   __pyx_r = ((PyDatetimeScalarObject *)__pyx_v_obj)->obval;
   goto __pyx_L0;
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":1028
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":1028
  * 
  * 
  * cdef inline npy_datetime get_datetime64_value(object obj) nogil:             # <<<<<<<<<<<<<<
@@ -4715,7 +4715,7 @@ static CYTHON_INLINE npy_datetime __pyx_f_5numpy_get_datetime64_value(PyObject *
   return __pyx_r;
 }
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":1038
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":1038
  * 
  * 
  * cdef inline npy_timedelta get_timedelta64_value(object obj) nogil:             # <<<<<<<<<<<<<<
@@ -4726,7 +4726,7 @@ static CYTHON_INLINE npy_datetime __pyx_f_5numpy_get_datetime64_value(PyObject *
 static CYTHON_INLINE npy_timedelta __pyx_f_5numpy_get_timedelta64_value(PyObject *__pyx_v_obj) {
   npy_timedelta __pyx_r;
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":1042
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":1042
  *     returns the int64 value underlying scalar numpy timedelta64 object
  *     """
  *     return (<PyTimedeltaScalarObject*>obj).obval             # <<<<<<<<<<<<<<
@@ -4736,7 +4736,7 @@ static CYTHON_INLINE npy_timedelta __pyx_f_5numpy_get_timedelta64_value(PyObject
   __pyx_r = ((PyTimedeltaScalarObject *)__pyx_v_obj)->obval;
   goto __pyx_L0;
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":1038
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":1038
  * 
  * 
  * cdef inline npy_timedelta get_timedelta64_value(object obj) nogil:             # <<<<<<<<<<<<<<
@@ -4749,7 +4749,7 @@ static CYTHON_INLINE npy_timedelta __pyx_f_5numpy_get_timedelta64_value(PyObject
   return __pyx_r;
 }
 
-/* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":1045
+/* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":1045
  * 
  * 
  * cdef inline NPY_DATETIMEUNIT get_datetime64_unit(object obj) nogil:             # <<<<<<<<<<<<<<
@@ -4760,7 +4760,7 @@ static CYTHON_INLINE npy_timedelta __pyx_f_5numpy_get_timedelta64_value(PyObject
 static CYTHON_INLINE NPY_DATETIMEUNIT __pyx_f_5numpy_get_datetime64_unit(PyObject *__pyx_v_obj) {
   NPY_DATETIMEUNIT __pyx_r;
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":1049
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":1049
  *     returns the unit part of the dtype for a numpy datetime64 object.
  *     """
  *     return <NPY_DATETIMEUNIT>(<PyDatetimeScalarObject*>obj).obmeta.base             # <<<<<<<<<<<<<<
@@ -4768,7 +4768,7 @@ static CYTHON_INLINE NPY_DATETIMEUNIT __pyx_f_5numpy_get_datetime64_unit(PyObjec
   __pyx_r = ((NPY_DATETIMEUNIT)((PyDatetimeScalarObject *)__pyx_v_obj)->obmeta.base);
   goto __pyx_L0;
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":1045
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":1045
  * 
  * 
  * cdef inline NPY_DATETIMEUNIT get_datetime64_unit(object obj) nogil:             # <<<<<<<<<<<<<<
@@ -4784,22 +4784,22 @@ static CYTHON_INLINE NPY_DATETIMEUNIT __pyx_f_5numpy_get_datetime64_unit(PyObjec
 /* "sympol/integer_points.pyx":8
  * ctypedef cnp.int64_t DTYPE_t
  * 
- * def _find_integer_points(             # <<<<<<<<<<<<<<
+ * def find_integer_points(             # <<<<<<<<<<<<<<
  *         cnp.ndarray[DTYPE_t, ndim=2] verts,
  *         cnp.ndarray ineqs,
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_6sympol_14integer_points_1_find_integer_points(PyObject *__pyx_self, 
+static PyObject *__pyx_pw_6sympol_14integer_points_1find_integer_points(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-PyDoc_STRVAR(__pyx_doc_6sympol_14integer_points__find_integer_points, "\n    Find all integer points in a polytope. returns a list of pairs (point, facet_ids)\n    where facet_ids is a list of the indices of the facets containing the point. Adapted\n    from the SageMath implementation by Volker Braun.\n    NOTE: This function is slow if compared with Barvinok's algorithm but I couldn't\n    find a better implementation available in Python.\n    ");
-static PyMethodDef __pyx_mdef_6sympol_14integer_points_1_find_integer_points = {"_find_integer_points", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_6sympol_14integer_points_1_find_integer_points, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_6sympol_14integer_points__find_integer_points};
-static PyObject *__pyx_pw_6sympol_14integer_points_1_find_integer_points(PyObject *__pyx_self, 
+PyDoc_STRVAR(__pyx_doc_6sympol_14integer_points_find_integer_points, "\n    Find all integer points in a polytope. returns a list of pairs (point, facet_ids)\n    where facet_ids is a list of the indices of the facets containing the point. Adapted\n    from the SageMath implementation by Volker Braun.\n    NOTE: This function is slow if compared with Barvinok's algorithm but I couldn't\n    find a better implementation available in Python.\n    ");
+static PyMethodDef __pyx_mdef_6sympol_14integer_points_1find_integer_points = {"find_integer_points", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_6sympol_14integer_points_1find_integer_points, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_6sympol_14integer_points_find_integer_points};
+static PyObject *__pyx_pw_6sympol_14integer_points_1find_integer_points(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -4821,7 +4821,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   int __pyx_clineno = 0;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("_find_integer_points (wrapper)", 0);
+  __Pyx_RefNannySetupContext("find_integer_points (wrapper)", 0);
   {
     PyObject **__pyx_pyargnames[] = {&__pyx_n_s_verts,&__pyx_n_s_ineqs,&__pyx_n_s_dim,&__pyx_n_s_count_only,&__pyx_n_s_stop_at,&__pyx_n_s_stop_at_interior,0};
     PyObject* values[6] = {0,0,0,0,0,0};
@@ -4854,14 +4854,14 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
         if (likely((values[1] = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_ineqs)) != 0)) kw_args--;
         else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 8, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("_find_integer_points", 0, 3, 6, 1); __PYX_ERR(0, 8, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("find_integer_points", 0, 3, 6, 1); __PYX_ERR(0, 8, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_dim)) != 0)) kw_args--;
         else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 8, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("_find_integer_points", 0, 3, 6, 2); __PYX_ERR(0, 8, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("find_integer_points", 0, 3, 6, 2); __PYX_ERR(0, 8, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
@@ -4887,7 +4887,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t kwd_pos_args = __pyx_nargs;
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "_find_integer_points") < 0)) __PYX_ERR(0, 8, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "find_integer_points") < 0)) __PYX_ERR(0, 8, __pyx_L3_error)
       }
     } else {
       switch (__pyx_nargs) {
@@ -4933,20 +4933,20 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("_find_integer_points", 0, 3, 6, __pyx_nargs); __PYX_ERR(0, 8, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("find_integer_points", 0, 3, 6, __pyx_nargs); __PYX_ERR(0, 8, __pyx_L3_error)
   __pyx_L3_error:;
-  __Pyx_AddTraceback("sympol.integer_points._find_integer_points", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("sympol.integer_points.find_integer_points", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_verts), __pyx_ptype_5numpy_ndarray, 1, "verts", 0))) __PYX_ERR(0, 9, __pyx_L1_error)
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_ineqs), __pyx_ptype_5numpy_ndarray, 1, "ineqs", 0))) __PYX_ERR(0, 10, __pyx_L1_error)
-  __pyx_r = __pyx_pf_6sympol_14integer_points__find_integer_points(__pyx_self, __pyx_v_verts, __pyx_v_ineqs, __pyx_v_dim, __pyx_v_count_only, __pyx_v_stop_at, __pyx_v_stop_at_interior);
+  __pyx_r = __pyx_pf_6sympol_14integer_points_find_integer_points(__pyx_self, __pyx_v_verts, __pyx_v_ineqs, __pyx_v_dim, __pyx_v_count_only, __pyx_v_stop_at, __pyx_v_stop_at_interior);
 
   /* "sympol/integer_points.pyx":8
  * ctypedef cnp.int64_t DTYPE_t
  * 
- * def _find_integer_points(             # <<<<<<<<<<<<<<
+ * def find_integer_points(             # <<<<<<<<<<<<<<
  *         cnp.ndarray[DTYPE_t, ndim=2] verts,
  *         cnp.ndarray ineqs,
  */
@@ -4959,7 +4959,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
-static PyObject *__pyx_gb_6sympol_14integer_points_20_find_integer_points_2generator(__pyx_CoroutineObject *__pyx_generator, CYTHON_UNUSED PyThreadState *__pyx_tstate, PyObject *__pyx_sent_value); /* proto */
+static PyObject *__pyx_gb_6sympol_14integer_points_19find_integer_points_2generator(__pyx_CoroutineObject *__pyx_generator, CYTHON_UNUSED PyThreadState *__pyx_tstate, PyObject *__pyx_sent_value); /* proto */
 
 /* "sympol/integer_points.pyx":56
  *         # Find the lower bound for the allowed region
@@ -4969,7 +4969,7 @@ static PyObject *__pyx_gb_6sympol_14integer_points_20_find_integer_points_2gener
  *                 if any(i_min * ineqs[i, 1] + tmp_v[i] == 0 for i in range(len(tmp_v))):
  */
 
-static PyObject *__pyx_pf_6sympol_14integer_points_20_find_integer_points_genexpr(PyObject *__pyx_self, Py_ssize_t __pyx_genexpr_arg_0) {
+static PyObject *__pyx_pf_6sympol_14integer_points_19find_integer_points_genexpr(PyObject *__pyx_self, Py_ssize_t __pyx_genexpr_arg_0) {
   struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct_1_genexpr *__pyx_cur_scope;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
@@ -4985,12 +4985,12 @@ static PyObject *__pyx_pf_6sympol_14integer_points_20_find_integer_points_genexp
   } else {
     __Pyx_GOTREF((PyObject *)__pyx_cur_scope);
   }
-  __pyx_cur_scope->__pyx_outer_scope = (struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct___find_integer_points *) __pyx_self;
+  __pyx_cur_scope->__pyx_outer_scope = (struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct__find_integer_points *) __pyx_self;
   __Pyx_INCREF((PyObject *)__pyx_cur_scope->__pyx_outer_scope);
   __Pyx_GIVEREF((PyObject *)__pyx_cur_scope->__pyx_outer_scope);
   __pyx_cur_scope->__pyx_genexpr_arg_0 = __pyx_genexpr_arg_0;
   {
-    __pyx_CoroutineObject *gen = __Pyx_Generator_New((__pyx_coroutine_body_t) __pyx_gb_6sympol_14integer_points_20_find_integer_points_2generator, NULL, (PyObject *) __pyx_cur_scope, __pyx_n_s_genexpr, __pyx_n_s_find_integer_points_locals_gene, __pyx_n_s_sympol_integer_points); if (unlikely(!gen)) __PYX_ERR(0, 56, __pyx_L1_error)
+    __pyx_CoroutineObject *gen = __Pyx_Generator_New((__pyx_coroutine_body_t) __pyx_gb_6sympol_14integer_points_19find_integer_points_2generator, NULL, (PyObject *) __pyx_cur_scope, __pyx_n_s_genexpr, __pyx_n_s_find_integer_points_locals_genex, __pyx_n_s_sympol_integer_points); if (unlikely(!gen)) __PYX_ERR(0, 56, __pyx_L1_error)
     __Pyx_DECREF(__pyx_cur_scope);
     __Pyx_RefNannyFinishContext();
     return (PyObject *) gen;
@@ -4998,7 +4998,7 @@ static PyObject *__pyx_pf_6sympol_14integer_points_20_find_integer_points_genexp
 
   /* function exit code */
   __pyx_L1_error:;
-  __Pyx_AddTraceback("sympol.integer_points._find_integer_points.genexpr", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("sympol.integer_points.find_integer_points.genexpr", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __Pyx_DECREF((PyObject *)__pyx_cur_scope);
   __Pyx_XGIVEREF(__pyx_r);
@@ -5006,7 +5006,7 @@ static PyObject *__pyx_pf_6sympol_14integer_points_20_find_integer_points_genexp
   return __pyx_r;
 }
 
-static PyObject *__pyx_gb_6sympol_14integer_points_20_find_integer_points_2generator(__pyx_CoroutineObject *__pyx_generator, CYTHON_UNUSED PyThreadState *__pyx_tstate, PyObject *__pyx_sent_value) /* generator body */
+static PyObject *__pyx_gb_6sympol_14integer_points_19find_integer_points_2generator(__pyx_CoroutineObject *__pyx_generator, CYTHON_UNUSED PyThreadState *__pyx_tstate, PyObject *__pyx_sent_value) /* generator body */
 {
   struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct_1_genexpr *__pyx_cur_scope = ((struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct_1_genexpr *)__pyx_generator->closure);
   PyObject *__pyx_r = NULL;
@@ -5100,7 +5100,7 @@ static PyObject *__pyx_gb_6sympol_14integer_points_20_find_integer_points_2gener
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
-static PyObject *__pyx_gb_6sympol_14integer_points_20_find_integer_points_5generator1(__pyx_CoroutineObject *__pyx_generator, CYTHON_UNUSED PyThreadState *__pyx_tstate, PyObject *__pyx_sent_value); /* proto */
+static PyObject *__pyx_gb_6sympol_14integer_points_19find_integer_points_5generator1(__pyx_CoroutineObject *__pyx_generator, CYTHON_UNUSED PyThreadState *__pyx_tstate, PyObject *__pyx_sent_value); /* proto */
 
 /* "sympol/integer_points.pyx":58
  *             if all(i_min * ineqs[i, 1] + tmp_v[i] >= 0 for i in range(len(tmp_v))):
@@ -5110,7 +5110,7 @@ static PyObject *__pyx_gb_6sympol_14integer_points_20_find_integer_points_5gener
  *                     ii_min = i_min + 1
  */
 
-static PyObject *__pyx_pf_6sympol_14integer_points_20_find_integer_points_3genexpr(PyObject *__pyx_self, Py_ssize_t __pyx_genexpr_arg_0) {
+static PyObject *__pyx_pf_6sympol_14integer_points_19find_integer_points_3genexpr(PyObject *__pyx_self, Py_ssize_t __pyx_genexpr_arg_0) {
   struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct_2_genexpr *__pyx_cur_scope;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
@@ -5126,12 +5126,12 @@ static PyObject *__pyx_pf_6sympol_14integer_points_20_find_integer_points_3genex
   } else {
     __Pyx_GOTREF((PyObject *)__pyx_cur_scope);
   }
-  __pyx_cur_scope->__pyx_outer_scope = (struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct___find_integer_points *) __pyx_self;
+  __pyx_cur_scope->__pyx_outer_scope = (struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct__find_integer_points *) __pyx_self;
   __Pyx_INCREF((PyObject *)__pyx_cur_scope->__pyx_outer_scope);
   __Pyx_GIVEREF((PyObject *)__pyx_cur_scope->__pyx_outer_scope);
   __pyx_cur_scope->__pyx_genexpr_arg_0 = __pyx_genexpr_arg_0;
   {
-    __pyx_CoroutineObject *gen = __Pyx_Generator_New((__pyx_coroutine_body_t) __pyx_gb_6sympol_14integer_points_20_find_integer_points_5generator1, NULL, (PyObject *) __pyx_cur_scope, __pyx_n_s_genexpr, __pyx_n_s_find_integer_points_locals_gene, __pyx_n_s_sympol_integer_points); if (unlikely(!gen)) __PYX_ERR(0, 58, __pyx_L1_error)
+    __pyx_CoroutineObject *gen = __Pyx_Generator_New((__pyx_coroutine_body_t) __pyx_gb_6sympol_14integer_points_19find_integer_points_5generator1, NULL, (PyObject *) __pyx_cur_scope, __pyx_n_s_genexpr, __pyx_n_s_find_integer_points_locals_genex, __pyx_n_s_sympol_integer_points); if (unlikely(!gen)) __PYX_ERR(0, 58, __pyx_L1_error)
     __Pyx_DECREF(__pyx_cur_scope);
     __Pyx_RefNannyFinishContext();
     return (PyObject *) gen;
@@ -5139,7 +5139,7 @@ static PyObject *__pyx_pf_6sympol_14integer_points_20_find_integer_points_3genex
 
   /* function exit code */
   __pyx_L1_error:;
-  __Pyx_AddTraceback("sympol.integer_points._find_integer_points.genexpr", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("sympol.integer_points.find_integer_points.genexpr", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __Pyx_DECREF((PyObject *)__pyx_cur_scope);
   __Pyx_XGIVEREF(__pyx_r);
@@ -5147,7 +5147,7 @@ static PyObject *__pyx_pf_6sympol_14integer_points_20_find_integer_points_3genex
   return __pyx_r;
 }
 
-static PyObject *__pyx_gb_6sympol_14integer_points_20_find_integer_points_5generator1(__pyx_CoroutineObject *__pyx_generator, CYTHON_UNUSED PyThreadState *__pyx_tstate, PyObject *__pyx_sent_value) /* generator body */
+static PyObject *__pyx_gb_6sympol_14integer_points_19find_integer_points_5generator1(__pyx_CoroutineObject *__pyx_generator, CYTHON_UNUSED PyThreadState *__pyx_tstate, PyObject *__pyx_sent_value) /* generator body */
 {
   struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct_2_genexpr *__pyx_cur_scope = ((struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct_2_genexpr *)__pyx_generator->closure);
   PyObject *__pyx_r = NULL;
@@ -5237,7 +5237,7 @@ static PyObject *__pyx_gb_6sympol_14integer_points_20_find_integer_points_5gener
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
-static PyObject *__pyx_gb_6sympol_14integer_points_20_find_integer_points_8generator2(__pyx_CoroutineObject *__pyx_generator, CYTHON_UNUSED PyThreadState *__pyx_tstate, PyObject *__pyx_sent_value); /* proto */
+static PyObject *__pyx_gb_6sympol_14integer_points_19find_integer_points_8generator2(__pyx_CoroutineObject *__pyx_generator, CYTHON_UNUSED PyThreadState *__pyx_tstate, PyObject *__pyx_sent_value); /* proto */
 
 /* "sympol/integer_points.pyx":61
  *                     # i_min is a boundary point, we need to go further to find interior p
@@ -5247,7 +5247,7 @@ static PyObject *__pyx_gb_6sympol_14integer_points_20_find_integer_points_8gener
  *                         # the interior of the polytope
  */
 
-static PyObject *__pyx_pf_6sympol_14integer_points_20_find_integer_points_6genexpr(PyObject *__pyx_self, Py_ssize_t __pyx_genexpr_arg_0) {
+static PyObject *__pyx_pf_6sympol_14integer_points_19find_integer_points_6genexpr(PyObject *__pyx_self, Py_ssize_t __pyx_genexpr_arg_0) {
   struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct_3_genexpr *__pyx_cur_scope;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
@@ -5263,12 +5263,12 @@ static PyObject *__pyx_pf_6sympol_14integer_points_20_find_integer_points_6genex
   } else {
     __Pyx_GOTREF((PyObject *)__pyx_cur_scope);
   }
-  __pyx_cur_scope->__pyx_outer_scope = (struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct___find_integer_points *) __pyx_self;
+  __pyx_cur_scope->__pyx_outer_scope = (struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct__find_integer_points *) __pyx_self;
   __Pyx_INCREF((PyObject *)__pyx_cur_scope->__pyx_outer_scope);
   __Pyx_GIVEREF((PyObject *)__pyx_cur_scope->__pyx_outer_scope);
   __pyx_cur_scope->__pyx_genexpr_arg_0 = __pyx_genexpr_arg_0;
   {
-    __pyx_CoroutineObject *gen = __Pyx_Generator_New((__pyx_coroutine_body_t) __pyx_gb_6sympol_14integer_points_20_find_integer_points_8generator2, NULL, (PyObject *) __pyx_cur_scope, __pyx_n_s_genexpr, __pyx_n_s_find_integer_points_locals_gene, __pyx_n_s_sympol_integer_points); if (unlikely(!gen)) __PYX_ERR(0, 61, __pyx_L1_error)
+    __pyx_CoroutineObject *gen = __Pyx_Generator_New((__pyx_coroutine_body_t) __pyx_gb_6sympol_14integer_points_19find_integer_points_8generator2, NULL, (PyObject *) __pyx_cur_scope, __pyx_n_s_genexpr, __pyx_n_s_find_integer_points_locals_genex, __pyx_n_s_sympol_integer_points); if (unlikely(!gen)) __PYX_ERR(0, 61, __pyx_L1_error)
     __Pyx_DECREF(__pyx_cur_scope);
     __Pyx_RefNannyFinishContext();
     return (PyObject *) gen;
@@ -5276,7 +5276,7 @@ static PyObject *__pyx_pf_6sympol_14integer_points_20_find_integer_points_6genex
 
   /* function exit code */
   __pyx_L1_error:;
-  __Pyx_AddTraceback("sympol.integer_points._find_integer_points.genexpr", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("sympol.integer_points.find_integer_points.genexpr", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __Pyx_DECREF((PyObject *)__pyx_cur_scope);
   __Pyx_XGIVEREF(__pyx_r);
@@ -5284,7 +5284,7 @@ static PyObject *__pyx_pf_6sympol_14integer_points_20_find_integer_points_6genex
   return __pyx_r;
 }
 
-static PyObject *__pyx_gb_6sympol_14integer_points_20_find_integer_points_8generator2(__pyx_CoroutineObject *__pyx_generator, CYTHON_UNUSED PyThreadState *__pyx_tstate, PyObject *__pyx_sent_value) /* generator body */
+static PyObject *__pyx_gb_6sympol_14integer_points_19find_integer_points_8generator2(__pyx_CoroutineObject *__pyx_generator, CYTHON_UNUSED PyThreadState *__pyx_tstate, PyObject *__pyx_sent_value) /* generator body */
 {
   struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct_3_genexpr *__pyx_cur_scope = ((struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct_3_genexpr *)__pyx_generator->closure);
   PyObject *__pyx_r = NULL;
@@ -5372,7 +5372,7 @@ static PyObject *__pyx_gb_6sympol_14integer_points_20_find_integer_points_8gener
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
-static PyObject *__pyx_gb_6sympol_14integer_points_20_find_integer_points_11generator3(__pyx_CoroutineObject *__pyx_generator, CYTHON_UNUSED PyThreadState *__pyx_tstate, PyObject *__pyx_sent_value); /* proto */
+static PyObject *__pyx_gb_6sympol_14integer_points_19find_integer_points_11generator3(__pyx_CoroutineObject *__pyx_generator, CYTHON_UNUSED PyThreadState *__pyx_tstate, PyObject *__pyx_sent_value); /* proto */
 
 /* "sympol/integer_points.pyx":71
  *         # Find the upper bound for the allowed region
@@ -5382,7 +5382,7 @@ static PyObject *__pyx_gb_6sympol_14integer_points_20_find_integer_points_11gene
  *                 if any(i_max * ineqs[i, 1] + tmp_v[i] == 0 for i in range(len(tmp_v))):
  */
 
-static PyObject *__pyx_pf_6sympol_14integer_points_20_find_integer_points_9genexpr(PyObject *__pyx_self, Py_ssize_t __pyx_genexpr_arg_0) {
+static PyObject *__pyx_pf_6sympol_14integer_points_19find_integer_points_9genexpr(PyObject *__pyx_self, Py_ssize_t __pyx_genexpr_arg_0) {
   struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct_4_genexpr *__pyx_cur_scope;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
@@ -5398,12 +5398,12 @@ static PyObject *__pyx_pf_6sympol_14integer_points_20_find_integer_points_9genex
   } else {
     __Pyx_GOTREF((PyObject *)__pyx_cur_scope);
   }
-  __pyx_cur_scope->__pyx_outer_scope = (struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct___find_integer_points *) __pyx_self;
+  __pyx_cur_scope->__pyx_outer_scope = (struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct__find_integer_points *) __pyx_self;
   __Pyx_INCREF((PyObject *)__pyx_cur_scope->__pyx_outer_scope);
   __Pyx_GIVEREF((PyObject *)__pyx_cur_scope->__pyx_outer_scope);
   __pyx_cur_scope->__pyx_genexpr_arg_0 = __pyx_genexpr_arg_0;
   {
-    __pyx_CoroutineObject *gen = __Pyx_Generator_New((__pyx_coroutine_body_t) __pyx_gb_6sympol_14integer_points_20_find_integer_points_11generator3, NULL, (PyObject *) __pyx_cur_scope, __pyx_n_s_genexpr, __pyx_n_s_find_integer_points_locals_gene, __pyx_n_s_sympol_integer_points); if (unlikely(!gen)) __PYX_ERR(0, 71, __pyx_L1_error)
+    __pyx_CoroutineObject *gen = __Pyx_Generator_New((__pyx_coroutine_body_t) __pyx_gb_6sympol_14integer_points_19find_integer_points_11generator3, NULL, (PyObject *) __pyx_cur_scope, __pyx_n_s_genexpr, __pyx_n_s_find_integer_points_locals_genex, __pyx_n_s_sympol_integer_points); if (unlikely(!gen)) __PYX_ERR(0, 71, __pyx_L1_error)
     __Pyx_DECREF(__pyx_cur_scope);
     __Pyx_RefNannyFinishContext();
     return (PyObject *) gen;
@@ -5411,7 +5411,7 @@ static PyObject *__pyx_pf_6sympol_14integer_points_20_find_integer_points_9genex
 
   /* function exit code */
   __pyx_L1_error:;
-  __Pyx_AddTraceback("sympol.integer_points._find_integer_points.genexpr", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("sympol.integer_points.find_integer_points.genexpr", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __Pyx_DECREF((PyObject *)__pyx_cur_scope);
   __Pyx_XGIVEREF(__pyx_r);
@@ -5419,7 +5419,7 @@ static PyObject *__pyx_pf_6sympol_14integer_points_20_find_integer_points_9genex
   return __pyx_r;
 }
 
-static PyObject *__pyx_gb_6sympol_14integer_points_20_find_integer_points_11generator3(__pyx_CoroutineObject *__pyx_generator, CYTHON_UNUSED PyThreadState *__pyx_tstate, PyObject *__pyx_sent_value) /* generator body */
+static PyObject *__pyx_gb_6sympol_14integer_points_19find_integer_points_11generator3(__pyx_CoroutineObject *__pyx_generator, CYTHON_UNUSED PyThreadState *__pyx_tstate, PyObject *__pyx_sent_value) /* generator body */
 {
   struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct_4_genexpr *__pyx_cur_scope = ((struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct_4_genexpr *)__pyx_generator->closure);
   PyObject *__pyx_r = NULL;
@@ -5513,7 +5513,7 @@ static PyObject *__pyx_gb_6sympol_14integer_points_20_find_integer_points_11gene
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
-static PyObject *__pyx_gb_6sympol_14integer_points_20_find_integer_points_14generator4(__pyx_CoroutineObject *__pyx_generator, CYTHON_UNUSED PyThreadState *__pyx_tstate, PyObject *__pyx_sent_value); /* proto */
+static PyObject *__pyx_gb_6sympol_14integer_points_19find_integer_points_14generator4(__pyx_CoroutineObject *__pyx_generator, CYTHON_UNUSED PyThreadState *__pyx_tstate, PyObject *__pyx_sent_value); /* proto */
 
 /* "sympol/integer_points.pyx":73
  *             if all(i_max * ineqs[i, 1] + tmp_v[i] >= 0 for i in range(len(tmp_v))):
@@ -5523,7 +5523,7 @@ static PyObject *__pyx_gb_6sympol_14integer_points_20_find_integer_points_14gene
  *                     ii_max = i_max - 1
  */
 
-static PyObject *__pyx_pf_6sympol_14integer_points_20_find_integer_points_12genexpr(PyObject *__pyx_self, Py_ssize_t __pyx_genexpr_arg_0) {
+static PyObject *__pyx_pf_6sympol_14integer_points_19find_integer_points_12genexpr(PyObject *__pyx_self, Py_ssize_t __pyx_genexpr_arg_0) {
   struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct_5_genexpr *__pyx_cur_scope;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
@@ -5539,12 +5539,12 @@ static PyObject *__pyx_pf_6sympol_14integer_points_20_find_integer_points_12gene
   } else {
     __Pyx_GOTREF((PyObject *)__pyx_cur_scope);
   }
-  __pyx_cur_scope->__pyx_outer_scope = (struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct___find_integer_points *) __pyx_self;
+  __pyx_cur_scope->__pyx_outer_scope = (struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct__find_integer_points *) __pyx_self;
   __Pyx_INCREF((PyObject *)__pyx_cur_scope->__pyx_outer_scope);
   __Pyx_GIVEREF((PyObject *)__pyx_cur_scope->__pyx_outer_scope);
   __pyx_cur_scope->__pyx_genexpr_arg_0 = __pyx_genexpr_arg_0;
   {
-    __pyx_CoroutineObject *gen = __Pyx_Generator_New((__pyx_coroutine_body_t) __pyx_gb_6sympol_14integer_points_20_find_integer_points_14generator4, NULL, (PyObject *) __pyx_cur_scope, __pyx_n_s_genexpr, __pyx_n_s_find_integer_points_locals_gene, __pyx_n_s_sympol_integer_points); if (unlikely(!gen)) __PYX_ERR(0, 73, __pyx_L1_error)
+    __pyx_CoroutineObject *gen = __Pyx_Generator_New((__pyx_coroutine_body_t) __pyx_gb_6sympol_14integer_points_19find_integer_points_14generator4, NULL, (PyObject *) __pyx_cur_scope, __pyx_n_s_genexpr, __pyx_n_s_find_integer_points_locals_genex, __pyx_n_s_sympol_integer_points); if (unlikely(!gen)) __PYX_ERR(0, 73, __pyx_L1_error)
     __Pyx_DECREF(__pyx_cur_scope);
     __Pyx_RefNannyFinishContext();
     return (PyObject *) gen;
@@ -5552,7 +5552,7 @@ static PyObject *__pyx_pf_6sympol_14integer_points_20_find_integer_points_12gene
 
   /* function exit code */
   __pyx_L1_error:;
-  __Pyx_AddTraceback("sympol.integer_points._find_integer_points.genexpr", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("sympol.integer_points.find_integer_points.genexpr", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __Pyx_DECREF((PyObject *)__pyx_cur_scope);
   __Pyx_XGIVEREF(__pyx_r);
@@ -5560,7 +5560,7 @@ static PyObject *__pyx_pf_6sympol_14integer_points_20_find_integer_points_12gene
   return __pyx_r;
 }
 
-static PyObject *__pyx_gb_6sympol_14integer_points_20_find_integer_points_14generator4(__pyx_CoroutineObject *__pyx_generator, CYTHON_UNUSED PyThreadState *__pyx_tstate, PyObject *__pyx_sent_value) /* generator body */
+static PyObject *__pyx_gb_6sympol_14integer_points_19find_integer_points_14generator4(__pyx_CoroutineObject *__pyx_generator, CYTHON_UNUSED PyThreadState *__pyx_tstate, PyObject *__pyx_sent_value) /* generator body */
 {
   struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct_5_genexpr *__pyx_cur_scope = ((struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct_5_genexpr *)__pyx_generator->closure);
   PyObject *__pyx_r = NULL;
@@ -5650,7 +5650,7 @@ static PyObject *__pyx_gb_6sympol_14integer_points_20_find_integer_points_14gene
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
-static PyObject *__pyx_gb_6sympol_14integer_points_20_find_integer_points_17generator5(__pyx_CoroutineObject *__pyx_generator, CYTHON_UNUSED PyThreadState *__pyx_tstate, PyObject *__pyx_sent_value); /* proto */
+static PyObject *__pyx_gb_6sympol_14integer_points_19find_integer_points_17generator5(__pyx_CoroutineObject *__pyx_generator, CYTHON_UNUSED PyThreadState *__pyx_tstate, PyObject *__pyx_sent_value); /* proto */
 
 /* "sympol/integer_points.pyx":76
  *                     # i_max is a boundary point, we need to go further to find interior p
@@ -5660,7 +5660,7 @@ static PyObject *__pyx_gb_6sympol_14integer_points_20_find_integer_points_17gene
  *                         # the interior of the polytope
  */
 
-static PyObject *__pyx_pf_6sympol_14integer_points_20_find_integer_points_15genexpr(PyObject *__pyx_self, Py_ssize_t __pyx_genexpr_arg_0) {
+static PyObject *__pyx_pf_6sympol_14integer_points_19find_integer_points_15genexpr(PyObject *__pyx_self, Py_ssize_t __pyx_genexpr_arg_0) {
   struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct_6_genexpr *__pyx_cur_scope;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
@@ -5676,12 +5676,12 @@ static PyObject *__pyx_pf_6sympol_14integer_points_20_find_integer_points_15gene
   } else {
     __Pyx_GOTREF((PyObject *)__pyx_cur_scope);
   }
-  __pyx_cur_scope->__pyx_outer_scope = (struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct___find_integer_points *) __pyx_self;
+  __pyx_cur_scope->__pyx_outer_scope = (struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct__find_integer_points *) __pyx_self;
   __Pyx_INCREF((PyObject *)__pyx_cur_scope->__pyx_outer_scope);
   __Pyx_GIVEREF((PyObject *)__pyx_cur_scope->__pyx_outer_scope);
   __pyx_cur_scope->__pyx_genexpr_arg_0 = __pyx_genexpr_arg_0;
   {
-    __pyx_CoroutineObject *gen = __Pyx_Generator_New((__pyx_coroutine_body_t) __pyx_gb_6sympol_14integer_points_20_find_integer_points_17generator5, NULL, (PyObject *) __pyx_cur_scope, __pyx_n_s_genexpr, __pyx_n_s_find_integer_points_locals_gene, __pyx_n_s_sympol_integer_points); if (unlikely(!gen)) __PYX_ERR(0, 76, __pyx_L1_error)
+    __pyx_CoroutineObject *gen = __Pyx_Generator_New((__pyx_coroutine_body_t) __pyx_gb_6sympol_14integer_points_19find_integer_points_17generator5, NULL, (PyObject *) __pyx_cur_scope, __pyx_n_s_genexpr, __pyx_n_s_find_integer_points_locals_genex, __pyx_n_s_sympol_integer_points); if (unlikely(!gen)) __PYX_ERR(0, 76, __pyx_L1_error)
     __Pyx_DECREF(__pyx_cur_scope);
     __Pyx_RefNannyFinishContext();
     return (PyObject *) gen;
@@ -5689,7 +5689,7 @@ static PyObject *__pyx_pf_6sympol_14integer_points_20_find_integer_points_15gene
 
   /* function exit code */
   __pyx_L1_error:;
-  __Pyx_AddTraceback("sympol.integer_points._find_integer_points.genexpr", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("sympol.integer_points.find_integer_points.genexpr", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __Pyx_DECREF((PyObject *)__pyx_cur_scope);
   __Pyx_XGIVEREF(__pyx_r);
@@ -5697,7 +5697,7 @@ static PyObject *__pyx_pf_6sympol_14integer_points_20_find_integer_points_15gene
   return __pyx_r;
 }
 
-static PyObject *__pyx_gb_6sympol_14integer_points_20_find_integer_points_17generator5(__pyx_CoroutineObject *__pyx_generator, CYTHON_UNUSED PyThreadState *__pyx_tstate, PyObject *__pyx_sent_value) /* generator body */
+static PyObject *__pyx_gb_6sympol_14integer_points_19find_integer_points_17generator5(__pyx_CoroutineObject *__pyx_generator, CYTHON_UNUSED PyThreadState *__pyx_tstate, PyObject *__pyx_sent_value) /* generator body */
 {
   struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct_6_genexpr *__pyx_cur_scope = ((struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct_6_genexpr *)__pyx_generator->closure);
   PyObject *__pyx_r = NULL;
@@ -5785,7 +5785,7 @@ static PyObject *__pyx_gb_6sympol_14integer_points_20_find_integer_points_17gene
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
-static PyObject *__pyx_gb_6sympol_14integer_points_20_find_integer_points_20generator6(__pyx_CoroutineObject *__pyx_generator, CYTHON_UNUSED PyThreadState *__pyx_tstate, PyObject *__pyx_sent_value); /* proto */
+static PyObject *__pyx_gb_6sympol_14integer_points_19find_integer_points_20generator6(__pyx_CoroutineObject *__pyx_generator, CYTHON_UNUSED PyThreadState *__pyx_tstate, PyObject *__pyx_sent_value); /* proto */
 
 /* "sympol/integer_points.pyx":98
  *                     boundary_points.append(np.array(p)[orig_perm])
@@ -5795,7 +5795,7 @@ static PyObject *__pyx_gb_6sympol_14integer_points_20_find_integer_points_20gene
  *                     saturated_facets.append(saturated)
  */
 
-static PyObject *__pyx_pf_6sympol_14integer_points_20_find_integer_points_18genexpr(PyObject *__pyx_self, Py_ssize_t __pyx_genexpr_arg_0) {
+static PyObject *__pyx_pf_6sympol_14integer_points_19find_integer_points_18genexpr(PyObject *__pyx_self, Py_ssize_t __pyx_genexpr_arg_0) {
   struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct_7_genexpr *__pyx_cur_scope;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
@@ -5811,12 +5811,12 @@ static PyObject *__pyx_pf_6sympol_14integer_points_20_find_integer_points_18gene
   } else {
     __Pyx_GOTREF((PyObject *)__pyx_cur_scope);
   }
-  __pyx_cur_scope->__pyx_outer_scope = (struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct___find_integer_points *) __pyx_self;
+  __pyx_cur_scope->__pyx_outer_scope = (struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct__find_integer_points *) __pyx_self;
   __Pyx_INCREF((PyObject *)__pyx_cur_scope->__pyx_outer_scope);
   __Pyx_GIVEREF((PyObject *)__pyx_cur_scope->__pyx_outer_scope);
   __pyx_cur_scope->__pyx_genexpr_arg_0 = __pyx_genexpr_arg_0;
   {
-    __pyx_CoroutineObject *gen = __Pyx_Generator_New((__pyx_coroutine_body_t) __pyx_gb_6sympol_14integer_points_20_find_integer_points_20generator6, NULL, (PyObject *) __pyx_cur_scope, __pyx_n_s_genexpr, __pyx_n_s_find_integer_points_locals_gene, __pyx_n_s_sympol_integer_points); if (unlikely(!gen)) __PYX_ERR(0, 98, __pyx_L1_error)
+    __pyx_CoroutineObject *gen = __Pyx_Generator_New((__pyx_coroutine_body_t) __pyx_gb_6sympol_14integer_points_19find_integer_points_20generator6, NULL, (PyObject *) __pyx_cur_scope, __pyx_n_s_genexpr, __pyx_n_s_find_integer_points_locals_genex, __pyx_n_s_sympol_integer_points); if (unlikely(!gen)) __PYX_ERR(0, 98, __pyx_L1_error)
     __Pyx_DECREF(__pyx_cur_scope);
     __Pyx_RefNannyFinishContext();
     return (PyObject *) gen;
@@ -5824,7 +5824,7 @@ static PyObject *__pyx_pf_6sympol_14integer_points_20_find_integer_points_18gene
 
   /* function exit code */
   __pyx_L1_error:;
-  __Pyx_AddTraceback("sympol.integer_points._find_integer_points.genexpr", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("sympol.integer_points.find_integer_points.genexpr", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __Pyx_DECREF((PyObject *)__pyx_cur_scope);
   __Pyx_XGIVEREF(__pyx_r);
@@ -5832,7 +5832,7 @@ static PyObject *__pyx_pf_6sympol_14integer_points_20_find_integer_points_18gene
   return __pyx_r;
 }
 
-static PyObject *__pyx_gb_6sympol_14integer_points_20_find_integer_points_20generator6(__pyx_CoroutineObject *__pyx_generator, CYTHON_UNUSED PyThreadState *__pyx_tstate, PyObject *__pyx_sent_value) /* generator body */
+static PyObject *__pyx_gb_6sympol_14integer_points_19find_integer_points_20generator6(__pyx_CoroutineObject *__pyx_generator, CYTHON_UNUSED PyThreadState *__pyx_tstate, PyObject *__pyx_sent_value) /* generator body */
 {
   struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct_7_genexpr *__pyx_cur_scope = ((struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct_7_genexpr *)__pyx_generator->closure);
   PyObject *__pyx_r = NULL;
@@ -5936,13 +5936,13 @@ static PyObject *__pyx_gb_6sympol_14integer_points_20_find_integer_points_20gene
 /* "sympol/integer_points.pyx":8
  * ctypedef cnp.int64_t DTYPE_t
  * 
- * def _find_integer_points(             # <<<<<<<<<<<<<<
+ * def find_integer_points(             # <<<<<<<<<<<<<<
  *         cnp.ndarray[DTYPE_t, ndim=2] verts,
  *         cnp.ndarray ineqs,
  */
 
-static PyObject *__pyx_pf_6sympol_14integer_points__find_integer_points(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_verts, PyArrayObject *__pyx_v_ineqs, int __pyx_v_dim, int __pyx_v_count_only, int __pyx_v_stop_at, int __pyx_v_stop_at_interior) {
-  struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct___find_integer_points *__pyx_cur_scope;
+static PyObject *__pyx_pf_6sympol_14integer_points_find_integer_points(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_verts, PyArrayObject *__pyx_v_ineqs, int __pyx_v_dim, int __pyx_v_count_only, int __pyx_v_stop_at, int __pyx_v_stop_at_interior) {
+  struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct__find_integer_points *__pyx_cur_scope;
   PyArrayObject *__pyx_v_box_min = 0;
   PyArrayObject *__pyx_v_box_max = 0;
   PyArrayObject *__pyx_v_box_diff = 0;
@@ -5966,13 +5966,13 @@ static PyObject *__pyx_pf_6sympol_14integer_points__find_integer_points(CYTHON_U
   __pyx_t_6sympol_14integer_points_DTYPE_t __pyx_8genexpr2__pyx_v_i;
   PyObject *__pyx_8genexpr2__pyx_v_j = NULL;
   __pyx_t_6sympol_14integer_points_DTYPE_t __pyx_8genexpr3__pyx_v_i;
-  PyObject *__pyx_gb_6sympol_14integer_points_20_find_integer_points_2generator = 0;
-  PyObject *__pyx_gb_6sympol_14integer_points_20_find_integer_points_5generator1 = 0;
-  PyObject *__pyx_gb_6sympol_14integer_points_20_find_integer_points_8generator2 = 0;
-  PyObject *__pyx_gb_6sympol_14integer_points_20_find_integer_points_11generator3 = 0;
-  PyObject *__pyx_gb_6sympol_14integer_points_20_find_integer_points_14generator4 = 0;
-  PyObject *__pyx_gb_6sympol_14integer_points_20_find_integer_points_17generator5 = 0;
-  PyObject *__pyx_gb_6sympol_14integer_points_20_find_integer_points_20generator6 = 0;
+  PyObject *__pyx_gb_6sympol_14integer_points_19find_integer_points_2generator = 0;
+  PyObject *__pyx_gb_6sympol_14integer_points_19find_integer_points_5generator1 = 0;
+  PyObject *__pyx_gb_6sympol_14integer_points_19find_integer_points_8generator2 = 0;
+  PyObject *__pyx_gb_6sympol_14integer_points_19find_integer_points_11generator3 = 0;
+  PyObject *__pyx_gb_6sympol_14integer_points_19find_integer_points_14generator4 = 0;
+  PyObject *__pyx_gb_6sympol_14integer_points_19find_integer_points_17generator5 = 0;
+  PyObject *__pyx_gb_6sympol_14integer_points_19find_integer_points_20generator6 = 0;
   __Pyx_LocalBuf_ND __pyx_pybuffernd_boundary_points_arr;
   __Pyx_Buffer __pyx_pybuffer_boundary_points_arr;
   __Pyx_LocalBuf_ND __pyx_pybuffernd_box_diff;
@@ -6020,10 +6020,10 @@ static PyObject *__pyx_pf_6sympol_14integer_points__find_integer_points(CYTHON_U
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("_find_integer_points", 0);
-  __pyx_cur_scope = (struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct___find_integer_points *)__pyx_tp_new_6sympol_14integer_points___pyx_scope_struct___find_integer_points(__pyx_ptype_6sympol_14integer_points___pyx_scope_struct___find_integer_points, __pyx_empty_tuple, NULL);
+  __Pyx_RefNannySetupContext("find_integer_points", 0);
+  __pyx_cur_scope = (struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct__find_integer_points *)__pyx_tp_new_6sympol_14integer_points___pyx_scope_struct__find_integer_points(__pyx_ptype_6sympol_14integer_points___pyx_scope_struct__find_integer_points, __pyx_empty_tuple, NULL);
   if (unlikely(!__pyx_cur_scope)) {
-    __pyx_cur_scope = ((struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct___find_integer_points *)Py_None);
+    __pyx_cur_scope = ((struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct__find_integer_points *)Py_None);
     __Pyx_INCREF(Py_None);
     __PYX_ERR(0, 8, __pyx_L1_error)
   } else {
@@ -6736,7 +6736,7 @@ static PyObject *__pyx_pf_6sympol_14integer_points__find_integer_points(CYTHON_U
       __Pyx_INCREF(__pyx_t_3);
       __pyx_t_13 = PyObject_Length(__pyx_t_3); if (unlikely(__pyx_t_13 == ((Py_ssize_t)-1))) __PYX_ERR(0, 56, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __pyx_t_3 = __pyx_pf_6sympol_14integer_points_20_find_integer_points_genexpr(((PyObject*)__pyx_cur_scope), __pyx_t_13); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 56, __pyx_L1_error)
+      __pyx_t_3 = __pyx_pf_6sympol_14integer_points_19find_integer_points_genexpr(((PyObject*)__pyx_cur_scope), __pyx_t_13); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 56, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __pyx_t_2 = __Pyx_Generator_Next(__pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 56, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
@@ -6756,7 +6756,7 @@ static PyObject *__pyx_pf_6sympol_14integer_points__find_integer_points(CYTHON_U
         __Pyx_INCREF(__pyx_t_2);
         __pyx_t_13 = PyObject_Length(__pyx_t_2); if (unlikely(__pyx_t_13 == ((Py_ssize_t)-1))) __PYX_ERR(0, 58, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-        __pyx_t_2 = __pyx_pf_6sympol_14integer_points_20_find_integer_points_3genexpr(((PyObject*)__pyx_cur_scope), __pyx_t_13); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 58, __pyx_L1_error)
+        __pyx_t_2 = __pyx_pf_6sympol_14integer_points_19find_integer_points_3genexpr(((PyObject*)__pyx_cur_scope), __pyx_t_13); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 58, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __pyx_t_3 = __Pyx_Generator_Next(__pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 58, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
@@ -6790,7 +6790,7 @@ static PyObject *__pyx_pf_6sympol_14integer_points__find_integer_points(CYTHON_U
           __Pyx_INCREF(__pyx_t_3);
           __pyx_t_13 = PyObject_Length(__pyx_t_3); if (unlikely(__pyx_t_13 == ((Py_ssize_t)-1))) __PYX_ERR(0, 61, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-          __pyx_t_3 = __pyx_pf_6sympol_14integer_points_20_find_integer_points_6genexpr(((PyObject*)__pyx_cur_scope), __pyx_t_13); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 61, __pyx_L1_error)
+          __pyx_t_3 = __pyx_pf_6sympol_14integer_points_19find_integer_points_6genexpr(((PyObject*)__pyx_cur_scope), __pyx_t_13); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 61, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_3);
           __pyx_t_2 = __Pyx_Generator_Next(__pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 61, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_2);
@@ -6906,7 +6906,7 @@ static PyObject *__pyx_pf_6sympol_14integer_points__find_integer_points(CYTHON_U
       __Pyx_INCREF(__pyx_t_2);
       __pyx_t_13 = PyObject_Length(__pyx_t_2); if (unlikely(__pyx_t_13 == ((Py_ssize_t)-1))) __PYX_ERR(0, 71, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __pyx_t_2 = __pyx_pf_6sympol_14integer_points_20_find_integer_points_9genexpr(((PyObject*)__pyx_cur_scope), __pyx_t_13); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 71, __pyx_L1_error)
+      __pyx_t_2 = __pyx_pf_6sympol_14integer_points_19find_integer_points_9genexpr(((PyObject*)__pyx_cur_scope), __pyx_t_13); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 71, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __pyx_t_3 = __Pyx_Generator_Next(__pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 71, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
@@ -6926,7 +6926,7 @@ static PyObject *__pyx_pf_6sympol_14integer_points__find_integer_points(CYTHON_U
         __Pyx_INCREF(__pyx_t_3);
         __pyx_t_13 = PyObject_Length(__pyx_t_3); if (unlikely(__pyx_t_13 == ((Py_ssize_t)-1))) __PYX_ERR(0, 73, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __pyx_t_3 = __pyx_pf_6sympol_14integer_points_20_find_integer_points_12genexpr(((PyObject*)__pyx_cur_scope), __pyx_t_13); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 73, __pyx_L1_error)
+        __pyx_t_3 = __pyx_pf_6sympol_14integer_points_19find_integer_points_12genexpr(((PyObject*)__pyx_cur_scope), __pyx_t_13); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 73, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         __pyx_t_2 = __Pyx_Generator_Next(__pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 73, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
@@ -6960,7 +6960,7 @@ static PyObject *__pyx_pf_6sympol_14integer_points__find_integer_points(CYTHON_U
           __Pyx_INCREF(__pyx_t_2);
           __pyx_t_13 = PyObject_Length(__pyx_t_2); if (unlikely(__pyx_t_13 == ((Py_ssize_t)-1))) __PYX_ERR(0, 76, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-          __pyx_t_2 = __pyx_pf_6sympol_14integer_points_20_find_integer_points_15genexpr(((PyObject*)__pyx_cur_scope), __pyx_t_13); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 76, __pyx_L1_error)
+          __pyx_t_2 = __pyx_pf_6sympol_14integer_points_19find_integer_points_15genexpr(((PyObject*)__pyx_cur_scope), __pyx_t_13); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 76, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_2);
           __pyx_t_3 = __Pyx_Generator_Next(__pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 76, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_3);
@@ -7281,7 +7281,7 @@ static PyObject *__pyx_pf_6sympol_14integer_points__find_integer_points(CYTHON_U
           __Pyx_INCREF(__pyx_t_7);
           __pyx_t_13 = PyObject_Length(__pyx_t_7); if (unlikely(__pyx_t_13 == ((Py_ssize_t)-1))) __PYX_ERR(0, 98, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-          __pyx_t_7 = __pyx_pf_6sympol_14integer_points_20_find_integer_points_18genexpr(((PyObject*)__pyx_cur_scope), __pyx_t_13); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 98, __pyx_L1_error)
+          __pyx_t_7 = __pyx_pf_6sympol_14integer_points_19find_integer_points_18genexpr(((PyObject*)__pyx_cur_scope), __pyx_t_13); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 98, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_7);
 
           /* "sympol/integer_points.pyx":97
@@ -7836,7 +7836,7 @@ static PyObject *__pyx_pf_6sympol_14integer_points__find_integer_points(CYTHON_U
   /* "sympol/integer_points.pyx":8
  * ctypedef cnp.int64_t DTYPE_t
  * 
- * def _find_integer_points(             # <<<<<<<<<<<<<<
+ * def find_integer_points(             # <<<<<<<<<<<<<<
  *         cnp.ndarray[DTYPE_t, ndim=2] verts,
  *         cnp.ndarray ineqs,
  */
@@ -7861,7 +7861,7 @@ static PyObject *__pyx_pf_6sympol_14integer_points__find_integer_points(CYTHON_U
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_p.rcbuffer->pybuffer);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_verts.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_AddTraceback("sympol.integer_points._find_integer_points", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("sympol.integer_points.find_integer_points", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   goto __pyx_L2;
   __pyx_L0:;
@@ -7888,31 +7888,31 @@ static PyObject *__pyx_pf_6sympol_14integer_points__find_integer_points(CYTHON_U
   __Pyx_XDECREF((PyObject *)__pyx_v_interior_points_arr);
   __Pyx_XDECREF((PyObject *)__pyx_v_boundary_points_arr);
   __Pyx_XDECREF(__pyx_8genexpr2__pyx_v_j);
-  __Pyx_XDECREF(__pyx_gb_6sympol_14integer_points_20_find_integer_points_2generator);
-  __Pyx_XDECREF(__pyx_gb_6sympol_14integer_points_20_find_integer_points_5generator1);
-  __Pyx_XDECREF(__pyx_gb_6sympol_14integer_points_20_find_integer_points_8generator2);
-  __Pyx_XDECREF(__pyx_gb_6sympol_14integer_points_20_find_integer_points_11generator3);
-  __Pyx_XDECREF(__pyx_gb_6sympol_14integer_points_20_find_integer_points_14generator4);
-  __Pyx_XDECREF(__pyx_gb_6sympol_14integer_points_20_find_integer_points_17generator5);
-  __Pyx_XDECREF(__pyx_gb_6sympol_14integer_points_20_find_integer_points_20generator6);
+  __Pyx_XDECREF(__pyx_gb_6sympol_14integer_points_19find_integer_points_2generator);
+  __Pyx_XDECREF(__pyx_gb_6sympol_14integer_points_19find_integer_points_5generator1);
+  __Pyx_XDECREF(__pyx_gb_6sympol_14integer_points_19find_integer_points_8generator2);
+  __Pyx_XDECREF(__pyx_gb_6sympol_14integer_points_19find_integer_points_11generator3);
+  __Pyx_XDECREF(__pyx_gb_6sympol_14integer_points_19find_integer_points_14generator4);
+  __Pyx_XDECREF(__pyx_gb_6sympol_14integer_points_19find_integer_points_17generator5);
+  __Pyx_XDECREF(__pyx_gb_6sympol_14integer_points_19find_integer_points_20generator6);
   __Pyx_DECREF((PyObject *)__pyx_cur_scope);
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct___find_integer_points *__pyx_freelist_6sympol_14integer_points___pyx_scope_struct___find_integer_points[8];
-static int __pyx_freecount_6sympol_14integer_points___pyx_scope_struct___find_integer_points = 0;
+static struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct__find_integer_points *__pyx_freelist_6sympol_14integer_points___pyx_scope_struct__find_integer_points[8];
+static int __pyx_freecount_6sympol_14integer_points___pyx_scope_struct__find_integer_points = 0;
 
-static PyObject *__pyx_tp_new_6sympol_14integer_points___pyx_scope_struct___find_integer_points(PyTypeObject *t, CYTHON_UNUSED PyObject *a, CYTHON_UNUSED PyObject *k) {
+static PyObject *__pyx_tp_new_6sympol_14integer_points___pyx_scope_struct__find_integer_points(PyTypeObject *t, CYTHON_UNUSED PyObject *a, CYTHON_UNUSED PyObject *k) {
   PyObject *o;
   #if CYTHON_COMPILING_IN_LIMITED_API
   allocfunc alloc_func = (allocfunc)PyType_GetSlot(t, Py_tp_alloc);
   o = alloc_func(t, 0);
   #else
-  if (CYTHON_COMPILING_IN_CPYTHON && likely((int)(__pyx_freecount_6sympol_14integer_points___pyx_scope_struct___find_integer_points > 0) & (int)(t->tp_basicsize == sizeof(struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct___find_integer_points)))) {
-    o = (PyObject*)__pyx_freelist_6sympol_14integer_points___pyx_scope_struct___find_integer_points[--__pyx_freecount_6sympol_14integer_points___pyx_scope_struct___find_integer_points];
-    memset(o, 0, sizeof(struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct___find_integer_points));
+  if (CYTHON_COMPILING_IN_CPYTHON && likely((int)(__pyx_freecount_6sympol_14integer_points___pyx_scope_struct__find_integer_points > 0) & (int)(t->tp_basicsize == sizeof(struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct__find_integer_points)))) {
+    o = (PyObject*)__pyx_freelist_6sympol_14integer_points___pyx_scope_struct__find_integer_points[--__pyx_freecount_6sympol_14integer_points___pyx_scope_struct__find_integer_points];
+    memset(o, 0, sizeof(struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct__find_integer_points));
     (void) PyObject_INIT(o, t);
     PyObject_GC_Track(o);
   } else {
@@ -7923,11 +7923,11 @@ static PyObject *__pyx_tp_new_6sympol_14integer_points___pyx_scope_struct___find
   return o;
 }
 
-static void __pyx_tp_dealloc_6sympol_14integer_points___pyx_scope_struct___find_integer_points(PyObject *o) {
-  struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct___find_integer_points *p = (struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct___find_integer_points *)o;
+static void __pyx_tp_dealloc_6sympol_14integer_points___pyx_scope_struct__find_integer_points(PyObject *o) {
+  struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct__find_integer_points *p = (struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct__find_integer_points *)o;
   #if CYTHON_USE_TP_FINALIZE
   if (unlikely((PY_VERSION_HEX >= 0x03080000 || __Pyx_PyType_HasFeature(Py_TYPE(o), Py_TPFLAGS_HAVE_FINALIZE)) && __Pyx_PyObject_GetSlot(o, tp_finalize, destructor)) && !__Pyx_PyObject_GC_IsFinalized(o)) {
-    if (__Pyx_PyObject_GetSlot(o, tp_dealloc, destructor) == __pyx_tp_dealloc_6sympol_14integer_points___pyx_scope_struct___find_integer_points) {
+    if (__Pyx_PyObject_GetSlot(o, tp_dealloc, destructor) == __pyx_tp_dealloc_6sympol_14integer_points___pyx_scope_struct__find_integer_points) {
       if (PyObject_CallFinalizerFromDealloc(o)) return;
     }
   }
@@ -7937,16 +7937,16 @@ static void __pyx_tp_dealloc_6sympol_14integer_points___pyx_scope_struct___find_
   Py_CLEAR(p->__pyx_v_ii_min);
   Py_CLEAR(p->__pyx_v_ineqs);
   Py_CLEAR(p->__pyx_v_tmp_v);
-  if (CYTHON_COMPILING_IN_CPYTHON && ((int)(__pyx_freecount_6sympol_14integer_points___pyx_scope_struct___find_integer_points < 8) & (int)(Py_TYPE(o)->tp_basicsize == sizeof(struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct___find_integer_points)))) {
-    __pyx_freelist_6sympol_14integer_points___pyx_scope_struct___find_integer_points[__pyx_freecount_6sympol_14integer_points___pyx_scope_struct___find_integer_points++] = ((struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct___find_integer_points *)o);
+  if (CYTHON_COMPILING_IN_CPYTHON && ((int)(__pyx_freecount_6sympol_14integer_points___pyx_scope_struct__find_integer_points < 8) & (int)(Py_TYPE(o)->tp_basicsize == sizeof(struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct__find_integer_points)))) {
+    __pyx_freelist_6sympol_14integer_points___pyx_scope_struct__find_integer_points[__pyx_freecount_6sympol_14integer_points___pyx_scope_struct__find_integer_points++] = ((struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct__find_integer_points *)o);
   } else {
     (*Py_TYPE(o)->tp_free)(o);
   }
 }
 
-static int __pyx_tp_traverse_6sympol_14integer_points___pyx_scope_struct___find_integer_points(PyObject *o, visitproc v, void *a) {
+static int __pyx_tp_traverse_6sympol_14integer_points___pyx_scope_struct__find_integer_points(PyObject *o, visitproc v, void *a) {
   int e;
-  struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct___find_integer_points *p = (struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct___find_integer_points *)o;
+  struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct__find_integer_points *p = (struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct__find_integer_points *)o;
   if (p->__pyx_v_ii_max) {
     e = (*v)(p->__pyx_v_ii_max, a); if (e) return e;
   }
@@ -7962,9 +7962,9 @@ static int __pyx_tp_traverse_6sympol_14integer_points___pyx_scope_struct___find_
   return 0;
 }
 
-static int __pyx_tp_clear_6sympol_14integer_points___pyx_scope_struct___find_integer_points(PyObject *o) {
+static int __pyx_tp_clear_6sympol_14integer_points___pyx_scope_struct__find_integer_points(PyObject *o) {
   PyObject* tmp;
-  struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct___find_integer_points *p = (struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct___find_integer_points *)o;
+  struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct__find_integer_points *p = (struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct__find_integer_points *)o;
   tmp = ((PyObject*)p->__pyx_v_ii_max);
   p->__pyx_v_ii_max = Py_None; Py_INCREF(Py_None);
   Py_XDECREF(tmp);
@@ -7980,28 +7980,28 @@ static int __pyx_tp_clear_6sympol_14integer_points___pyx_scope_struct___find_int
   return 0;
 }
 #if CYTHON_USE_TYPE_SPECS
-static PyType_Slot __pyx_type_6sympol_14integer_points___pyx_scope_struct___find_integer_points_slots[] = {
-  {Py_tp_dealloc, (void *)__pyx_tp_dealloc_6sympol_14integer_points___pyx_scope_struct___find_integer_points},
-  {Py_tp_traverse, (void *)__pyx_tp_traverse_6sympol_14integer_points___pyx_scope_struct___find_integer_points},
-  {Py_tp_clear, (void *)__pyx_tp_clear_6sympol_14integer_points___pyx_scope_struct___find_integer_points},
-  {Py_tp_new, (void *)__pyx_tp_new_6sympol_14integer_points___pyx_scope_struct___find_integer_points},
+static PyType_Slot __pyx_type_6sympol_14integer_points___pyx_scope_struct__find_integer_points_slots[] = {
+  {Py_tp_dealloc, (void *)__pyx_tp_dealloc_6sympol_14integer_points___pyx_scope_struct__find_integer_points},
+  {Py_tp_traverse, (void *)__pyx_tp_traverse_6sympol_14integer_points___pyx_scope_struct__find_integer_points},
+  {Py_tp_clear, (void *)__pyx_tp_clear_6sympol_14integer_points___pyx_scope_struct__find_integer_points},
+  {Py_tp_new, (void *)__pyx_tp_new_6sympol_14integer_points___pyx_scope_struct__find_integer_points},
   {0, 0},
 };
-static PyType_Spec __pyx_type_6sympol_14integer_points___pyx_scope_struct___find_integer_points_spec = {
-  "sympol.integer_points.__pyx_scope_struct___find_integer_points",
-  sizeof(struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct___find_integer_points),
+static PyType_Spec __pyx_type_6sympol_14integer_points___pyx_scope_struct__find_integer_points_spec = {
+  "sympol.integer_points.__pyx_scope_struct__find_integer_points",
+  sizeof(struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct__find_integer_points),
   0,
   Py_TPFLAGS_DEFAULT|Py_TPFLAGS_HAVE_VERSION_TAG|Py_TPFLAGS_CHECKTYPES|Py_TPFLAGS_HAVE_NEWBUFFER|Py_TPFLAGS_HAVE_GC|Py_TPFLAGS_HAVE_FINALIZE,
-  __pyx_type_6sympol_14integer_points___pyx_scope_struct___find_integer_points_slots,
+  __pyx_type_6sympol_14integer_points___pyx_scope_struct__find_integer_points_slots,
 };
 #else
 
-static PyTypeObject __pyx_type_6sympol_14integer_points___pyx_scope_struct___find_integer_points = {
+static PyTypeObject __pyx_type_6sympol_14integer_points___pyx_scope_struct__find_integer_points = {
   PyVarObject_HEAD_INIT(0, 0)
-  "sympol.integer_points.""__pyx_scope_struct___find_integer_points", /*tp_name*/
-  sizeof(struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct___find_integer_points), /*tp_basicsize*/
+  "sympol.integer_points.""__pyx_scope_struct__find_integer_points", /*tp_name*/
+  sizeof(struct __pyx_obj_6sympol_14integer_points___pyx_scope_struct__find_integer_points), /*tp_basicsize*/
   0, /*tp_itemsize*/
-  __pyx_tp_dealloc_6sympol_14integer_points___pyx_scope_struct___find_integer_points, /*tp_dealloc*/
+  __pyx_tp_dealloc_6sympol_14integer_points___pyx_scope_struct__find_integer_points, /*tp_dealloc*/
   #if PY_VERSION_HEX < 0x030800b4
   0, /*tp_print*/
   #endif
@@ -8028,8 +8028,8 @@ static PyTypeObject __pyx_type_6sympol_14integer_points___pyx_scope_struct___fin
   0, /*tp_as_buffer*/
   Py_TPFLAGS_DEFAULT|Py_TPFLAGS_HAVE_VERSION_TAG|Py_TPFLAGS_CHECKTYPES|Py_TPFLAGS_HAVE_NEWBUFFER|Py_TPFLAGS_HAVE_GC|Py_TPFLAGS_HAVE_FINALIZE, /*tp_flags*/
   0, /*tp_doc*/
-  __pyx_tp_traverse_6sympol_14integer_points___pyx_scope_struct___find_integer_points, /*tp_traverse*/
-  __pyx_tp_clear_6sympol_14integer_points___pyx_scope_struct___find_integer_points, /*tp_clear*/
+  __pyx_tp_traverse_6sympol_14integer_points___pyx_scope_struct__find_integer_points, /*tp_traverse*/
+  __pyx_tp_clear_6sympol_14integer_points___pyx_scope_struct__find_integer_points, /*tp_clear*/
   0, /*tp_richcompare*/
   0, /*tp_weaklistoffset*/
   0, /*tp_iter*/
@@ -8046,7 +8046,7 @@ static PyTypeObject __pyx_type_6sympol_14integer_points___pyx_scope_struct___fin
   #endif
   0, /*tp_init*/
   0, /*tp_alloc*/
-  __pyx_tp_new_6sympol_14integer_points___pyx_scope_struct___find_integer_points, /*tp_new*/
+  __pyx_tp_new_6sympol_14integer_points___pyx_scope_struct__find_integer_points, /*tp_new*/
   0, /*tp_free*/
   0, /*tp_is_gc*/
   0, /*tp_bases*/
@@ -9141,7 +9141,7 @@ static int __Pyx_CreateStringTabAndInitStrings(void) {
     {&__pyx_kp_u_enable, __pyx_k_enable, sizeof(__pyx_k_enable), 0, 1, 0, 0},
     {&__pyx_n_s_enumerate, __pyx_k_enumerate, sizeof(__pyx_k_enumerate), 0, 0, 1, 1},
     {&__pyx_n_s_find_integer_points, __pyx_k_find_integer_points, sizeof(__pyx_k_find_integer_points), 0, 0, 1, 1},
-    {&__pyx_n_s_find_integer_points_locals_gene, __pyx_k_find_integer_points_locals_gene, sizeof(__pyx_k_find_integer_points_locals_gene), 0, 0, 1, 1},
+    {&__pyx_n_s_find_integer_points_locals_genex, __pyx_k_find_integer_points_locals_genex, sizeof(__pyx_k_find_integer_points_locals_genex), 0, 0, 1, 1},
     {&__pyx_n_s_forced_stop, __pyx_k_forced_stop, sizeof(__pyx_k_forced_stop), 0, 0, 1, 1},
     {&__pyx_kp_u_gc, __pyx_k_gc, sizeof(__pyx_k_gc), 0, 1, 0, 0},
     {&__pyx_n_s_genexpr, __pyx_k_genexpr, sizeof(__pyx_k_genexpr), 0, 0, 1, 1},
@@ -9208,7 +9208,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":983
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":983
  *         __pyx_import_array()
  *     except Exception:
  *         raise ImportError("numpy.core.multiarray failed to import")             # <<<<<<<<<<<<<<
@@ -9219,7 +9219,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple_);
   __Pyx_GIVEREF(__pyx_tuple_);
 
-  /* "../../AppData/Local/Temp/pip-build-env-k4d90jm9/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":989
+  /* "../../AppData/Local/Temp/pip-build-env-ujx28na8/overlay/Lib/site-packages/numpy/__init__.cython-30.pxd":989
  *         _import_umath()
  *     except Exception:
  *         raise ImportError("numpy.core.umath failed to import")             # <<<<<<<<<<<<<<
@@ -9286,7 +9286,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   /* "sympol/integer_points.pyx":8
  * ctypedef cnp.int64_t DTYPE_t
  * 
- * def _find_integer_points(             # <<<<<<<<<<<<<<
+ * def find_integer_points(             # <<<<<<<<<<<<<<
  *         cnp.ndarray[DTYPE_t, ndim=2] verts,
  *         cnp.ndarray ineqs,
  */
@@ -9359,22 +9359,22 @@ static int __Pyx_modinit_type_init_code(void) {
   __Pyx_RefNannySetupContext("__Pyx_modinit_type_init_code", 0);
   /*--- Type init code ---*/
   #if CYTHON_USE_TYPE_SPECS
-  __pyx_ptype_6sympol_14integer_points___pyx_scope_struct___find_integer_points = (PyTypeObject *) __Pyx_PyType_FromModuleAndSpec(__pyx_m, &__pyx_type_6sympol_14integer_points___pyx_scope_struct___find_integer_points_spec, NULL); if (unlikely(!__pyx_ptype_6sympol_14integer_points___pyx_scope_struct___find_integer_points)) __PYX_ERR(0, 8, __pyx_L1_error)
-  if (__Pyx_fix_up_extension_type_from_spec(&__pyx_type_6sympol_14integer_points___pyx_scope_struct___find_integer_points_spec, __pyx_ptype_6sympol_14integer_points___pyx_scope_struct___find_integer_points) < 0) __PYX_ERR(0, 8, __pyx_L1_error)
+  __pyx_ptype_6sympol_14integer_points___pyx_scope_struct__find_integer_points = (PyTypeObject *) __Pyx_PyType_FromModuleAndSpec(__pyx_m, &__pyx_type_6sympol_14integer_points___pyx_scope_struct__find_integer_points_spec, NULL); if (unlikely(!__pyx_ptype_6sympol_14integer_points___pyx_scope_struct__find_integer_points)) __PYX_ERR(0, 8, __pyx_L1_error)
+  if (__Pyx_fix_up_extension_type_from_spec(&__pyx_type_6sympol_14integer_points___pyx_scope_struct__find_integer_points_spec, __pyx_ptype_6sympol_14integer_points___pyx_scope_struct__find_integer_points) < 0) __PYX_ERR(0, 8, __pyx_L1_error)
   #else
-  __pyx_ptype_6sympol_14integer_points___pyx_scope_struct___find_integer_points = &__pyx_type_6sympol_14integer_points___pyx_scope_struct___find_integer_points;
+  __pyx_ptype_6sympol_14integer_points___pyx_scope_struct__find_integer_points = &__pyx_type_6sympol_14integer_points___pyx_scope_struct__find_integer_points;
   #endif
   #if !CYTHON_COMPILING_IN_LIMITED_API
   #endif
   #if !CYTHON_USE_TYPE_SPECS
-  if (__Pyx_PyType_Ready(__pyx_ptype_6sympol_14integer_points___pyx_scope_struct___find_integer_points) < 0) __PYX_ERR(0, 8, __pyx_L1_error)
+  if (__Pyx_PyType_Ready(__pyx_ptype_6sympol_14integer_points___pyx_scope_struct__find_integer_points) < 0) __PYX_ERR(0, 8, __pyx_L1_error)
   #endif
   #if PY_MAJOR_VERSION < 3
-  __pyx_ptype_6sympol_14integer_points___pyx_scope_struct___find_integer_points->tp_print = 0;
+  __pyx_ptype_6sympol_14integer_points___pyx_scope_struct__find_integer_points->tp_print = 0;
   #endif
   #if !CYTHON_COMPILING_IN_LIMITED_API
-  if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_ptype_6sympol_14integer_points___pyx_scope_struct___find_integer_points->tp_dictoffset && __pyx_ptype_6sympol_14integer_points___pyx_scope_struct___find_integer_points->tp_getattro == PyObject_GenericGetAttr)) {
-    __pyx_ptype_6sympol_14integer_points___pyx_scope_struct___find_integer_points->tp_getattro = __Pyx_PyObject_GenericGetAttrNoDict;
+  if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_ptype_6sympol_14integer_points___pyx_scope_struct__find_integer_points->tp_dictoffset && __pyx_ptype_6sympol_14integer_points___pyx_scope_struct__find_integer_points->tp_getattro == PyObject_GenericGetAttr)) {
+    __pyx_ptype_6sympol_14integer_points___pyx_scope_struct__find_integer_points->tp_getattro = __Pyx_PyObject_GenericGetAttrNoDict;
   }
   #endif
   #if CYTHON_USE_TYPE_SPECS
@@ -9915,7 +9915,7 @@ if (!__Pyx_RefNanny) {
   /* "sympol/integer_points.pyx":8
  * ctypedef cnp.int64_t DTYPE_t
  * 
- * def _find_integer_points(             # <<<<<<<<<<<<<<
+ * def find_integer_points(             # <<<<<<<<<<<<<<
  *         cnp.ndarray[DTYPE_t, ndim=2] verts,
  *         cnp.ndarray ineqs,
  */
@@ -9930,7 +9930,7 @@ if (!__Pyx_RefNanny) {
   __pyx_t_2 = 0;
   __pyx_t_4 = 0;
   __pyx_t_5 = 0;
-  __pyx_t_5 = __Pyx_CyFunction_New(&__pyx_mdef_6sympol_14integer_points_1_find_integer_points, 0, __pyx_n_s_find_integer_points, NULL, __pyx_n_s_sympol_integer_points, __pyx_d, ((PyObject *)__pyx_codeobj__12)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 8, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_CyFunction_New(&__pyx_mdef_6sympol_14integer_points_1find_integer_points, 0, __pyx_n_s_find_integer_points, NULL, __pyx_n_s_sympol_integer_points, __pyx_d, ((PyObject *)__pyx_codeobj__12)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 8, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_5, __pyx_t_6);
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;

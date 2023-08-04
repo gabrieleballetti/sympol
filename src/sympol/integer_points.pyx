@@ -5,7 +5,7 @@ cnp.import_array()
 
 ctypedef cnp.int64_t DTYPE_t
 
-def _find_integer_points(
+def find_integer_points(
         cnp.ndarray[DTYPE_t, ndim=2] verts,
         cnp.ndarray ineqs,
         int dim,

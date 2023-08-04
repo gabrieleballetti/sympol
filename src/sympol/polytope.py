@@ -10,7 +10,7 @@ from sympy.matrices import zeros
 from sympy.matrices.normalforms import hermite_normal_form
 
 from sympol.hilbert_basis import get_hilbert_basis_np
-from sympol.integer_points import _find_integer_points
+from sympol.integer_points import find_integer_points
 from sympol.isomorphism import get_normal_form
 from sympol.parallelotope import HalfOpenParallelotope
 from sympol.point import Point
@@ -1154,7 +1154,7 @@ class Polytope:
             _n_integer_points,
             _n_interior_points,
             forced_stop,
-        ) = _find_integer_points(
+        ) = find_integer_points(
             verts=self.vertices.view(np.ndarray).astype(np.int64),
             ineqs=self.homogeneous_inequalities.view(np.ndarray).astype(np.int64),
             dim=self.dim,
