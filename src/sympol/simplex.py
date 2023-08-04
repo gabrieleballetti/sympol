@@ -1,1 +1,0 @@
-from sympol import Polytope

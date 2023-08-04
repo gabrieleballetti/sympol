@@ -29,7 +29,8 @@ def test_empty_init():
 
 def test_higher_rank_init():
     """
-    Test initialization of a point list with rank greater than the ambient dimension
+    Test initialization of a point list with rank greater than the ambient
+    dimension.
     """
     data = np.zeros((3, 3, 1))
     point_list = PointConfiguration(data)

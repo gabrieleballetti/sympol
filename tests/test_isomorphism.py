@@ -1,5 +1,4 @@
 from random import shuffle
-import time
 from sympy import Matrix
 
 from sympol.isomorphism import (
@@ -7,8 +6,6 @@ from sympol.isomorphism import (
     # _is_automorphism,
     # _find_canonical_permutation_and_automorphisms,
 )
-from sympol.point import Point
-from sympol.point_configuration import PointConfiguration
 from sympol.polytope import Polytope
 
 
@@ -119,8 +116,8 @@ def test_normal_form():
 
 # def test_unimodular_eq_lists_is_automorphism():
 #     """
-#     Test that is_automorphism returns True when called with two affinely unimodular
-#     equivalent lists
+#     Test that is_automorphism returns True when called with two affinely
+#     unimodular equivalent lists
 #     """
 
 #     input_list = PointConfiguration(
@@ -146,8 +143,8 @@ def test_normal_form():
 
 # def test_non_unimodular_eq_lists_is_not_automorphism():
 #     """
-#     Test that is_automorphism returns True when called with two affinely unimodular
-#     equivalent lists
+#     Test that is_automorphism returns True when called with two affinely
+#     unimodular equivalent lists
 #     """
 
 #     input_list = PointConfiguration(

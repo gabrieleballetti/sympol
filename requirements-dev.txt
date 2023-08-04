@@ -1,6 +1,3 @@
 black
-cython
-pylint
 pytest
-pytest-html
 ruff

@@ -27,8 +27,8 @@ def test_integer_points(count_only):
         n_interior_points,
         forced_stop,
     ) = _find_integer_points(
-        verts=p.vertices.view(np.ndarray).view(np.ndarray).astype(np.int64),
-        ineqs=p.inequalities.view(np.ndarray).view(np.ndarray).astype(np.int64),
+        verts=p.vertices.view(np.ndarray).astype(np.int64),
+        ineqs=p.inequalities.view(np.ndarray).astype(np.int64),
         dim=p.dim,
         count_only=count_only,
     )
@@ -72,8 +72,8 @@ def test_integer_points_consistency():
 @pytest.mark.parametrize("count_only", [True, False])
 def test_stop_at_max_points(count_only, interior):
     """
-    Test that the lattice point enumeration of a (massive) polytope stops correctly
-    if the maximum number of requested points is reached.
+    Test that the lattice point enumeration of a (massive) polytope stops
+    correctly if the maximum number of requested points is reached.
     """
     p = (
         Polytope(
