@@ -1,4 +1,4 @@
 black
-pylint
+coverage
 pytest
 ruff
