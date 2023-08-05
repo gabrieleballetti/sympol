@@ -36,6 +36,17 @@ jobs:
     - name: Check with black
       run: |
         black --check .
-    - name: Test with pytest
+    - name: Test with pytest and check coverage
       run: |
-        pytest tests/
+        coverage run -m pytest tests
+    - name: Generate coverage report
+      run: |
+        coverage html
+    - name: Upload report
+      uses: actions/upload-artifact@v3
+      with:
+        name: coverage-report
+        path: ./htmlcov
+    - name: Check coverage
+      run: |
+        coverage report --fail-under=100
