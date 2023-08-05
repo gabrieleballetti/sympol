@@ -1,5 +1,5 @@
 import numpy as np
-from sympy import Abs, Matrix, NDimArray, prod, ZZ, Rational
+from sympy import Abs, Matrix, prod, ZZ, Rational
 from sympy.matrices.normalforms import smith_normal_form
 
 from sympol.point import Point

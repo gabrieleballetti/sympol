@@ -95,6 +95,20 @@ def test_init_from_points_and_vertices():
     assert polytope._vertices == PointConfiguration(vertices)
 
 
+def test_init_edge_cases():
+    """
+    Test initialization of a polytope raises exceptions for edge cases
+    """
+    with pytest.raises(ValueError):
+        Polytope(points=None, vertices=None)
+
+    with pytest.raises(ValueError):
+        Polytope(points=[])
+
+    with pytest.raises(ValueError):
+        Polytope(vertices=[])
+
+
 def test_vertices():
     """
     Test that the vertices are correct
@@ -169,6 +183,15 @@ def test_homogeneous_inequalities():
     )
 
     assert _arrays_equal_up_to_row_permutation(p.homogeneous_inequalities, expected)
+
+
+def test_n_inequalities():
+    """
+    Test that the number of inequalities is correct
+    """
+    p = Polytope.cube(3)
+
+    assert p.n_inequalities == 6
 
 
 def test_is_eq():
@@ -332,10 +355,17 @@ def test_boundary_volume():
     """
     Test that the boundary volume is calculated correctly
     """
-    polytope = Polytope.cube(3)
+    p = Polytope.cube(3)
 
-    assert polytope.boundary_volume == 6
-    assert polytope.normalized_boundary_volume == 12
+    assert p.boundary_volume == 6
+
+
+def test_normalized_boundary_volume():
+    """
+    Test that the normalized boundary volume is calculated correctly
+    """
+    p = Polytope.cube(3)
+    assert p.normalized_boundary_volume == 12
 
 
 def test_barycenter():
@@ -520,9 +550,12 @@ def test_faces():
     p = Polytope.unimodular_simplex(7)
 
     # test edge cases
+    with pytest.raises(ValueError):
+        p.faces(-2)
     assert p.faces(-1) == tuple([frozenset()])
     assert p.faces(0) == tuple([frozenset([i]) for i in range(p.n_vertices)])
     assert p.faces(7) == (frozenset(range(p.n_vertices)),)
+    assert p.faces(8) == tuple()
 
     # test length for other dimensions
     assert len(p.faces(6)) == 8
@@ -530,6 +563,27 @@ def test_faces():
     assert len(p.faces(4)) == 56
     assert len(p.faces(3)) == 70
     assert len(p.faces(2)) == 56
+
+
+def test_faces_remove_temp_faces():
+    """
+    This is a test to check that the temporary faces are removed correctly
+    in the faces algorithm. This helps to achieve 100% code coverage for the
+    faces algorithm, which I couldn't achieve with a low dimensional polytope,
+    as the facets need to be listed in a particular order for the algorithm
+    to remove temporary faces.
+    """
+    p = Polytope.cross_polytope(5)
+
+    # Reorder the 3-dim faces so that the algorithm will add and then remove a
+    # temporary face
+    for face in p.faces(3):
+        f = face.intersection(p.facets[0])
+        if len(f) < 3:
+            break
+    p._faces[3] = tuple([face] + [f for f in p._faces[3] if f != face])
+
+    assert len(p.faces(2)) == 80
 
 
 def test_faces_lower_dimensional_polytope():
@@ -763,8 +817,8 @@ def test_integer_points():
     assert s.n_interior_points == 0
     assert s.n_boundary_points == 4
 
-    assert s2.n_integer_points == 10
     assert s2.n_interior_points == 0
+    assert s2.n_integer_points == 10
     assert s2.n_boundary_points == 10
 
     assert s3.n_integer_points == 20
@@ -816,6 +870,18 @@ def test_integer_points_consistency():
     assert _arrays_equal_up_to_row_permutation(p.integer_points, pts)
 
 
+def test_integer_points_low_dimensional_polytope():
+    """
+    Test that an exception is raised when trying to compute the integer points of
+    a non full-dimensional polytope
+    """
+    verts = [[0, 0, 0], [1, 0, 0], [0, 1, 0]]
+    square = Polytope(verts)
+
+    with pytest.raises(ValueError):
+        square.integer_points
+
+
 def test_has_n_interior_points():
     """
     Test that the has_n_interior_points method works correctly and the lattice points
@@ -835,8 +901,9 @@ def test_boundary_points_facets():
     Test that facets of the boundary points of a polytope are calculated correctly
     """
     p = Polytope.cube(3)
+    boundary_points_facets = p.boundary_points_facets
 
-    for pt, f_ids in zip(p.boundary_points, p.boundary_points_facets):
+    for pt, f_ids in zip(p.boundary_points, boundary_points_facets):
         for j, ineq in enumerate(p.inequalities):
             if np.dot(ineq[1:], pt) + ineq[0] == 0:
                 assert j in f_ids
@@ -848,6 +915,10 @@ def test_ehrhart_polynomial():
     """
     Test that the Ehrhart polynomial of a lattice polytope is correct
     """
+    with pytest.raises(ValueError):
+        p = Polytope.unimodular_simplex(1) * Rational(1, 2)
+        p.ehrhart_polynomial
+
     assert Polytope.unimodular_simplex(1).ehrhart_polynomial == Poly(x + 1, domain="QQ")
     assert Polytope.unimodular_simplex(2).ehrhart_polynomial == Poly(
         x**2 / 2 + 3 * x / 2 + 1, domain="QQ"
@@ -877,6 +948,10 @@ def test_h_star_polynomial():
     """
     Test that the h*-polynomial of a lattice polytope is correct
     """
+    with pytest.raises(ValueError):
+        p = Polytope.unimodular_simplex(1) * Rational(1, 2)
+        p.h_star_polynomial
+
     for d in range(1, 5):
         assert Polytope.unimodular_simplex(d).h_star_polynomial == Poly(1, x)
 
@@ -1048,6 +1123,8 @@ def test_is_reflexive():
     """
     Test the is_reflexive property
     """
+    assert not Polytope.unimodular_simplex(2).is_reflexive
+
     s = Polytope.unimodular_simplex(3) * 4 - Point([1, 1, 1])
     c = Polytope.cube(3) * 2 - Point([1, 1, 1])
 
@@ -1281,6 +1358,9 @@ def test_simplex_conversion():
     # Calculating vertices should convert to a simplex
     simplex.vertices
     assert simplex.__class__ == Simplex
+
+    with pytest.raises(ValueError):
+        Polytope.cube(2)._make_simplex()
 
 
 def test_barycentric_coordinates():

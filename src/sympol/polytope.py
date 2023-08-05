@@ -170,10 +170,11 @@ class Polytope:
         if self._cdd_polyhedron is None:
             if self._vertices is not None or self._points is not None:
                 self._get_cdd_polyhedron_from_points()
-            elif self._inequalities is not None:
-                self._get_cdd_polyhedron_from_inequalities()
-            else:
-                raise ValueError("No points or inequalities given")
+            # TODO: add support for inequalities
+            # elif self._inequalities is not None:
+            #     self._get_cdd_polyhedron_from_inequalities()
+            # else:
+            #     raise ValueError("No points or inequalities given")
 
         return self._cdd_polyhedron
 
@@ -296,13 +297,6 @@ class Polytope:
         return self.inequalities[self.is_eq]
 
     @property
-    def facet_normal(self, facet_id):
-        """
-        Get the normal of a facet given its id.
-        """
-        return self.inequalities[facet_id][1:]
-
-    @property
     def homogeneous_inequalities(self):
         """
         Get the defining homogeneous inequalities of the polytope as a numpy array.
@@ -370,32 +364,22 @@ class Polytope:
 
         return self._edges
 
-    @property
-    def all_faces(self):
-        """
-        Get all the faces of the polytope. If only the faces of a certain dimension
-        are needed, use the faces(dim) method instead to avoid unnecessary computations.
-        """
-        if self._faces is None:
-            for d in range(-1, self.dim + 1):
-                # trigger the calculation of the faces
-                self.faces(d)
-
-        return self._faces
-
     def faces(self, dim):
         """
         Get the faces of the polytope of a given dimension. Faces of dimension and
         codimension lower ore equal to two are found from the cdd polyhedron. Other
         faces are found from higher dimensional faces, via intersection with facets.
         TODO: This could be done more efficiently especially as low dimensional faces
-        need all the higher dimensional faces to be calculated first.
+        need all the higher dimensional faces to be calculated first. Can also be
+        compiled with cython.
         """
-        if dim < -1 or dim > self.dim:
+        if dim < -1:
             raise ValueError(
-                "The dimension of the face should be between -1 and the dimension of"
-                " the polytope"
+                "The dimension of the face must be greater than or equal to -1"
             )
+
+        if dim > self.dim:
+            return tuple()
 
         if self._faces is None:
             self._faces = {i: None for i in range(-1, self.dim + 1)}
@@ -419,6 +403,7 @@ class Polytope:
                 new_faces = []
                 for facet in self.facets:
                     for face in self.faces(dim + 1):
+                        remove_faces = []
                         if face.issubset(facet):
                             continue
                         f = face.intersection(facet)
@@ -428,9 +413,10 @@ class Polytope:
                                 add_f = False
                                 break
                             if f2.issubset(f):
-                                new_faces.remove(f2)
+                                remove_faces.append(f2)
                         if add_f:
                             new_faces.append(f)
+                        new_faces = [f for f in new_faces if f not in remove_faces]
                 self._faces[dim] = tuple(new_faces)
 
         return self._faces[dim]
@@ -1092,12 +1078,12 @@ class Polytope:
         mat.rep_type = cdd.RepType.GENERATOR
         self._cdd_polyhedron = cdd.Polyhedron(mat)
 
-    def _get_cdd_polyhedron_from_inequalities(self):
-        """
-        Get the cdd polyhedron from the h-representation of the polytope
-        """
-        # TODO
-        pass
+    # def _get_cdd_polyhedron_from_inequalities(self):
+    #     """
+    #     Get the cdd polyhedron from the h-representation of the polytope
+    #     """
+    #     # TODO
+    #     pass
 
     def _calculate_volume(self):
         """
