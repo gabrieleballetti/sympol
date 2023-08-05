@@ -16,10 +16,10 @@ class PointConfiguration(np.ndarray):
         if _arr.ndim == 1:
             _arr = _arr.reshape(0, 0)
         elif _arr.ndim > 2:
-            if all([i == 1 for i in _arr.shape[2:]]):
-                _arr = _arr.reshape(*_arr.shape[:2])
-            else:
-                raise ValueError("Point configuration must be a rank 2 array at most.")
+            # if len([i for i in _arr.shape if i > 1]) <= 2:
+            #     _arr = _arr.reshape(*_arr.shape[:2])
+            # else:
+            raise ValueError("Point configuration must be a rank 2 array at most.")
         if _arr.size > 0:
             _arr = make_sympy_rational(_arr)
         return _arr.view(cls)
@@ -30,7 +30,7 @@ class PointConfiguration(np.ndarray):
         """
 
         self._ambient_dimension = None
-        self._hom_rank = None
+        self._rank = None
         self._affine_rank = None
         self._barycenter = None
         self._snf_diag = None
@@ -72,16 +72,16 @@ class PointConfiguration(np.ndarray):
         """
         Overload the + operator to add allow translation by a vector
         """
-        if isinstance(other, NDimArray) and self.shape[1] == other.shape[0]:
-            return PointConfiguration([p + other for p in self])
+        if isinstance(other, Point) and self.shape[1] == other.shape[0]:
+            return super().__add__(other).view(PointConfiguration)
         return super().__add__(other)
 
     def __sub__(self, other):
         """
         Overload the - operator to add allow translation by a vector
         """
-        if isinstance(other, NDimArray) and self.shape[1] == other.shape[0]:
-            return PointConfiguration([p - other for p in self])
+        if isinstance(other, Point) and self.shape[1] == other.shape[0]:
+            return super().__sub__(other).view(PointConfiguration)
         return super().__sub__(other)
 
     # def __mul__(self, other):
@@ -91,12 +91,6 @@ class PointConfiguration(np.ndarray):
     #     if isinstance(other, (int, float)):
     #         return PointConfiguration([p * other for p in self])
     #     return super().__mul__(other)
-
-    def tolist(self):
-        """
-        Convert the point list to a list of numbers
-        """
-        return [p.tolist() for p in self]
 
     @property
     def ambient_dimension(self):
@@ -112,15 +106,15 @@ class PointConfiguration(np.ndarray):
         return self._ambient_dimension
 
     @property
-    def hom_rank(self):
+    def rank(self):
         """
         Get the rank of the point list (avoid the variable name "rank" to avoid
         conflict with the rank method of the Array class)
         """
-        if self._hom_rank is None:
-            self._hom_rank = Matrix(self).rank()
+        if self._rank is None:
+            self._rank = Matrix(self).rank()
 
-        return self._hom_rank
+        return self._rank
 
     @property
     def affine_rank(self):

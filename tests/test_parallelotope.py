@@ -4,6 +4,16 @@ from sympol.parallelotope import HalfOpenParallelotope
 from sympol.point_configuration import PointConfiguration
 
 
+def test_linearly_dependent_generators():
+    """
+    Test that the HalfOpenParallelotope __init__ method raises an exception
+    when the generators are linearly dependent.
+    """
+    generators = PointConfiguration([[1, 0, 0], [1, 1, 0], [1, 0, 1], [1, 1, 1]])
+    with pytest.raises(ValueError):
+        HalfOpenParallelotope(generators)
+
+
 def test_smith_normal_form():
     """
     Test calculation of Smith normal form of generator matrix.
@@ -12,8 +22,25 @@ def test_smith_normal_form():
     hop = HalfOpenParallelotope(generators)
     assert hop.m == Matrix([[1, 1, 1], [-1, 1, 0], [-1, 0, 1]])
     assert hop.snf == [1, 1, 3]
-    assert hop.det == 3
     assert hop.k == 2
+
+
+def test_det():
+    """
+    Test calculation of determinant of generator matrix.
+    """
+    generators = PointConfiguration([[1, -1, -1], [1, 1, 0], [1, 0, 1]])
+    hop = HalfOpenParallelotope(generators)
+    assert hop.det == 3
+
+
+def test_v_d_inv():
+    """
+    Test calculation of the inversion matrix V*D^-1.
+    """
+    generators = PointConfiguration([[1, -1, -1], [1, 1, 0], [1, 0, 1]])
+    hop = HalfOpenParallelotope(generators)
+    assert hop.v_d_inv == Matrix([[0, 0, 1], [0, 0, 1], [0, 0, 1]])
 
 
 @pytest.mark.parametrize("count_only", [True, False])
@@ -43,7 +70,9 @@ def test_integer_points(height, count_only):
             assert set([tuple(p) for p in pts]) == set({(1, 0, 0)})
 
 
-def test_integer_points_consistency():
+@pytest.mark.parametrize("count_only", [True, False])
+@pytest.mark.parametrize("height", [-1, 1])
+def test_integer_points_consistency(height, count_only):
     """
     Check that the two methods (numpy and sympy) give the same results.
     """
@@ -56,7 +85,12 @@ def test_integer_points_consistency():
         ]
     )
     hop = HalfOpenParallelotope(generators)
-    pts1, h1 = hop.get_integer_points(use_sympy=True)
-    pts2, h2 = hop.get_integer_points(use_sympy=False)
+    pts1, h1 = hop.get_integer_points(
+        height=height, use_sympy=True, count_only=count_only
+    )
+    pts2, h2 = hop.get_integer_points(
+        height=height, use_sympy=False, count_only=count_only
+    )
     assert h1 == h2
-    assert set([tuple(pt) for pt in pts1]) == set([tuple(pt) for pt in pts2])
+    if not count_only:
+        assert set([tuple(pt) for pt in pts1]) == set([tuple(pt) for pt in pts2])

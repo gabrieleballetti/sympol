@@ -1,3 +1,4 @@
+import pytest
 import numpy as np
 from sympy import Rational
 from sympol.point import Point
@@ -6,89 +7,168 @@ from sympol.point_configuration import PointConfiguration
 
 def test_init():
     """
-    Test initialization of a point list
+    Test initialization of a point configuration.
     """
     points = [[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]]
-    point_list = PointConfiguration(points)
+    pt_cfg = PointConfiguration(points)
 
-    assert point_list.shape == (4, 3)
-    assert point_list[0] == Point([0, 0, 0])
-    assert point_list[1] == Point([1, 0, 0])
-    assert point_list[2] == Point([0, 1, 0])
-    assert point_list[3] == Point([0, 0, 1])
+    assert pt_cfg.shape == (4, 3)
+    assert pt_cfg[0] == Point([0, 0, 0])
+    assert pt_cfg[1] == Point([1, 0, 0])
+    assert pt_cfg[2] == Point([0, 1, 0])
+    assert pt_cfg[3] == Point([0, 0, 1])
+
+
+def test_point_configuration_from_high_rank_array():
+    """
+    Test that an exception is raised when trying to initialize a point configuration
+    from an array with rank > 2.
+    """
+    with pytest.raises(ValueError):
+        PointConfiguration([[[1, 3], [1, 3]], [[1, 3], [1, 3]]])
 
 
 def test_empty_init():
     """
-    Test initialization of an empty point list
+    Test initialization of an empty point configuration.
     """
-    point_list = PointConfiguration([])
+    pt_cfg = PointConfiguration([])
 
-    assert point_list.shape == (0, 0)
+    assert pt_cfg.shape == (0, 0)
 
 
-def test_higher_rank_init():
+def test_get_item():
     """
-    Test initialization of a point list with rank greater than the ambient
-    dimension.
+    Test that __getitem__ is overridden correctly.
     """
-    data = np.zeros((3, 3, 1))
-    point_list = PointConfiguration(data)
+    pt_cfg = PointConfiguration([[1, 2], [3, 4]])
+    assert pt_cfg[0] == Point([1, 2])
+    assert pt_cfg[1] == Point([3, 4])
 
-    assert point_list.shape == (3, 3)
+    assert pt_cfg[0:1] == PointConfiguration([[1, 2]])
+    assert pt_cfg[0:2] == PointConfiguration([[1, 2], [3, 4]])
+
+    with pytest.raises(IndexError):
+        # For a type which is not int or slice let numpy handle the error
+        pt_cfg[0.5]
+
+
+def test_eq():
+    """
+    Test that __eq__ is overridden correctly.
+    """
+    pt_cfg_1 = PointConfiguration([[1, 2], [3, 4]])
+    pt_cfg_2 = PointConfiguration([[1, 2], [3, 4]])
+    pt_cfg_3 = PointConfiguration([[1, 2], [3, 5]])
+
+    assert pt_cfg_1 == pt_cfg_2
+    assert pt_cfg_1 != pt_cfg_3
+
+    with pytest.raises(ValueError):
+        # np.array wants a.any()/a.all()
+        assert pt_cfg_1 == np.array([[1, 2], [3, 4]])
+
+
+def test_ne():
+    """
+    Test that __ne__ is overridden correctly.
+    """
+    pt_cfg_1 = PointConfiguration([[1, 2], [3, 4]])
+    pt_cfg_2 = PointConfiguration([[1, 2], [3, 5]])
+
+    assert pt_cfg_1 != pt_cfg_2
+
+
+def test_add():
+    """
+    Test that __add__ is overridden correctly.
+    """
+    pt_cfg_1 = PointConfiguration([[1, 2], [3, 4]])
+    pt_cfg_2 = PointConfiguration([[1, 2], [3, 5]])
+
+    assert pt_cfg_1 + pt_cfg_2 == PointConfiguration([[2, 4], [6, 9]])
+
+
+def test_sub():
+    """
+    Test that __sub__ is overridden correctly.
+    """
+    pt_cfg_1 = PointConfiguration([[1, 2], [3, 4]])
+    pt_cfg_2 = PointConfiguration([[1, 2], [3, 5]])
+
+    assert pt_cfg_1 - pt_cfg_2 == PointConfiguration([[0, 0], [0, -1]])
+
+
+def test_ambient_dimension():
+    """
+    Test calculation of the ambient dimension of a point configuration.
+    """
+    pt_cfg = PointConfiguration([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])
+    assert pt_cfg.ambient_dimension == 3
+
+    with pytest.raises(ValueError):
+        PointConfiguration([]).ambient_dimension
 
 
 def test_affine_rank():
     """
-    Test calculation of the affine rank of a point list
+    Test calculation of the affine rank of a point configuration.
     """
-    points = [[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]]
-    point_list = PointConfiguration(points)
+    pts = [[0, 0, 0], [1, 0, 0], [0, 1, 0]]
 
-    assert point_list.affine_rank == 3
+    assert PointConfiguration(pts).affine_rank == 2
+    assert PointConfiguration(pts + Point([1, 1, 1])).affine_rank == 2
+
+
+def test_rank():
+    """
+    Test calculation of the homogeneous rank of a point configuration.
+    """
+    pts = [[0, 0, 0], [1, 0, 0], [0, 1, 0]]
+
+    assert PointConfiguration(pts).rank == 2
+    assert PointConfiguration(pts + Point([1, 1, 1])).rank == 3
 
 
 def test_barycenter():
     """
-    Test calculation of the barycenter of a point list
+    Test calculation of the barycenter of a point configuration.
     """
-    points = [[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]]
-    point_list = PointConfiguration(points)
+    pts = [[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]]
+    pt_cfg = PointConfiguration(pts)
 
-    assert point_list.barycenter == Point(
-        [Rational(1, 4), Rational(1, 4), Rational(1, 4)]
-    )
+    assert pt_cfg.barycenter == Point([Rational(1, 4), Rational(1, 4), Rational(1, 4)])
 
 
 def test_smith_normal_form():
     """
-    Test calculation of the affine Smith normal form of a point list with rank
+    Test calculation of the affine Smith normal form of a point configuration with rank
     strictly less than the ambient dimension
     """
-    points = [
+    pts = [
         [0, 0, 0, 0],
         [1, 0, 0, 0],
         [0, 1, 0, 0],
         [1, 1, 3, 0],
         [0, 0, -2, 0],
     ]
-    point_list = PointConfiguration(points)
+    pt_cfg = PointConfiguration(pts)
 
-    assert point_list.snf_diag == [1, 1, 1, 0]
+    assert pt_cfg.snf_diag == [1, 1, 1, 0]
 
 
 def test_index():
     """
-    Test calculation of the index of a point list
+    Test calculation of the index of a point configuration.
     """
-    points = [[0, 0, 0], [1, 0, 0], [0, 1, 0], [1, 1, 3]]
-    point_list = PointConfiguration(points)
-    assert point_list.index == 3
+    pts = [[0, 0, 0], [1, 0, 0], [0, 1, 0], [1, 1, 3]]
+    pt_cfg = PointConfiguration(pts)
+    assert pt_cfg.index == 3
 
     # this are the vertices of a simplex with non-spanning vertices
     # (since it is not a unimodular simplex), but whose lattice points
     # span the lattice
-    points = [
+    pts = [
         [0, 0, 0, 0, 0],
         [1, 0, 0, 0, 0],
         [0, 1, 0, 0, 0],
@@ -97,8 +177,19 @@ def test_index():
         [5, 5, 5, 5, 8],
         [2, 2, 2, 2, 3],
     ]
-    point_list = PointConfiguration(points)
-    assert point_list.index == 1
+    pt_cfg = PointConfiguration(pts)
+    assert pt_cfg.index == 1
+
+
+def test_index_non_full_rank():
+    """
+    Test that an exception is raised when trying to calculate the index of a non-full
+    rank point configuration.
+    """
+    pts = [[0, 0, 0], [1, 0, 0], [0, 1, 0]]
+    pt_cfg = PointConfiguration(pts)
+    with pytest.raises(ValueError):
+        pt_cfg.index
 
 
 def test_can_make_set():

@@ -28,15 +28,17 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-        python -m pip install -e .
         if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; fi
+    - name: Install sympol
+      run: |
+        python -m pip install -e .
     - name: Lint with ruff
       run: |
         ruff .
     - name: Check with black
       run: |
         black --check .
-    - name: Test with pytest and check coverage
+    - name: Run unit tests
       run: |
         coverage run -m pytest tests
     - name: Generate coverage report

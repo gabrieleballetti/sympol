@@ -30,9 +30,6 @@ def get_normal_form(polytope, affine=False):
     if not polytope.is_lattice_polytope:
         raise ValueError("Polytope must be a lattice polytope")
 
-    # if not polytope.is_full_dim():
-    #     raise ValueError("Polytope must be full-dimensional")
-
     graph = _get_vertex_facet_pairing_graph(polytope)
 
     perm = graph.canonical_permutation(color=[v["color"] for v in graph.vs])
@@ -122,8 +119,8 @@ def _get_vertex_facet_pairing_graph(polytope):
 #     shifted_output_list = output_list - output_list.barycenter
 
 #     ambient_dim = len(input_list[0])
-#     rank_input = shifted_input_list.hom_rank
-#     rank_output = shifted_output_list.hom_rank
+#     rank_input = shifted_input_list.rank
+#     rank_output = shifted_output_list.rank
 
 #     if rank_input < ambient_dim or rank_output < ambient_dim:
 #         raise ValueError("Input and output must span the ambient space")

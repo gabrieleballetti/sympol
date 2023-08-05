@@ -1,64 +1,9 @@
+import pytest
 from random import shuffle
-from sympy import Matrix
+from sympy import Matrix, Rational
 
-from sympol.isomorphism import (
-    get_normal_form,
-    # _is_automorphism,
-    # _find_canonical_permutation_and_automorphisms,
-)
+from sympol.isomorphism import get_normal_form
 from sympol.polytope import Polytope
-
-
-# def test_time_normal_form_1():
-#     verts = [
-#         [-1, 0, 0, 0, 0, 0],
-#         [1, 0, 0, 0, 0, 0],
-#         [0, -1, 0, 0, 0, 0],
-#         [0, 1, 0, 0, 0, 0],
-#         [0, 0, -1, 0, 0, 0],
-#         [0, 0, 1, 0, 0, 0],
-#         [0, 0, 0, -1, 0, 0],
-#         [0, 0, 0, 1, 0, 0],
-#         [0, 0, 0, 0, -1, 0],
-#         [0, 0, 0, 0, 1, 0],
-#         [0, 0, 0, 0, 0, -1],
-#         [0, 0, 0, 0, 0, 1],
-#         [-1, -1, -1, -1, -1, -1],
-#         [1, 1, 1, 1, 1, 1],
-#     ]
-
-#     polytope = Polytope(vertices=verts)
-
-#     start = time.time()
-#     normal_form = get_normal_form(polytope)
-#     end = time.time()
-#     time_1 = end - start
-#     print(f"Time 1: {time_1}")
-
-
-# def test_time_normal_form_2():
-#     verts = [
-#         [1, 0, 0, 0, 0, 0],
-#         [0, 1, 0, 0, 0, 0],
-#         [0, 0, 1, 0, 0, 0],
-#         [0, 0, 0, 1, 0, 0],
-#         [0, 0, 0, 0, 1, 0],
-#         [0, 0, 0, 0, 0, 1],
-#         [-1, -1, -1, 1, 1, 1],
-#         [0, 0, 1, -1, 0, 0],
-#         [0, 0, -1, 0, 0, 0],
-#         [0, 1, 1, -1, -1, -1],
-#         [0, -1, -1, 0, 0, 0],
-#         [0, 0, 0, 0, -1, -1],
-#     ]
-
-#     polytope = Polytope(vertices=verts)
-
-#     start = time.time()
-#     get_normal_form(polytope)
-#     end = time.time()
-#     time_1 = end - start
-#     print(f"Time 1: {time_1}")
 
 
 def test_normal_form():
@@ -87,10 +32,21 @@ def test_normal_form():
             [-4, 9, 1],
         ]
     )
-    polytope_2 = Polytope(vertices=(Matrix(verts) * uni_map))
+    polytope_2 = Polytope(vertices=Matrix(verts) * uni_map)
     normal_form_2 = get_normal_form(polytope_2)
 
     assert normal_form_1 == normal_form_2
+
+
+def test_normal_form_fail_non_lattice_polytope():
+    """
+    Test that an exception is raised when trying to get the normal form of a
+    non-lattice polytope
+    """
+    p = Polytope.cube(2) * Rational(1, 2)
+
+    with pytest.raises(ValueError):
+        get_normal_form(p)
 
 
 # def test_identity_is_automorphisms():
