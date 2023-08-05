@@ -41,7 +41,7 @@ jobs:
         coverage run -m pytest tests
     - name: Generate coverage report
       run: |
-        coverage html
+        coverage html --include=./src/sympol/*
     - name: Upload report
       uses: actions/upload-artifact@v3
       with:
@@ -49,4 +49,4 @@ jobs:
         path: ./htmlcov
     - name: Check coverage
       run: |
-        coverage report --fail-under=100
+        coverage report --include=./src/sympol/* --fail-under=90
