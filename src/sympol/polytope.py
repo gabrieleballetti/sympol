@@ -1335,11 +1335,7 @@ class Polytope:
 
         new_verts = [u for u_id, u in enumerate(self.vertices) if u_id != vertex_id]
         v = self.vertices[vertex_id]
-        recompute = False
         neighbors = self.neighbors(vertex_id)
-        if len(neighbors) > self.dim:
-            # if P is not simple we might need to recompute the vertices
-            recompute = True
         for u_id in neighbors:
             u = self.vertices[u_id]
             vs_dir = u - v
@@ -1349,28 +1345,22 @@ class Polytope:
             w = vs_dir / vs_gcd
             new_verts.append(v + w * dist)
 
-        return Polytope(new_verts) if recompute else Polytope(vertices=new_verts)
+        return Polytope(new_verts)
 
     def chisel(self, dist):
         """
         Return a new polytope obtained by "chiseling" all the vertices at a given
         lattice distance along their neighboring edges.
         """
-        # NOTE: code repetition with the previous method is intentional for
-        # performance reasons
         if dist < 0:
             raise ValueError("dist must be positive")
         if dist == 0:
             return self
 
         new_verts = []
-        recompute = False
         for v_id in range(self.n_vertices):
             v = self.vertices[v_id]
             neighbors = self.neighbors(v_id)
-            if len(neighbors) > self.dim:
-                # if P is not simple we might need to recompute the vertices
-                recompute = True
             for u_id in neighbors:
                 u = self.vertices[u_id]
                 vs_dir = u - v
@@ -1382,7 +1372,7 @@ class Polytope:
                 if pt not in new_verts:
                     new_verts.append(pt)
 
-        return Polytope(new_verts) if recompute else Polytope(vertices=new_verts)
+        return Polytope(new_verts)
 
     # Polytope relations
 

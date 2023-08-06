@@ -505,6 +505,16 @@ def test_lower_dim_polytope_contains_polytope():
     assert not (p * 2).contains(p * 3)
 
 
+def test_contains_wrong_type():
+    """
+    Test that the contains method raises an exception when called with a wrong type
+    """
+    p = Polytope.cube(3)
+
+    with pytest.raises(TypeError):
+        p.contains(1)
+
+
 def test_facets():
     """
     Test that the facets of a cube are six and of the right shape
@@ -968,6 +978,16 @@ def test_h_star_vector():
     assert (Polytope.cube(3) * 2).h_star_vector == (1, 23, 23, 1)
 
 
+def test_ehrhart_to_h_star_polynomial():
+    """
+    Test that the method _ehrhart_to_h_star_polynomial works correctly for a
+    unit cube.
+    """
+    p = Polytope.cube(3)
+
+    assert p._ehrhart_to_h_star_polynomial() == Poly(x**2 + 4 * x + 1, x)
+
+
 def test_degree():
     """
     Test that the degree of a lattice polytope is correct
@@ -1014,6 +1034,10 @@ def test_hilbert_basis():
     """
     Test that the Hilbert basis is calculated correctly
     """
+    with pytest.raises(ValueError):
+        p = Polytope.unimodular_simplex(1) * Rational(1, 2)
+        p.hilbert_basis
+
     p = Polytope.cube(3)
     assert len(p.hilbert_basis) == p.n_integer_points
 
@@ -1026,6 +1050,68 @@ def test_hilbert_basis():
         ]
     )
     assert len(p.hilbert_basis) == p.n_integer_points + 1
+
+
+def test_add():
+    """
+    Test that the __add__ method works correctly
+    """
+    p = Polytope.cube(2) + Point([1, 1])
+    expected = PointConfiguration([[1, 1], [1, 2], [2, 1], [2, 2]])
+    assert _arrays_equal_up_to_row_permutation(p.vertices, expected)
+
+    with pytest.raises(NotImplementedError):
+        Polytope.cube(2) + Polytope.cube(2)
+
+    with pytest.raises(TypeError):
+        Polytope.cube(2) + 1
+
+
+def test_neg():
+    """
+    Test that the __neg__ method works correctly
+    """
+    p = -Polytope.cube(2)
+    expected = PointConfiguration([[0, 0], [0, -1], [-1, 0], [-1, -1]])
+    assert _arrays_equal_up_to_row_permutation(p.vertices, expected)
+
+
+def test_mult():
+    """
+    Test that the __mult__ method works correctly
+    """
+    p = Polytope.cube(2) * 2
+    expected = PointConfiguration([[0, 0], [0, 2], [2, 0], [2, 2]])
+    assert _arrays_equal_up_to_row_permutation(p.vertices, expected)
+
+    p = Polytope.cube(2) * Rational(1, 2)
+    expected = PointConfiguration(
+        [
+            [0, 0],
+            [0, Rational(1, 2)],
+            [Rational(1, 2), 0],
+            [Rational(1, 2), Rational(1, 2)],
+        ]
+    )
+    assert _arrays_equal_up_to_row_permutation(p.vertices, expected)
+
+    p = Polytope.cube(2) * Polytope([[2], [3]])
+    expected = PointConfiguration(
+        [
+            [0, 0, 2],
+            [0, 1, 2],
+            [1, 0, 2],
+            [1, 1, 2],
+            [0, 0, 3],
+            [0, 1, 3],
+            [1, 0, 3],
+            [1, 1, 3],
+        ]
+    )
+    assert _arrays_equal_up_to_row_permutation(p.vertices, expected)
+
+    with pytest.raises(TypeError):
+        Polytope.cube(2) * "a not allowed type"
 
 
 @pytest.mark.parametrize("stop_at_height", [-1, 2])
@@ -1228,7 +1314,10 @@ def test_chisel_vertex():
     Test that the chisel_vertex method works correctly
     """
     with pytest.raises(ValueError):
-        assert Polytope.cube(2).chisel(-1)
+        assert Polytope.cube(2).chisel_vertex(0, -1)
+
+    with pytest.raises(ValueError):
+        assert Polytope.cube(2).chisel_vertex(0, 2)
 
     c = Polytope.cube(2) * 2
     assert c.chisel_vertex(0, 0) == c
@@ -1242,18 +1331,21 @@ def test_chisel():
     with pytest.raises(ValueError):
         assert Polytope.cube(2).chisel(-1)
 
+    with pytest.raises(ValueError):
+        assert (Polytope.cube(2) * 3).chisel(2)
+
     assert Polytope.cube(2).chisel(0).vertices == Polytope.cube(2).vertices
     assert (Polytope.cube(2) * 2).chisel(1).n_vertices == 4
     assert (Polytope.cube(2) * 3).chisel(1).n_vertices == 8
-
-    with pytest.raises(ValueError):
-        assert (Polytope.cube(2) * 3).chisel(2)
 
 
 def test_unimodular_simplex():
     """
     Test that the unimodular simplex is correctly constructed
     """
+    with pytest.raises(ValueError):
+        assert Polytope.unimodular_simplex(-1)
+
     simplex = Polytope.unimodular_simplex(3)
 
     expected_vertices = PointConfiguration(
@@ -1274,6 +1366,9 @@ def test_cube():
     """
     Test that the cube is correctly constructed
     """
+    with pytest.raises(ValueError):
+        assert Polytope.cube(-1)
+
     cube = Polytope.cube(3)
 
     expected_vertices = PointConfiguration(
@@ -1298,6 +1393,9 @@ def test_cross_polytope():
     """
     Test that the cross polytope is correctly constructed
     """
+    with pytest.raises(ValueError):
+        assert Polytope.cross_polytope(-1)
+
     cross = Polytope.cross_polytope(3)
 
     expected_vertices = PointConfiguration(

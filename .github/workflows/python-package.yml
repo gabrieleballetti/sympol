@@ -51,4 +51,4 @@ jobs:
         path: ./htmlcov
     - name: Check coverage
       run: |
-        coverage report --include=./src/sympol/* --fail-under=90
+        coverage report --include=./src/sympol/* --fail-under=100

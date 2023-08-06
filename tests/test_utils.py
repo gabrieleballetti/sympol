@@ -1,3 +1,4 @@
+import pytest
 import numpy as np
 from cdd import Fraction
 from sympy import Poly, Rational
@@ -22,6 +23,9 @@ def test_cdd_fraction_to_simpy_rational():
     n = 10**100
     frac = _cdd_fraction_to_simpy_rational(n)
     assert frac == Rational(10**100)
+
+    with pytest.raises(TypeError):
+        _cdd_fraction_to_simpy_rational("not a fraction")
 
 
 def test_np_cartesian_product():
