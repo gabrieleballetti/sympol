@@ -40,10 +40,7 @@ jobs:
         black --check .
     - name: Run unit tests
       run: |
-        coverage run -m pytest tests
-    - name: Generate coverage report
-      run: |
-        coverage html --include=./src/sympol/*
+        pytest --cov=./src --cov-report=html ./tests
     - name: Upload report
       uses: actions/upload-artifact@v3
       with:
@@ -51,4 +48,4 @@ jobs:
         path: ./htmlcov
     - name: Check coverage
       run: |
-        coverage report --include=./src/sympol/* --fail-under=100
+        coverage report --fail-under=100
