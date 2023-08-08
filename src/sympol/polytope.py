@@ -15,7 +15,7 @@ from sympol.isomorphism import get_normal_form
 from sympol.parallelotope import HalfOpenParallelotope
 from sympol.point import Point
 from sympol.point_configuration import PointConfiguration
-from sympol._utils import (
+from sympol.utils import (
     _binomial_polynomial,
     _cdd_fraction_to_simpy_rational,
     _eulerian_poly,
