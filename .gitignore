@@ -5,6 +5,10 @@ __pycache__
 *.so
 *.o
 
+# cython
+src/**/*.c
+
+
 *.egg
 *.egg-info
 .*cache*/
@@ -19,3 +23,8 @@ dist/
 # coverage
 htmlcov/
 .coverage
+
+# docs
+docs/_build/
+docs/_generated/
+docs/_static/

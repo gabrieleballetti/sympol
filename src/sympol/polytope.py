@@ -20,13 +20,22 @@ from sympol.utils import (
     _cdd_fraction_to_simpy_rational,
     _eulerian_poly,
     _np_cartesian_product,
-    is_unimodal,
+    _is_unimodal,
 )
 
 
 class Polytope:
-    """
-    Polytope class
+    """One line definition.
+
+    Extended description of function.
+
+    Args:
+        arg1 (int): Description of arg1
+        arg2 (str): Description of arg2
+
+    Returns:
+        bool: Description of return value
+
     """
 
     def __init__(
@@ -135,8 +144,17 @@ class Polytope:
 
     @property
     def points(self):
-        """
-        Get the defining points of the polytope
+        """Get the defining points of the polytope.
+
+        Extended description of function.
+
+        Args:
+            arg1 (int): Description of arg1
+            arg2 (str): Description of arg2
+
+        Returns:
+            bool: Description of return value
+
         """
         return self._points
 
@@ -1011,7 +1029,7 @@ class Polytope:
         Check if the polytope has a unimodal h* vector
         """
         if self._has_unimodal_h_star_vector is None:
-            self._has_unimodal_h_star_vector = is_unimodal(self.h_star_vector)
+            self._has_unimodal_h_star_vector = _is_unimodal(self.h_star_vector)
 
         return self._has_unimodal_h_star_vector
 
