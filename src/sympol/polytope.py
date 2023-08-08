@@ -62,11 +62,11 @@ class Polytope:
             vertices = None
 
         if points is not None:
-            self.points = PointConfiguration(points)
+            self._points = PointConfiguration(points)
         else:
-            self.points = PointConfiguration(vertices)
+            self._points = PointConfiguration(vertices)
 
-        self._ambient_dim = self.points[0].ambient_dimension
+        self._ambient_dim = self._points[0].ambient_dimension
 
         self._dim = dim
 
@@ -156,7 +156,7 @@ class Polytope:
             bool: Description of return value
 
         """
-        return self.points
+        return self._points
 
     @property
     def ambient_dim(self):
@@ -186,7 +186,7 @@ class Polytope:
         Get the cdd polyhedron of the polytope
         """
         if self._cdd_polyhedron is None:
-            if self._vertices is not None or self.points is not None:
+            if self._vertices is not None or self._points is not None:
                 self._get_cdd_polyhedron_from_points()
             # TODO: add support for inequalities
             # elif self._inequalities is not None:

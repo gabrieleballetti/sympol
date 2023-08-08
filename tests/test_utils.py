@@ -6,7 +6,7 @@ from sympy.abc import x
 from sympol.utils import (
     _cdd_fraction_to_simpy_rational,
     _np_cartesian_product,
-    is_unimodal,
+    _is_unimodal,
     _eulerian_number,
     _eulerian_poly,
 )
@@ -45,13 +45,13 @@ def test_is_unimodal():
     """
     Test that a sequence is correctly identified as unimodal or not.
     """
-    assert is_unimodal([1, 2, 3, 4, 5, 5, 5, 4, 3, 2, 1])
-    assert is_unimodal([1, 2, 3, 4, 5, 5, 5, 5, 5, 5, 5])
-    assert is_unimodal([5, 4, 3, 2, 1, 0, 0, 0, 0, 0, 0])
-    assert is_unimodal([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])
-    assert not is_unimodal([1, 2, 3, 4, 5, 4, 5, 4, 3, 2, 1])
-    assert not is_unimodal([2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2])
-    assert not is_unimodal([1, 2, 3, 4, 5, 4, 3, 2, 1, 0, 1])
+    assert _is_unimodal([1, 2, 3, 4, 5, 5, 5, 4, 3, 2, 1])
+    assert _is_unimodal([1, 2, 3, 4, 5, 5, 5, 5, 5, 5, 5])
+    assert _is_unimodal([5, 4, 3, 2, 1, 0, 0, 0, 0, 0, 0])
+    assert _is_unimodal([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])
+    assert not _is_unimodal([1, 2, 3, 4, 5, 4, 5, 4, 3, 2, 1])
+    assert not _is_unimodal([2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2])
+    assert not _is_unimodal([1, 2, 3, 4, 5, 4, 3, 2, 1, 0, 1])
 
 
 def test_eulerian_number():
