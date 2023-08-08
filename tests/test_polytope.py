@@ -55,7 +55,7 @@ def test_init_from_vertices():
         [0, 0, 1],
     ]
     polytope = Polytope(vertices=vertices)
-    assert polytope._points == PointConfiguration(vertices)
+    assert polytope.points == PointConfiguration(vertices)
     assert polytope.points == PointConfiguration(vertices)
     assert polytope.ambient_dim == 3
 

@@ -33,7 +33,7 @@ def _np_cartesian_product(*arrays):
     return prod
 
 
-def is_unimodal(iterable):
+def _is_unimodal(iterable):
     """
     Return True if an iterable is unimodal, False otherwise. An iterable is
     unimodal if "there are no valleys", i.e. it is weakly increasing and then weakly

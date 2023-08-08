@@ -15,18 +15,27 @@ from sympol.isomorphism import get_normal_form
 from sympol.parallelotope import HalfOpenParallelotope
 from sympol.point import Point
 from sympol.point_configuration import PointConfiguration
-from sympol.utils import (
+from sympol._utils import (
     _binomial_polynomial,
     _cdd_fraction_to_simpy_rational,
     _eulerian_poly,
     _np_cartesian_product,
-    is_unimodal,
+    _is_unimodal,
 )
 
 
 class Polytope:
-    """
-    Polytope class
+    """One line definition.
+
+    Extended description of function.
+
+    Args:
+        arg1 (int): Description of arg1
+        arg2 (str): Description of arg2
+
+    Returns:
+        bool: Description of return value
+
     """
 
     def __init__(
@@ -53,11 +62,11 @@ class Polytope:
             vertices = None
 
         if points is not None:
-            self._points = PointConfiguration(points)
+            self.points = PointConfiguration(points)
         else:
-            self._points = PointConfiguration(vertices)
+            self.points = PointConfiguration(vertices)
 
-        self._ambient_dim = self._points[0].ambient_dimension
+        self._ambient_dim = self.points[0].ambient_dimension
 
         self._dim = dim
 
@@ -135,10 +144,19 @@ class Polytope:
 
     @property
     def points(self):
+        """Get the defining points of the polytope.
+
+        Extended description of function.
+
+        Args:
+            arg1 (int): Description of arg1
+            arg2 (str): Description of arg2
+
+        Returns:
+            bool: Description of return value
+
         """
-        Get the defining points of the polytope
-        """
-        return self._points
+        return self.points
 
     @property
     def ambient_dim(self):
@@ -168,7 +186,7 @@ class Polytope:
         Get the cdd polyhedron of the polytope
         """
         if self._cdd_polyhedron is None:
-            if self._vertices is not None or self._points is not None:
+            if self._vertices is not None or self.points is not None:
                 self._get_cdd_polyhedron_from_points()
             # TODO: add support for inequalities
             # elif self._inequalities is not None:
@@ -1011,7 +1029,7 @@ class Polytope:
         Check if the polytope has a unimodal h* vector
         """
         if self._has_unimodal_h_star_vector is None:
-            self._has_unimodal_h_star_vector = is_unimodal(self.h_star_vector)
+            self._has_unimodal_h_star_vector = _is_unimodal(self.h_star_vector)
 
         return self._has_unimodal_h_star_vector
 
