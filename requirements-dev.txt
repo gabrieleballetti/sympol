@@ -1,4 +1,9 @@
+# linting, testing and coverage
 black
 pytest
 pytest-cov
 ruff
+
+# documentation
+myst-parser
+sphinx-rtd-theme
