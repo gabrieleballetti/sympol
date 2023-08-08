@@ -5,6 +5,10 @@ __pycache__
 *.so
 *.o
 
+# cython
+src/**/*.c
+
+
 *.egg
 *.egg-info
 .*cache*/
