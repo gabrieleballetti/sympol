@@ -16,7 +16,7 @@ build:
     pre_install:
       - pip install --upgrade pip
       - pip install -r requirements.txt
-      - pip install -e .
+      - pip install .
       - pip list
     post_install:
       - pip list
@@ -32,8 +32,3 @@ sphinx:
 python:
   install:
     - requirements: docs/requirements.txt
-    - requirements: requirements.txt
-    - method: pip
-      path: .
-
-
