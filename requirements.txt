@@ -1,3 +1,4 @@
+cython>=0.29.35
 igraph>=0.10.4
 numpy>=1.24.3
 pycddlib>=2.1.6
