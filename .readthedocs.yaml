@@ -11,7 +11,9 @@ build:
   tools:
     python: "3.11"
   jobs:
-    post_build:
+    post_create_environment:
+      - pip list
+    post_install:
       - pip list
   
 
