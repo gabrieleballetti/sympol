@@ -15,7 +15,7 @@ build:
       - pip list
     pre_install:
       - pip install --upgrade pip
-      - pip install .
+      - pip install -e .
       - pip list
     post_install:
       - pip list
