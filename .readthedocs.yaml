@@ -13,6 +13,9 @@ build:
   jobs:
     post_create_environment:
       - pip list
+    pre_install:
+      - pip install --upgrade pip
+      - pip install .
     post_install:
       - pip list
   
