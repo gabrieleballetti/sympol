@@ -10,6 +10,10 @@ build:
   os: ubuntu-22.04
   tools:
     python: "3.11"
+  jobs:
+    post_build:
+      - pip list
+  
 
 # Build documentation in the docs/ directory with Sphinx
 sphinx:
@@ -23,6 +27,6 @@ python:
     - requirements: docs/requirements.txt
     - requirements: requirements.txt
     - method: pip
-      path: "-e ."
+      path: .
 
 
