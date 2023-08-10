@@ -13,7 +13,7 @@ build:
   jobs:
     pre_install:
       - pip install --upgrade pip
-      - pip install -e .
+      - pip install -e .[docs]
       - pip list
     post_install:
       - pip list

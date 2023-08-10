@@ -12,4 +12,16 @@ setup(
         "scipy>=0.12.0",
         "sympy>=1.12",
     ],
+    extras_require={
+        "dev": [
+            "black",
+            "pytest",
+            "pytest-cov",
+            "ruff",
+        ],
+        "docs": [
+            "myst-parser",
+            "sphinx-rtd-theme",
+        ],
+    },
 )
