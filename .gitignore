@@ -24,6 +24,7 @@ htmlcov/
 src/**/*.c
 
 # docs
+docs/_autosummary/
 docs/_build/
 docs/_generated/
 docs/_static/
