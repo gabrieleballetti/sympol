@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 from Cython.Build import cythonize
 from numpy import get_include as numpy_get_include
 
@@ -12,4 +12,5 @@ setup(
         "scipy>=0.12.0",
         "sympy>=1.12",
     ],
+    packages=find_packages(),
 )
