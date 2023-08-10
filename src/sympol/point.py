@@ -85,10 +85,10 @@ class Point(np.ndarray):
 
     @property
     def ambient_dimension(self):
-        """Get the ambient dimension of the Point.
+        """Get the ambient dimension of the point.
 
         Returns:
-            int: The ambient dimension of the Point.
+            int: The ambient dimension of the point.
 
         """
         return self.shape[0]
