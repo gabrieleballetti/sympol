@@ -1,4 +1,4 @@
-"""Point class based on a numpy array with sympy rational entries."""
+"""Module for the Point class."""
 
 import numpy as np
 from sympy import Rational
@@ -7,16 +7,11 @@ from sympy import Rational
 class Point(np.ndarray):
     """Point class based on a numpy array with sympy rational entries.
 
-    Attributes:
-        None
-
-    Methods:
-        __new__(cls, data)
-        __init__(self, data, **kwargs)
-        __eq__(self, other)
-        __ne__(self, other)
-        __hash__(self)
-        ambient_dimension(self)
+    Example usage:
+    >>> from sympol.point import Point
+    >>> a = Point([1, 2, 3])
+    >>> a / 2
+    Point([1/2, 1, 3/2])
 
     """
 
