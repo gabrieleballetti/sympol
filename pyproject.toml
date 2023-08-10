@@ -1,12 +1,7 @@
 [build-system]
 requires = [
-    "cython>=0.29.35",
-    "igraph>=0.10.4",
-    "numpy>=1.24.3",
-    "pycddlib>=2.1.6",
-    "scipy>=0.12.0",
-    "setuptools>=61.0",
-    "sympy>=1.12"
+    "cython",
+    "setuptools",
 ]
 build-backend = "setuptools.build_meta"
 
