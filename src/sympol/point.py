@@ -8,10 +8,13 @@ class Point(np.ndarray):
     """Point class based on a numpy array with sympy rational entries.
 
     Example usage:
-    >>> from sympol.point import Point
-    >>> a = Point([1, 2, 3])
-    >>> a / 2
-    Point([1/2, 1, 3/2])
+
+    .. code-block:: python
+
+        from sympol.point import Point
+
+        a = Point([1, 2, 3])
+        print(a / 2) # [1/2  1  3/2]
 
     """
 
