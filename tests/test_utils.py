@@ -3,7 +3,7 @@ import numpy as np
 from cdd import Fraction
 from sympy import Poly, Rational
 from sympy.abc import x
-from sympol.utils import (
+from sympol._utils import (
     _cdd_fraction_to_simpy_rational,
     _np_cartesian_product,
     _is_unimodal,

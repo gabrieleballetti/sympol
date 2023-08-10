@@ -2,7 +2,7 @@ import pytest
 from random import shuffle
 from sympy import Matrix, Rational
 
-from sympol.isomorphism import get_normal_form
+from sympol._isomorphism import get_normal_form
 from sympol.polytope import Polytope
 
 

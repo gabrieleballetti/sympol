@@ -9,13 +9,13 @@ from sympy.abc import x
 from sympy.matrices import zeros
 from sympy.matrices.normalforms import hermite_normal_form
 
-from sympol.hilbert_basis import get_hilbert_basis_np
-from sympol.integer_points import find_integer_points
-from sympol.isomorphism import get_normal_form
-from sympol.parallelotope import HalfOpenParallelotope
+from sympol._hilbert_basis_np import get_hilbert_basis_np
+from sympol._integer_points_np import find_integer_points
+from sympol._isomorphism import get_normal_form
+from sympol._half_open_parallelotope import HalfOpenParallelotope
 from sympol.point import Point
 from sympol.point_configuration import PointConfiguration
-from sympol.utils import (
+from sympol._utils import (
     _binomial_polynomial,
     _cdd_fraction_to_simpy_rational,
     _eulerian_poly,

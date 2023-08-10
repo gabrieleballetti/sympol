@@ -1,17 +1,9 @@
 API
 ===
 
-.. autoclass:: sympol.Point
-   :members:
-   :undoc-members:
-   :show-inheritance:
+.. autosummary::
+   :toctree: _autosummary
+   :template: custom-module-template.rst
+   :recursive:
 
-.. autoclass:: sympol.PointConfiguration
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-.. autoclass:: sympol.Polytope
-   :members:
-   :undoc-members:
-   :show-inheritance:
+   sympol
