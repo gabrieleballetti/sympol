@@ -1,6 +1,5 @@
 from sympy import Matrix
-
-from sympol.snf import smith_normal_form
+from sympol._snf import smith_normal_form
 
 
 def test_smith_normal_form():

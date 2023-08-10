@@ -21,6 +21,7 @@ setup(
         ],
         "docs": [
             "myst-parser",
+            "pydocstyle",
             "sphinx-rtd-theme",
         ],
     },

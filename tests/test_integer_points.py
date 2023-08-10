@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 
-from sympol.integer_points import find_integer_points
+from sympol._integer_points_np import find_integer_points
 from sympol.polytope import Polytope
 
 

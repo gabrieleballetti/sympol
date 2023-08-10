@@ -24,3 +24,6 @@ classifiers = [
 [project.urls]
 "Homepage" = "https://github.com/gabrieleballetti/sympol"
 "Bug Tracker" = "https://github.com/gabrieleballetti/sympol/issues"
+
+[tool.pydocstyle]
+convention = "google"

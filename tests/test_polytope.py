@@ -4,7 +4,7 @@ import numpy as np
 from sympy import Matrix, Poly, Rational
 from sympy.abc import x
 
-from sympol.parallelotope import HalfOpenParallelotope
+from sympol._half_open_parallelotope import HalfOpenParallelotope
 from sympol.point import Point
 from sympol.point_configuration import PointConfiguration
 from sympol.polytope import Polytope, Simplex

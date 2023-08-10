@@ -3,11 +3,11 @@ import itertools
 import numpy as np
 from sympy import diag, Matrix
 
-from sympol.integer_pts_parallelotope_np import (
+from sympol._integer_pts_hop_np import (
     get_parallelotope_points_np,
 )
 from sympol.point import Point
-from sympol.snf import smith_normal_form
+from sympol._snf import smith_normal_form
 
 
 class HalfOpenParallelotope:

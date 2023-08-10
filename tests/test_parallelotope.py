@@ -1,6 +1,6 @@
 import pytest
 from sympy import Matrix
-from sympol.parallelotope import HalfOpenParallelotope
+from sympol._half_open_parallelotope import HalfOpenParallelotope
 from sympol.point_configuration import PointConfiguration
 
 
