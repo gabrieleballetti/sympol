@@ -1,4 +1,7 @@
+"""Module for the PointConfiguration class."""
+
 import numpy as np
+from numpy.typing import ArrayLike
 from sympy import Abs, Matrix, prod, ZZ, Rational
 from sympy.matrices.normalforms import smith_normal_form
 
@@ -6,28 +9,39 @@ from sympol.point import Point
 
 
 class PointConfiguration(np.ndarray):
-    """
-    A class for representing a point configuration, which is just a list of points
+    """PointConfiguration class based on a numpy array with sympy rational entries.
+
+    The PointConfiguration inherit from numpy.ndarray. It is a two dimensional array
+    whose entries are converted to sympy Rational upon initialization. This object can
+    be thought as a list of Point objects in the same ambient space.
+
+    Example usage:
+
+    .. code-block:: python
+
+        from sympol import PointConfiguration
+
+        PointConfiguration([[1, 0, 0], [0, 1, 0]]) / 2
+        # PointConfiguration([[1/2, 0, 0],
+        #                     [0, 1/2, 0]], dtype=object)
+
     """
 
-    def __new__(cls, data):
-        make_sympy_rational = np.vectorize(lambda x: Rational(x))
+    def __new__(cls, data: ArrayLike, shape=None, **kwargs):
+        """Create a new PointConfiguration object."""
+
         _arr = np.array(data)
-        if _arr.ndim == 1:
+        if _arr.size == 0:
             _arr = _arr.reshape(0, 0)
-        elif _arr.ndim > 2:
-            # if len([i for i in _arr.shape if i > 1]) <= 2:
-            #     _arr = _arr.reshape(*_arr.shape[:2])
-            # else:
-            raise ValueError("Point configuration must be a rank 2 array at most.")
+        if _arr.ndim != 2:
+            raise ValueError("Point configuration must be a rank 2 array.")
         if _arr.size > 0:
+            make_sympy_rational = np.vectorize(lambda x: Rational(x))
             _arr = make_sympy_rational(_arr)
         return _arr.view(cls)
 
-    def __init__(self, iterable, shape=None, **kwargs):
-        """
-        Initialize a point list
-        """
+    def __init__(self, data: ArrayLike, shape=None, **kwargs):
+        """Initialize a PointConfiguration object."""
 
         self._ambient_dimension = None
         self._rank = None
@@ -67,30 +81,6 @@ class PointConfiguration(np.ndarray):
         Override the hash method for the PointConfiguration class.
         """
         return tuple(map(tuple, self)).__hash__()
-
-    def __add__(self, other):
-        """
-        Overload the + operator to add allow translation by a vector
-        """
-        if isinstance(other, Point) and self.shape[1] == other.shape[0]:
-            return super().__add__(other).view(PointConfiguration)
-        return super().__add__(other)
-
-    def __sub__(self, other):
-        """
-        Overload the - operator to add allow translation by a vector
-        """
-        if isinstance(other, Point) and self.shape[1] == other.shape[0]:
-            return super().__sub__(other).view(PointConfiguration)
-        return super().__sub__(other)
-
-    # def __mul__(self, other):
-    #     """
-    #     Overload the * operator to allow scaling by a scalar
-    #     """
-    #     if isinstance(other, (int, float)):
-    #         return PointConfiguration([p * other for p in self])
-    #     return super().__mul__(other)
 
     @property
     def ambient_dimension(self):
