@@ -51,41 +51,42 @@ class PointConfiguration(np.ndarray):
         self._index = None
 
     def __getitem__(self, index):
-        """
-        Overload the getitem method to return a Point
+        """Make sure that __getitem__ returns a Point object when a single row is
+        selected.
         """
         if isinstance(index, int):
             return Point(super().__getitem__(index))
-        elif isinstance(index, slice):
-            return PointConfiguration(super().__getitem__(index))
+        elif isinstance(index, tuple) and len(index) > 0 and isinstance(index[0], int):
+            # Also Point for indices like [0, ...]
+            return Point(super().__getitem__(index))
         else:
             return super().__getitem__(index)
 
     def __eq__(self, other):
-        """
-        Override the == operator for the PointConfiguration class.
-        """
+        """Define __eq__ between two PointConfiguration objects."""
         if isinstance(other, PointConfiguration):
             return np.array_equal(self, other)
         else:
             return super().__eq__(other)
 
     def __ne__(self, other):
-        """
-        Override the != operator for the PointConfiguration class.
-        """
+        """Define __ne__ between two PointConfiguration objects."""
         return not self.__eq__(other)
 
     def __hash__(self):
-        """
-        Override the hash method for the PointConfiguration class.
-        """
+        """Define __hash__ for PointConfiguration objects."""
         return tuple(map(tuple, self)).__hash__()
 
     @property
-    def ambient_dimension(self):
-        """
-        Get the ambient dimension of the point list
+    def ambient_dimension(self) -> int:
+        """Get the ambient dimension of the point.
+
+        Returns:
+            The ambient dimension of the point.
+
+        Raises:
+            ValueError: If the point list is empty.
+
         """
         if self.shape[0] == 0:
             raise ValueError("Point list is empty")
@@ -96,10 +97,17 @@ class PointConfiguration(np.ndarray):
         return self._ambient_dimension
 
     @property
-    def rank(self):
-        """
-        Get the rank of the point list (avoid the variable name "rank" to avoid
-        conflict with the rank method of the Array class)
+    def rank(self) -> int:
+        """Get the rank of the point list.
+
+        Note that the rank of a point list is the rank of the matrix defined by the
+        points in the list, which is the size of the largest square submatrix with
+        non-zero determinant. The rank might not be translation-invariant, see
+        :attr:`affine_rank` for the translation-invariant version.
+
+        Returns:
+            The rank of the point list.
+
         """
         if self._rank is None:
             self._rank = Matrix(self).rank()
@@ -107,9 +115,17 @@ class PointConfiguration(np.ndarray):
         return self._rank
 
     @property
-    def affine_rank(self):
-        """
-        Get the affine rank of the point list
+    def affine_rank(self) -> int:
+        """Get the affine rank of the point list.
+
+        Note that the affine rank of a point list is the rank of the matrix defined by
+        the points in the list after translating one of the points to the origin. Use
+        :attr:`rank` for the rank of the matrix defined by the points in the
+        PointConfiguration without translation.
+
+        Returns:
+            The affine rank of the point list.
+
         """
         if self._affine_rank is None:
             translated_points = [p - self[0] for p in self]
@@ -118,9 +134,15 @@ class PointConfiguration(np.ndarray):
         return self._affine_rank
 
     @property
-    def barycenter(self):
-        """
-        Get the barycenter of the point list
+    def barycenter(self) -> Point:
+        """Get the barycenter of the point list.
+
+        The barycenter (or center of mass) of the PointConfiguration is the average of
+        its points.
+
+        Returns:
+            The barycenter of the point list.
+
         """
         if self._barycenter is None:
             self._barycenter = (
@@ -130,9 +152,17 @@ class PointConfiguration(np.ndarray):
         return self._barycenter
 
     @property
-    def snf_diag(self):
-        """
-        Get the (diagonal entries of the) affine Smith Normal Form of the point list.
+    def snf_diag(self) -> list:
+        """Get the affine Smith Normal Form of the PointConfiguration.
+
+        The affine Smith Normal Form of a PointConfiguration is the diagonal of the
+        matrix defined by the points in the PointConfiguration after translating one of
+        them to the origin.
+
+        Returns:
+            The diagonal entries of the affine Smith Normal Form of the
+            PointConfiguration.
+
         """
         if self._snf_diag is None:
             m = Matrix(self[1:] - self[0])
@@ -142,9 +172,16 @@ class PointConfiguration(np.ndarray):
 
     @property
     def index(self):
-        """
-        Get the index of the sublattice spanned by the point list in the integer
-        lattice.
+        """Get the index of the sublattice spanned by the PointConfiguration.
+
+        The index of a sublattice is the index of the sublattice L in the ambient
+        integer lattice ZZ^d. It equals the cardinality of the quotient group ZZ^d / L.
+
+        Returns:
+            The index of the sublattice spanned by the PointConfiguration.
+
+        Raises:
+            ValueError: If the PointConfiguration is not full rank.
         """
         if self._index is None:
             if self.affine_rank < self.ambient_dimension:
