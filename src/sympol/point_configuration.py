@@ -12,8 +12,8 @@ class PointConfiguration(np.ndarray):
     """PointConfiguration class based on a numpy array with sympy rational entries.
 
     The PointConfiguration inherit from numpy.ndarray. It is a two dimensional array
-    whose entries are converted to sympy Rational upon initialization. This object can
-    be thought as a list of Point objects in the same ambient space.
+    whose entries are converted to sympy Rational upon initialization. This object
+    represents a list of Point objects in the same ambient space.
 
     Example usage:
 
@@ -29,7 +29,6 @@ class PointConfiguration(np.ndarray):
 
     def __new__(cls, data: ArrayLike, shape=None, **kwargs):
         """Create a new PointConfiguration object."""
-
         _arr = np.array(data)
         if _arr.size == 0:
             _arr = _arr.reshape(0, 0)
@@ -42,7 +41,6 @@ class PointConfiguration(np.ndarray):
 
     def __init__(self, data: ArrayLike, shape=None, **kwargs):
         """Initialize a PointConfiguration object."""
-
         self._ambient_dimension = None
         self._rank = None
         self._affine_rank = None
@@ -51,14 +49,12 @@ class PointConfiguration(np.ndarray):
         self._index = None
 
     def __getitem__(self, index):
-        """Make sure that __getitem__ returns a Point object when a single row is
-        selected.
-        """
+        """Override __getitem__ to return Point objects for integers values."""
         if isinstance(index, int):
             return Point(super().__getitem__(index))
         elif isinstance(index, tuple) and len(index) > 0 and isinstance(index[0], int):
             # Also Point for indices like [0, ...]
-            return Point(super().__getitem__(index))
+            return Point(super().__getitem__(index[0])).__getitem__(index[1:])
         else:
             return super().__getitem__(index)
 
@@ -86,7 +82,6 @@ class PointConfiguration(np.ndarray):
 
         Raises:
             ValueError: If the point list is empty.
-
         """
         if self.shape[0] == 0:
             raise ValueError("Point list is empty")
@@ -107,7 +102,6 @@ class PointConfiguration(np.ndarray):
 
         Returns:
             The rank of the point list.
-
         """
         if self._rank is None:
             self._rank = Matrix(self).rank()
@@ -125,7 +119,6 @@ class PointConfiguration(np.ndarray):
 
         Returns:
             The affine rank of the point list.
-
         """
         if self._affine_rank is None:
             translated_points = [p - self[0] for p in self]
@@ -142,7 +135,6 @@ class PointConfiguration(np.ndarray):
 
         Returns:
             The barycenter of the point list.
-
         """
         if self._barycenter is None:
             self._barycenter = (
@@ -162,7 +154,6 @@ class PointConfiguration(np.ndarray):
         Returns:
             The diagonal entries of the affine Smith Normal Form of the
             PointConfiguration.
-
         """
         if self._snf_diag is None:
             m = Matrix(self[1:] - self[0])

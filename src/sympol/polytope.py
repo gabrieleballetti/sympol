@@ -1,3 +1,5 @@
+"""Module for the Polytope class."""
+
 import numpy as np
 import cdd
 
@@ -25,17 +27,30 @@ from sympol._utils import (
 
 
 class Polytope:
-    """One line definition.
+    """A class for representing the convex hull of a finite set of points.
 
-    Extended description of function.
+    A polytope can be either defined by a list of points (V-representation) or by
+    a list of inequalities or hyperplanes (H-representation) (TODO). The lists can be
+    redundant, and a irreduntant representation is calculated automatically, if needed.
 
-    Args:
-        arg1 (int): Description of arg1
-        arg2 (str): Description of arg2
+    Example usage:
 
-    Returns:
-        bool: Description of return value
+    .. code-block:: python
 
+        from sympol import Polytope
+
+        p = Polytope([[-1, -1], [-1, 1], [1, -1], [1, 1], [0, 0]])
+        p.vertices
+        # PointConfiguration([[-1, -1],
+        #             [-1, 1],
+        #             [1, -1],
+        #             [1, 1]], dtype=object)
+
+        p.volume
+        # 4
+
+        p.f_vector
+        # (1, 4, 4, 1)
     """
 
     def __init__(
@@ -44,9 +59,7 @@ class Polytope:
         dim: int = None,
         vertices: list = None,
     ):
-        """
-        Initialize a polytope from a list of points or vertices
-        """
+        """Initialize a Polytope object."""
         if points is None and vertices is None:
             raise ValueError("Either points or vertices must be given")
 
@@ -61,6 +74,7 @@ class Polytope:
         else:
             vertices = None
 
+        # TODO: change this once support for H-representation is added
         if points is not None:
             self._points = PointConfiguration(points)
         else:
@@ -143,25 +157,20 @@ class Polytope:
         self._weights = None
 
     @property
-    def points(self):
-        """Get the defining points of the polytope.
-
-        Extended description of function.
-
-        Args:
-            arg1 (int): Description of arg1
-            arg2 (str): Description of arg2
+    def points(self) -> PointConfiguration:
+        """Get the (possibly redundant) defining points of the polytope.
 
         Returns:
-            bool: Description of return value
-
+            The defining points of the polytope.
         """
         return self._points
 
     @property
-    def ambient_dim(self):
-        """
-        Get the ambient dimension of the polytope
+    def ambient_dim(self) -> int:
+        """Get the ambient dimension of the polytope.
+
+        Returns:
+            The ambient dimension of the polytope.
         """
         return self._ambient_dim
 
