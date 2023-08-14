@@ -30,7 +30,7 @@ class Polytope:
     """A class for representing the convex hull of a finite set of points.
 
     A polytope can be either defined by a list of points (V-representation) or by
-    a list of inequalities or hyperplanes (H-representation) (TODO). The lists can be
+    a list of inequalities or hyperplanes (H-representation) [TODO]. The lists can be
     redundant, and a irreduntant representation is calculated automatically, if needed.
 
     Example usage:
@@ -175,9 +175,11 @@ class Polytope:
         return self._ambient_dim
 
     @property
-    def dim(self):
-        """
-        Get the dimension of the polytope
+    def dim(self) -> int:
+        """Get the dimension of the polytope.
+
+        Returns:
+            The dimension of the polytope.
         """
         if self._dim is None:
             self._dim = self.points.affine_rank
@@ -190,9 +192,14 @@ class Polytope:
         return self._dim
 
     @property
-    def cdd_polyhedron(self):
-        """
-        Get the cdd polyhedron of the polytope
+    def cdd_polyhedron(self) -> cdd.Polyhedron:
+        """Get the cdd polyhedron of the polytope.
+
+        The Polyhedron object from the pycddlib library, which is used to switch between
+        V-representation and H-representation.
+
+        Returns:
+            The cdd polyhedron of the polytope.
         """
         if self._cdd_polyhedron is None:
             if self._vertices is not None or self._points is not None:
@@ -206,9 +213,11 @@ class Polytope:
         return self._cdd_polyhedron
 
     @property
-    def cdd_inequalities(self):
-        """
-        Get the output from cdd_polyhedron.get_inequalities()
+    def cdd_inequalities(self) -> cdd.Matrix:
+        """Get the output from cdd_polyhedron.get_inequalities().
+
+        Returns:
+            The output from cdd_polyhedron.get_inequalities().
         """
         if self._cdd_inequalities is None:
             self._cdd_inequalities = self.cdd_polyhedron.get_inequalities()
@@ -222,9 +231,11 @@ class Polytope:
         return self._cdd_inequalities
 
     @property
-    def cdd_vertex_adjacency(self):
-        """
-        Get the cdd vertex adjacency output
+    def cdd_vertex_adjacency(self) -> cdd.Matrix:
+        """Get the out from cdd_polyhedron.get_input_adjacency().
+
+        Returns:
+            The output from cdd_polyhedron.get_input_adjacency().
         """
         if self._cdd_vertex_adjacency is None:
             # make sure vertices are calculated (and simplified)
@@ -234,9 +245,11 @@ class Polytope:
         return self._cdd_vertex_adjacency
 
     @property
-    def cdd_facet_adjacency(self):
-        """
-        Get the cdd facet adjacency
+    def cdd_facet_adjacency(self) -> cdd.Matrix:
+        """Get the out from cdd_polyhedron.get_adjacency().
+
+        Returns:
+            The output from cdd_polyhedron.get_adjacency().
         """
         if self._cdd_facet_adjacency is None:
             # make sure inequalities are calculated (and simplified)
@@ -246,10 +259,11 @@ class Polytope:
         return self._cdd_facet_adjacency
 
     @property
-    def vertices(self):
-        """
-        Return the vertices of the polytope or calculate them if they are not
-        already calculated
+    def vertices(self) -> PointConfiguration:
+        """Get the irredundant list of vertices of the polytope.
+
+        Returns:
+            The vertices of the polytope as a PointConfiguration object.
         """
         if self._vertices is None:
             mat_gens = self.cdd_polyhedron.get_generators()
@@ -267,12 +281,18 @@ class Polytope:
         return self._vertices
 
     @property
-    def inequalities(self):
-        """
-        Get the defining inequalities of the polytope as a numpy array [-b A]
-        such that the polytope is defined by {x | Ax >= b}.
-        This is a copy of cdd_inequalities where each normal is expressed
-        by integers and is primitive (the right hand b side might be rational).
+    def inequalities(self) -> np.ndarray:
+        """Get the irredundant list of defining inequalities of the polytope.
+
+        The inequalities as given as a numpy array [-b A] such that the polytope is
+        defined as {x | Ax >= b}. This is a copy of cdd_inequalities where each normal
+        is expressed by integers and is primitive (b might be rational).
+
+        If the polytope is not full dimensional, then some of the inequalities are
+        actually equalities. See the ``is_eq`` property.
+
+        Returns:
+            The defining inequalities of the polytope as a numpy array.
         """
         if self._inequalities is None:
             n_rows = self.cdd_inequalities.row_size
@@ -293,9 +313,15 @@ class Polytope:
         return self._inequalities
 
     @property
-    def is_eq(self):
-        """
-        For each inequality, store 0 if it is an equality, 1 otherwise
+    def is_eq(self) -> np.ndarray:
+        """Get the list of inequalities that are equalities.
+
+        If the polytope is not full dimensional, then some of the inequalities are
+        actually equalities. This property specifies which ones.
+
+        Returns:
+            A numpy array of booleans, where True indicates that the corresponding
+            inequality is an equality, False indicates that it is an actual inequality.
         """
         if self._is_eq is None:
             self._is_eq = np.zeros(shape=self.cdd_inequalities.row_size, dtype=bool)
@@ -304,31 +330,40 @@ class Polytope:
         return self._is_eq
 
     @property
-    def _ineqs(self):
-        """
-        Return the "actual" inequalities of the polytope. The property self.inequalities
-        includes both the inequalities [-b A] and the equalities [-b' A'] such that
-        the polytope is defined by {x | Ax >= b, A'x = b'}. This property returns only
-        the inequalities [-b A].
+    def _ineqs(self) -> np.ndarray:
+        """Return the "actual" inequalities of the polytope.
+
+        Return the "actual" inequalities of the polytope. See the ``inequalities`` and
+        ``_eqs`` properties.
+
+        Return:
+            This property returns only the "actual" inequalities [-b A].
         """
         return self.inequalities[~self.is_eq]
 
     @property
-    def _eqs(self):
-        """
-        Return the "actual" equalities of the polytope. The property self.inequalities
-        includes both the inequalities [-b A] and the equalities [-b' A'] such that
-        the polytope is defined by {x | Ax >= b, A'x = b'}. This property returns only
-        the equalities [-b' A'].
+    def _eqs(self) -> np.ndarray:
+        """Return the "actual" equalities of the polytope.
+
+        Return the equalities of the polytope. See the ``inequalities`` and
+        ``_eqs`` properties.
+
+        Return:
+            This property returns only the "actual" equalities [-b A].
         """
         return self.inequalities[self.is_eq]
 
     @property
-    def homogeneous_inequalities(self):
-        """
-        Get the defining homogeneous inequalities of the polytope as a numpy array.
-        This is a copy of cdd_inequalities where each line (inequality) is expressed
-        by integers and is primitive.
+    def homogeneous_inequalities(self) -> np.ndarray:
+        """Get the defining homogeneous inequalities of the polytope.
+
+        This is basically a copy of the ``inequalities`` property, where each line
+        (inequality) is multiplied by the denominator of the right hand side b, making
+        this array integer. This can be thought of as the defining homogeneous
+        inequalities {x | Ax >= 0} of the cone positively spanned by {1} x P.
+
+        Returns:
+            The defining homogeneous inequalities of the polytope as a numpy array.
         """
         if self._homogeneous_inequalities is None:
             self._homogeneous_inequalities = np.empty_like(self.inequalities)
@@ -338,9 +373,11 @@ class Polytope:
         return self._homogeneous_inequalities
 
     @property
-    def n_inequalities(self):
-        """
-        Get the number of inequalities of the polytope
+    def n_inequalities(self) -> int:
+        """Get the number of defining inequalities of the polytope.
+
+        Returns:
+            The number of defining inequalities of the polytope.
         """
         if self._n_inequalities is None:
             self._n_inequalities = self.inequalities.shape[0]
@@ -348,9 +385,14 @@ class Polytope:
         return self._n_inequalities
 
     @property
-    def facets(self):
-        """
-        Get the facets of the polytope.
+    def facets(self) -> tuple:
+        """Get the facets of the polytope.
+
+        The facets of the polytope are the (d-1)-dimensional faces of the polytope,
+        where d is the dimension of the polytope.
+
+        Returns:
+            The facets of the polytope as a tuple of frozensets of vertex ids.
         """
         if self._facets is None:
             self._facets = tuple(
@@ -360,9 +402,14 @@ class Polytope:
         return self._facets
 
     @property
-    def ridges(self):
-        """
-        Get the ridges of the polytope (d-2 dimensional faces)
+    def ridges(self) -> tuple:
+        """Get the ridges of the polytope.
+
+        The ridges of the polytope are the (d-2)-dimensional faces of the polytope,
+        where d is the dimension of the polytope.
+
+        Returns:
+            The ridges of the polytope as a tuple of frozensets of vertex ids.
         """
         if self._ridges is None:
             self._ridges = []
@@ -375,11 +422,14 @@ class Polytope:
         return self._ridges
 
     @property
-    def edges(self):
-        """
-        Get the edges of the polytope (1 dimensional faces)
-        """
+    def edges(self) -> tuple:
+        """Get the edges of the polytope.
 
+        The edges of the polytope are the 1-dimensional faces of the polytope.
+
+        Returns:
+            The edges of the polytope as a tuple of frozensets of vertex ids.
+        """
         if self._edges is None:
             self._edges = []
             for i, ads in enumerate(self.cdd_vertex_adjacency):
@@ -391,15 +441,23 @@ class Polytope:
 
         return self._edges
 
-    def faces(self, dim):
+    def faces(self, dim) -> tuple:
+        """Get the faces of the polytope of a given dimension.
+
+        Faces of dimension and codimension lower or equal to two are deduced from the
+        cdd polyhedron. Other faces are found from higher dimensional faces, via
+        intersection with facets.
+
+        Args:
+            dim: The dimension of the faces to be returned.
+
+        Returns:
+            The faces of the polytope of dimension dim as a tuple of frozensets of
+            vertex ids.
         """
-        Get the faces of the polytope of a given dimension. Faces of dimension and
-        codimension lower ore equal to two are found from the cdd polyhedron. Other
-        faces are found from higher dimensional faces, via intersection with facets.
-        TODO: This could be done more efficiently especially as low dimensional faces
-        need all the higher dimensional faces to be calculated first. Can also be
-        compiled with cython.
-        """
+        # TODO: This could be done more efficiently especially as low dimensional faces
+        # need all the higher dimensional faces to be calculated first. Can also be
+        # compiled with cython.
         if dim < -1:
             raise ValueError(
                 "The dimension of the face must be greater than or equal to -1"
@@ -449,9 +507,11 @@ class Polytope:
         return self._faces[dim]
 
     @property
-    def n_vertices(self):
-        """
-        Get the number of vertices of the polytope
+    def n_vertices(self) -> int:
+        """Get the number of vertices of the polytope.
+
+        Returns:
+            The number of vertices of the polytope.
         """
         if self._n_vertices is None:
             self._n_vertices = self.vertices.shape[0]
@@ -459,9 +519,11 @@ class Polytope:
         return self._n_vertices
 
     @property
-    def n_facets(self):
-        """
-        Get the number of facets of the polytope
+    def n_facets(self) -> int:
+        """Get the number of facets of the polytope.
+
+        Returns:
+            The number of facets of the polytope.
         """
         if self._n_facets is None:
             self._n_facets = self.inequalities.shape[0] - sum(self.is_eq)
@@ -469,9 +531,11 @@ class Polytope:
         return self._n_facets
 
     @property
-    def n_ridges(self):
-        """
-        Get the number of ridges of the polytope
+    def n_ridges(self) -> int:
+        """Get the number of ridges of the polytope.
+
+        Returns:
+            The number of ridges of the polytope.
         """
         if self._n_ridges is None:
             self._n_ridges = len(self.ridges)
@@ -479,9 +543,11 @@ class Polytope:
         return self._n_ridges
 
     @property
-    def n_edges(self):
-        """
-        Get the number of edges of the polytope
+    def n_edges(self) -> int:
+        """Get the number of edges of the polytope.
+
+        Returns:
+            The number of edges of the polytope.
         """
         if self._n_edges is None:
             self._n_edges = len(self.edges)
@@ -489,9 +555,16 @@ class Polytope:
         return self._n_edges
 
     @property
-    def f_vector(self):
-        """
-        Get the f-vector of the polytope
+    def f_vector(self) -> tuple:
+        """Get the f-vector of the polytope.
+
+        The f-vector of a polytope is a vector of the number of faces of each dimension.
+        It should be thought as indexed by the dimension of the faces, where the first
+        and last entries are 1 as they represent the empty set (contained in all faces)
+        and the polytope itself (containing all faces), respectively.
+
+        Returns:
+            The f-vector of the polytope.
         """
         if self._f_vector is None:
             self._f_vector = tuple(
@@ -501,14 +574,21 @@ class Polytope:
         return self._f_vector
 
     @property
-    def vertex_adjacency_matrix(self):
-        """
-        Get the vertex adjacency matrix of the polytope:
-            a_ij = 1 if vertex i adjacent to vertex j,
-            a_ij = 0 otherwise
+    def vertex_adjacency_matrix(self) -> np.ndarray:
+        """Get the vertex adjacency matrix of the polytope.
+
+        The vertex adjacency matrix A of the polytope is a matrix of size n x n, where n
+        is the number of vertices of the polytope and
+            * a_ij = 1 if vertex i adjacent to vertex j,
+            * a_ij = 0 otherwise.
+
+        Returns:
+            The vertex adjacency matrix of the polytope.
         """
         if self._vertex_adjacency_matrix is None:
-            self._vertex_adjacency_matrix = zeros(self.n_vertices, self.n_vertices)
+            self._vertex_adjacency_matrix = np.zeros(
+                shape=(self.n_vertices, self.n_vertices), dtype=bool
+            )
             for i, ads in enumerate(self.cdd_vertex_adjacency):
                 for j in ads:
                     self._vertex_adjacency_matrix[i, j] = 1
@@ -516,11 +596,16 @@ class Polytope:
         return self._vertex_adjacency_matrix
 
     @property
-    def vertex_facet_matrix(self):
-        """
-        Get the vertex facet incidence matrix of the polytope:
-            m_ij = 1 if vertex j is in facet i,
-            m_ij = 0 otherwise.
+    def vertex_facet_matrix(self) -> np.ndarray:
+        """Get the vertex facet incidence matrix of the polytope.
+
+        The vertex facet incidence matrix M of the polytope is a matrix of size
+        n_facets x n_vertices, where
+            * m_ij = 1 if vertex j is in facet i,
+            * m_ij = 0 otherwise.
+
+        Returns:
+            The vertex facet incidence matrix of the polytope.
         """
         if self._vertex_facet_matrix is None:
             # This initializes (and possibly simplifies inequalities and vertices).
@@ -537,10 +622,14 @@ class Polytope:
         return self._vertex_facet_matrix
 
     @property
-    def vertex_facet_pairing_matrix(self):
-        """
-        Get the vertex facet pairing matrix of the polytope:
-            m_ij = <F_j, v_i> (distance of vertex j to facet i)
+    def vertex_facet_pairing_matrix(self) -> np.ndarray:
+        """Get the vertex facet pairing matrix of the polytope.
+
+        The vertex facet pairing matrix M of the polytope is a matrix of size
+        n_facets x n_vertices, with m_ij = <F_i, v_j> (distance of vertex j to facet i).
+
+        Returns:
+            The vertex facet pairing matrix of the polytope.
         """
         if self._vertex_facet_pairing_matrix is None:
             self._vertex_facet_pairing_matrix = (
@@ -551,17 +640,26 @@ class Polytope:
         return self._vertex_facet_pairing_matrix
 
     @property
-    def barycenter(self):
-        """
-        Get the barycenter of the polytope
+    def barycenter(self) -> Point:
+        """Get the barycenter of the polytope.
+
+        The barycenter (or center of mass) of the Polytope is the average of
+        its vertices.
+
+        Returns:
+            The barycenter of the polytope.
         """
         return self.vertices.barycenter
 
     @property
-    def triangulation(self):
-        """
-        Get the triangulation of the polytope (uses scipy.spatial.Delaunay)
-        NOTE: scipy.spatial.Delaunay uses Qhull, which is float based, use with care
+    def triangulation(self) -> tuple:
+        """Get a triangulation of the polytope in simplices.
+
+        NOTE: scipy.spatial.Delaunay uses Qhull, which is float based. This should and
+        will be replaced by a symbolic triangulation algorithm.
+
+        Returns:
+            A triangulation of the polytope in simplices.
         """
         if self._triangulation is None:
             # if the polytope is not full-dimensional, we need to project it
@@ -585,12 +683,21 @@ class Polytope:
         return self._triangulation
 
     @property
-    def half_open_decomposition(self):
-        """
-        Get the half open decomposition of the polytope. This is a tuple of
-        vertices ids, indicating - for each simplex in the triangulation - which
-        facets (opposite to the vertices) are missing from such simplex.
-        Their order is the same as the order of the simplices in the triangulation.
+    def half_open_decomposition(self) -> tuple:
+        """Get the half open decomposition of the polytope.
+
+        The half open decomposition of the polytope is given as tuple of vertices ids,
+        indicating - for each simplex in the triangulation - which facets (opposite to
+        the vertices whose ids are given) are missing from such simplex. A simplex with
+        some faces removed is said half-open simplex. The simplices in the triangulation
+        of the polytope - once made into half-open simplices - have the property that
+        their union is the polytope itself, but they do not have pairwise intersections.
+
+        They are ordered according to the respective simplices in the ``triangulation``
+        property.
+
+        Returns:
+            The half open decomposition of the polytope.
         """
         if self._half_open_decomposition is None:
             self._half_open_decomposition = []
@@ -603,6 +710,9 @@ class Polytope:
                     # triangulation, make sure its coordinates do not satisfy
                     # any rational linear relations. This ensures that any of the
                     # inequalities below will not evaluate to zero at this point.
+                    # TODO: it is probably more efficient to take a random point
+                    # and check if it strictly satisfies the inequalities, starting over
+                    # if it does not.
                     weights = [2 ** Rational(1, i + 2) for i in range(len(verts))]
                     ref_pt = self._origin()
                     for v, w in zip(verts, weights):
@@ -620,10 +730,14 @@ class Polytope:
         return self._half_open_decomposition
 
     @property
-    def induced_boundary_triangulation(self):
-        """
+    def induced_boundary_triangulation(self) -> tuple:
+        """Get the triangulation of the boundary of the polytope.
+
         Get the triangulation of the boundary of the polytope induced by the
-        triangulation of the polytope
+        triangulation of the polytope.
+
+        Returns:
+            The triangulation of the boundary of the polytope.
         """
         if self._induced_boundary_triangulation is None:
             self._induced_boundary_triangulation = tuple(
