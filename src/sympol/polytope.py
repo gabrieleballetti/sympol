@@ -8,7 +8,6 @@ from scipy.spatial import Delaunay
 
 from sympy import Abs, factorial, gcd, lcm, Number, Matrix, Poly, Rational
 from sympy.abc import x
-from sympy.matrices import zeros
 from sympy.matrices.normalforms import hermite_normal_form
 
 from sympol._hilbert_basis_np import get_hilbert_basis_np
@@ -579,8 +578,8 @@ class Polytope:
 
         The vertex adjacency matrix A of the polytope is a matrix of size n x n, where n
         is the number of vertices of the polytope and
-            * a_ij = 1 if vertex i adjacent to vertex j,
-            * a_ij = 0 otherwise.
+        * a_ij = 1 if vertex i adjacent to vertex j,
+        * a_ij = 0 otherwise.
 
         Returns:
             The vertex adjacency matrix of the polytope.
@@ -601,8 +600,8 @@ class Polytope:
 
         The vertex facet incidence matrix M of the polytope is a matrix of size
         n_facets x n_vertices, where
-            * m_ij = 1 if vertex j is in facet i,
-            * m_ij = 0 otherwise.
+        * m_ij = 1 if vertex j is in facet i,
+        * m_ij = 0 otherwise.
 
         Returns:
             The vertex facet incidence matrix of the polytope.
@@ -754,9 +753,11 @@ class Polytope:
         return self._induced_boundary_triangulation
 
     @property
-    def volume(self):
-        """
-        Get the normalized volume of the polytope
+    def volume(self) -> Rational:
+        """Get the euclidean volume of the polytope.
+
+        Returns:
+            The euclidean volume of the polytope as a sympy Rational.
         """
         if self._volume is None:
             if self.is_full_dim():
@@ -766,9 +767,17 @@ class Polytope:
         return self._volume
 
     @property
-    def normalized_volume(self):
-        """
-        Get the normalized volume of the polytope
+    def normalized_volume(self) -> Rational:
+        """Get the normalized volume of the polytope.
+
+        The normalized volume of a polytope is the euclidean volume of the polytope
+        multiplied by d!, where d is the dimension of the polytope. In particular, the
+        normalized volume of a unit hypercube is 1.
+
+        The normalized volume of a lattice polytope is always an integer.
+
+        Returns:
+            The normalized volume of the polytope as a sympy Rational.
         """
         if self._normalized_volume is None:
             if self.is_full_dim():
@@ -778,27 +787,46 @@ class Polytope:
         return self._normalized_volume
 
     @property
-    def boundary_volume(self):
-        """
-        Get the normalized volume of the boundary of the polytope
+    def boundary_volume(self) -> Rational:
+        """Get the boundary volume of the polytope.
+
+        The boundary volume is calculated as the sum of the volumes of the facets of the
+        polytope, where each for each facet, the volume is calculated as the euclidean
+        volume with respect to the affine lattice obtained as the intersection of the
+        original full dimensional lattice with the hyperplane supporting the facet.
+
+        Returns:
+            The boundary volume of the polytope as a sympy Rational.
         """
         if self._boundary_volume is None:
             self._calculate_boundary_volume()
         return self._boundary_volume
 
     @property
-    def normalized_boundary_volume(self):
-        """
-        Get the normalized volume of the boundary of the polytope
+    def normalized_boundary_volume(self) -> Rational:
+        """Get the normalized boundary volume of the polytope.
+
+        The normalized boundary volume of a polytope is the boundary volume of the
+        polytope multiplied by d!, where d is the dimension of the polytope.
+
+        Returns:
+            The normalized boundary volume of the polytope as a sympy Rational.
         """
         if self._normalized_boundary_volume is None:
             self._calculate_boundary_volume()
         return self._normalized_boundary_volume
 
     @property
-    def full_dim_projection(self):
-        """
-        An affine unimodular copy of the polytope in a lower dimensional space
+    def full_dim_projection(self) -> "Polytope":
+        """Get a full dimensional projection of the polytope.
+
+        Use Hermite Normal Form to find a full dimensional projection of the polytope,
+        which is a polytope which is image of a lattice preserving unimodular affine
+        map from the affine span of the polytope, to a d-dimensional space, where d is
+        the dimension of the polytope.
+
+        Returns:
+            A full dimensional projection of the polytope.
         """
         if self._full_dim_projection is None:
             m = Matrix(self.vertices - self.vertices[0])
@@ -808,9 +836,19 @@ class Polytope:
         return self._full_dim_projection
 
     @property
-    def normal_form(self):
-        """
-        Return a polytope in normal form
+    def normal_form(self) -> PointConfiguration:
+        """Return the vertices of the polytope in normal form.
+
+        The normal form of a polytope is a "canonical" representative of the equivalence
+        class of polytopes under unimodular integer transformations. It only depends on
+        the equivalence class of the polytope, and not on the actual instance of the
+        polytope.
+
+        To also consider affine transformations, i.e. to include translations in the
+        equivalence class, use ``affine_normal_form``.
+
+        Returns:
+            The vertices of the polytope in normal form, as a PointConfiguration object.
         """
         if self._normal_form is None:
             self._normal_form = get_normal_form(polytope=self)
@@ -818,9 +856,20 @@ class Polytope:
         return self._normal_form
 
     @property
-    def affine_normal_form(self):
-        """
-        Return a polytope in affine normal form
+    def affine_normal_form(self) -> PointConfiguration:
+        """Return the vertices of the polytope in affine normal form.
+
+        The affine normal form of a polytope is a "canonical" representative of the
+        equivalence class of polytopes under affine unimodular transformations. It only
+        depends on the equivalence class of the polytope, and not on the actual instance
+        of the polytope.
+
+        This can be used to check if two polytopes are equivalent under affine lattice
+        preserving unimodular transformations.
+
+        Returns:
+            The vertices of the polytope in affine normal form, as a PointConfiguration
+            object.
         """
         if self._affine_normal_form is None:
             self._affine_normal_form = get_normal_form(polytope=self, affine=True)
@@ -828,9 +877,11 @@ class Polytope:
         return self._affine_normal_form
 
     @property
-    def integer_points(self):
-        """
-        Get the integer points of the polytope
+    def integer_points(self) -> PointConfiguration:
+        """Get the integer points of the polytope.
+
+        Returns:
+            The integer points of the polytope as a PointConfiguration object.
         """
         if self._integer_points is None:
             _integer_points = [pt for pt in self.boundary_points]
@@ -840,9 +891,11 @@ class Polytope:
         return self._integer_points
 
     @property
-    def interior_points(self):
-        """
-        Get the interior integer points of the polytope
+    def interior_points(self) -> PointConfiguration:
+        """Get the interior integer points of the polytope.
+
+        Returns:
+            The interior integer points of the polytope as a PointConfiguration object.
         """
         if self._interior_points is None:
             self._get_integer_points()
@@ -850,9 +903,11 @@ class Polytope:
         return self._interior_points
 
     @property
-    def boundary_points(self):
-        """
-        Get the boundary integer points of the polytope
+    def boundary_points(self) -> PointConfiguration:
+        """Get the boundary integer points of the polytope.
+
+        Returns:
+            The boundary integer points of the polytope as a PointConfiguration object.
         """
         if self._boundary_points is None:
             self._get_integer_points()
@@ -860,9 +915,15 @@ class Polytope:
         return self._boundary_points
 
     @property
-    def boundary_points_facets(self):
-        """
-        Get the ids facets of the polytope that contain boundary integer points
+    def boundary_points_facets(self) -> list:
+        """Get the ids facets of the polytope that contain boundary integer points.
+
+        This is a list of list of frozensets of facet ids. The i-th set in the list
+        contains the ids of the facets that contain the i-th boundary integer point.
+
+        Returns:
+            The ids facets of the polytope that contain boundary integer points as
+            a list of list of frozensets of facet ids.
         """
         if self._boundary_points_facets is None:
             self._get_integer_points()
@@ -870,9 +931,11 @@ class Polytope:
         return self._boundary_points_facets
 
     @property
-    def n_integer_points(self):
-        """
-        Get the number of integer points of the polytope
+    def n_integer_points(self) -> int:
+        """Get the number of integer points of the polytope.
+
+        Returns:
+            The number of integer points of the polytope.
         """
         if self._n_integer_points is None:
             self._get_integer_points(count_only=True)
@@ -880,9 +943,11 @@ class Polytope:
         return self._n_integer_points
 
     @property
-    def n_interior_points(self):
-        """
-        Get the number of interior integer points of the polytope
+    def n_interior_points(self) -> int:
+        """Get the number of interior integer points of the polytope.
+
+        Returns:
+            The number of interior integer points of the polytope.
         """
         if self._n_interior_points is None:
             self._get_integer_points(count_only=True)
@@ -890,9 +955,11 @@ class Polytope:
         return self._n_interior_points
 
     @property
-    def n_boundary_points(self):
-        """
-        Get the number of boundary integer points of the polytope
+    def n_boundary_points(self) -> int:
+        """Get the number of boundary integer points of the polytope.
+
+        Returns:
+            The number of boundary integer points of the polytope.
         """
         if self._n_boundary_points is None:
             self._n_boundary_points = self.n_integer_points - self.n_interior_points
@@ -900,9 +967,16 @@ class Polytope:
         return self._n_boundary_points
 
     @property
-    def ehrhart_polynomial(self):
-        """
-        Get the Ehrhart polynomial of the polytope
+    def ehrhart_polynomial(self) -> Poly:
+        """Get the Ehrhart polynomial of the polytope.
+
+        The Ehrhart polynomial of a polytope is a polynomial in one variable with
+        integer coefficients, which encodes the number of integer points in the dilates
+        of the polytope as a function of the dilation factor. `More details on Wikipedia
+        <https://en.wikipedia.org/wiki/Ehrhart_polynomial>`_.
+
+        Returns:
+            The Ehrhart polynomial of the polytope as a sympy Poly object.
         """
         if self._ehrhart_polynomial is None:
             if not self.is_lattice_polytope:
@@ -921,9 +995,12 @@ class Polytope:
         return self._ehrhart_polynomial
 
     @property
-    def ehrhart_coefficients(self):
-        """
-        Get the Ehrhart coefficients of the polytope
+    def ehrhart_coefficients(self) -> tuple:
+        """Get the coefficients of the Ehrhart polynomial of the polytope.
+
+        Returns:
+            A list of the coefficients of the Ehrhart polynomial of the polytope
+            as a tuple of sympy Rational objects.
         """
         if self._ehrhart_coefficients is None:
             self._ehrhart_coefficients = tuple(self.ehrhart_polynomial.coeffs()[::-1])
@@ -931,9 +1008,16 @@ class Polytope:
         return self._ehrhart_coefficients
 
     @property
-    def h_star_polynomial(self):
-        """
-        Get the h*-polynomial of the polytope
+    def h_star_polynomial(self) -> Poly:
+        """Get the h*-polynomial of the polytope.
+
+        The h*-polynomial of a polytope is a polynomial in one variable encoding
+        information about the number of integer points in the dilates of the polytope.
+        `More details on Wikipedia
+        <https://en.wikipedia.org/wiki/Ehrhart_polynomial#Ehrhart_series>`_.
+
+        Returns:
+            The h*-polynomial of the polytope as a sympy Poly object.
         """
         if self._h_star_polynomial is None:
             if not self.is_lattice_polytope:
@@ -948,9 +1032,15 @@ class Polytope:
         return self._h_star_polynomial
 
     @property
-    def h_star_vector(self):
-        """
-        Get the h*-vector of the polytope
+    def h_star_vector(self) -> tuple:
+        """Get the h*-vector of the polytope.
+
+        The h*-vector of a polytope is the vector of coefficients of the h*-polynomial
+        of the polytope. It can be shown that these coefficients are non-negative
+        integers.
+
+        Returns:
+            The h*-vector of the polytope as a tuple of integers.
         """
         if self._h_star_vector is None:
             self._h_star_vector = [0 for _ in range(self.ambient_dim + 1)]
@@ -981,9 +1071,11 @@ class Polytope:
         return self._h_star_vector
 
     @property
-    def degree(self):
-        """
-        Get the degree of the h*-polynomial of the polytope
+    def degree(self) -> int:
+        """Get the degree of the h*-polynomial of the polytope.
+
+        Returns:
+            The degree of the h*-polynomial of the polytope.
         """
         if self._degree is None:
             self._degree = self.h_star_polynomial.degree()
@@ -991,10 +1083,19 @@ class Polytope:
         return self._degree
 
     @property
-    def half_open_parallelotopes_pts(self):
-        """
-        Return all the points in the (half-open) parallelotopes of the triangulation
+    def half_open_parallelotopes_pts(self) -> tuple:
+        """Return the integer points in the half-open parallelotopes of the polytope.
+
+        Return all the points in the half-open parallelotopes of the triangulation
         of the polytope. This can be seen as a multi-graded version of the h*-vector.
+
+        Note that while their number at each height is invariative under unimodular
+        transformations, the actual points are not as they depend on the chosen
+        half-open decomposition of the polytope into simplices.
+
+        Returns:
+            The integer points in the half-open parallelotopes of the polytope as a
+            tuple of Point objects.
         """
         if self._half_open_parallelotopes_pts is None:
             self._half_open_parallelotopes_pts = []
@@ -1016,10 +1117,14 @@ class Polytope:
         return self._half_open_parallelotopes_pts
 
     @property
-    def hilbert_basis(self):
-        """
-        Return the Hilbert basis of the semigroup of the integer points in the cone
-        positively spanned by {1} x P.
+    def hilbert_basis(self) -> tuple:
+        """Get the Hilbert basis of the polytope.
+
+        The Hilbert basis is a minimal generating set for the semigroup of the integer
+        points in the cone positively spanned by {1} x P.
+
+        Returns:
+            The Hilbert basis of the polytope as a tuple of Point objects.
         """
         if self._hilbert_basis is None:
             self._hilbert_basis = self._get_hilbert_basis()
@@ -1027,9 +1132,13 @@ class Polytope:
         return self._hilbert_basis
 
     @property
-    def is_simplicial(self):
-        """
-        Check if the polytope is simplicial, i.e. if all its facets are simplices.
+    def is_simplicial(self) -> bool:
+        """Check if the polytope is simplicial.
+
+        A polytope is simplicial if all its facets are simplices.
+
+        Returns:
+            True if the polytope is simplicial, False otherwise.
         """
         if self._is_simplicial is None:
             self._is_simplicial = all([len(f) == self.dim for f in self.facets])
@@ -1037,10 +1146,14 @@ class Polytope:
         return self._is_simplicial
 
     @property
-    def is_simple(self):
-        """
-        Check if the polytope is simple, i.e. if each vertex is contained in exactly
-        d edges, where d is the dimension of the polytope.
+    def is_simple(self) -> bool:
+        """Check if the polytope is simple.
+
+        A polytope is simple if each vertex is contained in exactly d edges, where d is
+        the dimension of the polytope.
+
+        Returns:
+            True if the polytope is simple, False otherwise.
         """
         if self._is_simple is None:
             self._is_simple = all(
@@ -1053,9 +1166,13 @@ class Polytope:
         return self._is_simple
 
     @property
-    def is_lattice_polytope(self):
-        """
-        Check if the polytope is a lattice polytope
+    def is_lattice_polytope(self) -> bool:
+        """Check if the polytope is a lattice polytope.
+
+        A polytope is a lattice polytope if all its vertices have integer coordinates.
+
+        Returns:
+            True if the polytope is a lattice polytope, False otherwise.
         """
         if self._is_lattice_polytope is None:
             self._is_lattice_polytope = np.all(
@@ -1065,20 +1182,23 @@ class Polytope:
         return self._is_lattice_polytope
 
     @property
-    def is_hollow(self):
-        """
-        Check if the polytope is hollow, i.e. if it has no interior points
-        """
+    def is_hollow(self) -> bool:
+        """Check if the polytope is hollow, i.e. if it has no interior points.
 
+        Returns:
+            True if the polytope is hollow, False otherwise.
+        """
         if self._is_hollow is None:
             self._is_hollow = self.has_n_interior_points(0)
 
         return self._is_hollow
 
     @property
-    def has_one_interior_point(self):
-        """
-        Check if the polytope has exactly one interior point
+    def has_one_interior_point(self) -> bool:
+        """Check if the polytope has exactly one interior point.
+
+        Returns:
+            True if the polytope has exactly one interior point, False otherwise.
         """
         if self._has_one_interior_point is None:
             self._has_one_interior_point = self.has_n_interior_points(1)
@@ -1086,10 +1206,14 @@ class Polytope:
         return self._has_one_interior_point
 
     @property
-    def is_canonical(self):
-        """
-        Check if the polytope is canonical Fano, i.e. if it is a lattice polytope with
-        the origin as unique interior point
+    def is_canonical(self) -> bool:
+        """Check if the polytope is a canonical Fano polytope.
+
+        A polytope is canonical Fano if it is a lattice polytope with
+        the origin as unique interior point.
+
+        Returns:
+            True if the polytope is a canonical Fano polytope, False otherwise.
         """
         if self._is_canonical is None:
             self._is_canonical = (
@@ -1101,9 +1225,15 @@ class Polytope:
         return self._is_canonical
 
     @property
-    def is_reflexive(self):
-        """
-        Check if the polytope is reflexive
+    def is_reflexive(self) -> bool:
+        """Check if the polytope is reflexive.
+
+        A polytope is reflexive if it is a lattice polytope with the origin as unique
+        interior point and all its facets at distance 1 from the origin. Equivalently,
+        a lattice polytope is reflexive if its dual is a lattice polytope.
+
+        Returns:
+            True if the polytope is reflexive, False otherwise.
         """
         if self._is_reflexive is None:
             if not self.is_canonical:
@@ -1120,9 +1250,14 @@ class Polytope:
         return self._is_reflexive
 
     @property
-    def is_gorenstein(self):
-        """
-        Check if the polytope is Gorenstein
+    def is_gorenstein(self) -> bool:
+        """Check if the polytope is Gorenstein.
+
+        A polytope is Gorenstein if its h*-vector is symmetric, equivalently if it
+        is reflexive up to a translation and an integer dilation.
+
+        Returns:
+            True if the polytope is Gorenstein, False otherwise.
         """
         if self._is_gorenstein is None:
             # if h* is not available, it would be faster to check if it has an integer
@@ -1136,10 +1271,14 @@ class Polytope:
         return self._is_gorenstein
 
     @property
-    def is_ehrhart_positive(self):
-        """
-        Check if the polytope is Ehrhart positive, i.e. if its Ehrhart polynomial has
-        only positive coefficients
+    def is_ehrhart_positive(self) -> bool:
+        """Check if the polytope is Ehrhart positive.
+
+        A polytope is Ehrhart positive if its Ehrhart polynomial has non-negative
+        coefficients.
+
+        Returns:
+            True if the polytope is Ehrhart positive, False otherwise.
         """
         if self._is_ehrhart_positive is None:
             self._is_ehrhart_positive = all([i >= 0 for i in self.ehrhart_coefficients])
@@ -1147,9 +1286,15 @@ class Polytope:
         return self._is_ehrhart_positive
 
     @property
-    def has_unimodal_h_star_vector(self):
-        """
-        Check if the polytope has a unimodal h* vector
+    def has_unimodal_h_star_vector(self) -> bool:
+        """Check if the polytope has a unimodal h*-vector.
+
+        A unimodal vector is a vector whose entries are non-negative integers and
+        which is unimodal, i.e. there is an index i such that the first i entries
+        are increasing and the last i entries are decreasing.
+
+        Returns:
+            True if the polytope has a unimodal h*-vector, False otherwise.
         """
         if self._has_unimodal_h_star_vector is None:
             self._has_unimodal_h_star_vector = _is_unimodal(self.h_star_vector)
@@ -1157,12 +1302,15 @@ class Polytope:
         return self._has_unimodal_h_star_vector
 
     @property
-    def is_idp(self):
-        """
-        Check if the polytope P has the Integer Decomposition Property (IDP), i.e. if
-        if for every >= 2 and for every lattice point in kP there exist v1, . . . , vk
-        lattice points in P such that u = v1 + · · · + vk. A polytope P with this
-        property is also called integrally closed.
+    def is_idp(self) -> bool:
+        """Check if the polytope P has the Integer Decomposition Property (IDP).
+
+        A polytope is IDP for every k >= 2 and for every lattice point u in kP there
+        exist k lattice points v1, . . . , vk in P such that u = v1 + · · · + vk.
+        A polytope P with this property is also called integrally closed.
+
+        Returns:
+            True if the polytope is IDP, False otherwise.
         """
         if self._is_idp is None:
             # a quicker check is to check that the lattice points of the polytope
@@ -1187,10 +1335,14 @@ class Polytope:
         return self._is_idp
 
     @property
-    def is_smooth(self):
-        """
-        Check if the polytope is smooth, i.e. if it is simple and the tangent cone at
+    def is_smooth(self) -> bool:
+        """Check if the polytope is smooth.
+
+        A lattice polytope is is smooth if it is simple and the tangent cone at
         each vertex is unimodular.
+
+        Returns:
+            True if the polytope is smooth, False otherwise.
         """
         if self._is_smooth is None:
             if not self.is_simple:
@@ -1209,10 +1361,8 @@ class Polytope:
 
     # property setters
 
-    def _get_cdd_polyhedron_from_points(self):
-        """
-        Get the cdd polyhedron from the v-representation of the polytope
-        """
+    def _get_cdd_polyhedron_from_points(self) -> None:
+        """Set cdd_polyhedron from the v-representation of the polytope."""
         points_to_use = self._vertices if self._vertices is not None else self.points
         formatted_points = [[1] + [c for c in p] for p in points_to_use]
         mat = cdd.Matrix(formatted_points, number_type="fraction")
@@ -1226,10 +1376,8 @@ class Polytope:
     #     # TODO
     #     pass
 
-    def _calculate_volume(self):
-        """
-        Calculate the volume of the polytope, sets both _volume and _normalized_volume
-        """
+    def _calculate_volume(self) -> None:
+        """Set both _volume and _normalized_volume."""
         volume = Rational(0)
 
         if self.ambient_dim == 1:
@@ -1248,17 +1396,9 @@ class Polytope:
         self._normalized_volume = volume
         self._volume = volume / factorial(self.dim)
 
-    def _calculate_boundary_volume(self):
-        """
-        Calculate the volume of the boundary of the polytope, i.e. the sum of the
-        volumes of the facets of the polytopes, wrt their affinely spanned lattice.
-        Sets both _boundary_volume and _normalized_boundary_volume
-        """
+    def _calculate_boundary_volume(self) -> None:
+        """Set both _boundary_volume and _normalized_boundary_volume."""
         boundary_norm_volume = Rational(0)
-
-        # for facet in self.facets:
-        #     facet_polytope = Polytope([self.vertices[i] for i in facet])
-        #     boundary_norm_volume += facet_polytope.normalized_volume
 
         for s in self.induced_boundary_triangulation:
             simplex = Simplex(vertices=[self.vertices[i] for i in s])
@@ -1267,11 +1407,8 @@ class Polytope:
         self._normalized_boundary_volume = boundary_norm_volume
         self._boundary_volume = boundary_norm_volume / factorial(self.dim - 1)
 
-    def _get_integer_points(self, count_only=False, stop_at_interior=-1):
-        """
-        Get the integer points, or optionally just enumerate them, and populate the
-        correct properties. This is done with a conversion to int64.
-        """
+    def _get_integer_points(self, count_only=False, stop_at_interior=-1) -> None:
+        """Set all the integer points properties of the polytope."""
         if not self.is_full_dim():
             raise ValueError("polytope must be full-dimensional")
         (
@@ -1302,41 +1439,63 @@ class Polytope:
 
     # Helper functions
 
-    def _origin(self):
-        """
-        Return the origin of the ambient space
-        """
+    def _origin(self) -> Point:
+        """Return the origin of the ambient space."""
         return Point([0 for _ in range(self.ambient_dim)])
 
-    def is_full_dim(self):
-        """
-        Check if the polytope is full dimensional
+    def is_full_dim(self) -> bool:
+        """Check if the polytope is full dimensional.
+
+        Returns:
+            True if the polytope is full dimensional, False otherwise.
         """
         return self.dim == self.ambient_dim
 
-    def is_simplex(self):
-        """
-        Check if the polytope is a simplex
+    def is_simplex(self) -> bool:
+        """Check if the polytope is a simplex.
+
+        Returns:
+            True if the polytope is a simplex, False otherwise.
         """
         return self.n_vertices == self.dim + 1
 
-    def _make_simplex(self):
-        """
-        Make the polytope a simplex
+    def _make_simplex(self) -> None:
+        """Specialize the Polytope class to a Simplex class.
+
+        This is only possible if the polytope is a simplex.
+
+        Raises:
+            ValueError: If the polytope is not a simplex.
         """
         if not self.is_simplex():
             raise ValueError("Polytope is not a simplex")
         self.__class__ = Simplex
 
-    def neighbors(self, vertex_id):
-        """
-        Get the neighbors of a vertex
+    def neighbors(self, vertex_id) -> list:
+        """Get the neighbors of a vertex.
+
+        The neighbors of a vertex are the vertices that share an edge with it.
+
+        Args:
+            vertex_id: The id of the vertex.
+
+        Returns:
+            The ids of the neighbors of the vertex.
         """
         return self.cdd_vertex_adjacency[vertex_id]
 
-    def has_n_interior_points(self, n):
-        """
-        Check if the polytope has *exactly* n interior points
+    def has_n_interior_points(self, n) -> bool:
+        """Check if the polytope has *exactly* n interior points.
+
+        This might result in a quicker calculation than comparing against
+        ``n_interior_points``, as the calculation can be interrupted as soon as
+        more than n interior points are found.
+
+        Args:
+            n: The number of interior points to check for.
+
+        Returns:
+            True if the polytope has exactly n interior points, False otherwise.
         """
         if self._n_interior_points is None:
             self._get_integer_points(count_only=True, stop_at_interior=n + 1)
@@ -1347,11 +1506,8 @@ class Polytope:
         # know the exact number)
         return self._n_interior_points == n
 
-    def _ehrhart_to_h_star_polynomial(self):
-        """
-        Get the h*-polynomial from the h*-vector. This is only used in
-        tests right now.
-        """
+    def _ehrhart_to_h_star_polynomial(self) -> Poly:
+        """Get the h*-polynomial from the h*-vector."""
         return sum(
             [
                 self.ehrhart_coefficients[i]
@@ -1361,12 +1517,17 @@ class Polytope:
             ]
         ).simplify()
 
-    def _get_hilbert_basis(self, stop_at_height=-1):
-        """
-        Get the Hilbert basis of the semigroup of the integer points in the cone
-        positively spanned by {1} x P. If stop_at_height is set to a positive
-        integer, the algorithm will stop when an irreducible point at height
-        greater than or equal to stop_at_height is found.
+    def _get_hilbert_basis(self, stop_at_height=-1) -> tuple:
+        """Get the Hilbert basis of the polytope.
+
+        See the ``hilbert_base`` property for more details.
+
+        Args:
+            stop_at_height: If > 0, stop the enumeration of the Hilbert basis when
+                a point at a heigh greater then or equal to given height is found.
+
+        Returns:
+            The Hilbert basis of the polytope as a tuple of Point objects.
         """
         if not self.is_lattice_polytope:
             raise ValueError("Hilbert basis is only implemented for lattice polytopes")
@@ -1398,11 +1559,18 @@ class Polytope:
 
     # Polytope operations
 
-    def __add__(self, other):
-        """
-        Return the the sum of self and other:
-            - the translation of self by other if other is a Point
-            - the Minkowski sum of self and other if other is a Polytope (TODO)
+    def __add__(self, other) -> "Polytope":
+        """Return the the sum of self and other.
+
+        This is:
+        * the translation of self by other if other is a Point,
+        * the Minkowski sum of self and other if other is a Polytope. (TODO)
+
+        Args:
+            other: The other polytope.
+
+        Returns:
+            The sum of self and other.
         """
         if isinstance(other, Point):
             verts = self.vertices + other
@@ -1412,29 +1580,38 @@ class Polytope:
             raise NotImplementedError("Minkowski sum not implemented yet")
 
         raise TypeError(
-            "A polytope can only be added to a Point (translation)"
-            " or another polytope (Minkowski sum)"
+            "A polytope can only be added to a Point (translation) "
+            "or another polytope (Minkowski sum)."
         )
 
-    def __sub__(self, other):
-        """
-        Return the the difference of self and other:
-            - the translation of self by -other if other is a Point
-            - the Minkowski difference of self and -other if other is a Polytope (TODO)
+    def __sub__(self, other) -> "Polytope":
+        """Return the the difference of self and other.
+
+        This is:
+        * the translation of self by -other if other is a Point,
+        * the Minkowski difference of self and -other if other is a Polytope. (TODO)
         """
         return self + (-other)
 
-    def __neg__(self):
-        """
-        Return the negation of self
-        """
+    def __neg__(self) -> "Polytope":
+        """Return the "flipped" polytope P * (-1)."""
         return self * (-1)
 
-    def __mul__(self, other):
-        """
-        Return the product of self and other:
-            - the dilation of self by other if other is a scalar
-            - the cartesian product of self and other if other is a Polytope
+    def __mul__(self, other) -> "Polytope":
+        """Return the product of self and other.
+
+        This is:
+        * the dilation of self by other if other is a scalar,
+        * the cartesian product of self and other if other is a Polytope.
+
+        Args:
+            other: The scalar or the other polytope.
+
+        Returns:
+            The product of self and other.
+
+        Raises:
+            TypeError: If other is not a scalar or a polytope.
         """
         if isinstance(other, Number) or isinstance(other, int):
             verts = self.vertices * other
@@ -1449,9 +1626,18 @@ class Polytope:
             " or another polytope (cartesian product)"
         )
 
-    def free_sum(self, other):
-        """
-        Return the free sum of self and other.
+    def free_sum(self, other) -> "Polytope":
+        """Return the free sum of the polytope with another polytope.
+
+        The free sum of two polytopes P and Q is the polytope obtained by taking the
+        convex hull of the union of the vertices of P and Q, where Q and P are on
+        orthogonal spaces in a dim(P) + dim(Q) dimensional space.
+
+        Args:
+            other: The other polytope.
+
+        Returns:
+            The free sum of the polytope with another polytope.
         """
         if not isinstance(other, Polytope):
             raise TypeError("The free sum is only defined for polytopes")
@@ -1464,13 +1650,30 @@ class Polytope:
 
         return Polytope(vertices=verts)
 
-    def chisel_vertex(self, vertex_id, dist):
-        """
-        Return a new polytope obtained by "chiseling" a vertex at a given lattice
+    def chisel_vertex(self, vertex_id, dist) -> "Polytope":
+        """Return a polytope with a "chiseled" vertex at a given distance.
+
+        Return a new polytope obtained by cutting a vertex at a given lattice
         distance along its neighboring edges.
+
+        Args:
+            vertex_id: The id of the vertex to chisel.
+            dist: The distance to chisel the vertex at.
+
+        Returns:
+            A new polytope obtained by chiseling the vertex at the given distance.
+
+        Raises:
+            ValueError: If the polytope is not a lattice polytope, if the distance
+                is negative or if the distance is too large.
         """
+        if not self.is_lattice_polytope:
+            raise ValueError(
+                "The chisel operation is only defined for lattice polytopes."
+            )
+
         if dist < 0:
-            raise ValueError("dist must be positive")
+            raise ValueError("The argument dist must be positive.")
         if dist == 0:
             return self
 
@@ -1488,11 +1691,27 @@ class Polytope:
 
         return Polytope(new_verts)
 
-    def chisel(self, dist):
+    def chisel(self, dist) -> "Polytope":
+        """Return a polytope with all vertices "chieseled" at a given distance.
+
+        This is done by applying the chisel operation to all vertices, see
+        ``chisel_vertex`` for details.
+
+        Args:
+            dist: The distance to chisel the vertices at.
+
+        Returns:
+            A new polytope obtained by chiseling all vertices at the given distance.
+
+        Raises:
+            ValueError: If the polytope is not a lattice polytope, if the distance
+                is negative or if the distance is too large.
         """
-        Return a new polytope obtained by "chiseling" all the vertices at a given
-        lattice distance along their neighboring edges.
-        """
+        if not self.is_lattice_polytope:
+            raise ValueError(
+                "The chisel operation is only defined for lattice polytopes."
+            )
+
         if dist < 0:
             raise ValueError("dist must be positive")
         if dist == 0:
@@ -1517,10 +1736,18 @@ class Polytope:
 
     # Polytope relations
 
-    def contains(self, other, strict=False):
-        """
-        Check if the polytope contains a point or another polytope, optionally
-        only checking the relative interior
+    def contains(self, other, strict=False) -> bool:
+        """Check if the polytope contains a point or another polytope.
+
+        Args:
+            other: The point or polytope to check for containment.
+            strict: If True, check for strict containment.
+
+        Returns:
+            True if the polytope contains the point or polytope, False otherwise.
+
+        Raises:
+            TypeError: If the argument is neither a point nor a polytope.
         """
         if isinstance(other, Point):
             if np.any(np.dot(self._eqs[:, 1:], other) != -self._eqs[:, 0]):
@@ -1545,11 +1772,18 @@ class Polytope:
     # Polytope constructors
 
     @classmethod
-    def unimodular_simplex(cls, dim):
-        """
-        Return a unimodular simplex in the given dimension
-        """
+    def unimodular_simplex(cls, dim) -> "Simplex":
+        """Construct a unimodular simplex in the given dimension.
 
+        Args:
+            dim: The dimension of the simplex.
+
+        Returns:
+            A unimodular simplex in the given dimension.
+
+        Raises:
+            ValueError: If the dimension is not a positive integer.
+        """
         # check if dim is an integer > 0
         if not isinstance(dim, int) or dim < 1:
             raise ValueError("Dimension must be a positive integer")
@@ -1565,11 +1799,15 @@ class Polytope:
         return simplex
 
     @classmethod
-    def cube(cls, dim):
-        """
-        Return a unit hypercube in the given dimension
-        """
+    def cube(cls, dim) -> "Polytope":
+        """Return a unit hypercube in the given dimension.
 
+        Args:
+            dim: The dimension of the hypercube.
+
+        Returns:
+            A unit hypercube in the given dimension.
+        """
         # check if dim is an integer > 0
         if not isinstance(dim, int) or dim < 1:
             raise ValueError("Dimension must be a positive integer")
@@ -1581,10 +1819,17 @@ class Polytope:
 
     @classmethod
     def cross_polytope(cls, dim):
-        """
-        Return a cross polytope centered in 0 in the given dimension
-        """
+        """Return a cross polytope in the given dimension.
 
+        Args:
+            dim: The dimension of the cross polytope.
+
+        Returns:
+            A cross polytope in the given dimension.
+
+        Raises:
+            ValueError: If the dimension is not a positive integer.
+        """
         # check if dim is an integer > 0
         if not isinstance(dim, int) or dim < 1:
             raise ValueError("Dimension must be a positive integer")
@@ -1598,24 +1843,40 @@ class Polytope:
         return cross_polytope
 
     @classmethod
-    def random_lattice_polytope(cls, dim, n_vertices, min=0, max=1):
+    def random_lattice_polytope(cls, dim, n_points, min=0, max=1):
+        """Return a random lattice polytope in the given dimension.
+
+        Generate n_points random lattice points in dimension dim and calculate their
+        convex hull. Consequently, the actual number of vertices and the dimension
+        might be lower than the given values.
+
+        Args:
+            dim: The dimension of the polytope.
+            n_points: The number of points to generate the polytope.
+            min: The minimum coordinate of the vertices.
+            max: The maximum coordinate of the vertices.
+
+        Returns:
+            A random lattice polytope in the given dimension.
         """
-        Return a random lattice polytope in the given dimension from a given number of
-        point with integer coordinates between min and max (included, default 0 and 1)
-        """
-        pts = np.random.randint(min, max + 1, size=(n_vertices, dim))
+        pts = np.random.randint(min, max + 1, size=(n_points, dim))
         return cls(points=pts)
 
 
 class Simplex(Polytope):
-    """
-    Simplex class
+    """A class representing a simplex, as a specialization of the Polytope class.
+
+    A simplex is a polytope with exactly dim + 1 vertices, where dim is the dimension
+    of the ambient space. This class overrides some of the methods of the Polytope with
+    simpler implementations, and adds some simplex-specific methods.
     """
 
     @property
-    def triangulation(self):
-        """
-        Triangulation of the simplex
+    def triangulation(self) -> tuple:
+        """Get the trivial triangulation of the simplex.
+
+        Returns:
+            The trivial triangulation of the simplex as a tuple with one frozenset.
         """
         if self._triangulation is None:
             self._triangulation = tuple([frozenset({i for i in range(self.dim + 1)})])
@@ -1623,9 +1884,12 @@ class Simplex(Polytope):
         return self._triangulation
 
     @property
-    def half_open_decomposition(self):
-        """
-        Half open decomposition of the simplex
+    def half_open_decomposition(self) -> tuple:
+        """Get the trivial half-open decomposition of the simplex.
+
+        Returns:
+            The trivial half-open decomposition of the simplex as a tuple with one
+            empty frozenset.
         """
         if self._half_open_decomposition is None:
             self._half_open_decomposition = tuple([frozenset({})])
@@ -1634,17 +1898,27 @@ class Simplex(Polytope):
 
     # Simplex-specific properties and methods
 
-    def opposite_vertex(self, facet_id):
-        """
-        Get the opposite vertex of a facet
+    def opposite_vertex(self, facet_id) -> int:
+        """Get the opposite vertex of a given facet.
+
+        Args:
+            facet_id: The id of the facet.
+
+        Returns:
+            The id of the opposite vertex.
         """
         return np.where(self.vertex_facet_matrix[facet_id] == 0)[0][0]
 
     @property
-    def weights(self):
-        """
-        Return the weights of the simplex, i.e. the barycentric coordinates of the
-        origin given as integers
+    def weights(self) -> list:
+        """Return the weights of the simplex.
+
+        The weights of a simplex are the barycentric coordinates of the
+        origin. They are uniquely determined up to a scalar, they are given as
+        integers.
+
+        Returns:
+            The weights of the simplex as a list of integers.
         """
         if self._weights is None:
             b = self.barycentric_coordinates(self._origin())
@@ -1656,10 +1930,15 @@ class Simplex(Polytope):
 
         return self._weights
 
-    def barycentric_coordinates(self, point: Point):
-        """
-        Return the barycentric coordinates of a point in the simplex, or the
-        barycentric coordinates of the origin if no point is given
+    def barycentric_coordinates(self, point: Point) -> list:
+        """Return the barycentric coordinates of a point in the simplex.
+
+        Args:
+            point: The point in the simplex.
+
+        Returns:
+            The barycentric coordinates of the point as a list of sympy Rational
+            objects.
         """
         m = Matrix([[1] + v.tolist() for v in self.vertices]).T
         b = m.LUsolve(Matrix([1] + point.tolist()))
