@@ -8,24 +8,30 @@ from sympol.point_configuration import PointConfiguration
 
 
 class VertexType(Enum):
-    """
-    Enum for vertex type in the vertex-facet pairing graph.
-    """
+    """Enum for vertex type in the vertex-facet pairing graph."""
 
     VERTEX = 0
     FACET = 1
 
 
-def get_normal_form(polytope, affine=False):
-    """
+def get_normal_form(polytope, affine=False) -> PointConfiguration:
+    """Get the normal form of a polytope.
+
     Find the normal form of a lattice polytope by:
         1. associate to each polytope a graph encoding the vertex-facet relations,
         2. put the graph in canonical form with the igraph Bliss algorithm,
         3. find the automorphism group of the graph with the igraph vf2 algorithm,
         4. find the lexicographically smallest hermite form among all the vertex
            permutations induced by the automorphisms.
-    :param polytope: polytope
-    :return: normal form of the polytope
+
+    Args:
+        polytope: The polytope to be put in normal form.
+        affine: If True, the normal form is computed with with respect to all
+            affine transofrmations. If False, the normal form is computed with
+            respect to all linear transformations.
+
+    Returns:
+        The normal form of the polytope as a PointConfiguration.
     """
     if not polytope.is_lattice_polytope:
         raise ValueError("Polytope must be a lattice polytope")
@@ -63,14 +69,18 @@ def get_normal_form(polytope, affine=False):
     return PointConfiguration(normal_form)
 
 
-def _get_vertex_facet_pairing_graph(polytope):
-    """
-    Return a graph encoding the vertex-facet relations of the input polytope. Color each
-    vertex of the graph with the maximum of the correponging row/column of the vertex-
-    facet pairing matrix. (multiply by -1 for the vertices associated to the facets to
-    avoid matching between vertices and facets)
-    :param polytope: polytope
-    :return: graph
+def _get_vertex_facet_pairing_graph(polytope) -> Graph:
+    """Return a graph encoding the vertex-facet relations of the input polytope.
+
+    Each vertex of the graph is colored with the maximum of the correponging row/column
+    of the vertex-facet pairing matrix. Vertices associated to the facets are multiplied
+    by -1 to avoid matching between vertices and facets.
+
+    Args:
+        polytope: The polytope to be put in normal form.
+
+    Returns:
+        The vertex-facet pairing graph of the polytope.
     """
     vfpm = polytope.vertex_facet_pairing_matrix
 

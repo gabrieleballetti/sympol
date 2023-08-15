@@ -9,7 +9,8 @@ from sympy import Matrix
 # Might be slow, but probably not the bottleneck for us.
 
 
-def extended_gcd(a, b):
+def _extended_gcd(a, b):
+    """Return (gcd, x, y), where a*x + b*y == gcd."""
     x0 = 1
     x1 = 0
     y0 = 0
@@ -29,10 +30,8 @@ def extended_gcd(a, b):
     return [a, x0, y0]
 
 
-# Perform a "column-swap". Here we modify the matrix J by swapping the
-# columns of index i and j. We adjust the matrix T to make sure the
-# overall relation of S*A*T = J continues to hold.
-def cSwap(i, j, J, T):
+def _cSwap(i, j, J, T):
+    """Swap the ith and jth columns of J, adjust T accordingly."""
     # perform the column swap to J
     for k in range(J.rows):
         temp = J[k, i]
@@ -50,11 +49,8 @@ def cSwap(i, j, J, T):
     return J, T
 
 
-# Perform a "column-wise linear combination" operation. Here we set the k
-# column of the matrix J to be a * the k column plus b times the j
-# column. We update the T matrix to ensure the relationship S*A*T = J
-# continues to hold.
-def cLC(k, i, j, a, b, J, T, gcd=None):
+def _cLC(k, i, j, a, b, J, T, gcd=None):
+    """Perform a column-wise linear combination operation, adjust T accordingly."""
     # perform the linear column application to J
     if gcd is None or a in [1, -1]:
         c = 0
@@ -81,10 +77,8 @@ def cLC(k, i, j, a, b, J, T, gcd=None):
     return J, T
 
 
-# Perform a "row-swap". Here we modify the matrix J by swapping the rows
-# of index i and j. We adjust the matrix S to make sure the overall
-# relation of S*A*T = J continues to hold.
-def rSwap(i, j, J, S):
+def _rSwap(i, j, J, S):
+    """Swap the ith and jth rows of J, adjust S accordingly."""
     # perform the row swap to J
     for k in range(J.cols):
         temp = J[i, k]
@@ -102,11 +96,8 @@ def rSwap(i, j, J, S):
     return J, S
 
 
-# Perform a "row-wise linear combination" operation. Here we set the k
-# row of the matrix J to be a * the i row plus b times the j row. We
-# update the S matrix to ensure the relationship S*A*T = J continues to
-# hold.
-def rLC(k, i, j, a, b, J, S, gcd=None):
+def _rLC(k, i, j, a, b, J, S, gcd=None):
+    """Perform a row-wise linear combination operation, adjust S accordingly."""
     if gcd is None or a in [1, -1]:
         c = 0
         d = 1
@@ -133,9 +124,17 @@ def rLC(k, i, j, a, b, J, S, gcd=None):
 
 
 def smith_normal_form(A: Matrix):
-    """
-    Returns the Smith normal form of the matrix A, i.e. the diagonal matrix D
-    such that D = U * A * V, where U and V are integer unimodular matrices.
+    """Returns the Smith normal form of the matrix A.
+
+    The Smith normal form of a matrix A is the diagonal matrix D such that
+    D = U * A * V, where U and V are integer unimodular matrices.
+
+    Args:
+        A: The matrix to be diagonalized.
+
+    Returns:
+        A tuple (D, U, V) where D is the diagonal matrix, and U and V are
+        the transformation matrices such that D = U * A * V.
     """
     J = A.copy()
     S = Matrix.eye(A.rows)
@@ -166,8 +165,8 @@ def smith_normal_form(A: Matrix):
 
             # perform the swap
             else:
-                J, S = rSwap(i, j, J, S)
-                J, T = cSwap(i, k, J, T)
+                J, S = _rSwap(i, j, J, S)
+                J, T = _cSwap(i, k, J, T)
 
         # now we should not have a zero in the top-left position
         # of the submatrix
@@ -180,24 +179,24 @@ def smith_normal_form(A: Matrix):
                 break
             doneIteration = True
             for j in range(i + 1, J.rows):
-                gcd, x, y = extended_gcd(J[i, i], J[j, i])
+                gcd, x, y = _extended_gcd(J[i, i], J[j, i])
                 if J[i, i] in [gcd, -gcd]:
                     pass
                 elif J[j, i] in [gcd, -gcd]:
-                    J, S = rSwap(i, j, J, S)
+                    J, S = _rSwap(i, j, J, S)
                     doneIteration = False
                 else:
-                    J, S = rLC(i, i, j, x, y, J, S, gcd)
+                    J, S = _rLC(i, i, j, x, y, J, S, gcd)
                     doneIteration = False
             for j in range(i + 1, J.cols):
-                gcd, x, y = extended_gcd(J[i, i], J[i, j])
+                gcd, x, y = _extended_gcd(J[i, i], J[i, j])
                 if J[i, i] in [gcd, -gcd]:
                     pass
                 elif J[i, j] in [gcd, -gcd]:
-                    J, T = cSwap(i, j, J, T)  # pragma: no cover
+                    J, T = _cSwap(i, j, J, T)  # pragma: no cover
                     doneIteration = False  # pragma: no cover
                 else:
-                    J, T = cLC(i, i, j, x, y, J, T, gcd)
+                    J, T = _cLC(i, i, j, x, y, J, T, gcd)
                     doneIteration = False
 
         # use the gcd to make all elements int the ith row and the ith
@@ -207,12 +206,12 @@ def smith_normal_form(A: Matrix):
             doneZeroing = True
             for j in range(i + 1, J.rows):
                 if J[j, i] != 0:
-                    J, S = rLC(i, j, i, 1, -J[j, i] // J[i, i], J, S)
+                    J, S = _rLC(i, j, i, 1, -J[j, i] // J[i, i], J, S)
                     if J[j, i] != 0:
                         doneZeroing = False  # pragma: no cover
             for j in range(i + 1, J.cols):
                 if J[i, j] != 0:
-                    J, T = cLC(i, j, i, 1, -J[i, j] // J[i, i], J, T)
+                    J, T = _cLC(i, j, i, 1, -J[i, j] // J[i, i], J, T)
                     if J[i, j] != 0:
                         doneZeroing = False  # pragma: no cover
 
@@ -224,7 +223,7 @@ def smith_normal_form(A: Matrix):
         # and we return
         if J[i + 1, i + 1] == 0:
             return J, S, T
-        gcd, x, y = extended_gcd(J[i, i], J[i + 1, i + 1])
+        gcd, x, y = _extended_gcd(J[i, i], J[i + 1, i + 1])
 
         # if the ith diagonal element is already the gcd of of the the
         # ith and the (i+1)th diagonal elements, they are correct and
@@ -232,20 +231,20 @@ def smith_normal_form(A: Matrix):
         # element to be the gcd by row operations while maintaining
         # that J is diagonal
         if gcd == J[i + 1, i + 1]:
-            J, T = cSwap(i, i + 1, J, T)
-            J, S = rSwap(i, i + 1, J, S)
+            J, T = _cSwap(i, i + 1, J, T)
+            J, S = _rSwap(i, i + 1, J, S)
 
         elif gcd != J[i, i]:
-            J, S = rLC(i, i, i + 1, 1, 1, J, S)
-            J, T = cLC(i, i, i + 1, x, y, J, T, gcd)
-            J, T = cLC(i, i + 1, i, 1, -J[i, i + 1] // J[i, i], J, T)
-            J, S = rLC(i, i + 1, i, 1, -J[i + 1, i] // J[i, i], J, S)
+            J, S = _rLC(i, i, i + 1, 1, 1, J, S)
+            J, T = _cLC(i, i, i + 1, x, y, J, T, gcd)
+            J, T = _cLC(i, i + 1, i, 1, -J[i, i + 1] // J[i, i], J, T)
+            J, S = _rLC(i, i + 1, i, 1, -J[i + 1, i] // J[i, i], J, S)
 
     # The original algorithm was in a more general setting where solutions up to a
     # unit are enough. In our case we might end up with possibly negative diagonal
     # elements. We force them to be positive, and update S and T accordingly.
     for i in range(min(J.cols, J.rows)):
         if J[i, i] < 0:
-            J, S = rLC(i, i, i, -1, 0, J, S)
+            J, S = _rLC(i, i, i, -1, 0, J, S)
 
     return J, S, T
