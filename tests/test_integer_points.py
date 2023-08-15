@@ -48,7 +48,7 @@ def test_integer_points(count_only):
 
 
 def test_integer_points_consistency():
-    p = Polytope.random_lattice_polytope(dim=4, n_vertices=20, min=-10, max=10)
+    p = Polytope.random_lattice_polytope(dim=4, n_points=20, min=-10, max=10)
 
     (
         interior_points,

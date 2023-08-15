@@ -45,6 +45,8 @@ def test_get_item():
     assert pt_cfg[0] == Point([1, 2])
     assert pt_cfg[1] == Point([3, 4])
 
+    assert pt_cfg[0, :] == Point([1, 2])
+
     assert pt_cfg[0:1] == PointConfiguration([[1, 2]])
     assert pt_cfg[0:2] == PointConfiguration([[1, 2], [3, 4]])
 

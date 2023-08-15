@@ -1,4 +1,7 @@
+"""Module for the PointConfiguration class."""
+
 import numpy as np
+from numpy.typing import ArrayLike
 from sympy import Abs, Matrix, prod, ZZ, Rational
 from sympy.matrices.normalforms import smith_normal_form
 
@@ -6,29 +9,38 @@ from sympol.point import Point
 
 
 class PointConfiguration(np.ndarray):
-    """
-    A class for representing a point configuration, which is just a list of points
+    """PointConfiguration class based on a numpy array with sympy rational entries.
+
+    The PointConfiguration inherit from numpy.ndarray. It is a two dimensional array
+    whose entries are converted to sympy Rational upon initialization. This object
+    represents a list of Point objects in the same ambient space.
+
+    Example usage:
+
+    .. code-block:: python
+
+        from sympol import PointConfiguration
+
+        PointConfiguration([[1, 0, 0], [0, 1, 0]]) / 2
+        # PointConfiguration([[1/2, 0, 0],
+        #                     [0, 1/2, 0]], dtype=object)
+
     """
 
-    def __new__(cls, data):
-        make_sympy_rational = np.vectorize(lambda x: Rational(x))
+    def __new__(cls, data: ArrayLike, shape=None, **kwargs):
+        """Create a new PointConfiguration object."""
         _arr = np.array(data)
-        if _arr.ndim == 1:
+        if _arr.size == 0:
             _arr = _arr.reshape(0, 0)
-        elif _arr.ndim > 2:
-            # if len([i for i in _arr.shape if i > 1]) <= 2:
-            #     _arr = _arr.reshape(*_arr.shape[:2])
-            # else:
-            raise ValueError("Point configuration must be a rank 2 array at most.")
+        if _arr.ndim != 2:
+            raise ValueError("Point configuration must be a rank 2 array.")
         if _arr.size > 0:
+            make_sympy_rational = np.vectorize(lambda x: Rational(x))
             _arr = make_sympy_rational(_arr)
         return _arr.view(cls)
 
-    def __init__(self, iterable, shape=None, **kwargs):
-        """
-        Initialize a point list
-        """
-
+    def __init__(self, data: ArrayLike, shape=None, **kwargs):
+        """Initialize a PointConfiguration object."""
         self._ambient_dimension = None
         self._rank = None
         self._affine_rank = None
@@ -37,65 +49,39 @@ class PointConfiguration(np.ndarray):
         self._index = None
 
     def __getitem__(self, index):
-        """
-        Overload the getitem method to return a Point
-        """
+        """Override __getitem__ to return Point objects for integers values."""
         if isinstance(index, int):
             return Point(super().__getitem__(index))
-        elif isinstance(index, slice):
-            return PointConfiguration(super().__getitem__(index))
+        elif isinstance(index, tuple) and len(index) > 0 and isinstance(index[0], int):
+            # Also Point for indices like [0, ...]
+            return Point(super().__getitem__(index[0])).__getitem__(index[1:])
         else:
             return super().__getitem__(index)
 
     def __eq__(self, other):
-        """
-        Override the == operator for the PointConfiguration class.
-        """
+        """Define __eq__ between two PointConfiguration objects."""
         if isinstance(other, PointConfiguration):
             return np.array_equal(self, other)
         else:
             return super().__eq__(other)
 
     def __ne__(self, other):
-        """
-        Override the != operator for the PointConfiguration class.
-        """
+        """Define __ne__ between two PointConfiguration objects."""
         return not self.__eq__(other)
 
     def __hash__(self):
-        """
-        Override the hash method for the PointConfiguration class.
-        """
+        """Define __hash__ for PointConfiguration objects."""
         return tuple(map(tuple, self)).__hash__()
 
-    def __add__(self, other):
-        """
-        Overload the + operator to add allow translation by a vector
-        """
-        if isinstance(other, Point) and self.shape[1] == other.shape[0]:
-            return super().__add__(other).view(PointConfiguration)
-        return super().__add__(other)
-
-    def __sub__(self, other):
-        """
-        Overload the - operator to add allow translation by a vector
-        """
-        if isinstance(other, Point) and self.shape[1] == other.shape[0]:
-            return super().__sub__(other).view(PointConfiguration)
-        return super().__sub__(other)
-
-    # def __mul__(self, other):
-    #     """
-    #     Overload the * operator to allow scaling by a scalar
-    #     """
-    #     if isinstance(other, (int, float)):
-    #         return PointConfiguration([p * other for p in self])
-    #     return super().__mul__(other)
-
     @property
-    def ambient_dimension(self):
-        """
-        Get the ambient dimension of the point list
+    def ambient_dimension(self) -> int:
+        """Get the ambient dimension of the point.
+
+        Returns:
+            The ambient dimension of the point.
+
+        Raises:
+            ValueError: If the point list is empty.
         """
         if self.shape[0] == 0:
             raise ValueError("Point list is empty")
@@ -106,10 +92,16 @@ class PointConfiguration(np.ndarray):
         return self._ambient_dimension
 
     @property
-    def rank(self):
-        """
-        Get the rank of the point list (avoid the variable name "rank" to avoid
-        conflict with the rank method of the Array class)
+    def rank(self) -> int:
+        """Get the rank of the point list.
+
+        Note that the rank of a point list is the rank of the matrix defined by the
+        points in the list, which is the size of the largest square submatrix with
+        non-zero determinant. The rank might not be translation-invariant, see
+        :attr:`affine_rank` for the translation-invariant version.
+
+        Returns:
+            The rank of the point list.
         """
         if self._rank is None:
             self._rank = Matrix(self).rank()
@@ -117,9 +109,16 @@ class PointConfiguration(np.ndarray):
         return self._rank
 
     @property
-    def affine_rank(self):
-        """
-        Get the affine rank of the point list
+    def affine_rank(self) -> int:
+        """Get the affine rank of the point list.
+
+        Note that the affine rank of a point list is the rank of the matrix defined by
+        the points in the list after translating one of the points to the origin. Use
+        :attr:`rank` for the rank of the matrix defined by the points in the
+        PointConfiguration without translation.
+
+        Returns:
+            The affine rank of the point list.
         """
         if self._affine_rank is None:
             translated_points = [p - self[0] for p in self]
@@ -128,9 +127,14 @@ class PointConfiguration(np.ndarray):
         return self._affine_rank
 
     @property
-    def barycenter(self):
-        """
-        Get the barycenter of the point list
+    def barycenter(self) -> Point:
+        """Get the barycenter of the point list.
+
+        The barycenter (or center of mass) of the PointConfiguration is the average of
+        its points.
+
+        Returns:
+            The barycenter of the point list.
         """
         if self._barycenter is None:
             self._barycenter = (
@@ -140,9 +144,16 @@ class PointConfiguration(np.ndarray):
         return self._barycenter
 
     @property
-    def snf_diag(self):
-        """
-        Get the (diagonal entries of the) affine Smith Normal Form of the point list.
+    def snf_diag(self) -> list:
+        """Get the affine Smith Normal Form of the PointConfiguration.
+
+        The affine Smith Normal Form of a PointConfiguration is the diagonal of the
+        matrix defined by the points in the PointConfiguration after translating one of
+        them to the origin.
+
+        Returns:
+            The diagonal entries of the affine Smith Normal Form of the
+            PointConfiguration.
         """
         if self._snf_diag is None:
             m = Matrix(self[1:] - self[0])
@@ -152,9 +163,16 @@ class PointConfiguration(np.ndarray):
 
     @property
     def index(self):
-        """
-        Get the index of the sublattice spanned by the point list in the integer
-        lattice.
+        """Get the index of the sublattice spanned by the PointConfiguration.
+
+        The index of a sublattice is the index of the sublattice L in the ambient
+        integer lattice ZZ^d. It equals the cardinality of the quotient group ZZ^d / L.
+
+        Returns:
+            The index of the sublattice spanned by the PointConfiguration.
+
+        Raises:
+            ValueError: If the PointConfiguration is not full rank.
         """
         if self._index is None:
             if self.affine_rank < self.ambient_dimension:
