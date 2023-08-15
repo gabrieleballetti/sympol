@@ -972,8 +972,8 @@ class Polytope:
 
         The Ehrhart polynomial of a polytope is a polynomial in one variable with
         integer coefficients, which encodes the number of integer points in the dilates
-        of the polytope as a function of the dilation factor. `More details on Wikipedia
-        <https://en.wikipedia.org/wiki/Ehrhart_polynomial>`_.
+        of the polytope as a function of the dilation factor. `More details
+        <https://en.wikipedia.org/wiki/Ehrhart_polynomial>`__.
 
         Returns:
             The Ehrhart polynomial of the polytope as a sympy Poly object.
@@ -1013,8 +1013,8 @@ class Polytope:
 
         The h*-polynomial of a polytope is a polynomial in one variable encoding
         information about the number of integer points in the dilates of the polytope.
-        `More details on Wikipedia
-        <https://en.wikipedia.org/wiki/Ehrhart_polynomial#Ehrhart_series>`_.
+        `More details
+        <https://en.wikipedia.org/wiki/Ehrhart_polynomial#Ehrhart_series>`__.
 
         Returns:
             The h*-polynomial of the polytope as a sympy Poly object.

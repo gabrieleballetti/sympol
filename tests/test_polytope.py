@@ -627,7 +627,7 @@ def test_vertex_adjacency_matrix():
     """
     p = Polytope.cube(3)
 
-    expected_matrix = Matrix(
+    expected_matrix = np.array(
         [
             [0, 1, 1, 0, 1, 0, 0, 0],
             [1, 0, 0, 1, 0, 1, 0, 0],
@@ -640,8 +640,8 @@ def test_vertex_adjacency_matrix():
         ]
     )
 
-    assert p.vertex_adjacency_matrix.is_symmetric()
-    assert p.vertex_adjacency_matrix == expected_matrix
+    assert np.array_equal(p.vertex_adjacency_matrix, p.vertex_adjacency_matrix.T)
+    assert np.array_equal(p.vertex_adjacency_matrix, expected_matrix)
 
 
 def test_f_vector():
@@ -730,7 +730,7 @@ def test_vertex_facet_pairing_matrix_is_nonnegative():
     """
     Test that the vertex facet pairing matrix is nonnegative
     """
-    p = Polytope.random_lattice_polytope(dim=4, n_vertices=10, min=-5, max=5)
+    p = Polytope.random_lattice_polytope(dim=4, n_points=10, min=-5, max=5)
     assert np.all((p.vertex_facet_pairing_matrix) >= 0)
 
 
@@ -776,7 +776,7 @@ def test_affine_normal_form():
     """
     Test calculation of the affine normal form of a polytope
     """
-    cube_1 = Polytope.random_lattice_polytope(3, 8, -2, 2)
+    cube_1 = Polytope.random_lattice_polytope(dim=3, n_points=8, min=-2, max=2)
 
     unimodular_map = Matrix(
         [
@@ -797,7 +797,7 @@ def test_affine_normal_form_idempotent():
     """
     Test that the affine normal form is idempotent
     """
-    polytope = Polytope.random_lattice_polytope(dim=4, n_vertices=10, min=-2, max=2)
+    polytope = Polytope.random_lattice_polytope(dim=4, n_points=10, min=-2, max=2)
     polytope_anf = Polytope(vertices=polytope.affine_normal_form)
     assert polytope.affine_normal_form == polytope_anf.affine_normal_form
 
@@ -1314,6 +1314,9 @@ def test_chisel_vertex():
     Test that the chisel_vertex method works correctly
     """
     with pytest.raises(ValueError):
+        assert (Polytope.cube(2) * Rational(1, 2)).chisel_vertex(0, 1)
+
+    with pytest.raises(ValueError):
         assert Polytope.cube(2).chisel_vertex(0, -1)
 
     with pytest.raises(ValueError):
@@ -1328,6 +1331,9 @@ def test_chisel():
     """
     Test that the chisel method works correctly
     """
+    with pytest.raises(ValueError):
+        assert (Polytope.cube(2) * Rational(1, 2)).chisel(1)
+
     with pytest.raises(ValueError):
         assert Polytope.cube(2).chisel(-1)
 
