@@ -84,9 +84,10 @@ class Polytope:
         self._dim = dim
 
         self._inequalities = None
+        self._equalities = None
         self._homogeneous_inequalities = None
-        self._is_eq = None
         self._n_inequalities = None
+        self._n_equalities = None
 
         self._vertices = vertices
         self._facets = None
@@ -102,7 +103,6 @@ class Polytope:
         self._f_vector = None
 
         self._cdd_polyhedron = None
-        self._cdd_inequalities = None
         self._cdd_vertex_adjacency = None
         self._cdd_facet_adjacency = None
 
@@ -202,32 +202,32 @@ class Polytope:
         """
         if self._cdd_polyhedron is None:
             if self._vertices is not None or self._points is not None:
-                self._get_cdd_polyhedron_from_points()
+                self._set_cdd_polyhedron_from_points()
             # TODO: add support for inequalities
             # elif self._inequalities is not None:
-            #     self._get_cdd_polyhedron_from_inequalities()
+            #     self._set_cdd_polyhedron_from_inequalities()
             # else:
             #     raise ValueError("No points or inequalities given")
 
         return self._cdd_polyhedron
 
-    @property
-    def cdd_inequalities(self) -> cdd.Matrix:
-        """Get the output from cdd_polyhedron.get_inequalities().
+    # @property
+    # def cdd_inequalities(self) -> cdd.Matrix:
+    #     """Get the output from cdd_polyhedron.get_inequalities().
 
-        Returns:
-            The output from cdd_polyhedron.get_inequalities().
-        """
-        if self._cdd_inequalities is None:
-            self._cdd_inequalities = self.cdd_polyhedron.get_inequalities()
+    #     Returns:
+    #         The output from cdd_polyhedron.get_inequalities().
+    #     """
+    #     if self._cdd_inequalities is None:
+    #         self._cdd_inequalities = self.cdd_polyhedron.get_inequalities()
 
-            # TODO: this check should be safe to remove as long as polytope
-            # is always initialized with a list of points
-            # r1, r2 = self._cdd_inequalities.copy().canonicalize()
-            # assert r1 == (frozenset({}))
-            # assert r2 == frozenset({})
+    #         # TODO: this check should be safe to remove as long as polytope
+    #         # is always initialized with a list of points
+    #         # r1, r2 = self._cdd_inequalities.copy().canonicalize()
+    #         # assert r1 == (frozenset({}))
+    #         # assert r2 == frozenset({})
 
-        return self._cdd_inequalities
+    #     return self._cdd_inequalities
 
     @property
     def cdd_vertex_adjacency(self) -> cdd.Matrix:
@@ -252,7 +252,7 @@ class Polytope:
         """
         if self._cdd_facet_adjacency is None:
             # make sure inequalities are calculated (and simplified)
-            _ = self.cdd_inequalities
+            _ = self.inequalities
             self._cdd_facet_adjacency = self.cdd_polyhedron.get_adjacency()
 
         return self._cdd_facet_adjacency
@@ -283,74 +283,36 @@ class Polytope:
     def inequalities(self) -> np.ndarray:
         """Get the irredundant list of defining inequalities of the polytope.
 
-        The inequalities as given as a numpy array [-b A] such that the polytope is
-        defined as {x | Ax >= b}. This is a copy of cdd_inequalities where each normal
-        is expressed by integers and is primitive (b might be rational).
-
-        If the polytope is not full dimensional, then some of the inequalities are
-        actually equalities. See the ``is_eq`` property.
+        The inequalities are an irredundant array [-b A] such that the polytope
+        satisfies Ax >= b. Together with the equalities [-b' A'] they define the
+        polytope as {x | Ax >= b, A'x = b'}.
 
         Returns:
             The defining inequalities of the polytope as a numpy array.
         """
         if self._inequalities is None:
-            n_rows = self.cdd_inequalities.row_size
-            n_cols = self.cdd_inequalities.col_size
-            self._inequalities = np.empty(shape=(n_rows, n_cols), dtype=object)
-            for i, ineq in enumerate(self.cdd_inequalities):
-                # convert cdd rational to sympy rational
-                ineq = [_cdd_fraction_to_simpy_rational(coeff) for coeff in ineq]
-
-                # make the normal integer and primitive
-                lcm_ineq = lcm([rat_coeff.q for rat_coeff in ineq[1:]])
-                ineq = [rat_coeff * Abs(lcm_ineq) for rat_coeff in ineq]
-
-                gcd_ineq = gcd([int_coeff for int_coeff in ineq[1:]])
-                ineq = [int_coeff / Abs(gcd_ineq) for int_coeff in ineq]
-                self._inequalities[i] = ineq
+            self._set_ineqs_and_eqs()
 
         return self._inequalities
 
     @property
-    def is_eq(self) -> np.ndarray:
-        """Get the list of inequalities that are equalities.
+    def equalities(self) -> np.ndarray:
+        """Get the irredundant list of defining equalities of the polytope.
 
-        If the polytope is not full dimensional, then some of the inequalities are
-        actually equalities. This property specifies which ones.
+        The equalities are an irredundant array [-b' A'] such that the polytope
+        satisfies A'x = b'. Together with the inequalities [-b A] they define the
+        polytope as {x | Ax >= b, A'x = b'}.
+
+        There are always as many equalities as the ambient dimension of the polytope
+        minus the dimension of the polytope.
 
         Returns:
-            A numpy array of booleans, where True indicates that the corresponding
-            inequality is an equality, False indicates that it is an actual inequality.
+            The defining equalities of the polytope as a numpy array.
         """
-        if self._is_eq is None:
-            self._is_eq = np.zeros(shape=self.cdd_inequalities.row_size, dtype=bool)
-            self._is_eq[list(self.cdd_inequalities.lin_set)] = True
+        if self._equalities is None:
+            self._set_ineqs_and_eqs()
 
-        return self._is_eq
-
-    @property
-    def _ineqs(self) -> np.ndarray:
-        """Return the "actual" inequalities of the polytope.
-
-        Return the "actual" inequalities of the polytope. See the ``inequalities`` and
-        ``_eqs`` properties.
-
-        Return:
-            This property returns only the "actual" inequalities [-b A].
-        """
-        return self.inequalities[~self.is_eq]
-
-    @property
-    def _eqs(self) -> np.ndarray:
-        """Return the "actual" equalities of the polytope.
-
-        Return the equalities of the polytope. See the ``inequalities`` and
-        ``_eqs`` properties.
-
-        Return:
-            This property returns only the "actual" equalities [-b A].
-        """
-        return self.inequalities[self.is_eq]
+        return self._equalities
 
     @property
     def homogeneous_inequalities(self) -> np.ndarray:
@@ -378,10 +340,16 @@ class Polytope:
         Returns:
             The number of defining inequalities of the polytope.
         """
-        if self._n_inequalities is None:
-            self._n_inequalities = self.inequalities.shape[0]
+        return self.inequalities.shape[0]
 
-        return self._n_inequalities
+    @property
+    def n_equalities(self) -> int:
+        """Get the number of defining equalities of the polytope.
+
+        Returns:
+            The number of defining equalities of the polytope.
+        """
+        return self.equalities.shape[0]
 
     @property
     def facets(self) -> tuple:
@@ -524,10 +492,7 @@ class Polytope:
         Returns:
             The number of facets of the polytope.
         """
-        if self._n_facets is None:
-            self._n_facets = self.inequalities.shape[0] - sum(self.is_eq)
-
-        return self._n_facets
+        return self.n_inequalities
 
     @property
     def n_ridges(self) -> int:
@@ -611,8 +576,11 @@ class Polytope:
             self._vertex_facet_matrix = np.zeros(
                 shape=(self.n_facets, self.n_vertices), dtype=bool
             )
-            _cdd_vertex_facet_incidence = np.array(self.cdd_polyhedron.get_incidence())[
-                ~self.is_eq
+            _cdd_vertex_facet_incidence = list(self.cdd_polyhedron.get_incidence())
+            # remove all occurrences of frozenset({1,...,n}) from the list as
+            # this correspond to equalities
+            _cdd_vertex_facet_incidence = [
+                f for f in _cdd_vertex_facet_incidence if len(f) < self.n_vertices
             ]
             for i, facet in enumerate(_cdd_vertex_facet_incidence):
                 for j in facet:
@@ -632,8 +600,8 @@ class Polytope:
         """
         if self._vertex_facet_pairing_matrix is None:
             self._vertex_facet_pairing_matrix = (
-                self._ineqs[:, 1:] @ self.vertices.view(np.ndarray).T
-                + self._ineqs[:, :1]
+                self.inequalities[:, 1:] @ self.vertices.view(np.ndarray).T
+                + self.inequalities[:, :1]
             )
 
         return self._vertex_facet_pairing_matrix
@@ -1361,7 +1329,7 @@ class Polytope:
 
     # property setters
 
-    def _get_cdd_polyhedron_from_points(self) -> None:
+    def _set_cdd_polyhedron_from_points(self) -> None:
         """Set cdd_polyhedron from the v-representation of the polytope."""
         points_to_use = self._vertices if self._vertices is not None else self.points
         formatted_points = [[1] + [c for c in p] for p in points_to_use]
@@ -1369,12 +1337,36 @@ class Polytope:
         mat.rep_type = cdd.RepType.GENERATOR
         self._cdd_polyhedron = cdd.Polyhedron(mat)
 
-    # def _get_cdd_polyhedron_from_inequalities(self):
+    # def _set_cdd_polyhedron_from_inequalities(self):
     #     """
     #     Get the cdd polyhedron from the h-representation of the polytope
     #     """
     #     # TODO
     #     pass
+
+    def _set_ineqs_and_eqs(self) -> None:
+        """Set the defining inequalities and the equalities of the polytope."""
+        cdd_ineqs = self.cdd_polyhedron.get_inequalities()
+        # TODO: possibly simplify the inequalities
+        eq_ids = cdd_ineqs.lin_set
+
+        self._inequalities = np.empty(shape=(0, cdd_ineqs.col_size), dtype=object)
+        self._equalities = np.empty(shape=(0, cdd_ineqs.col_size), dtype=object)
+
+        for i, ineq in enumerate(cdd_ineqs):
+            # convert cdd rational to sympy rational
+            ineq = [_cdd_fraction_to_simpy_rational(coeff) for coeff in ineq]
+
+            # make the normal integer and primitive
+            lcm_ineq = lcm([rat_coeff.q for rat_coeff in ineq[1:]])
+            ineq = [rat_coeff * Abs(lcm_ineq) for rat_coeff in ineq]
+
+            gcd_ineq = gcd([int_coeff for int_coeff in ineq[1:]])
+            ineq = [int_coeff / Abs(gcd_ineq) for int_coeff in ineq]
+            if i in eq_ids:
+                self._equalities = np.vstack([self._equalities, ineq])
+            else:
+                self._inequalities = np.vstack([self._inequalities, ineq])
 
     def _calculate_volume(self) -> None:
         """Set both _volume and _normalized_volume."""
@@ -1750,13 +1742,17 @@ class Polytope:
             TypeError: If the argument is neither a point nor a polytope.
         """
         if isinstance(other, Point):
-            if np.any(np.dot(self._eqs[:, 1:], other) != -self._eqs[:, 0]):
+            if np.any(np.dot(self.equalities[:, 1:], other) != -self.equalities[:, 0]):
                 return False
             if strict:
-                if np.any(np.dot(self._ineqs[:, 1:], other) <= -self._ineqs[:, 0]):
+                if np.any(
+                    np.dot(self.inequalities[:, 1:], other) <= -self.inequalities[:, 0]
+                ):
                     return False
             else:
-                if np.any(np.dot(self._ineqs[:, 1:], other) < -self._ineqs[:, 0]):
+                if np.any(
+                    np.dot(self.inequalities[:, 1:], other) < -self.inequalities[:, 0]
+                ):
                     return False
             return True
 

@@ -194,14 +194,13 @@ def test_n_inequalities():
     assert p.n_inequalities == 6
 
 
-def test_is_eq():
+def test_n_equalities():
     """
-    Test that the inequalities are properly categorized into equalities and
-    inequalities.
+    Test that the number of equalities is correct
     """
-    p = Polytope([[0, 0, 0], [1, 0, 0], [0, 1, 0]])
+    p = Polytope.cube(3)
 
-    assert np.array_equal(p.is_eq, np.array([False, False, False, True], dtype=bool))
+    assert p.n_equalities == 0
 
 
 def test_triangulation():
@@ -520,6 +519,8 @@ def test_facets():
     Test that the facets of a cube are six and of the right shape
     """
     p = Polytope.cube(3)
+
+    p.inequalities
 
     assert p.n_facets == 6
 
@@ -1420,7 +1421,7 @@ def test_cross_polytope():
     assert cross.normalized_volume == 8
 
 
-def test_get_cdd_polyhedron_from_points():
+def test_set_cdd_polyhedron_from_points():
     """
     Test that _cdd_polyhedron is initialized from a list of points
     """
@@ -1430,9 +1431,23 @@ def test_get_cdd_polyhedron_from_points():
         [0, Rational(1, 7), 0],
         [0, 0, Rational(1, 7)],
     ]
-    polytope = Polytope(points)
-    polytope._get_cdd_polyhedron_from_points()
-    assert polytope._cdd_polyhedron is not None
+    p = Polytope(points)
+    p._set_cdd_polyhedron_from_points()
+    assert p._cdd_polyhedron is not None
+
+
+def test_set_ineqs_and_eqs():
+    """
+    Test that the setter for inequalities and equalities
+    """
+    verts = [[0, 0, 0], [1, 0, 0], [0, 1, 0], [1, 1, 0]]
+    p = Polytope(verts)
+
+    ineqs = np.array([[0, 0, 1, 0], [0, 1, 0, 0], [1, 0, -1, 0], [1, -1, 0, 0]])
+    eqs = np.array([[0, 0, 0, 1]])
+
+    assert _arrays_equal_up_to_row_permutation(p.inequalities, ineqs)
+    assert _arrays_equal_up_to_row_permutation(p.equalities, eqs)
 
 
 def test_lower_dimensional_polytope():
@@ -1447,7 +1462,7 @@ def test_lower_dimensional_polytope():
     )
 
     p = Polytope(verts)
-    assert p._eqs.shape[0] > 0
+    assert p.n_equalities == 2
 
 
 def test_simplex_conversion():
