@@ -16,7 +16,7 @@ build:
     post_install:
       - pip list
     pre_build:
-      - pydocstyle.exe src\sympol\
+      - pydocstyle src\sympol\
   
 
 # Build documentation in the docs/ directory with Sphinx
