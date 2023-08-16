@@ -103,8 +103,6 @@ class Polytope:
         self._f_vector = None
 
         self._cdd_polyhedron = None
-        self._cdd_vertex_adjacency = None
-        self._cdd_facet_adjacency = None
 
         self._vertex_adjacency_matrix = None
         self._vertex_facet_matrix = None
@@ -230,34 +228,6 @@ class Polytope:
     #     return self._cdd_inequalities
 
     @property
-    def cdd_vertex_adjacency(self) -> cdd.Matrix:
-        """Get the out from cdd_polyhedron.get_input_adjacency().
-
-        Returns:
-            The output from cdd_polyhedron.get_input_adjacency().
-        """
-        if self._cdd_vertex_adjacency is None:
-            # make sure vertices are calculated (and simplified)
-            _ = self.vertices
-            self._cdd_vertex_adjacency = self.cdd_polyhedron.get_input_adjacency()
-
-        return self._cdd_vertex_adjacency
-
-    @property
-    def cdd_facet_adjacency(self) -> cdd.Matrix:
-        """Get the out from cdd_polyhedron.get_adjacency().
-
-        Returns:
-            The output from cdd_polyhedron.get_adjacency().
-        """
-        if self._cdd_facet_adjacency is None:
-            # make sure inequalities are calculated (and simplified)
-            _ = self.inequalities
-            self._cdd_facet_adjacency = self.cdd_polyhedron.get_adjacency()
-
-        return self._cdd_facet_adjacency
-
-    @property
     def vertices(self) -> PointConfiguration:
         """Get the irredundant list of vertices of the polytope.
 
@@ -380,7 +350,7 @@ class Polytope:
         """
         if self._ridges is None:
             self._ridges = []
-            for i, ads in enumerate(self.cdd_facet_adjacency):
+            for i, ads in enumerate(self.cdd_polyhedron.get_adjacency()):
                 for j in ads:
                     if i < j:
                         self._ridges.append(self.facets[i].intersection(self.facets[j]))
@@ -398,13 +368,8 @@ class Polytope:
             The edges of the polytope as a tuple of frozensets of vertex ids.
         """
         if self._edges is None:
-            self._edges = []
-            for i, ads in enumerate(self.cdd_vertex_adjacency):
-                for j in ads:
-                    if i < j:
-                        self._edges.append(frozenset((i, j)))
-            # sort the edges and make a tuple
-            self._edges = tuple(self._edges)
+            i, j = np.where(np.triu(self.vertex_adjacency_matrix, k=1))
+            self._edges = tuple(frozenset({i, j}) for i, j in zip(i, j))
 
         return self._edges
 
@@ -553,7 +518,7 @@ class Polytope:
             self._vertex_adjacency_matrix = np.zeros(
                 shape=(self.n_vertices, self.n_vertices), dtype=bool
             )
-            for i, ads in enumerate(self.cdd_vertex_adjacency):
+            for i, ads in enumerate(self.cdd_polyhedron.get_input_adjacency()):
                 for j in ads:
                     self._vertex_adjacency_matrix[i, j] = 1
 
@@ -1463,7 +1428,7 @@ class Polytope:
             raise ValueError("Polytope is not a simplex")
         self.__class__ = Simplex
 
-    def neighbors(self, vertex_id) -> list:
+    def neighbors(self, vertex_id) -> frozenset[int]:
         """Get the neighbors of a vertex.
 
         The neighbors of a vertex are the vertices that share an edge with it.
@@ -1474,7 +1439,8 @@ class Polytope:
         Returns:
             The ids of the neighbors of the vertex.
         """
-        return self.cdd_vertex_adjacency[vertex_id]
+        row = self.vertex_adjacency_matrix[vertex_id]
+        return frozenset(np.where(row)[0].tolist())
 
     def has_n_interior_points(self, n) -> bool:
         """Check if the polytope has *exactly* n interior points.
