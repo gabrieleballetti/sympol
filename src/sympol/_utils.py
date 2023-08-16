@@ -5,9 +5,7 @@ from sympy import binomial, factorial, Poly, Rational
 
 
 def _cdd_fraction_to_simpy_rational(frac):
-    """
-    Convert a cddlib fraction (or potentially an integer) to a sympy Rational.
-    """
+    """Convert a cddlib fraction (or potentially an integer) to a sympy Rational."""
     if isinstance(frac, int):
         return Rational(frac)
 
@@ -18,9 +16,7 @@ def _cdd_fraction_to_simpy_rational(frac):
 
 
 def _np_cartesian_product(*arrays):
-    """
-    Return the cartesian product of a list of arrays.
-    """
+    """Return the cartesian product of a list of arrays."""
     prod = np.empty(
         shape=(
             np.prod([a.shape[0] for a in arrays]),
@@ -34,11 +30,7 @@ def _np_cartesian_product(*arrays):
 
 
 def _is_unimodal(iterable):
-    """
-    Return True if an iterable is unimodal, False otherwise. An iterable is
-    unimodal if "there are no valleys", i.e. it is weakly increasing and then weakly
-    decreasing.
-    """
+    """Return True if the iterable is unimodal, False otherwise."""
     i = 1
     while i < len(iterable) and iterable[i - 1] <= iterable[i]:
         i += 1
@@ -48,18 +40,14 @@ def _is_unimodal(iterable):
 
 
 def _eulerian_number(n, k):
-    """
-    Calculate Eulerian number A(n,k)
-    """
+    """Return the Eulerian number A(n,k)."""
     return sum(
         [(-1) ** i * binomial(n + 1, i) * (k + 1 - i) ** n for i in range(k + 1)]
     )
 
 
 def _eulerian_poly(n, x):
-    """
-    Calculate Eulerian polynomial A_n(x), first 10 values are given explicitly
-    """
+    """Calculate Eulerian polynomial A_n(x), first 10 values are given explicitly."""
     if n == 0:
         return Poly(1, x)
     if n == 1:
@@ -126,12 +114,7 @@ def _eulerian_poly(n, x):
 
 
 def _binomial_polynomial(d, k, x):
-    """
-    Calculate the binomial polynomial binomial(x + k, d), with x as the variable
-    """
-    # binomial(x + k, d) = (x+k)! / (d! * (x+k-d)!) =
-    #                    = (x+k) * (x+k-1) * ... * (x+k-d+1) / d!
-
+    """Calculate the binomial polynomial binomial(x + k, d), with x as the variable."""
     poly = Poly(Rational(1, factorial(d)), x, domain="QQ")
     for i in range(d):
         poly *= Poly(x + k - i, x)

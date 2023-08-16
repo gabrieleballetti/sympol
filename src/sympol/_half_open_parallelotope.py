@@ -11,15 +11,10 @@ from sympol._snf import smith_normal_form
 
 
 class HalfOpenParallelotope:
-    """
-    Class for representing a half-open parallelotope and counting its
-    number of integer points.
-    """
+    """Class for representing a half-open parallelotope."""
 
     def __init__(self, generators, special_gens_ids=None, check_rank=True):
-        """
-        Initializes a half-open parallelotope with the given generators.
-        """
+        """Initialize a half-open parallelotope with the given generators."""
         if special_gens_ids is None:
             special_gens_ids = []
 
@@ -47,9 +42,7 @@ class HalfOpenParallelotope:
 
     @property
     def snf(self):
-        """
-        Returns the Smith normal form of the generator matrix.
-        """
+        """Return the Smith normal form of the generator matrix."""
         if self._snf is None:
             self._calculate_smith_normal_form()
 
@@ -57,9 +50,7 @@ class HalfOpenParallelotope:
 
     @property
     def det(self):
-        """
-        Returns the determinant of the generator matrix.
-        """
+        """Return the determinant of the generator matrix."""
         if self._det is None:
             self._calculate_smith_normal_form()
 
@@ -67,6 +58,7 @@ class HalfOpenParallelotope:
 
     @property
     def v_d_inv(self):
+        """Return the matrix VDinv, where D is the SNF."""
         if self._v_d_inv is None:
             self._calculate_smith_normal_form()
 
@@ -74,11 +66,7 @@ class HalfOpenParallelotope:
 
     @property
     def k(self):
-        """
-        Return the value of k, i.e. the index of the first non-one entry in the
-        (diagonal) of the Smith normal form of the generator matrix. This is used
-        to speed up the computation of the integer points enumeration.
-        """
+        """Return the index of the first non-one entry in the (diagonal of the) SNF."""
         if self._k is None:
             self._k = 0
             for i, d_i in enumerate(self.snf):
@@ -89,10 +77,10 @@ class HalfOpenParallelotope:
         return self._k
 
     def _calculate_smith_normal_form(self):
-        """
-        Calculates the Smith normal form of the generator matrix, i.e. the
-        diagonal matrix D such that D = U * M * V, where R is the matrix having
-        the generators as columns and U and V are integer unimodular matrices.
+        """Calculates the Smith normal form (SNF) of the generator matrix.
+
+        The SNF is the diagonal matrix D such that D = U * M * V, where R is the matrix
+        having the generators as columns and U and V are integer unimodular matrices.
         """
         d, u, v = smith_normal_form(self.m)
 
@@ -108,9 +96,7 @@ class HalfOpenParallelotope:
         self._v_d_inv = v * d_inv % self._det
 
     def get_integer_points(self, height=-1, count_only=False, use_sympy=False):
-        """
-        Returns the number of integer points in the half-open parallelotope.
-        """
+        """Returns the number of integer points in the half-open parallelotope."""
         if use_sympy:
             pts, h = get_parallelotope_points_simpy(
                 snf=self.snf,
@@ -136,6 +122,7 @@ class HalfOpenParallelotope:
         return pts, tuple(h)
 
 
+# TODO: keep sympy version?
 def get_parallelotope_points_simpy(
     snf,
     det,
@@ -146,9 +133,7 @@ def get_parallelotope_points_simpy(
     height=-1,
     count_only=False,
 ):
-    """
-    See get_parallelotope_points_np for the documentation of the parameters.
-    """
+    """See get_parallelotope_points_np for the documentation of the parameters."""
     dim = VDinv.shape[0]
     ambient_dim = R.shape[0]
     s = 0
