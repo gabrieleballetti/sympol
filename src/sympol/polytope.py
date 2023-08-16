@@ -1,5 +1,6 @@
 """Module for the Polytope class."""
 
+from enum import Enum
 import numpy as np
 import cdd
 
@@ -25,12 +26,20 @@ from sympol._utils import (
 )
 
 
+class PolytopeRepresentation(Enum):
+    """An enum for representing the different ways a polytope can be defined."""
+
+    NONE = 0
+    V_REPRESENTATION = 1
+    H_REPRESENTATION = 2
+
+
 class Polytope:
     """A class for representing the convex hull of a finite set of points.
 
     A polytope can be either defined by a list of points (V-representation) or by
-    a list of inequalities or hyperplanes (H-representation) [TODO]. The lists can be
-    redundant, and a irreduntant representation is calculated automatically, if needed.
+    a list of inequalities or hyperplanes (H-representation). The lists can be
+    redundant, an a irreduntant representation is calculated automatically if needed.
 
     Example usage:
 
@@ -55,29 +64,66 @@ class Polytope:
     def __init__(
         self,
         points: list = None,
-        dim: int = None,
         vertices: list = None,
+        inequalities: list = None,
+        equalities: list = None,
+        dim: int = None,
     ):
         """Initialize a Polytope object."""
-        if points is None and vertices is None:
-            raise ValueError("Either points or vertices must be given")
 
-        if points is not None and len(points) == 0:
-            raise ValueError("Points cannot be empty")
+        _repr = PolytopeRepresentation.NONE
 
-        if vertices is not None and len(vertices) == 0:
-            raise ValueError("Vertices cannot be empty")
+        if points is not None or vertices is not None:
+            _repr = PolytopeRepresentation.V_REPRESENTATION
+            if inequalities is not None or equalities is not None:
+                raise ValueError(
+                    "Cannot initialize a polytope with both points and inequalities."
+                )
 
-        if vertices is not None:
-            vertices = PointConfiguration(vertices)
+        if inequalities is not None or equalities is not None:
+            _repr = PolytopeRepresentation.H_REPRESENTATION
+            if points is not None or vertices is not None:
+                raise ValueError(
+                    "Cannot initialize a polytope with both points and inequalities."
+                )
+
+        if _repr == PolytopeRepresentation.NONE:
+            raise ValueError("Either points or inequalities must be given.")
+
+        if _repr == PolytopeRepresentation.V_REPRESENTATION:
+            if points is not None and len(points) == 0:
+                raise ValueError("Points cannot be empty")
+
+            if vertices is not None and len(vertices) == 0:
+                raise ValueError("Vertices cannot be empty")
+
+            if vertices is not None:
+                self._vertices = PointConfiguration(vertices)
+            else:
+                self._vertices = None
+
+            if points is not None:
+                self._points = PointConfiguration(points)
+            else:
+                self._points = PointConfiguration(vertices)
+        elif _repr == PolytopeRepresentation.H_REPRESENTATION:
+            if inequalities is None:
+                raise ValueError("Cannot initialize a polytope with only equalities.")
+
+            if len(inequalities) == 0:
+                raise ValueError("Inequalities cannot be empty")
+
+            if inequalities is not None:
+                self._inequalities = np.array(inequalities)
+            else:
+                self._inequalities = None
+
+            if equalities is not None:
+                self._equalities = np.array(equalities)
+            else:
+                self._equalities = None
         else:
-            vertices = None
-
-        # TODO: change this once support for H-representation is added
-        if points is not None:
-            self._points = PointConfiguration(points)
-        else:
-            self._points = PointConfiguration(vertices)
+            raise NotImplementedError("Only V- and H-representations are supported.")
 
         self._ambient_dim = self._points[0].ambient_dimension
 
@@ -89,7 +135,6 @@ class Polytope:
         self._n_inequalities = None
         self._n_equalities = None
 
-        self._vertices = vertices
         self._facets = None
         self._ridges = None
         self._edges = None
