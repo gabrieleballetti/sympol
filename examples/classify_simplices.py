@@ -1,12 +1,26 @@
+"""Example: classify all simplices up to a certain volume.
+
+This script contains code to enumerate all unimodular classes of simplices in a given
+dimension, up to a certain volume. This is done by iterating through all the possible
+Hermite Normal Forms.
+"""
+
 from sympy import divisors
+from sympol import Polytope, PointConfiguration
 
-from sympol.polytope import Polytope
 
+def classify_simplices(dim: int, max_volume: int) -> dict[int, set[PointConfiguration]]:
+    """Collect all of simplices in fixed dimension, up to a certain volume.
 
-def classify_simplices(dim, max_volume):
-    """
-    Classify all unimodular classes of simplices in a given dimension, up to a certain
-    volume. This is done by iterating through all the possible Hermite Normal Forms.
+    This is done by iterating through all the possible Hermite Normal Forms.
+
+    Args:
+        dim: Dimension of the simplices.
+        max_volume: Maximum volume of the simplices.
+
+    Returns:
+        A dictionary with the volume as key and the set of the vertices of one
+        representative for each equivalence class as value.
     """
     all_simplices = {}
 
@@ -15,7 +29,7 @@ def classify_simplices(dim, max_volume):
         for hnf in _all_hnfs(volume, dim):
             vol_simplices.add(Polytope(vertices=hnf).affine_normal_form)
         all_simplices[volume] = vol_simplices
-        print(f"{volume} - {len(vol_simplices)}")
+        print(f"Volume {volume:3d} - {len(vol_simplices):3d} classes")
 
     return all_simplices
 
@@ -42,3 +56,7 @@ def _all_left_values(k, size):
     if size == 0:
         return [[]]
     return (left + [i] for left in _all_left_values(k, size - 1) for i in range(k))
+
+
+if __name__ == "__main__":
+    classify_simplices(dim=3, max_volume=10)
