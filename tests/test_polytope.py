@@ -172,6 +172,9 @@ def test_init_edge_cases():
     Test initialization of a polytope raises exceptions for edge cases
     """
     with pytest.raises(ValueError):
+        Polytope()
+
+    with pytest.raises(ValueError):
         Polytope(points=None, vertices=None)
 
     with pytest.raises(ValueError):
