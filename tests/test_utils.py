@@ -6,6 +6,7 @@ from sympy.abc import x
 from sympol._utils import (
     _cdd_fraction_to_simpy_rational,
     _np_cartesian_product,
+    _is_log_concave,
     _is_unimodal,
     _eulerian_number,
     _eulerian_poly,
@@ -52,6 +53,20 @@ def test_is_unimodal():
     assert not _is_unimodal([1, 2, 3, 4, 5, 4, 5, 4, 3, 2, 1])
     assert not _is_unimodal([2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2])
     assert not _is_unimodal([1, 2, 3, 4, 5, 4, 3, 2, 1, 0, 1])
+
+
+def test_is_log_concave():
+    """
+    Test that a sequence is correctly identified as log-concave or not.
+    """
+    assert _is_log_concave([1, 6, 15, 20, 15, 6, 1])
+    assert _is_log_concave([1, 7, 21, 35, 35, 21, 7, 1])
+    assert _is_log_concave([5, 4, 3, 2, 1, 0, 0, 0, 0, 0, 0])
+    assert _is_log_concave([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])
+    assert not _is_log_concave([1, 1, 0, 0, 1])
+    assert not _is_log_concave([1, 4, 17, 0, 0])
+    assert not _is_log_concave([2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2])
+    assert not _is_log_concave([1, 2, 3, 4, 5, 4, 3, 2, 1, 0, 1])
 
 
 def test_eulerian_number():

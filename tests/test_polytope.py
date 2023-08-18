@@ -1413,6 +1413,41 @@ def test_is_ehrhart_positive():
     assert not p.is_ehrhart_positive
 
 
+def test_has_log_concave_h_star_vector():
+    """
+    Test the has_log_concave_h_star_vector property
+    """
+    p = Polytope(
+        [
+            [0, 0, 0],
+            [1, 0, 0],
+            [0, 1, 0],
+            [0, 0, 1],
+            [1, 0, 1],
+            [0, 1, 1],
+            [1, 1, 15],
+            [1, 1, 16],
+        ]
+    )
+
+    assert p.has_log_concave_h_star_vector
+
+    p = Polytope(
+        [
+            [0, 0, 0],
+            [1, 0, 0],
+            [0, 1, 0],
+            [0, 0, 1],
+            [1, 0, 1],
+            [0, 1, 1],
+            [1, 1, 16],
+            [1, 1, 17],
+        ]
+    )
+
+    assert not p.has_log_concave_h_star_vector
+
+
 def test_has_unimodal_h_star_vector():
     """
     Test the has_unimodal_h_star_vector property

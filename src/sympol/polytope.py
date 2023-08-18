@@ -22,6 +22,7 @@ from sympol._utils import (
     _cdd_fraction_to_simpy_rational,
     _eulerian_poly,
     _np_cartesian_product,
+    _is_log_concave,
     _is_unimodal,
 )
 
@@ -181,6 +182,7 @@ class Polytope:
         self._is_reflexive = None
         self._is_gorenstein = None
         self._is_ehrhart_positive = None
+        self._has_log_concave_h_star_vector = None
         self._has_unimodal_h_star_vector = None
         self._is_idp = None
         self._is_smooth = None
@@ -1309,6 +1311,21 @@ class Polytope:
             self._is_ehrhart_positive = all([i >= 0 for i in self.ehrhart_coefficients])
 
         return self._is_ehrhart_positive
+
+    @property
+    def has_log_concave_h_star_vector(self) -> bool:
+        """Check if the polytope has a log-concave h*-vector.
+
+        A sequence a_0, a_1, ..., a_d is log concave if (a_i)^2 >= a_{i−1} * a_{i+1}
+        holds for all i = 1, ..., d − 1 and it has no internal zeros.
+
+        Returns:
+            True if the polytope has a log-concave h*-vector, False otherwise.
+        """
+        if self._has_log_concave_h_star_vector is None:
+            self._has_log_concave_h_star_vector = _is_log_concave(self.h_star_vector)
+
+        return self._has_log_concave_h_star_vector
 
     @property
     def has_unimodal_h_star_vector(self) -> bool:

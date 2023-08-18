@@ -29,6 +29,31 @@ def _np_cartesian_product(*arrays):
     return prod
 
 
+def _is_log_concave(iterable):
+    """Return True if the iterable is log-concave, False otherwise.
+
+    A sequence a_0, a_1, ..., a_d is log concave if it has no internal zeros and
+    (a_i)^2 >= a_{i−1} * a_{i+1} for all i = 1, ..., d − 1.
+
+    Usually it is also required that the sequence is non-negative, but we do not
+    check for this here (as we mainly work with positive sequences).
+
+    Log-concavity implies unimodality, but not vice versa.
+    """
+    last = len(iterable) - 1
+    while last > 0 and iterable[last] == 0:
+        last -= 1
+
+    i = 1
+    while i < last:
+        if iterable[i] == 0:
+            return False
+        if iterable[i] ** 2 < iterable[i - 1] * iterable[i + 1]:
+            return False
+        i += 1
+    return True
+
+
 def _is_unimodal(iterable):
     """Return True if the iterable is unimodal, False otherwise."""
     i = 1
