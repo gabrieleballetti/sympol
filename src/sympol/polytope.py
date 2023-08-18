@@ -67,70 +67,55 @@ class Polytope:
         vertices: list = None,
         inequalities: list = None,
         equalities: list = None,
-        dim: int = None,
     ):
         """Initialize a Polytope object."""
 
-        _repr = PolytopeRepresentation.NONE
+        self._repr = PolytopeRepresentation.NONE
 
         if points is not None or vertices is not None:
-            _repr = PolytopeRepresentation.V_REPRESENTATION
+            self._repr = PolytopeRepresentation.V_REPRESENTATION
             if inequalities is not None or equalities is not None:
                 raise ValueError(
                     "Cannot initialize a polytope with both points and inequalities."
                 )
+        elif inequalities is not None or equalities is not None:
+            self._repr = PolytopeRepresentation.H_REPRESENTATION
 
-        if inequalities is not None or equalities is not None:
-            _repr = PolytopeRepresentation.H_REPRESENTATION
-            if points is not None or vertices is not None:
-                raise ValueError(
-                    "Cannot initialize a polytope with both points and inequalities."
-                )
-
-        if _repr == PolytopeRepresentation.NONE:
+        if self._repr == PolytopeRepresentation.NONE:
             raise ValueError("Either points or inequalities must be given.")
 
-        if _repr == PolytopeRepresentation.V_REPRESENTATION:
-            if points is not None and len(points) == 0:
-                raise ValueError("Points cannot be empty")
+        self._points = None
+        self._vertices = None
+        self._inequalities = None
+        self._equalities = None
 
-            if vertices is not None and len(vertices) == 0:
-                raise ValueError("Vertices cannot be empty")
-
-            if vertices is not None:
+        if self._repr == PolytopeRepresentation.V_REPRESENTATION:
+            if points is not None and vertices is not None:
+                raise ValueError(
+                    "Cannot initialize a polytope with both points and vertices."
+                )
+            elif vertices is not None:
                 self._vertices = PointConfiguration(vertices)
-            else:
-                self._vertices = None
-
-            if points is not None:
+                self._points = self._vertices
+            elif points is not None:
                 self._points = PointConfiguration(points)
-            else:
-                self._points = PointConfiguration(vertices)
-        elif _repr == PolytopeRepresentation.H_REPRESENTATION:
+
+        elif self._repr == PolytopeRepresentation.H_REPRESENTATION:
             if inequalities is None:
                 raise ValueError("Cannot initialize a polytope with only equalities.")
 
-            if len(inequalities) == 0:
-                raise ValueError("Inequalities cannot be empty")
-
             if inequalities is not None:
                 self._inequalities = np.array(inequalities)
-            else:
-                self._inequalities = None
-
             if equalities is not None:
                 self._equalities = np.array(equalities)
-            else:
-                self._equalities = None
         else:
-            raise NotImplementedError("Only V- and H-representations are supported.")
+            raise NotImplementedError(
+                "Only V- and H-representations are supported."
+            )  # pragma: no cover
 
-        self._ambient_dim = self._points[0].ambient_dimension
+        self._ambient_dim = None
+        self._dim = None
 
-        self._dim = dim
-
-        self._inequalities = None
-        self._equalities = None
         self._homogeneous_inequalities = None
         self._n_inequalities = None
         self._n_equalities = None
@@ -150,14 +135,18 @@ class Polytope:
         self._cdd_polyhedron = None
 
         self._vertex_adjacency_matrix = None
+        self._facet_adjacency_matrix = None
         self._vertex_facet_matrix = None
+
         self._vertex_facet_pairing_matrix = None
 
         self._triangulation = None
         self._half_open_decomposition = None
         self._induced_boundary_triangulation = None
+
         self._volume = None
         self._normalized_volume = None
+
         self._boundary_volume = None
         self._normalized_boundary_volume = None
 
@@ -214,6 +203,19 @@ class Polytope:
         Returns:
             The ambient dimension of the polytope.
         """
+        if self._ambient_dim is None:
+            if self._repr == PolytopeRepresentation.V_REPRESENTATION:
+                if self._points is not None:
+                    self._ambient_dim = self._points.shape[1]
+                else:
+                    self._ambient_dim = self.vertices.shape[1]
+            elif self._repr == PolytopeRepresentation.H_REPRESENTATION:
+                self._ambient_dim = self.inequalities.shape[1] - 1
+            else:
+                raise NotImplementedError(
+                    "Only V- and H-representations are supported."
+                )  # pragma: no cover
+
         return self._ambient_dim
 
     @property
@@ -224,12 +226,17 @@ class Polytope:
             The dimension of the polytope.
         """
         if self._dim is None:
-            self._dim = self.points.affine_rank
-
-            # check if it is a simplex, but only if vertices are
-            # already calculated
-            if self._vertices is not None and self.is_simplex():
-                self._make_simplex()
+            if self._repr == PolytopeRepresentation.V_REPRESENTATION:
+                if self._points is not None:
+                    self._dim = self._points.affine_rank
+                else:
+                    self._dim = self.vertices.affine_rank
+            elif self._repr == PolytopeRepresentation.H_REPRESENTATION:
+                self._dim = self.ambient_dim - self.n_equalities
+            else:
+                raise NotImplementedError(
+                    "Only V- and H-representations are supported."
+                )  # pragma: no cover
 
         return self._dim
 
@@ -244,33 +251,16 @@ class Polytope:
             The cdd polyhedron of the polytope.
         """
         if self._cdd_polyhedron is None:
-            if self._vertices is not None or self._points is not None:
+            if self._repr == PolytopeRepresentation.V_REPRESENTATION:
                 self._set_cdd_polyhedron_from_points()
-            # TODO: add support for inequalities
-            # elif self._inequalities is not None:
-            #     self._set_cdd_polyhedron_from_inequalities()
-            # else:
-            #     raise ValueError("No points or inequalities given")
+            elif self._repr == PolytopeRepresentation.H_REPRESENTATION:
+                self._set_cdd_polyhedron_from_inequalities()
+            else:
+                raise NotImplementedError(
+                    "Only V- and H-representations are supported."
+                )  # pragma: no cover
 
         return self._cdd_polyhedron
-
-    # @property
-    # def cdd_inequalities(self) -> cdd.Matrix:
-    #     """Get the output from cdd_polyhedron.get_inequalities().
-
-    #     Returns:
-    #         The output from cdd_polyhedron.get_inequalities().
-    #     """
-    #     if self._cdd_inequalities is None:
-    #         self._cdd_inequalities = self.cdd_polyhedron.get_inequalities()
-
-    #         # TODO: this check should be safe to remove as long as polytope
-    #         # is always initialized with a list of points
-    #         # r1, r2 = self._cdd_inequalities.copy().canonicalize()
-    #         # assert r1 == (frozenset({}))
-    #         # assert r2 == frozenset({})
-
-    #     return self._cdd_inequalities
 
     @property
     def vertices(self) -> PointConfiguration:
@@ -282,9 +272,10 @@ class Polytope:
         if self._vertices is None:
             mat_gens = self.cdd_polyhedron.get_generators()
 
-            # remove redundant generators and update the cdd polyhedron
-            mat_gens.canonicalize()
-            self._cdd_polyhedron = cdd.Polyhedron(mat_gens)
+            if mat_gens.row_size > 0:
+                # remove redundant generators and update the cdd polyhedron
+                mat_gens.canonicalize()
+                self._cdd_polyhedron = cdd.Polyhedron(mat_gens)
 
             self._vertices = PointConfiguration([p[1:] for p in mat_gens])
 
@@ -307,6 +298,11 @@ class Polytope:
         """
         if self._inequalities is None:
             self._set_ineqs_and_eqs()
+        elif self._cdd_polyhedron is None:
+            # If the inequalities are already set, but the cdd polyhedron is not,
+            # then they might have redundancies. Calculate the cdd polyhedron
+            # to remove them.
+            self._set_cdd_polyhedron_from_inequalities()
 
         return self._inequalities
 
@@ -364,7 +360,9 @@ class Polytope:
         Returns:
             The number of defining equalities of the polytope.
         """
-        return self.equalities.shape[0]
+        if self.equalities is not None:
+            return self.equalities.shape[0]
+        return 0
 
     @property
     def facets(self) -> tuple:
@@ -395,11 +393,10 @@ class Polytope:
         """
         if self._ridges is None:
             self._ridges = []
-            for i, ads in enumerate(self.cdd_polyhedron.get_adjacency()):
-                for j in ads:
-                    if i < j:
-                        self._ridges.append(self.facets[i].intersection(self.facets[j]))
-            self._ridges = tuple(self._ridges)
+            i, j = np.where(np.triu(self.facet_adjacency_matrix, k=1))
+            self._ridges = tuple(
+                self.facets[i].intersection(self.facets[j]) for i, j in zip(i, j)
+            )
 
         return self._ridges
 
@@ -560,14 +557,52 @@ class Polytope:
             The vertex adjacency matrix of the polytope.
         """
         if self._vertex_adjacency_matrix is None:
+            if self._repr == PolytopeRepresentation.V_REPRESENTATION:
+                get_vertex_adjacency = self.cdd_polyhedron.get_input_adjacency
+            elif self._repr == PolytopeRepresentation.H_REPRESENTATION:
+                get_vertex_adjacency = self.cdd_polyhedron.get_adjacency
+            else:
+                raise NotImplementedError(
+                    "Only V- and H-representations are supported."
+                )  # pragma: no cover
             self._vertex_adjacency_matrix = np.zeros(
                 shape=(self.n_vertices, self.n_vertices), dtype=bool
             )
-            for i, ads in enumerate(self.cdd_polyhedron.get_input_adjacency()):
+            for i, ads in enumerate(get_vertex_adjacency()):
                 for j in ads:
                     self._vertex_adjacency_matrix[i, j] = 1
 
         return self._vertex_adjacency_matrix
+
+    @property
+    def facet_adjacency_matrix(self) -> np.ndarray:
+        """Get the facet adjacency matrix of the polytope.
+
+        The facet adjacency matrix A of the polytope is a matrix of size n x n, where n
+        is the number of facets of the polytope and
+        * a_ij = 1 if facet i adjacent to facet j,
+        * a_ij = 0 otherwise.
+
+        Returns:
+            The facet adjacency matrix of the polytope.
+        """
+        if self._facet_adjacency_matrix is None:
+            if self._repr == PolytopeRepresentation.V_REPRESENTATION:
+                get_facet_adjacency = self.cdd_polyhedron.get_adjacency
+            elif self._repr == PolytopeRepresentation.H_REPRESENTATION:
+                get_facet_adjacency = self.cdd_polyhedron.get_input_adjacency
+            else:
+                raise NotImplementedError(
+                    "Only V- and H-representations are supported."
+                )  # pragma: no cover
+            self._facet_adjacency_matrix = np.zeros(
+                shape=(self.n_facets, self.n_facets), dtype=bool
+            )
+            for i, ads in enumerate(get_facet_adjacency()):
+                for j in ads:
+                    self._facet_adjacency_matrix[i, j] = 1
+
+        return self._facet_adjacency_matrix
 
     @property
     def vertex_facet_matrix(self) -> np.ndarray:
@@ -582,11 +617,18 @@ class Polytope:
             The vertex facet incidence matrix of the polytope.
         """
         if self._vertex_facet_matrix is None:
-            # This initializes (and possibly simplifies inequalities and vertices).
+            if self._repr == PolytopeRepresentation.V_REPRESENTATION:
+                get_incidence = self.cdd_polyhedron.get_incidence
+            elif self._repr == PolytopeRepresentation.H_REPRESENTATION:
+                get_incidence = self.cdd_polyhedron.get_input_incidence
+            else:
+                raise NotImplementedError(
+                    "Only V- and H-representations are supported."
+                )  # pragma: no cover
             self._vertex_facet_matrix = np.zeros(
                 shape=(self.n_facets, self.n_vertices), dtype=bool
             )
-            _cdd_vertex_facet_incidence = list(self.cdd_polyhedron.get_incidence())
+            _cdd_vertex_facet_incidence = list(get_incidence())
             # remove all occurrences of frozenset({1,...,n}) from the list as
             # this correspond to equalities
             _cdd_vertex_facet_incidence = [
@@ -1341,23 +1383,33 @@ class Polytope:
 
     def _set_cdd_polyhedron_from_points(self) -> None:
         """Set cdd_polyhedron from the v-representation of the polytope."""
-        points_to_use = self._vertices if self._vertices is not None else self.points
+        points_to_use = self._vertices if self._vertices is not None else self._points
         formatted_points = [[1] + [c for c in p] for p in points_to_use]
         mat = cdd.Matrix(formatted_points, number_type="fraction")
         mat.rep_type = cdd.RepType.GENERATOR
         self._cdd_polyhedron = cdd.Polyhedron(mat)
 
-    # def _set_cdd_polyhedron_from_inequalities(self):
-    #     """
-    #     Get the cdd polyhedron from the h-representation of the polytope
-    #     """
-    #     # TODO
-    #     pass
+    def _set_cdd_polyhedron_from_inequalities(self):
+        """Set the cdd polyhedron from the h-representation of the polytope."""
+        ineqs = np.array(self._inequalities)
+        mat_ineqs = cdd.Matrix(ineqs, number_type="fraction")
+        if self._equalities is not None:
+            eqs = np.array(self.equalities)
+            mat_eqs = cdd.Matrix(eqs, number_type="fraction")
+            mat_ineqs.extend(mat_eqs, linear=True)
+
+        mat_ineqs.rep_type = cdd.RepType.INEQUALITY
+        self._cdd_polyhedron = cdd.Polyhedron(mat_ineqs)
+
+        # remove redundancies and update the inequalities and equalities
+        mat_ineqs = self.cdd_polyhedron.get_inequalities()
+        mat_ineqs.canonicalize()
+        self._cdd_polyhedron = cdd.Polyhedron(mat_ineqs)
+        self._set_ineqs_and_eqs()
 
     def _set_ineqs_and_eqs(self) -> None:
         """Set the defining inequalities and the equalities of the polytope."""
         cdd_ineqs = self.cdd_polyhedron.get_inequalities()
-        # TODO: possibly simplify the inequalities
         eq_ids = cdd_ineqs.lin_set
 
         self._inequalities = np.empty(shape=(0, cdd_ineqs.col_size), dtype=object)
