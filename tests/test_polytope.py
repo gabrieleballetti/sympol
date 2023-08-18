@@ -30,7 +30,7 @@ def test_init_from_points():
     ]
     polytope = Polytope(points)
 
-    assert polytope.points == PointConfiguration(points)
+    assert polytope._points == PointConfiguration(points)
     assert polytope.ambient_dim == 3
 
     # check correct dimension initialization
@@ -55,8 +55,7 @@ def test_init_from_vertices():
         [0, 0, 1],
     ]
     polytope = Polytope(vertices=vertices)
-    assert polytope.points == PointConfiguration(vertices)
-    assert polytope.points == PointConfiguration(vertices)
+    assert polytope._vertices == PointConfiguration(vertices)
     assert polytope.ambient_dim == 3
 
     # check correct dimension initialization
@@ -68,31 +67,114 @@ def test_init_from_vertices():
     assert polytope._vertices == PointConfiguration(vertices)
     assert polytope.vertices == PointConfiguration(vertices)
 
+    # check that inequalities are not initialized
+    assert polytope._inequalities is None
 
-def test_init_from_points_and_vertices():
+
+def test_init_from_inequalities():
     """
-    Test initialization of a random polytope from a list of vertices
+    Test initialization of a polytope from inequalities
     """
-    points = [
-        [0, 0, 0],
-        [1, 0, 0],
+    ineqs = [
         [0, 1, 0],
         [0, 0, 1],
-        [Rational(1, 4), Rational(1, 4), Rational(1, 4)],
+        [1, -1, 0],
+        [1, 0, -1],
     ]
-    vertices = points[:-1]
-    polytope = Polytope(points, vertices=vertices)
 
-    assert polytope.points == PointConfiguration(points)
-    assert polytope.ambient_dim == 3
+    p = Polytope(inequalities=ineqs)
+    assert np.array_equal(p._inequalities, ineqs)
+    assert p.ambient_dim == 2
 
     # check correct dimension initialization
-    assert polytope._dim is None
-    assert polytope.dim == 3
-    assert polytope._dim == 3
+    assert p._dim is None
+    assert p.dim == 2
+    assert p._dim == 2
 
-    # check correct vertices initialization
-    assert polytope._vertices == PointConfiguration(vertices)
+    # check that vertices are not initialized
+    assert p._vertices is None
+
+
+def test_init_from_inequalities_and_equalities():
+    """
+    Test initialization of a polytope from inequalities and equalities
+    """
+    ineqs = [
+        [0, 1, 0, 0],
+        [0, 0, 1, 0],
+        [1, -1, 0, 0],
+        [1, 0, -1, 0],
+    ]
+    eqs = [
+        [0, 0, 0, 1],
+    ]
+
+    p = Polytope(inequalities=ineqs, equalities=eqs)
+    expected_verts = np.array(
+        [
+            [0, 0, 0],
+            [1, 0, 0],
+            [0, 1, 0],
+            [1, 1, 0],
+        ]
+    )
+
+    assert _arrays_equal_up_to_row_permutation(p.vertices, expected_verts)
+
+
+def test_init_from_inequalities_with_redundancies():
+    """
+    Test initialization of a polytope from inequalities with redundencies
+    """
+    ineqs = [
+        [0, 1, 0],
+        [0, 0, 1],
+        [1, -1, 0],
+        [1, 0, -1],
+        [2, 0, -1],  # redundant
+    ]
+
+    p = Polytope(inequalities=ineqs)
+
+    assert _arrays_equal_up_to_row_permutation(p._inequalities, np.array(ineqs))
+    assert _arrays_equal_up_to_row_permutation(p.inequalities, np.array(ineqs[:-1]))
+
+
+def test_init_from_inequalities_equalities_with_redundancies():
+    """
+    Test initialization of a polytope from inequalities + equalities with redundencies
+    """
+    ineqs = [
+        [0, 1, 0, 0],
+        [0, 0, 1, 0],
+        [1, -1, 0, 0],
+        [1, 0, -1, 0],
+        [2, 0, -1, 0],  # redundant
+    ]
+
+    eqs = [
+        [0, 0, 0, 1],
+        [0, 0, 0, -1],  # redundant
+    ]
+
+    p = Polytope(inequalities=ineqs, equalities=eqs)
+
+    assert _arrays_equal_up_to_row_permutation(p._inequalities, np.array(ineqs))
+    assert _arrays_equal_up_to_row_permutation(p._equalities, np.array(eqs))
+    assert _arrays_equal_up_to_row_permutation(p.inequalities, np.array(ineqs[:-1]))
+    assert _arrays_equal_up_to_row_permutation(p.equalities, np.array(eqs[:-1]))
+
+
+def test_init_from_inequalities_empty_polytope():
+    """
+    Test initialization of a polytope from inequalities defining an empty polytope
+    """
+    ineqs = [[0, 1, 0], [0, 0, 1], [1, -1, 0], [1, 0, -1], [-2, 0, 1]]
+
+    p = Polytope(inequalities=ineqs)
+
+    assert p.n_vertices == 0
+    assert p.n_inequalities == 0
 
 
 def test_init_edge_cases():
@@ -100,13 +182,19 @@ def test_init_edge_cases():
     Test initialization of a polytope raises exceptions for edge cases
     """
     with pytest.raises(ValueError):
+        Polytope()
+
+    with pytest.raises(ValueError):
         Polytope(points=None, vertices=None)
 
     with pytest.raises(ValueError):
-        Polytope(points=[])
+        Polytope(points=[], vertices=[])
 
     with pytest.raises(ValueError):
-        Polytope(vertices=[])
+        Polytope(equalities=[])
+
+    with pytest.raises(ValueError):
+        Polytope(points=[], inequalities=[])
 
 
 def test_vertices():
@@ -194,14 +282,13 @@ def test_n_inequalities():
     assert p.n_inequalities == 6
 
 
-def test_is_eq():
+def test_n_equalities():
     """
-    Test that the inequalities are properly categorized into equalities and
-    inequalities.
+    Test that the number of equalities is correct
     """
-    p = Polytope([[0, 0, 0], [1, 0, 0], [0, 1, 0]])
+    p = Polytope.cube(3)
 
-    assert np.array_equal(p.is_eq, np.array([False, False, False, True], dtype=bool))
+    assert p.n_equalities == 0
 
 
 def test_triangulation():
@@ -521,6 +608,8 @@ def test_facets():
     """
     p = Polytope.cube(3)
 
+    p.inequalities
+
     assert p.n_facets == 6
 
     for facet in p.facets:
@@ -621,53 +710,101 @@ def test_neighbors():
     assert neighbors == frozenset([1, 2, 4])
 
 
-def test_vertex_adjacency_matrix():
+@pytest.mark.parametrize("v_repr", [True, False])
+def test_vertex_adjacency_matrix(v_repr):
     """
     Test calculation of the vertex adjacency matrix of a polytope
     """
     p = Polytope.cube(3)
 
-    expected_matrix = np.array(
-        [
-            [0, 1, 1, 0, 1, 0, 0, 0],
-            [1, 0, 0, 1, 0, 1, 0, 0],
-            [1, 0, 0, 1, 0, 0, 1, 0],
-            [0, 1, 1, 0, 0, 0, 0, 1],
-            [1, 0, 0, 0, 0, 1, 1, 0],
-            [0, 1, 0, 0, 1, 0, 0, 1],
-            [0, 0, 1, 0, 1, 0, 0, 1],
-            [0, 0, 0, 1, 0, 1, 1, 0],
-        ]
-    )
+    if v_repr:
+        expected = np.array(
+            [
+                [0, 1, 1, 0, 1, 0, 0, 0],
+                [1, 0, 0, 1, 0, 1, 0, 0],
+                [1, 0, 0, 1, 0, 0, 1, 0],
+                [0, 1, 1, 0, 0, 0, 0, 1],
+                [1, 0, 0, 0, 0, 1, 1, 0],
+                [0, 1, 0, 0, 1, 0, 0, 1],
+                [0, 0, 1, 0, 1, 0, 0, 1],
+                [0, 0, 0, 1, 0, 1, 1, 0],
+            ]
+        )
+    else:
+        p = Polytope(inequalities=p.inequalities)
+        # different matrix due to vertex order permutation
+        expected = np.array(
+            [
+                [0, 1, 0, 1, 0, 0, 0, 1],
+                [1, 0, 1, 0, 0, 0, 1, 0],
+                [0, 1, 0, 1, 1, 0, 0, 0],
+                [1, 0, 1, 0, 0, 1, 0, 0],
+                [0, 0, 1, 0, 0, 1, 1, 0],
+                [0, 0, 0, 1, 1, 0, 0, 1],
+                [0, 1, 0, 0, 1, 0, 0, 1],
+                [1, 0, 0, 0, 0, 1, 1, 0],
+            ]
+        )
 
     assert np.array_equal(p.vertex_adjacency_matrix, p.vertex_adjacency_matrix.T)
-    assert np.array_equal(p.vertex_adjacency_matrix, expected_matrix)
+    assert np.array_equal(p.vertex_adjacency_matrix, expected)
 
 
-def test_f_vector():
+@pytest.mark.parametrize("v_repr", [True, False])
+def test_facet_adjacency_matrix(v_repr):
     """
-    Test calculation of the f-vector for an hypercube
+    Test calculation of the facet adjacency matrix of a polytope
     """
-    p = Polytope.cube(7)
-
-    expected_f_vector = (1, 128, 448, 672, 560, 280, 84, 14, 1)
-    assert p.f_vector == expected_f_vector
-
-
-def test_vertex_facet_matrix():
-    """
-    Test calculation of the vertex facet matrix of a polytope
-    """
-    polytope = Polytope.unimodular_simplex(dim=2)
+    p = Polytope.cube(3)
+    if not v_repr:
+        p = Polytope(inequalities=p.inequalities)
 
     expected = np.array(
         [
-            [False, True, True],
-            [True, False, True],
-            [True, True, False],
+            [0, 1, 1, 0, 1, 1],
+            [1, 0, 1, 1, 1, 0],
+            [1, 1, 0, 1, 0, 1],
+            [0, 1, 1, 0, 1, 1],
+            [1, 1, 0, 1, 0, 1],
+            [1, 0, 1, 1, 1, 0],
         ]
     )
-    assert _arrays_equal_up_to_row_permutation(polytope.vertex_facet_matrix, expected)
+
+    assert np.array_equal(p.facet_adjacency_matrix, p.facet_adjacency_matrix.T)
+    assert np.array_equal(p.facet_adjacency_matrix, expected)
+
+
+@pytest.mark.parametrize("v_repr", [True, False])
+def test_vertex_facet_matrix(v_repr):
+    """
+    Test calculation of the vertex facet matrix of a polytope
+    """
+    p = Polytope.cube(3)
+    if v_repr:
+        expected = np.array(
+            [
+                [1, 0, 1, 0, 1, 0, 1, 0],
+                [1, 1, 1, 1, 0, 0, 0, 0],
+                [1, 1, 0, 0, 1, 1, 0, 0],
+                [0, 1, 0, 1, 0, 1, 0, 1],
+                [0, 0, 1, 1, 0, 0, 1, 1],
+                [0, 0, 0, 0, 1, 1, 1, 1],
+            ]
+        )
+    else:
+        p = Polytope(inequalities=p.inequalities)
+        # different matrix due to vertex order permutation
+        expected = np.array(
+            [
+                [1, 1, 1, 1, 0, 0, 0, 0],
+                [0, 1, 1, 0, 1, 0, 1, 0],
+                [0, 0, 1, 1, 1, 1, 0, 0],
+                [0, 0, 0, 0, 1, 1, 1, 1],
+                [1, 1, 0, 0, 0, 0, 1, 1],
+                [1, 0, 0, 1, 0, 1, 0, 1],
+            ]
+        )
+    assert _arrays_equal_up_to_row_permutation(p.vertex_facet_matrix, expected)
 
 
 def test_vertex_facet_pairing_matrix():
@@ -700,6 +837,16 @@ def test_vertex_facet_pairing_matrix():
         ]
     )
     assert np.array_equal(polytope.vertex_facet_pairing_matrix, expected)
+
+
+def test_f_vector():
+    """
+    Test calculation of the f-vector for an hypercube
+    """
+    p = Polytope.cube(7)
+
+    expected_f_vector = (1, 128, 448, 672, 560, 280, 84, 14, 1)
+    assert p.f_vector == expected_f_vector
 
 
 def test_vertex_facet_matrix_low_dimensional_polytope():
@@ -1420,7 +1567,7 @@ def test_cross_polytope():
     assert cross.normalized_volume == 8
 
 
-def test_get_cdd_polyhedron_from_points():
+def test_set_cdd_polyhedron_from_points():
     """
     Test that _cdd_polyhedron is initialized from a list of points
     """
@@ -1430,9 +1577,23 @@ def test_get_cdd_polyhedron_from_points():
         [0, Rational(1, 7), 0],
         [0, 0, Rational(1, 7)],
     ]
-    polytope = Polytope(points)
-    polytope._get_cdd_polyhedron_from_points()
-    assert polytope._cdd_polyhedron is not None
+    p = Polytope(points)
+    p._set_cdd_polyhedron_from_points()
+    assert p._cdd_polyhedron is not None
+
+
+def test_set_ineqs_and_eqs():
+    """
+    Test that the setter for inequalities and equalities
+    """
+    verts = [[0, 0, 0], [1, 0, 0], [0, 1, 0], [1, 1, 0]]
+    p = Polytope(verts)
+
+    ineqs = np.array([[0, 0, 1, 0], [0, 1, 0, 0], [1, 0, -1, 0], [1, -1, 0, 0]])
+    eqs = np.array([[0, 0, 0, 1]])
+
+    assert _arrays_equal_up_to_row_permutation(p.inequalities, ineqs)
+    assert _arrays_equal_up_to_row_permutation(p.equalities, eqs)
 
 
 def test_lower_dimensional_polytope():
@@ -1447,7 +1608,7 @@ def test_lower_dimensional_polytope():
     )
 
     p = Polytope(verts)
-    assert p._eqs.shape[0] > 0
+    assert p.n_equalities == 2
 
 
 def test_simplex_conversion():
