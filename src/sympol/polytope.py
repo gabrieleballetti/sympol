@@ -203,7 +203,7 @@ class Polytope:
         """
         if self._ambient_dim is None:
             if self._repr == PolytopeRepresentation.V_REPRESENTATION:
-                self._ambient_dim = self._points.shape[1]
+                self._ambient_dim = self.points.shape[1]
             elif self._repr == PolytopeRepresentation.H_REPRESENTATION:
                 self._ambient_dim = self.inequalities.shape[1] - 1
 
@@ -218,7 +218,7 @@ class Polytope:
         """
         if self._dim is None:
             if self._repr == PolytopeRepresentation.V_REPRESENTATION:
-                self._dim = self.vertices.affine_rank
+                self._dim = self.points.affine_rank
             elif self._repr == PolytopeRepresentation.H_REPRESENTATION:
                 self._dim = self.ambient_dim - self.n_equalities
 
