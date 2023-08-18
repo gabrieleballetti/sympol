@@ -109,9 +109,10 @@ class Polytope:
             if equalities is not None:
                 self._equalities = np.array(equalities)
         else:
-            raise NotImplementedError(
-                "Only V- and H-representations are supported."
-            )  # pragma: no cover
+            raise ValueError(
+                "A polytope needs to be initialized with either points"
+                " (V-representation) or inequalities (H-representation)."
+            )
 
         self._ambient_dim = None
         self._dim = None
@@ -211,10 +212,6 @@ class Polytope:
                     self._ambient_dim = self.vertices.shape[1]
             elif self._repr == PolytopeRepresentation.H_REPRESENTATION:
                 self._ambient_dim = self.inequalities.shape[1] - 1
-            else:
-                raise NotImplementedError(
-                    "Only V- and H-representations are supported."
-                )  # pragma: no cover
 
         return self._ambient_dim
 
@@ -233,10 +230,6 @@ class Polytope:
                     self._dim = self.vertices.affine_rank
             elif self._repr == PolytopeRepresentation.H_REPRESENTATION:
                 self._dim = self.ambient_dim - self.n_equalities
-            else:
-                raise NotImplementedError(
-                    "Only V- and H-representations are supported."
-                )  # pragma: no cover
 
         return self._dim
 
@@ -255,10 +248,6 @@ class Polytope:
                 self._set_cdd_polyhedron_from_points()
             elif self._repr == PolytopeRepresentation.H_REPRESENTATION:
                 self._set_cdd_polyhedron_from_inequalities()
-            else:
-                raise NotImplementedError(
-                    "Only V- and H-representations are supported."
-                )  # pragma: no cover
 
         return self._cdd_polyhedron
 
@@ -561,10 +550,6 @@ class Polytope:
                 get_vertex_adjacency = self.cdd_polyhedron.get_input_adjacency
             elif self._repr == PolytopeRepresentation.H_REPRESENTATION:
                 get_vertex_adjacency = self.cdd_polyhedron.get_adjacency
-            else:
-                raise NotImplementedError(
-                    "Only V- and H-representations are supported."
-                )  # pragma: no cover
             self._vertex_adjacency_matrix = np.zeros(
                 shape=(self.n_vertices, self.n_vertices), dtype=bool
             )
@@ -591,10 +576,6 @@ class Polytope:
                 get_facet_adjacency = self.cdd_polyhedron.get_adjacency
             elif self._repr == PolytopeRepresentation.H_REPRESENTATION:
                 get_facet_adjacency = self.cdd_polyhedron.get_input_adjacency
-            else:
-                raise NotImplementedError(
-                    "Only V- and H-representations are supported."
-                )  # pragma: no cover
             self._facet_adjacency_matrix = np.zeros(
                 shape=(self.n_facets, self.n_facets), dtype=bool
             )
@@ -621,10 +602,6 @@ class Polytope:
                 get_incidence = self.cdd_polyhedron.get_incidence
             elif self._repr == PolytopeRepresentation.H_REPRESENTATION:
                 get_incidence = self.cdd_polyhedron.get_input_incidence
-            else:
-                raise NotImplementedError(
-                    "Only V- and H-representations are supported."
-                )  # pragma: no cover
             self._vertex_facet_matrix = np.zeros(
                 shape=(self.n_facets, self.n_vertices), dtype=bool
             )
