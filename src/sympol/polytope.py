@@ -26,10 +26,10 @@ from sympol._utils import (
 )
 
 
-class PolytopeRepresentation(Enum):
+class _PolytopeRepresentation(Enum):
     """An enum for representing the different ways a polytope can be defined."""
 
-    NONE = 0
+    UNKNOWN = 0
     V_REPRESENTATION = 1
     H_REPRESENTATION = 2
 
@@ -70,16 +70,16 @@ class Polytope:
     ):
         """Initialize a Polytope object."""
 
-        self._repr = PolytopeRepresentation.NONE
+        self._repr = _PolytopeRepresentation.UNKNOWN
 
         if points is not None or vertices is not None:
-            self._repr = PolytopeRepresentation.V_REPRESENTATION
+            self._repr = _PolytopeRepresentation.V_REPRESENTATION
             if inequalities is not None or equalities is not None:
                 raise ValueError(
                     "Cannot initialize a polytope with both points and inequalities."
                 )
         elif inequalities is not None or equalities is not None:
-            self._repr = PolytopeRepresentation.H_REPRESENTATION
+            self._repr = _PolytopeRepresentation.H_REPRESENTATION
         else:
             raise ValueError(
                 "A polytope needs to be initialized with either points"
@@ -91,7 +91,7 @@ class Polytope:
         self._inequalities = None
         self._equalities = None
 
-        if self._repr == PolytopeRepresentation.V_REPRESENTATION:
+        if self._repr == _PolytopeRepresentation.V_REPRESENTATION:
             if points is not None and vertices is not None:
                 raise ValueError(
                     "Cannot initialize a polytope with both points and vertices."
@@ -102,7 +102,7 @@ class Polytope:
             elif points is not None:
                 self._points = PointConfiguration(points)
 
-        elif self._repr == PolytopeRepresentation.H_REPRESENTATION:
+        elif self._repr == _PolytopeRepresentation.H_REPRESENTATION:
             if inequalities is None:
                 raise ValueError("Cannot initialize a polytope with only equalities.")
 
@@ -113,6 +113,9 @@ class Polytope:
 
         self._ambient_dim = None
         self._dim = None
+
+        self._is_empty_set = None
+        self._is_bounded = None
 
         self._homogeneous_inequalities = None
         self._n_inequalities = None
@@ -192,6 +195,10 @@ class Polytope:
         Returns:
             The defining points of the polytope.
         """
+
+        if self._points is None:
+            self._points = self.vertices
+
         return self._points
 
     @property
@@ -202,9 +209,9 @@ class Polytope:
             The ambient dimension of the polytope.
         """
         if self._ambient_dim is None:
-            if self._repr == PolytopeRepresentation.V_REPRESENTATION:
+            if self._repr == _PolytopeRepresentation.V_REPRESENTATION:
                 self._ambient_dim = self.points.shape[1]
-            elif self._repr == PolytopeRepresentation.H_REPRESENTATION:
+            elif self._repr == _PolytopeRepresentation.H_REPRESENTATION:
                 self._ambient_dim = self.inequalities.shape[1] - 1
 
         return self._ambient_dim
@@ -217,12 +224,38 @@ class Polytope:
             The dimension of the polytope.
         """
         if self._dim is None:
-            if self._repr == PolytopeRepresentation.V_REPRESENTATION:
+            if self._repr == _PolytopeRepresentation.V_REPRESENTATION:
                 self._dim = self.points.affine_rank
-            elif self._repr == PolytopeRepresentation.H_REPRESENTATION:
+            elif self._repr == _PolytopeRepresentation.H_REPRESENTATION:
                 self._dim = self.ambient_dim - self.n_equalities
 
         return self._dim
+
+    @property
+    def is_empty_set(self) -> bool:
+        """Check if the polytope is the empty set.
+
+        Returns:
+            True if the polytope is the empty set, False otherwise.
+        """
+        if self._is_empty_set is None:
+            self._is_empty_set = self.points.shape[0] == 0
+
+        return self._is_empty_set
+
+    @property
+    def is_bounded(self) -> bool:
+        """Check if the polytope is bounded.
+
+        Returns:
+            True if the polytope is bounded, False otherwise.
+        """
+        if self._is_bounded is None:
+            # NOTE: this check could be done just by looking at the inequalities
+            # in case of H-representation
+            _ = self.vertices  # init the vertices to check if the polytope is bounded
+
+        return self._is_bounded
 
     @property
     def cdd_polyhedron(self) -> cdd.Polyhedron:
@@ -235,9 +268,9 @@ class Polytope:
             The cdd polyhedron of the polytope.
         """
         if self._cdd_polyhedron is None:
-            if self._repr == PolytopeRepresentation.V_REPRESENTATION:
+            if self._repr == _PolytopeRepresentation.V_REPRESENTATION:
                 self._set_cdd_polyhedron_from_points()
-            elif self._repr == PolytopeRepresentation.H_REPRESENTATION:
+            elif self._repr == _PolytopeRepresentation.H_REPRESENTATION:
                 self._set_cdd_polyhedron_from_inequalities()
 
         return self._cdd_polyhedron
@@ -251,6 +284,12 @@ class Polytope:
         """
         if self._vertices is None:
             mat_gens = self.cdd_polyhedron.get_generators()
+
+            if len(mat_gens.lin_set) > 0:
+                # unbounded polyhedron case
+                self._is_bounded = False
+            else:
+                self._is_bounded = True
 
             if mat_gens.row_size > 0:
                 # remove redundant generators and update the cdd polyhedron
@@ -535,9 +574,9 @@ class Polytope:
             The vertex adjacency matrix of the polytope.
         """
         if self._vertex_adjacency_matrix is None:
-            if self._repr == PolytopeRepresentation.V_REPRESENTATION:
+            if self._repr == _PolytopeRepresentation.V_REPRESENTATION:
                 get_vertex_adjacency = self.cdd_polyhedron.get_input_adjacency
-            elif self._repr == PolytopeRepresentation.H_REPRESENTATION:
+            elif self._repr == _PolytopeRepresentation.H_REPRESENTATION:
                 get_vertex_adjacency = self.cdd_polyhedron.get_adjacency
             self._vertex_adjacency_matrix = np.zeros(
                 shape=(self.n_vertices, self.n_vertices), dtype=bool
@@ -561,9 +600,9 @@ class Polytope:
             The facet adjacency matrix of the polytope.
         """
         if self._facet_adjacency_matrix is None:
-            if self._repr == PolytopeRepresentation.V_REPRESENTATION:
+            if self._repr == _PolytopeRepresentation.V_REPRESENTATION:
                 get_facet_adjacency = self.cdd_polyhedron.get_adjacency
-            elif self._repr == PolytopeRepresentation.H_REPRESENTATION:
+            elif self._repr == _PolytopeRepresentation.H_REPRESENTATION:
                 get_facet_adjacency = self.cdd_polyhedron.get_input_adjacency
             self._facet_adjacency_matrix = np.zeros(
                 shape=(self.n_facets, self.n_facets), dtype=bool
@@ -587,9 +626,9 @@ class Polytope:
             The vertex facet incidence matrix of the polytope.
         """
         if self._vertex_facet_matrix is None:
-            if self._repr == PolytopeRepresentation.V_REPRESENTATION:
+            if self._repr == _PolytopeRepresentation.V_REPRESENTATION:
                 get_incidence = self.cdd_polyhedron.get_incidence
-            elif self._repr == PolytopeRepresentation.H_REPRESENTATION:
+            elif self._repr == _PolytopeRepresentation.H_REPRESENTATION:
                 get_incidence = self.cdd_polyhedron.get_input_incidence
             self._vertex_facet_matrix = np.zeros(
                 shape=(self.n_facets, self.n_vertices), dtype=bool
@@ -1477,7 +1516,10 @@ class Polytope:
         Returns:
             True if the polytope is a simplex, False otherwise.
         """
-        return self.n_vertices == self.dim + 1
+        if self._repr == _PolytopeRepresentation.V_REPRESENTATION:
+            return self.n_vertices == self.dim + 1
+        elif self._repr == _PolytopeRepresentation.H_REPRESENTATION:
+            return self.n_facets == self.dim + 1
 
     def _make_simplex(self) -> None:
         """Specialize the Polytope class to a Simplex class.
