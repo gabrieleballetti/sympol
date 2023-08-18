@@ -67,6 +67,9 @@ def test_init_from_vertices():
     assert polytope._vertices == PointConfiguration(vertices)
     assert polytope.vertices == PointConfiguration(vertices)
 
+    # check that inequalities are not initialized
+    assert polytope._inequalities is None
+
 
 def test_init_from_inequalities():
     """
@@ -80,9 +83,16 @@ def test_init_from_inequalities():
     ]
 
     p = Polytope(inequalities=ineqs)
-    expected_verts = Polytope.cube(2).vertices
+    assert np.array_equal(p._inequalities, ineqs)
+    assert p.ambient_dim == 2
 
-    assert _arrays_equal_up_to_row_permutation(p.vertices, expected_verts)
+    # check correct dimension initialization
+    assert p._dim is None
+    assert p.dim == 2
+    assert p._dim == 2
+
+    # check that vertices are not initialized
+    assert p._vertices is None
 
 
 def test_init_from_inequalities_and_equalities():

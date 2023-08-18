@@ -80,9 +80,11 @@ class Polytope:
                 )
         elif inequalities is not None or equalities is not None:
             self._repr = PolytopeRepresentation.H_REPRESENTATION
-
-        if self._repr == PolytopeRepresentation.NONE:
-            raise ValueError("Either points or inequalities must be given.")
+        else:
+            raise ValueError(
+                "A polytope needs to be initialized with either points"
+                " (V-representation) or inequalities (H-representation)."
+            )
 
         self._points = None
         self._vertices = None
@@ -108,11 +110,6 @@ class Polytope:
                 self._inequalities = np.array(inequalities)
             if equalities is not None:
                 self._equalities = np.array(equalities)
-        else:
-            raise ValueError(
-                "A polytope needs to be initialized with either points"
-                " (V-representation) or inequalities (H-representation)."
-            )
 
         self._ambient_dim = None
         self._dim = None
