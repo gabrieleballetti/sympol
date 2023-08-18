@@ -173,8 +173,20 @@ def test_init_from_inequalities_empty_polytope():
 
     p = Polytope(inequalities=ineqs)
 
+    assert p.is_empty_set
     assert p.n_vertices == 0
     assert p.n_inequalities == 0
+
+
+def test_init_from_inequalities_unbounded_polytope():
+    """
+    Test initialization of a polytope from inequalities defining an unbounded polytope
+    """
+    ineqs = [[0, 1, 0, 0], [0, 0, 1, 0], [1, -1, 0, 0], [1, 0, -1, 0]]
+
+    p = Polytope(inequalities=ineqs)
+
+    assert not p.is_bounded
 
 
 def test_init_edge_cases():
