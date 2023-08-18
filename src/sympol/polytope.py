@@ -340,9 +340,7 @@ class Polytope:
         Returns:
             The number of defining equalities of the polytope.
         """
-        if self.equalities is not None:
-            return self.equalities.shape[0]
-        return 0
+        return self.equalities.shape[0]
 
     @property
     def facets(self) -> tuple:
