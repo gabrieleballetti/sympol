@@ -4,9 +4,6 @@ from enum import Enum
 import numpy as np
 import cdd
 
-from scipy.spatial import Delaunay
-
-
 from sympy import Abs, factorial, gcd, lcm, Number, Matrix, Poly, Rational
 from sympy.abc import x
 from sympy.matrices.normalforms import hermite_normal_form
@@ -690,21 +687,18 @@ class Polytope:
         if self._triangulation is None:
             # if the polytope is not full-dimensional, we need to project it
             # to a full-dimensional subspace
-            if self.dim < 2:
-                # scipy.spatial.Delaunay needs at least 2d points
-                self._triangulation = tuple(
-                    [frozenset({i for i, _ in enumerate(self.vertices)})]
-                )
-            elif self.is_full_dim():
-                delaunay_triangulation = Delaunay(np.array(self.vertices))
-                self._triangulation = tuple(
-                    [
-                        frozenset([int(i) for i in s])
-                        for s in delaunay_triangulation.simplices
-                    ]
-                )
-            else:
-                self._triangulation = self.full_dim_projection.triangulation
+            # if self.dim < 2:
+            #     # scipy.spatial.Delaunay needs at least 2d points
+            #     self._triangulation = tuple(
+            #         [frozenset({i for i, _ in enumerate(self.vertices)})]
+            #     )
+            # elif self.is_full_dim():
+            self._triangulation = self.vertices.triangulation
+            # self._triangulation = tuple(
+            #     [frozenset([int(i) for i in s]) for s in triangulation.simplices]
+            # )
+            # else:
+            #     self._triangulation = self.full_dim_projection.triangulation
 
         return self._triangulation
 
@@ -1954,18 +1948,6 @@ class Simplex(Polytope):
     of the ambient space. This class overrides some of the methods of the Polytope with
     simpler implementations, and adds some simplex-specific methods.
     """
-
-    @property
-    def triangulation(self) -> tuple:
-        """Get the trivial triangulation of the simplex.
-
-        Returns:
-            The trivial triangulation of the simplex as a tuple with one frozenset.
-        """
-        if self._triangulation is None:
-            self._triangulation = tuple([frozenset({i for i in range(self.dim + 1)})])
-
-        return self._triangulation
 
     @property
     def half_open_decomposition(self) -> tuple:

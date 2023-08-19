@@ -6,6 +6,7 @@ from sympy import Abs, Matrix, prod, ZZ, Rational
 from sympy.matrices.normalforms import smith_normal_form
 
 from sympol.point import Point
+from sympol._triangulation import _get_upper_or_lower_hull_triangulation
 
 
 class PointConfiguration(np.ndarray):
@@ -44,9 +45,13 @@ class PointConfiguration(np.ndarray):
         self._ambient_dimension = None
         self._rank = None
         self._affine_rank = None
+
         self._barycenter = None
+
         self._snf_diag = None
         self._index = None
+
+        self._triangulation = None
 
     def __getitem__(self, index):
         """Override __getitem__ to return Point objects for integers values."""
@@ -81,10 +86,10 @@ class PointConfiguration(np.ndarray):
             The ambient dimension of the point.
 
         Raises:
-            ValueError: If the point list is empty.
+            ValueError: If the point configuration is empty.
         """
         if self.shape[0] == 0:
-            raise ValueError("Point list is empty")
+            raise ValueError("Point configuration is empty")
 
         if self._ambient_dimension is None:
             self._ambient_dimension = self[0].ambient_dimension
@@ -93,10 +98,10 @@ class PointConfiguration(np.ndarray):
 
     @property
     def rank(self) -> int:
-        """Get the rank of the point list.
+        """Get the rank of the point configuration.
 
-        Note that the rank of a point list is the rank of the matrix defined by the
-        points in the list, which is the size of the largest square submatrix with
+        Note that the rank of a point configuration is the rank of the matrix defined
+        by the points, which is the size of the largest square submatrix with
         non-zero determinant. The rank might not be translation-invariant, see
         :attr:`affine_rank` for the translation-invariant version.
 
@@ -112,8 +117,8 @@ class PointConfiguration(np.ndarray):
     def affine_rank(self) -> int:
         """Get the affine rank of the point list.
 
-        Note that the affine rank of a point list is the rank of the matrix defined by
-        the points in the list after translating one of the points to the origin. Use
+        Note that the affine rank of a point configuration is the rank of the matrix
+        defined by the points after translating one to the origin. Use
         :attr:`rank` for the rank of the matrix defined by the points in the
         PointConfiguration without translation.
 
@@ -180,3 +185,17 @@ class PointConfiguration(np.ndarray):
             self._index = Abs(prod(self.snf_diag))
 
         return self._index
+
+    @property
+    def triangulation(self):
+        """Get a triangulation of on the PointConfiguration.
+
+        Returns:
+            A triangulation of the PointConfiguration.
+        """
+        if self._triangulation is None:
+            self._triangulation = _get_upper_or_lower_hull_triangulation(
+                points=self, affine_rank=self.affine_rank
+            )
+
+        return self._triangulation

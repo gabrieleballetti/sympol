@@ -211,3 +211,25 @@ def test_conversion_to_int64():
     pts_int64 = pts.view(np.ndarray).astype(np.int64)
 
     assert pts_int64.dtype == np.int64
+
+
+def test_triangulation():
+    """
+    Test calculation of the triangulation of a point configuration.
+    This point configuration has two possible triangulations (one with
+    one and one with four simplices), check that the former is returned.
+    """
+
+    pts = PointConfiguration(
+        [
+            [0, 0, 0],
+            [-1, -1, -1],
+            [1, 0, 0],
+            [0, 1, 0],
+            [0, 0, 1],
+        ]
+    )
+
+    triangulation = pts.triangulation
+
+    assert triangulation == tuple([frozenset({1, 2, 3, 4})])
