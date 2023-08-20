@@ -1009,7 +1009,6 @@ class Polytope:
             as a tuple of sympy Rational objects.
         """
         if self._ehrhart_coefficients is None:
-            x = self.ehrhart_polynomial.gens[0]
             self._ehrhart_coefficients = tuple(
                 [
                     self.ehrhart_polynomial.coeff_monomial(x**deg)
