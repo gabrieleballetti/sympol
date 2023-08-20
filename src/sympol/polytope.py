@@ -993,12 +993,9 @@ class Polytope:
                     "Ehrhart polynomial is only implemented for lattice polytopes"
                 )
 
-            self._ehrhart_polynomial = sum(
-                [
-                    h_i * _binomial_polynomial(self.dim, self.dim - i, x)
-                    for i, h_i in enumerate(self.h_star_vector)
-                    if h_i != 0
-                ]
+            self._ehrhart_polynomial = self._h_star_to_ehrhart_polynomial(
+                dim=self.dim,
+                h_star_vector=self.h_star_vector,
             )
 
         return self._ehrhart_polynomial
@@ -1012,7 +1009,13 @@ class Polytope:
             as a tuple of sympy Rational objects.
         """
         if self._ehrhart_coefficients is None:
-            self._ehrhart_coefficients = tuple(self.ehrhart_polynomial.coeffs()[::-1])
+            x = self.ehrhart_polynomial.gens[0]
+            self._ehrhart_coefficients = tuple(
+                [
+                    self.ehrhart_polynomial.coeff_monomial(x**deg)
+                    for deg in range(self.dim + 1)
+                ]
+            )
 
         return self._ehrhart_coefficients
 
@@ -1599,14 +1602,26 @@ class Polytope:
         # know the exact number)
         return self._n_interior_points == n
 
-    def _ehrhart_to_h_star_polynomial(self) -> Poly:
-        """Get the h*-polynomial from the h*-vector."""
+    @staticmethod
+    def _h_star_to_ehrhart_polynomial(dim: int, h_star_vector: tuple[int]) -> Poly:
+        """Get the Ehrhart polynomial from the h*-polynomial."""
         return sum(
             [
-                self.ehrhart_coefficients[i]
-                * _eulerian_poly(i, x)
-                * (1 - x) ** (self.dim - i)
-                for i in range(self.dim + 1)
+                h_i * _binomial_polynomial(dim, dim - i, x)
+                for i, h_i in enumerate(h_star_vector)
+                if h_i != 0
+            ]
+        )
+
+    @staticmethod
+    def _ehrhart_to_h_star_polynomial(
+        dim: int, ehrhart_coefficients: tuple[Rational]
+    ) -> Poly:
+        """Get the h*-polynomial from the Ehrhart polynomial."""
+        return sum(
+            [
+                ehrhart_coefficients[i] * _eulerian_poly(i, x) * (1 - x) ** (dim - i)
+                for i in range(dim + 1)
             ]
         ).simplify()
 

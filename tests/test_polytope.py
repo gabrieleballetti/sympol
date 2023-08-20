@@ -1159,7 +1159,9 @@ def test_ehrhart_to_h_star_polynomial():
     """
     p = Polytope.cube(3)
 
-    assert p._ehrhart_to_h_star_polynomial() == Poly(x**2 + 4 * x + 1, x)
+    assert p._ehrhart_to_h_star_polynomial(
+        dim=p.dim, ehrhart_coefficients=p.ehrhart_coefficients
+    ) == Poly(x**2 + 4 * x + 1, x)
 
 
 def test_degree():
