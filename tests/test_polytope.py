@@ -368,7 +368,7 @@ def test_triangulation_lower_dimensional_polytope():
     """
     Test that the triangulation is correct
     """
-    p = Polytope([[0, 0, 0], [1, 0, 0], [0, 1, 0], [1, 1, 0]])
+    p = Polytope([[0, 0, 0, 0], [1, 0, 0, 0], [0, 1, 0, 0], [1, 1, 0, 0]])
 
     possible_triangulations = [
         (frozenset({0, 1, 3}), frozenset({0, 2, 3})),
@@ -1348,6 +1348,31 @@ def test_is_lattice_polytope():
 
     polytope = polytope * Rational(3, 2)
     assert not polytope.is_lattice_polytope
+
+
+def test_is_lattice_pyramid():
+    """
+    Test the is_lattice_pyramid method
+    """
+    p = Polytope.unimodular_simplex(dim=3)
+
+    with pytest.raises(ValueError):
+        (p * Rational(1, 2)).is_lattice_pyramid
+
+    assert p.is_lattice_pyramid
+
+    assert not (p * 2).is_lattice_pyramid
+
+
+def test_is_lattice_pyramid_low_dimensional_polytope():
+    """
+    Test that the is_lattice_pyramid method works for low dimensional polytopes
+    """
+    p = Polytope([[0, 0, 0], [1, 0, 0], [0, 1, 0]])
+    assert p.is_lattice_pyramid
+
+    p = Polytope([[0, 0, 0], [1, 0, 0], [0, 1, 0], [1, 1, 0]])
+    assert not p.is_lattice_pyramid
 
 
 def test_is_hollow():
