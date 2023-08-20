@@ -25,14 +25,20 @@ def sample_polytope_from_normal_distribution(dim, n_points, std_dev=1):
 
 if __name__ == "__main__":
     dim = 6
-    extra_pts = 1
+    extra_pts = 0
     while True:
-        p = sample_polytope_from_normal_distribution(dim, n_points=dim + 1 + extra_pts)
+        p = sample_polytope_from_normal_distribution(
+            dim, n_points=dim + 1 + extra_pts, std_dev=1
+        )
         if p.dim < dim:
             continue
+
+        print(p.n_integer_points)
 
         if not p.is_idp:
             continue
 
-        if not p.has_log_concave_h_star_vector:
-            print(p.vertices)
+        print(p.h_star_vector)
+
+        # if not p.has_log_concave_h_star_vector:
+        #     print(p.vertices)

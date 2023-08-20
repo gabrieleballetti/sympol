@@ -675,7 +675,7 @@ class Polytope:
         return self.vertices.barycenter
 
     @property
-    def triangulation(self) -> tuple:
+    def triangulation(self) -> tuple[frozenset[int]]:
         """Get a triangulation of the polytope in simplices.
 
         It uses a custom symbolic implementation through upper or lower hull of the
@@ -1091,7 +1091,7 @@ class Polytope:
         return self._degree
 
     @property
-    def half_open_parallelotopes_pts(self) -> tuple:
+    def half_open_parallelotopes_pts(self) -> PointConfiguration:
         """Return the integer points in the half-open parallelotopes of the polytope.
 
         Return all the points in the half-open parallelotopes of the triangulation
@@ -1118,7 +1118,7 @@ class Polytope:
                 )
                 pts, _ = hop.get_integer_points()
                 self._half_open_parallelotopes_pts += [Point(pt) for pt in pts]
-            self._half_open_parallelotopes_pts = tuple(
+            self._half_open_parallelotopes_pts = PointConfiguration(
                 self._half_open_parallelotopes_pts
             )
 
@@ -1594,7 +1594,7 @@ class Polytope:
             raise ValueError("Hilbert basis is only implemented for lattice polytopes")
 
         # a (possibly redundant) set of generators for the semigroup is given by
-        # the half-open parallelotopes points, except the orgin (assumed to
+        # the half-open parallelotopes points, except the origin (assumed to
         # be the first point), plus the missing vertices of the first simplex
         # in the triangulation of the polytope
         generators = np.array(self.half_open_parallelotopes_pts[1:], dtype=np.int64)

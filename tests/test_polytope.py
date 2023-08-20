@@ -1288,6 +1288,15 @@ def test_mult():
         Polytope.cube(2) * "a not allowed type"
 
 
+def test_hilbert_basis_empty_polytope():
+    """
+    Test that the Hilbert basis of the empty polytope is "empty",
+    i.e. if it has no lattice points other than the vertices.
+    """
+    p = Polytope.unimodular_simplex(2)
+    assert len(p.hilbert_basis) == 3
+
+
 @pytest.mark.parametrize("stop_at_height", [-1, 2])
 def test_get_hilbert_basis_stopped(stop_at_height):
     """
