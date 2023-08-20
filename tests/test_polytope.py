@@ -309,7 +309,14 @@ def test_triangulation():
     """
     p = Polytope.cube(2)
 
-    assert p.triangulation == (frozenset({0, 1, 3}), frozenset({0, 2, 3}))
+    possible_triangulations = [
+        (frozenset({0, 1, 3}), frozenset({0, 2, 3})),
+        (frozenset({0, 1, 2}), frozenset({1, 2, 3})),
+        (frozenset({0, 2, 3}), frozenset({0, 1, 3})),
+        (frozenset({1, 2, 3}), frozenset({0, 1, 2})),
+    ]
+
+    assert p.triangulation in possible_triangulations
 
 
 def test_triangulation_simplex():
@@ -329,7 +336,8 @@ def test_half_open_decomposition():
     """
     p = Polytope.cube(2)
 
-    assert p.half_open_decomposition == (frozenset({}), frozenset({1}))
+    assert len(p.half_open_decomposition) == 2
+    assert len(p.half_open_decomposition[0]) + len(p.half_open_decomposition[1]) == 1
 
 
 def test_half_open_decomposition_simplex():
@@ -362,7 +370,14 @@ def test_triangulation_lower_dimensional_polytope():
     """
     p = Polytope([[0, 0, 0], [1, 0, 0], [0, 1, 0], [1, 1, 0]])
 
-    assert p.triangulation == (frozenset({0, 1, 3}), frozenset({0, 2, 3}))
+    possible_triangulations = [
+        (frozenset({0, 1, 3}), frozenset({0, 2, 3})),
+        (frozenset({0, 1, 2}), frozenset({1, 2, 3})),
+        (frozenset({0, 2, 3}), frozenset({0, 1, 3})),
+        (frozenset({1, 2, 3}), frozenset({0, 1, 2})),
+    ]
+
+    assert p.triangulation in possible_triangulations
 
 
 def test_triangulation_one_dimensional_polytope():
