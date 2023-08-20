@@ -678,27 +678,14 @@ class Polytope:
     def triangulation(self) -> tuple:
         """Get a triangulation of the polytope in simplices.
 
-        NOTE: scipy.spatial.Delaunay uses Qhull, which is float based. This should and
-        will be replaced by a symbolic triangulation algorithm.
+        It uses a custom symbolic implementation through upper or lower hull of the
+        vertices in a codimension one space, with random heights.
 
         Returns:
             A triangulation of the polytope in simplices.
         """
         if self._triangulation is None:
-            # if the polytope is not full-dimensional, we need to project it
-            # to a full-dimensional subspace
-            # if self.dim < 2:
-            #     # scipy.spatial.Delaunay needs at least 2d points
-            #     self._triangulation = tuple(
-            #         [frozenset({i for i, _ in enumerate(self.vertices)})]
-            #     )
-            # elif self.is_full_dim():
             self._triangulation = self.vertices.triangulation
-            # self._triangulation = tuple(
-            #     [frozenset([int(i) for i in s]) for s in triangulation.simplices]
-            # )
-            # else:
-            #     self._triangulation = self.full_dim_projection.triangulation
 
         return self._triangulation
 

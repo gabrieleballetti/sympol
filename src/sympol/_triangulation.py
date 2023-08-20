@@ -17,6 +17,8 @@ def _get_upper_or_lower_hull_triangulation(points: np.ndarray, affine_rank: int)
     Returns:
         A triangulation of the upper hull of the PointConfiguration.
     """
+    # make triangulations deterministic
+    np.random.seed(42)
 
     # simplex case needs to be handled separately
     if points.shape[0] == affine_rank + 1:

@@ -9,7 +9,6 @@ setup(
         "igraph>=0.10.4",
         "numpy>=1.24.3",
         "pycddlib>=2.1.6",
-        "scipy>=0.12.0",
         "sympy>=1.12",
     ],
     extras_require={
