@@ -173,6 +173,7 @@ class Polytope:
         self._is_simplicial = None
         self._is_simple = None
         self._is_lattice_polytope = None
+        self._is_lattice_pyramid = None
         self._is_hollow = None
         self._has_one_interior_point = None
         self._is_canonical = None
@@ -1188,6 +1189,37 @@ class Polytope:
             )
 
         return self._is_lattice_polytope
+
+    @property
+    def is_lattice_pyramid(self) -> bool:
+        """Check if the polytope is a lattice pyramid.
+
+        A polytope is a lattice pyramid if it is a lattice polytope if all of its
+        vertices but one are on a facet, from which the last vertex is at distance 1.
+
+        Returns:
+            True if the polytope is a lattice pyramid, False otherwise.
+
+        Raises:
+            ValueError: If the polytope is not a lattice polytope.
+        """
+        if self._is_lattice_pyramid is None:
+            if not self.is_lattice_polytope:
+                raise ValueError("Only lattice polytopes can be being lattice pyramids")
+
+            self._is_lattice_pyramid = False
+            for ineq in self.inequalities:
+                sum_dists = 0
+                for vert in self.vertices:
+                    sum_dists += np.dot(ineq[1:], vert) + ineq[0]
+                    if sum_dists > 1:
+                        break
+                if sum_dists == 1:
+                    # the polytope is a lattice pyramid wrt the current ineq
+                    self._is_lattice_pyramid = True
+                    break
+
+        return self._is_lattice_pyramid
 
     @property
     def is_hollow(self) -> bool:
