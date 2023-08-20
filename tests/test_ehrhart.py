@@ -1,4 +1,3 @@
-from sympy import Rational
 from sympol.ehrhart import is_valid_h_star_vector
 
 
