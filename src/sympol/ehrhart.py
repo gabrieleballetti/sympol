@@ -1,13 +1,17 @@
 """Module defining additional functions for Ehrhart Theory related properties."""
 
-from sympy import floor
+from sympy import floor, Poly, Rational
+from sympy.abc import x
+from sympol._utils import _is_integer
+from sympol._utils import _binomial_polynomial, _eulerian_poly
 
 
 def is_valid_h_star_vector(h: tuple[int]) -> bool:
     """Check if the given integer vector violates any known h*-vector inequalities.
 
     This method checks that the h*-vector satisfies a list of know inequalities.
-    This does not guarantee that the resulting vector is an h*-vector.
+    This checks that the vector satisfies certain necessary conditions, does not
+    guarantee that the resulting vector is an h*-vector.
 
     The list of checked properties/inequalities are:
     * h_i is an integer for all i,
@@ -22,7 +26,7 @@ def is_valid_h_star_vector(h: tuple[int]) -> bool:
     Returns:
         True if the vector satisfies all known inequalities, False otherwise.
     """
-    if any(not isinstance(h_i, int) for h_i in h):
+    if any(not _is_integer(h_i) for h_i in h):
         return False
 
     if any(h_i < 0 for h_i in h):
@@ -65,3 +69,52 @@ def is_valid_h_star_vector(h: tuple[int]) -> bool:
                 # could not find a counterexample for this case
 
     return True
+
+
+def h_star_to_ehrhart_polynomial(dim: int, h_star_vector: tuple[int]) -> Poly:
+    """Get the Ehrhart polynomial from the h*-polynomial."""
+    return sum(
+        [
+            h_i * _binomial_polynomial(dim, dim - i, x)
+            for i, h_i in enumerate(h_star_vector)
+            if h_i != 0
+        ]
+    )
+
+
+def ehrhart_to_h_star_polynomial(
+    dim: int, ehrhart_coefficients: tuple[Rational]
+) -> Poly:
+    """Get the h*-polynomial from the Ehrhart polynomial."""
+    return sum(
+        [
+            ehrhart_coefficients[i] * _eulerian_poly(i, x) * (1 - x) ** (dim - i)
+            for i in range(dim + 1)
+        ]
+    ).simplify()
+
+
+def h_star_vector_of_cartesian_product_from_h_star_vectors(
+    h_star_vector_1: tuple[int], h_star_vector_2: tuple[int]
+) -> tuple[int]:
+    """
+    Return the h-star vector of the cartesian product of two polytopes, given
+    their h-star vectors.
+    """
+    dim_1 = len(h_star_vector_1) - 1
+    dim_2 = len(h_star_vector_2) - 1
+    dim = dim_1 + dim_2
+
+    ehrhart_polynomial_1 = h_star_to_ehrhart_polynomial(dim_1, h_star_vector_1)
+    ehrhart_polynomial_2 = h_star_to_ehrhart_polynomial(dim_2, h_star_vector_2)
+    ehrhart_polynomial = ehrhart_polynomial_1 * ehrhart_polynomial_2
+    x = ehrhart_polynomial.gens[0]
+    ehrhart_coeffs = tuple(
+        [ehrhart_polynomial.coeff_monomial(x**deg) for deg in range(dim + 1)]
+    )
+    h_star_poly = ehrhart_to_h_star_polynomial(dim, ehrhart_coeffs)
+    h_star_vector = tuple(
+        [h_star_poly.coeff_monomial(x**deg) for deg in range(dim + 1)]
+    )
+
+    return h_star_vector

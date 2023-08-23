@@ -1,7 +1,7 @@
 import numpy as np
 from itertools import product
 from cdd import Fraction
-from sympy import binomial, factorial, Poly, Rational
+from sympy import binomial, factorial, Integer, Poly, Rational
 
 
 def _cdd_fraction_to_simpy_rational(frac):
@@ -13,6 +13,11 @@ def _cdd_fraction_to_simpy_rational(frac):
         return Rational(frac.numerator, frac.denominator)
 
     raise TypeError("Expected a cddlib Fraction or an int")
+
+
+def _is_integer(num) -> bool:
+    """Return True if num is an integer, False otherwise."""
+    return isinstance(num, (int, Integer))
 
 
 def _np_cartesian_product(*arrays):
