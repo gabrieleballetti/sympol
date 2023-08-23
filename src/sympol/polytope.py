@@ -12,12 +12,11 @@ from sympol._hilbert_basis_np import get_hilbert_basis_np
 from sympol._integer_points_np import find_integer_points
 from sympol._isomorphism import get_normal_form
 from sympol._half_open_parallelotope import HalfOpenParallelotope
+from sympol.ehrhart import h_star_to_ehrhart_polynomial
 from sympol.point import Point
 from sympol.point_configuration import PointConfiguration
 from sympol._utils import (
-    _binomial_polynomial,
     _cdd_fraction_to_simpy_rational,
-    _eulerian_poly,
     _np_cartesian_product,
     _is_log_concave,
     _is_unimodal,
@@ -993,7 +992,7 @@ class Polytope:
                     "Ehrhart polynomial is only implemented for lattice polytopes"
                 )
 
-            self._ehrhart_polynomial = self._h_star_to_ehrhart_polynomial(
+            self._ehrhart_polynomial = h_star_to_ehrhart_polynomial(
                 dim=self.dim,
                 h_star_vector=self.h_star_vector,
             )
@@ -1601,29 +1600,6 @@ class Polytope:
         # know the exact number)
         return self._n_interior_points == n
 
-    @staticmethod
-    def _h_star_to_ehrhart_polynomial(dim: int, h_star_vector: tuple[int]) -> Poly:
-        """Get the Ehrhart polynomial from the h*-polynomial."""
-        return sum(
-            [
-                h_i * _binomial_polynomial(dim, dim - i, x)
-                for i, h_i in enumerate(h_star_vector)
-                if h_i != 0
-            ]
-        )
-
-    @staticmethod
-    def _ehrhart_to_h_star_polynomial(
-        dim: int, ehrhart_coefficients: tuple[Rational]
-    ) -> Poly:
-        """Get the h*-polynomial from the Ehrhart polynomial."""
-        return sum(
-            [
-                ehrhart_coefficients[i] * _eulerian_poly(i, x) * (1 - x) ** (dim - i)
-                for i in range(dim + 1)
-            ]
-        ).simplify()
-
     def _get_hilbert_basis(self, stop_at_height=-1) -> tuple:
         """Get the Hilbert basis of the polytope.
 
@@ -1952,6 +1928,86 @@ class Polytope:
             cross_polytope = cross_polytope.free_sum(cls(vertices=segment_verts))
 
         return cross_polytope
+
+    @classmethod
+    def reeve_simplex(cls, dim: int, vol: int) -> "Simplex":
+        """Construct a Reeve simplex in the given dimension and volume.
+
+        A Reeve simplex is a Generalization of Reeve tetrahedron. It is an empty
+        simplex - i.e. its only lattice points are its vertices - that can be built
+        with arbitrarily high volume. It has h*-polynomial equal to 1 + vol * x^k,
+        with:
+        * k = (d + 1) / 2 when d is odd,
+        * k = d / 2 when d is even.
+
+        If d is even the Reeve simplex is just a lattice pyramid over the
+        (d-1)-dimensional Reeve simplex.
+
+        Args:
+            dim: The dimension of the simplex.
+            vol: The normalized volume of the simplex.
+
+        Returns:
+            A Reeve simplex in the given dimension and volume.
+
+        Raises:
+            ValueError: If the dimension or the volume are not positive integers.
+        """
+        if not isinstance(dim, int) or dim < 1:
+            raise ValueError("Dimension must be a positive integer")
+
+        if not isinstance(vol, int) or vol < 1:
+            raise ValueError("Volume must be a positive integer")
+
+        d = dim - 1 if dim % 2 == 0 else dim
+        k = (d + 1) // 2
+
+        verts = np.zeros(shape=(dim + 1, dim), dtype=int)
+        for i in range(d - 1):
+            verts[i + 1][i] = 1
+        verts[d, : k - 1] = 1
+        verts[d, k - 1 : d - 1] = vol - 1
+        verts[d, d - 1] = vol
+
+        if dim % 2 == 0:
+            verts[dim, dim - 1] = 1
+
+        return Simplex(vertices=verts)
+
+    @classmethod
+    def gentleman_reeve_polytope(cls, dim, vol) -> "Polytope":
+        """Construct a Gentleman-Reeve polytope in the given dimension and volume.
+
+        A Gentleman-Reeve polytope is a lattice polytope obtained by taking the
+        Reeve simplex of volume vol and adding a unimodular simplex to it (the "hat").
+        It has h*-polynomial 1 + x + ... + x^(k-1) + vol * x^k, with:
+        * k = (d + 1) / 2 when d is odd,
+        * k = d / 2 when d is even.
+
+        Args:
+            dim: The dimension of the polytope.
+            vol: The normalized volume of the Reeve simplex
+
+        Returns:
+            A Gentleman-Reeve polytope in the given dimension and volume.
+
+        Raises:
+            ValueError: If the dimension or the volume are not positive integers.
+        """
+        if not isinstance(dim, int) or dim < 1:
+            raise ValueError("Dimension must be a positive integer")
+
+        if not isinstance(vol, int) or vol < 1:
+            raise ValueError("Volume must be a positive integer")
+
+        verts = Polytope.reeve_simplex(dim, vol).vertices
+
+        d = dim - 1 if dim % 2 == 0 else dim
+        k = (d + 1) // 2
+        extra_vert = np.zeros(shape=(1, dim), dtype=int)
+        extra_vert[0, k - 1 : d] = -1
+
+        return Polytope(vertices=np.vstack((verts, extra_vert)))
 
     @classmethod
     def random_lattice_polytope(cls, dim, n_points, min=0, max=1):

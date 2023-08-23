@@ -1152,18 +1152,6 @@ def test_h_star_vector():
     assert (Polytope.cube(3) * 2).h_star_vector == (1, 23, 23, 1)
 
 
-def test_ehrhart_to_h_star_polynomial():
-    """
-    Test that the method _ehrhart_to_h_star_polynomial works correctly for a
-    unit cube.
-    """
-    p = Polytope.cube(3)
-
-    assert p._ehrhart_to_h_star_polynomial(
-        dim=p.dim, ehrhart_coefficients=p.ehrhart_coefficients
-    ) == Poly(x**2 + 4 * x + 1, x)
-
-
 def test_degree():
     """
     Test that the degree of a lattice polytope is correct
@@ -1663,6 +1651,87 @@ def test_cross_polytope():
     assert _arrays_equal_up_to_row_permutation(cross.vertices, expected_vertices)
     assert cross.volume == Rational(4, 3)
     assert cross.normalized_volume == 8
+
+
+def test_reeve_simplex():
+    """
+    Test that the reeve simplex is correctly constructed.
+    """
+    with pytest.raises(ValueError):
+        assert Polytope.reeve_simplex(0, 3)
+
+    with pytest.raises(ValueError):
+        assert Polytope.reeve_simplex(3, 0)
+
+    s = Polytope.reeve_simplex(3, 3)
+
+    expected_vertices = PointConfiguration(
+        [
+            [0, 0, 0],
+            [1, 0, 0],
+            [0, 1, 0],
+            [1, 2, 3],
+        ]
+    )
+
+    assert _arrays_equal_up_to_row_permutation(s.vertices, expected_vertices)
+    assert isinstance(s, Simplex)
+
+    s = Polytope.reeve_simplex(4, 3)
+
+    expected_vertices = PointConfiguration(
+        [
+            [0, 0, 0, 0],
+            [1, 0, 0, 0],
+            [0, 1, 0, 0],
+            [1, 2, 3, 0],
+            [0, 0, 0, 1],
+        ]
+    )
+
+    assert _arrays_equal_up_to_row_permutation(s.vertices, expected_vertices)
+    assert isinstance(s, Polytope)
+
+
+def test_gentleman_reeve_polytope():
+    """
+    Test that the gentleman reeve polytope is correctly constructed.
+    """
+
+    with pytest.raises(ValueError):
+        assert Polytope.gentleman_reeve_polytope(0, 3)
+
+    with pytest.raises(ValueError):
+        assert Polytope.gentleman_reeve_polytope(3, 0)
+
+    p = Polytope.gentleman_reeve_polytope(3, 3)
+
+    expected_vertices = PointConfiguration(
+        [
+            [0, 0, 0],
+            [1, 0, 0],
+            [0, 1, 0],
+            [1, 2, 3],
+            [0, -1, -1],
+        ]
+    )
+
+    assert _arrays_equal_up_to_row_permutation(p.vertices, expected_vertices)
+
+    p = Polytope.gentleman_reeve_polytope(4, 3)
+
+    expected_vertices = PointConfiguration(
+        [
+            [0, 0, 0, 0],
+            [1, 0, 0, 0],
+            [0, 1, 0, 0],
+            [1, 2, 3, 0],
+            [0, -1, -1, 0],
+            [0, 0, 0, 1],
+        ]
+    )
+
+    assert _arrays_equal_up_to_row_permutation(p.vertices, expected_vertices)
 
 
 def test_set_cdd_polyhedron_from_points():
