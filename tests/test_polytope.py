@@ -1504,7 +1504,7 @@ def test_is_spanning():
     """
     Test the is_spanning property. In the first case only the vertices should be used.
     """
-    p = Polytope([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])
+    p = Polytope.unimodular_simplex(3)
     assert p.is_spanning
     assert p._integer_points is None
 
@@ -1518,6 +1518,17 @@ def test_is_spanning():
     p = Polytope([[-1], [1]])
     p._integer_points = PointConfiguration([[-1], [1]])
     assert not p.is_spanning
+
+
+def test_is_very_ample():
+    """
+    Test the is_very_ample property
+    """
+    p = Polytope.unimodular_simplex(3)
+    assert p.is_very_ample
+
+    p = Polytope.cube(3)
+    assert p.is_very_ample
 
 
 def test_is_idp():

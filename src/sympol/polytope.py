@@ -181,7 +181,9 @@ class Polytope:
         self._is_ehrhart_positive = None
         self._has_log_concave_h_star_vector = None
         self._has_unimodal_h_star_vector = None
+
         self._is_spanning = None
+        self._is_very_ample = None
         self._is_idp = None
         self._is_smooth = None
 
@@ -1376,6 +1378,65 @@ class Polytope:
                 self._is_spanning = self.integer_points.index == 1
 
         return self._is_spanning
+
+    @property
+    def is_very_ample(self) -> bool:
+        """Check if the polytope is very ample.
+
+        A polytope is very ample if for each tangent cone at a vertex, hilbert basis
+        of the semigroup given by the integer points in the tangent cone is a subset of
+        the lattice points of the polytope.
+
+        Returns:
+            True if the polytope is very ample, False otherwise.
+        """
+        if self._is_very_ample is None:
+            for v_id in range(self.n_vertices):
+                v = self.vertices[v_id]
+                # # calculate the induced triangulation on the tangent cone
+                # ind_triang = {s.intersection(ns) for s in self.triangulation if v_id in s}
+                # ind_triang = {s for s in ind_triang if len(s) == self.dim}
+
+                generators = set()
+                for verts_ids, special_gens_ids in zip(
+                    self.triangulation, self.half_open_decomposition
+                ):
+                    if v_id not in verts_ids:
+                        continue
+
+                    rays = [self.vertices[i] - v for i in verts_ids if i != v_id]
+                    special_gens_ids = [s.remove(v_id) for s in special_gens_ids]
+
+                    hop = HalfOpenParallelotope(
+                        generators=rays,
+                        special_gens_ids=special_gens_ids,
+                    )
+                    pts, _ = hop.get_integer_points()
+                    generators.update([Point(pt) for pt in pts[1:]])
+                    generators.update(rays)
+
+                generators = PointConfiguration(list(generators))
+
+                # TODO: inequalities should be found in a better way
+                ineqs = np.array((self - v).inequalities)
+                ineqs = ineqs[ineqs[:, 0] == 0]
+                ineqs = ineqs[:, 1:]
+
+                hilbert_basis = tuple(
+                    get_hilbert_basis_np(
+                        generators=generators.astype(np.int64),
+                        inequalities=ineqs.astype(np.int64),
+                    )
+                )
+
+                for pt in hilbert_basis:
+                    if not self.contains(pt + v):
+                        self._is_very_ample = False
+                        return False
+
+            self._is_very_ample = True
+
+        return self._is_very_ample
 
     @property
     def is_idp(self) -> bool:
