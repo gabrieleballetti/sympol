@@ -1398,7 +1398,7 @@ class Polytope:
                 + [pt[1:] for pt in self.half_open_parallelotopes_pts if pt[0] == 1]
             ).index
             self._is_spanning = index == 1
-            if self.is_spanning:
+            if not self.is_spanning:
                 self._is_idp = False
             else:
                 hilbert_basis = self._get_hilbert_basis(stop_at_height=2)
