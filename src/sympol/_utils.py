@@ -45,11 +45,15 @@ def _is_log_concave(iterable):
 
     Log-concavity implies unimodality, but not vice versa.
     """
+    first = 0
+    while first < len(iterable) and iterable[first] == 0:
+        first += 1
+
     last = len(iterable) - 1
-    while last > 0 and iterable[last] == 0:
+    while last > first and iterable[last] == 0:
         last -= 1
 
-    i = 1
+    i = first + 1
     while i < last:
         if iterable[i] == 0:
             return False

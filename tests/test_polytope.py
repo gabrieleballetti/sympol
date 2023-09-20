@@ -1500,6 +1500,26 @@ def test_has_unimodal_h_star_vector():
     assert not p.has_unimodal_h_star_vector
 
 
+def test_is_spanning():
+    """
+    Test the is_spanning property. In the first case only the vertices should be used.
+    """
+    p = Polytope([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])
+    assert p.is_spanning
+    assert p._integer_points is None
+
+    p = Polytope([[0, 0, 0], [1, 0, 0], [0, 1, 0], [1, 1, 2]])
+    assert not p.is_spanning
+    assert p._integer_points is not None
+
+    p = Polytope([[-1], [1]])
+    assert p.is_spanning
+
+    p = Polytope([[-1], [1]])
+    p._integer_points = PointConfiguration([[-1], [1]])
+    assert not p.is_spanning
+
+
 def test_is_idp():
     """
     Test the is_idp property. In the first two cases by computing the Hilbert
