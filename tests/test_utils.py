@@ -62,6 +62,7 @@ def test_is_log_concave():
     assert _is_log_concave([1, 6, 15, 20, 15, 6, 1])
     assert _is_log_concave([1, 7, 21, 35, 35, 21, 7, 1])
     assert _is_log_concave([5, 4, 3, 2, 1, 0, 0, 0, 0, 0, 0])
+    assert _is_log_concave([0, 0, 1, 1, 1, 0, 0])
     assert _is_log_concave([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])
     assert not _is_log_concave([1, 1, 0, 0, 1])
     assert not _is_log_concave([1, 4, 17, 0, 0])

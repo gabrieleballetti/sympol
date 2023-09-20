@@ -181,6 +181,7 @@ class Polytope:
         self._is_ehrhart_positive = None
         self._has_log_concave_h_star_vector = None
         self._has_unimodal_h_star_vector = None
+        self._is_spanning = None
         self._is_idp = None
         self._is_smooth = None
 
@@ -1358,6 +1359,25 @@ class Polytope:
         return self._has_unimodal_h_star_vector
 
     @property
+    def is_spanning(self) -> bool:
+        """Check if the polytope is spanning.
+
+        A polyotpe is spanning if its vertices affinely span the whole ambient space.
+
+        Returns:
+            True if the polytope is spanning, False otherwise.
+        """
+
+        if self._is_spanning is None:
+            # first try with the vertices only, it's a fast check
+            if self.vertices.index == 1:
+                self._is_spanning = True
+            else:
+                self._is_spanning = self.integer_points.index == 1
+
+        return self._is_spanning
+
+    @property
     def is_idp(self) -> bool:
         """Check if the polytope P has the Integer Decomposition Property (IDP).
 
@@ -1377,7 +1397,8 @@ class Polytope:
                 [v for v in self.vertices]
                 + [pt[1:] for pt in self.half_open_parallelotopes_pts if pt[0] == 1]
             ).index
-            if index > 1:
+            self._is_spanning = index == 1
+            if not self.is_spanning:
                 self._is_idp = False
             else:
                 hilbert_basis = self._get_hilbert_basis(stop_at_height=2)

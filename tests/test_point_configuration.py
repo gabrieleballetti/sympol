@@ -167,7 +167,11 @@ def test_index():
     pt_cfg = PointConfiguration(pts)
     assert pt_cfg.index == 3
 
-    # this are the vertices of a simplex with non-spanning vertices
+    pts = [[-1], [1]]
+    pt_cfg = PointConfiguration(pts)
+    assert pt_cfg.index == 2
+
+    # these are the vertices of a simplex with non-spanning vertices
     # (since it is not a unimodular simplex), but whose lattice points
     # span the lattice
     pts = [
