@@ -9,8 +9,8 @@ from sympy.abc import x
 from sympy.matrices.normalforms import hermite_normal_form
 
 from sympol._hilbert_basis_np import (
-    get_hilbert_basis_hom_cone_np,
-    get_hilbert_basis_w_irreducibles_np,
+    get_hilbert_basis_hom_np,
+    check_hilbert_basis_in_polytope_np,
 )
 from sympol._integer_points_np import find_integer_points
 from sympol._isomorphism import get_normal_form
@@ -1396,9 +1396,6 @@ class Polytope:
         if self._is_very_ample is None:
             for v_id in range(self.n_vertices):
                 v = self.vertices[v_id]
-                # # calculate the induced triangulation on the tangent cone
-                # ind_triang = {s.intersection(ns) for s in self.triangulation if v_id in s}
-                # ind_triang = {s for s in ind_triang if len(s) == self.dim}
 
                 generators = set()
                 for verts_ids, special_gens_ids in zip(
@@ -1407,14 +1404,21 @@ class Polytope:
                     if v_id not in verts_ids:
                         continue
 
+                    verts_ids = sorted(list(verts_ids))
+                    v_id_id = verts_ids.index(v_id)
+
                     rays = [self.vertices[i] - v for i in verts_ids if i != v_id]
-                    special_gens_ids = [i for i in special_gens_ids if i != v_id]
+                    special_gens_ids = [
+                        (i if i < v_id_id else i - 1)
+                        for i in special_gens_ids
+                        if i != v_id
+                    ]
 
                     hop = HalfOpenParallelotope(
                         generators=rays,
                         special_gens_ids=special_gens_ids,
                     )
-                    pts, _ = hop.get_integer_points()
+                    pts, _ = hop.get_integer_points(count=False)
                     generators.update([Point(pt) for pt in pts[1:]])
                     generators.update(rays)
 
@@ -1425,21 +1429,20 @@ class Polytope:
 
                 # TODO: inequalities should be found in a better way
                 ineqs = np.array((self - v).inequalities)
-                ineqs = ineqs[ineqs[:, 0] == 0]
-                ineqs = ineqs[:, 1:]
+                cone_ineqs = ineqs[ineqs[:, 0] == 0]
+                cone_ineqs = cone_ineqs[:, 1:]
+                other_ineqs = ineqs[ineqs[:, 0] != 0]
 
-                hilbert_basis = tuple(
-                    get_hilbert_basis_w_irreducibles_np(
-                        generators=generators.astype(np.int64),
-                        irreducibles=irreducibles.astype(np.int64),
-                        inequalities=ineqs.astype(np.int64),
-                    )
+                contains_hb = check_hilbert_basis_in_polytope_np(
+                    generators=np.array(generators, dtype=np.int64),
+                    irreducibles=np.array(irreducibles, dtype=np.int64),
+                    cone_inequalities=np.array(cone_ineqs, dtype=np.int64),
+                    other_inequalities=np.array(other_ineqs, dtype=np.int64),
                 )
 
-                for pt in hilbert_basis:
-                    if not self.contains(pt + v):
-                        self._is_very_ample = False
-                        return False
+                if not contains_hb:
+                    self._is_very_ample = False
+                    return False
 
             self._is_very_ample = True
 
@@ -1718,7 +1721,7 @@ class Polytope:
             )
 
         hilbert_basis = tuple(
-            get_hilbert_basis_hom_cone_np(
+            get_hilbert_basis_hom_np(
                 generators=generators,
                 inequalities=self.homogeneous_inequalities.view(np.ndarray).astype(
                     np.int64
