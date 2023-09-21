@@ -8,7 +8,10 @@ from sympy import Abs, factorial, gcd, lcm, Number, Matrix, Poly, Rational
 from sympy.abc import x
 from sympy.matrices.normalforms import hermite_normal_form
 
-from sympol._hilbert_basis_np import get_hilbert_basis_np
+from sympol._hilbert_basis_np import (
+    get_hilbert_basis_hom_cone_np,
+    get_hilbert_basis_w_irreducibles_np,
+)
 from sympol._integer_points_np import find_integer_points
 from sympol._isomorphism import get_normal_form
 from sympol._half_open_parallelotope import HalfOpenParallelotope
@@ -1405,7 +1408,7 @@ class Polytope:
                         continue
 
                     rays = [self.vertices[i] - v for i in verts_ids if i != v_id]
-                    special_gens_ids = [s.remove(v_id) for s in special_gens_ids]
+                    special_gens_ids = [i for i in special_gens_ids if i != v_id]
 
                     hop = HalfOpenParallelotope(
                         generators=rays,
@@ -1415,7 +1418,10 @@ class Polytope:
                     generators.update([Point(pt) for pt in pts[1:]])
                     generators.update(rays)
 
+                irreducibles = set([self.vertices[i] - v for i in self.neighbors(v_id)])
+                generators = generators.difference(irreducibles)
                 generators = PointConfiguration(list(generators))
+                irreducibles = PointConfiguration(list(irreducibles))
 
                 # TODO: inequalities should be found in a better way
                 ineqs = np.array((self - v).inequalities)
@@ -1423,8 +1429,9 @@ class Polytope:
                 ineqs = ineqs[:, 1:]
 
                 hilbert_basis = tuple(
-                    get_hilbert_basis_np(
+                    get_hilbert_basis_w_irreducibles_np(
                         generators=generators.astype(np.int64),
+                        irreducibles=irreducibles.astype(np.int64),
                         inequalities=ineqs.astype(np.int64),
                     )
                 )
@@ -1711,7 +1718,7 @@ class Polytope:
             )
 
         hilbert_basis = tuple(
-            get_hilbert_basis_np(
+            get_hilbert_basis_hom_cone_np(
                 generators=generators,
                 inequalities=self.homogeneous_inequalities.view(np.ndarray).astype(
                     np.int64
