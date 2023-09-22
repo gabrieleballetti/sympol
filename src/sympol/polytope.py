@@ -1411,7 +1411,7 @@ class Polytope:
                     special_gens_ids = [
                         (i if i < v_id_id else i - 1)
                         for i in special_gens_ids
-                        if i != v_id
+                        if i != v_id_id
                     ]
 
                     hop = HalfOpenParallelotope(
