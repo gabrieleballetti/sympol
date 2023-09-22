@@ -1504,7 +1504,7 @@ def test_is_spanning():
     """
     Test the is_spanning property. In the first case only the vertices should be used.
     """
-    p = Polytope([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])
+    p = Polytope.unimodular_simplex(3)
     assert p.is_spanning
     assert p._integer_points is None
 
@@ -1520,6 +1520,38 @@ def test_is_spanning():
     assert not p.is_spanning
 
 
+def test_is_very_ample():
+    """
+    Test the is_very_ample property
+    """
+    p = Polytope.unimodular_simplex(3)
+    assert p.is_very_ample
+
+    p = Polytope.cube(3)
+    assert p.is_very_ample
+
+    p = Polytope.reeve_simplex(3, 2)
+    assert not p.is_very_ample
+
+    p = Polytope([[0, 0, 0], [1, 0, 0], [0, 1, 0], [1, 1, 2], [0, 0, -1]])
+    assert p.is_very_ample
+
+    # very ample, but not idp
+    p = Polytope(
+        [
+            [0, 0, 0],
+            [1, 0, 0],
+            [0, 1, 0],
+            [1, 1, 2],
+            [1, 1, 3],
+            [1, 0, -1],
+            [0, 1, -1],
+            [0, 0, 1],
+        ]
+    )
+    assert p.is_very_ample
+
+
 def test_is_idp():
     """
     Test the is_idp property. In the first two cases by computing the Hilbert
@@ -1530,6 +1562,21 @@ def test_is_idp():
     assert p.is_idp
 
     p = Polytope([[0, 0, 0], [1, 0, 0], [0, 1, 0], [1, 1, 3], [0, 0, -1]])
+    assert not p.is_idp
+
+    # very ample, but not idp
+    p = Polytope(
+        [
+            [0, 0, 0],
+            [1, 0, 0],
+            [0, 1, 0],
+            [1, 1, 2],
+            [1, 1, 3],
+            [1, 0, -1],
+            [0, 1, -1],
+            [0, 0, 1],
+        ]
+    )
     assert not p.is_idp
 
     p = Polytope([[0, 0, 0], [1, 0, 0], [0, 1, 0], [1, 1, 2]])

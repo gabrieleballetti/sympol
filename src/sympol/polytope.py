@@ -8,7 +8,10 @@ from sympy import Abs, factorial, gcd, lcm, Number, Matrix, Poly, Rational
 from sympy.abc import x
 from sympy.matrices.normalforms import hermite_normal_form
 
-from sympol._hilbert_basis_np import get_hilbert_basis_np
+from sympol._hilbert_basis_np import (
+    get_hilbert_basis_hom_np,
+    check_hilbert_basis_in_polytope_np,
+)
 from sympol._integer_points_np import find_integer_points
 from sympol._isomorphism import get_normal_form
 from sympol._half_open_parallelotope import HalfOpenParallelotope
@@ -181,7 +184,9 @@ class Polytope:
         self._is_ehrhart_positive = None
         self._has_log_concave_h_star_vector = None
         self._has_unimodal_h_star_vector = None
+
         self._is_spanning = None
+        self._is_very_ample = None
         self._is_idp = None
         self._is_smooth = None
 
@@ -1378,6 +1383,72 @@ class Polytope:
         return self._is_spanning
 
     @property
+    def is_very_ample(self) -> bool:
+        """Check if the polytope is very ample.
+
+        A polytope is very ample if for each tangent cone at a vertex, hilbert basis
+        of the semigroup given by the integer points in the tangent cone is a subset of
+        the lattice points of the polytope.
+
+        Returns:
+            True if the polytope is very ample, False otherwise.
+        """
+        if self._is_very_ample is None:
+            for v_id in range(self.n_vertices):
+                v = self.vertices[v_id]
+
+                generators = set()
+                for verts_ids, special_gens_ids in zip(
+                    self.triangulation, self.half_open_decomposition
+                ):
+                    if v_id not in verts_ids:
+                        continue
+
+                    verts_ids = sorted(list(verts_ids))
+                    v_id_id = verts_ids.index(v_id)
+
+                    rays = [self.vertices[i] - v for i in verts_ids if i != v_id]
+                    special_gens_ids = [
+                        (i if i < v_id_id else i - 1)
+                        for i in special_gens_ids
+                        if i != v_id_id
+                    ]
+
+                    hop = HalfOpenParallelotope(
+                        generators=rays,
+                        special_gens_ids=special_gens_ids,
+                    )
+                    pts, _ = hop.get_integer_points(count=False)
+                    generators.update([Point(pt) for pt in pts[1:]])
+                    generators.update(rays)
+
+                irreducibles = set([self.vertices[i] - v for i in self.neighbors(v_id)])
+                generators = generators.difference(irreducibles)
+                generators = PointConfiguration(list(generators))
+                irreducibles = PointConfiguration(list(irreducibles))
+
+                # TODO: inequalities should be found in a better way
+                ineqs = np.array((self - v).inequalities)
+                cone_ineqs = ineqs[ineqs[:, 0] == 0]
+                cone_ineqs = cone_ineqs[:, 1:]
+                other_ineqs = ineqs[ineqs[:, 0] != 0]
+
+                contains_hb = check_hilbert_basis_in_polytope_np(
+                    generators=np.array(generators, dtype=np.int64),
+                    irreducibles=np.array(irreducibles, dtype=np.int64),
+                    cone_inequalities=np.array(cone_ineqs, dtype=np.int64),
+                    other_inequalities=np.array(other_ineqs, dtype=np.int64),
+                )
+
+                if not contains_hb:
+                    self._is_very_ample = False
+                    return False
+
+            self._is_very_ample = True
+
+        return self._is_very_ample
+
+    @property
     def is_idp(self) -> bool:
         """Check if the polytope P has the Integer Decomposition Property (IDP).
 
@@ -1650,7 +1721,7 @@ class Polytope:
             )
 
         hilbert_basis = tuple(
-            get_hilbert_basis_np(
+            get_hilbert_basis_hom_np(
                 generators=generators,
                 inequalities=self.homogeneous_inequalities.view(np.ndarray).astype(
                     np.int64

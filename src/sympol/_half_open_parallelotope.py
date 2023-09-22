@@ -95,7 +95,9 @@ class HalfOpenParallelotope:
         # entries in the range [0, self._det)
         self._v_d_inv = v * d_inv % self._det
 
-    def get_integer_points(self, height=-1, count_only=False, use_sympy=False):
+    def get_integer_points(
+        self, height=-1, count_only=False, count=True, use_sympy=False
+    ):
         """Returns the number of integer points in the half-open parallelotope."""
         if use_sympy:
             pts, h = get_parallelotope_points_simpy(
@@ -107,6 +109,7 @@ class HalfOpenParallelotope:
                 t=self.t,
                 height=height,
                 count_only=count_only,
+                count=count,
             )
         else:
             pts, h = get_parallelotope_points_np(
@@ -118,6 +121,7 @@ class HalfOpenParallelotope:
                 t=np.array(self.t, dtype=np.int64),
                 height=height,
                 count_only=count_only,
+                count=count,
             )
         return pts, tuple(h)
 
@@ -132,6 +136,7 @@ def get_parallelotope_points_simpy(
     t,
     height=-1,
     count_only=False,
+    count=True,
 ):
     """See get_parallelotope_points_np for the documentation of the parameters."""
     dim = VDinv.shape[0]
@@ -155,7 +160,8 @@ def get_parallelotope_points_simpy(
             if i == 0:
                 if height >= 0 and gen[0] != height:
                     break
-                h[gen[0]] += 1
+                if count:
+                    h[gen[0]] += 1
                 if count_only:
                     break
         else:
