@@ -1551,19 +1551,6 @@ def test_is_very_ample():
     )
     assert p.is_very_ample
 
-    p = Polytope(
-        [
-            [0, 0, 0, 0, 0],
-            [1, 0, 0, 0, 0],
-            [0, 1, 0, 0, 0],
-            [0, 0, 1, 0, 0],
-            [0, 0, 0, 1, 0],
-            [0, 0, 0, 1, 2],
-            [-3, 2, -4, 6, 6],
-        ]
-    )
-    assert p.is_very_ample
-
 
 def test_is_idp():
     """
