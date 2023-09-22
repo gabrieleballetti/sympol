@@ -1,5 +1,6 @@
 import numpy as np
 from itertools import product
+from functools import cache
 from cdd import Fraction
 from sympy import binomial, factorial, Integer, Poly, Rational
 
@@ -73,6 +74,7 @@ def _is_unimodal(iterable):
     return i == len(iterable)
 
 
+@cache
 def _eulerian_number(n, k):
     """Return the Eulerian number A(n,k)."""
     return sum(
@@ -80,73 +82,15 @@ def _eulerian_number(n, k):
     )
 
 
+@cache
 def _eulerian_poly(n, x):
     """Calculate Eulerian polynomial A_n(x), first 10 values are given explicitly."""
     if n == 0:
         return Poly(1, x)
-    if n == 1:
-        return Poly(x)
-    if n == 2:
-        return Poly(x**2 + x)
-    if n == 3:
-        return Poly(x**3 + 4 * x**2 + x)
-    if n == 4:
-        return Poly(x**4 + 11 * x**3 + 11 * x**2 + x)
-    if n == 5:
-        return Poly(x**5 + 26 * x**4 + 66 * x**3 + 26 * x**2 + x)
-    if n == 6:
-        return Poly(
-            x**6 + 57 * x**5 + 302 * x**4 + 302 * x**3 + 57 * x**2 + x
-        )
-    if n == 7:
-        return Poly(
-            x**7
-            + 120 * x**6
-            + 1191 * x**5
-            + 2416 * x**4
-            + 1191 * x**3
-            + 120 * x**2
-            + x
-        )
-    if n == 8:
-        return Poly(
-            x**8
-            + 247 * x**7
-            + 4293 * x**6
-            + 15619 * x**5
-            + 15619 * x**4
-            + 4293 * x**3
-            + 247 * x**2
-            + x
-        )
-    if n == 9:
-        return Poly(
-            x**9
-            + 502 * x**8
-            + 14608 * x**7
-            + 88234 * x**6
-            + 156190 * x**5
-            + 88234 * x**4
-            + 14608 * x**3
-            + 502 * x**2
-            + x
-        )
-    if n == 10:
-        return Poly(
-            x**10
-            + 1013 * x**9
-            + 47840 * x**8
-            + 455192 * x**7
-            + 1310354 * x**6
-            + 1310354 * x**5
-            + 455192 * x**4
-            + 47840 * x**3
-            + 1013 * x**2
-            + x
-        )
     return Poly(sum([_eulerian_number(n, k - 1) * x**k for k in range(1, n + 1)]))
 
 
+@cache
 def _binomial_polynomial(d, k, x):
     """Calculate the binomial polynomial binomial(x + k, d), with x as the variable."""
     poly = Poly(Rational(1, factorial(d)), x, domain="QQ")

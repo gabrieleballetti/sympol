@@ -103,10 +103,10 @@ def test_eulerian_polynomial():
     hardcoded so we test them against the explicit formula.
     """
     assert _eulerian_poly(0, x) == Poly(1, x)
-    for n in range(1, 11):
-        assert _eulerian_poly(n, x) == Poly(
-            sum([_eulerian_number(n, k - 1) * x**k for k in range(1, n + 1)])
-        )
+    assert _eulerian_poly(1, x) == Poly(x)
+    assert _eulerian_poly(2, x) == Poly(x**2 + x)
+    assert _eulerian_poly(3, x) == Poly(x**3 + 4 * x**2 + x)
+    assert _eulerian_poly(4, x) == Poly(x**4 + 11 * x**3 + 11 * x**2 + x)
 
     assert _eulerian_poly(11, x) == Poly(
         x**11
