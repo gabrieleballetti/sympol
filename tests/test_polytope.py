@@ -1551,11 +1551,26 @@ def test_is_very_ample():
     )
     assert p.is_very_ample
 
+    p = Polytope(
+        [
+            [0, 0, 0],
+            [1, 0, 0],
+            [0, 1, 0],
+            [0, 0, 1],
+            [-1, 1, 1],
+            [-2, 1, 1],
+            [2, 1, 0],
+            [2, 0, -2],
+            [1, 0, -2],
+        ]
+    )
+    assert p.is_very_ample
+
 
 def test_is_idp():
     """
     Test the is_idp property. In the first two cases by computing the Hilbert
-    basis, in the third case by noting that the pattice points span a sublattice
+    basis, in the last case by noting that the pattice points span a sublattice
     of index > 1.
     """
     p = Polytope([[0, 0, 0], [1, 0, 0], [0, 1, 0], [1, 1, 2], [0, 0, -1]])

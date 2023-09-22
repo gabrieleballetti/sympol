@@ -1397,26 +1397,18 @@ class Polytope:
             for v_id in range(self.n_vertices):
                 v = self.vertices[v_id]
 
+                translated = self - v
                 generators = set()
-                for verts_ids, special_gens_ids in zip(
-                    self.triangulation, self.half_open_decomposition
-                ):
+                for verts_ids in self.triangulation:
                     if v_id not in verts_ids:
                         continue
 
                     verts_ids = sorted(list(verts_ids))
-                    v_id_id = verts_ids.index(v_id)
 
-                    rays = [self.vertices[i] - v for i in verts_ids if i != v_id]
-                    special_gens_ids = [
-                        (i if i < v_id_id else i - 1)
-                        for i in special_gens_ids
-                        if i != v_id_id
-                    ]
+                    rays = [translated.vertices[i] for i in verts_ids if i != v_id]
 
                     hop = HalfOpenParallelotope(
                         generators=rays,
-                        special_gens_ids=special_gens_ids,
                     )
                     pts, _ = hop.get_integer_points(count=False)
                     generators.update([Point(pt) for pt in pts[1:]])
@@ -1428,7 +1420,7 @@ class Polytope:
                 irreducibles = PointConfiguration(list(irreducibles))
 
                 # TODO: inequalities should be found in a better way
-                ineqs = np.array((self - v).inequalities)
+                ineqs = np.array(translated.inequalities)
                 cone_ineqs = ineqs[ineqs[:, 0] == 0]
                 cone_ineqs = cone_ineqs[:, 1:]
                 other_ineqs = ineqs[ineqs[:, 0] != 0]
