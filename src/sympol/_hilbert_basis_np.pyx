@@ -51,7 +51,7 @@ cpdef tuple get_hilbert_basis_hom_np(
     return tuple(irreducibles)
 
 
-cpdef tuple check_hilbert_basis_in_polytope_np(
+cpdef bint check_hilbert_basis_in_polytope_np(
     cnp.ndarray[DTYPE_t, ndim=2] generators,
     cnp.ndarray[DTYPE_t, ndim=2] irreducibles,
     cnp.ndarray[DTYPE_t, ndim=2] cone_inequalities,
