@@ -2094,6 +2094,52 @@ class Polytope:
         return Polytope(vertices=np.vstack((verts, extra_vert)))
 
     @classmethod
+    def higashitample_polytope(cls, d, h):
+        """Return the non-IDP very ample polytope with h holes in the given dimension.
+
+        See the reference for more details.
+
+        A. Higashitani, "Non-normal very ample polytopes and their holes." Electronic
+        Journal of Combinatorics 32 (2014): 1-12.
+
+        Args:
+            d: The dimension of the polytope.
+            h: The number of holes.
+
+        Returns:
+            The non-IDP very ample polytope with h holes in the given dimension.
+        """
+        if not isinstance(d, int) or d < 3:
+            raise ValueError("Dimension must be an integer >= 3")
+
+        if not isinstance(h, int) or h < 1:
+            raise ValueError("Number of holes h must be an integer >= 1")
+
+        verts = np.zeros((10, d), dtype=int)
+        verts[1, d - 1] = 1
+        verts[2, 1 : d - 1] = 1
+        verts[3, 1:] = h
+        verts[4, 1 : d - 1] = h - 1
+        verts[4, d - 1] = h
+        verts[5, 1 : d - 1] = h
+        verts[5, d - 1] = h - 1
+        verts[6, 0] = 1
+        verts[6, d - 1] = 4
+        verts[7, 0] = 1
+        verts[7, d - 1] = 5
+        verts[8, : d - 1] = 1
+        verts[9, :] = 1
+
+        for i in range(1, d - 1):
+            new_v = np.zeros(d, dtype=int)
+            new_v[i] = 1
+            verts = np.vstack((verts, new_v))
+            new_v[d - 1] = 1
+            verts = np.vstack((verts, new_v))
+
+        return Polytope(verts)
+
+    @classmethod
     def random_lattice_polytope(cls, dim, n_points, min=0, max=1):
         """Return a random lattice polytope in the given dimension.
 

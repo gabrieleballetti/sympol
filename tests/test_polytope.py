@@ -1816,6 +1816,21 @@ def test_gentleman_reeve_polytope():
     assert _arrays_equal_up_to_row_permutation(p.vertices, expected_vertices)
 
 
+def test_higashitample_polytope():
+    """
+    Test that the higashitample polytope is correctly constructed.
+    """
+    with pytest.raises(ValueError):
+        assert Polytope.higashitample_polytope(0, 1)
+
+    with pytest.raises(ValueError):
+        assert Polytope.higashitample_polytope(3, 0)
+
+    p = Polytope.higashitample_polytope(3, 3)
+    assert p.is_very_ample
+    assert not p.is_idp
+
+
 def test_set_cdd_polyhedron_from_points():
     """
     Test that _cdd_polyhedron is initialized from a list of points

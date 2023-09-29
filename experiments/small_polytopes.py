@@ -3,7 +3,7 @@ from sympol import Polytope
 from sympol._utils import _is_log_concave
 import pathlib
 
-DATA_FOLDER = "experiments/data/"
+DATA_FOLDER = ".data/"
 
 
 def check_log_concavity(ep):
@@ -13,30 +13,32 @@ def check_log_concavity(ep):
 
 if __name__ == "__main__":
     # read the data from a file, one line at a time
-    d = 3
-    i = 16
+    d = 6
+    i = 12
     polytopes_type = "polytopes"
     while True:
         filename = pathlib.Path(DATA_FOLDER) / f"{d}-{polytopes_type}" / f"v{i}.txt"
         if not filename.exists():
             break
         print(f"Checking {d}-{polytopes_type} of volume {i}...")
+        i += 1
         with open(filename, "r") as f:
             for line in f:
                 verts = eval(line)
                 p = Polytope(vertices=verts)
 
-                if p.is_idp:
-                    if not p.is_very_ample:
-                        print("IDP but not very ample")
-                        print(p.vertices)
-                    if not p.is_spanning:
-                        print("IDP but not spanning")
-                        print(p.vertices)
-                elif p.is_very_ample:
-                    if not p.is_spanning:
-                        print("Very ample but not spanning")
-                        print(p.vertices)
+                if p.is_lattice_pyramid:
+                    continue
+
+                if p.is_very_ample and not p.is_idp:
                     h = p.h_star_vector
+                    e = p.ehrhart_polynomial
+                    nes = [Abs(e(-i)) for i in range(1, d + 1)]
+                    lc = [
+                        nes[i] ** 2 - nes[i - 1] * nes[i + 1] for i in range(1, d - 1)
+                    ]
+
                     print(h)
-        i += 1
+                    print(nes)
+                    print(lc)
+                    print("--------")
