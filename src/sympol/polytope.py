@@ -1731,7 +1731,7 @@ class Polytope:
 
         This is:
         * the translation of self by other if other is a Point,
-        * the Minkowski sum of self and other if other is a Polytope. (TODO)
+        * the Minkowski sum of self and other if other is a Polytope.
 
         Args:
             other: The other polytope.
@@ -1744,7 +1744,19 @@ class Polytope:
             return Polytope(vertices=verts)
 
         if isinstance(other, Polytope):
-            raise NotImplementedError("Minkowski sum not implemented yet")
+            if self.ambient_dim != other.ambient_dim:
+                raise ValueError(
+                    "Polytopes must have the same ambient dimension to be added."
+                )
+            verts = np.empty(
+                (self.n_vertices * other.n_vertices, self.ambient_dim), dtype=object
+            )
+            for i, v1 in enumerate(self.vertices):
+                for j, v2 in enumerate(other.vertices):
+                    verts[i * other.n_vertices + j] = v1 + v2
+            # TODO: not all elements in verts will be vertices, potentially this could
+            # be optimized.
+            return Polytope(verts)
 
         raise TypeError(
             "A polytope can only be added to a Point (translation) "

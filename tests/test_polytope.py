@@ -1224,8 +1224,12 @@ def test_add():
     expected = PointConfiguration([[1, 1], [1, 2], [2, 1], [2, 2]])
     assert _arrays_equal_up_to_row_permutation(p.vertices, expected)
 
-    with pytest.raises(NotImplementedError):
-        Polytope.cube(2) + Polytope.cube(2)
+    p = Polytope.cube(2) + Polytope.cube(2)
+    expected = Polytope.cube(2) * 2
+    assert _arrays_equal_up_to_row_permutation(p.vertices, expected.vertices)
+
+    with pytest.raises(ValueError):
+        Polytope.cube(1) + Polytope.cube(2)
 
     with pytest.raises(TypeError):
         Polytope.cube(2) + 1
