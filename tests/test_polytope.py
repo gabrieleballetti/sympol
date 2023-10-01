@@ -1628,6 +1628,32 @@ def test_free_sum():
         assert Polytope.cube(2).free_sum(1)
 
 
+def test_cayley_sum():
+    """
+    Test the cayley_sum method
+    """
+    assert _arrays_equal_up_to_row_permutation(
+        Polytope.cube(2).cayley_sum(Polytope.unimodular_simplex(2)).vertices,
+        PointConfiguration(
+            [
+                [0, 0, 0],
+                [0, 1, 0],
+                [1, 0, 0],
+                [1, 1, 0],
+                [0, 0, 1],
+                [1, 0, 1],
+                [0, 1, 1],
+            ]
+        ),
+    )
+
+    with pytest.raises(TypeError):
+        assert Polytope.cube(2).cayley_sum(1)
+
+    with pytest.raises(ValueError):
+        assert Polytope.cube(2).cayley_sum(Polytope.cube(1))
+
+
 def test_chisel_vertex():
     """
     Test that the chisel_vertex method works correctly
