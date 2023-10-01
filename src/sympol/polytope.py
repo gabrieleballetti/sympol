@@ -1829,6 +1829,31 @@ class Polytope:
 
         return Polytope(vertices=verts)
 
+    def cayley_sum(self, other) -> "Polytope":
+        """Return the Cayley sum of the polytope with another polytope.
+
+        The Cayley sum of two polytopes P and Q in the same ambient space is the
+        convex hull of (P,0) and (Q,1) in a ambient space with an extra dimension.
+
+        Args:
+            other: The other polytope.
+
+        Returns:
+            The Cayley sum of the polytope with another polytope.
+        """
+        if not isinstance(other, Polytope):
+            raise TypeError("The Cayley sum is only defined for polytopes")
+
+        if self.ambient_dim != other.ambient_dim:
+            raise ValueError(
+                "Polytopes must have the same ambient dimension to be added."
+            )
+
+        verts = [v.tolist() + [0] for v in self.vertices]
+        verts += [v.tolist() + [1] for v in other.vertices]
+
+        return Polytope(vertices=verts)
+
     def chisel_vertex(self, vertex_id, dist) -> "Polytope":
         """Return a polytope with a "chiseled" vertex at a given distance.
 
