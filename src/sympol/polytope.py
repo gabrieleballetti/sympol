@@ -999,8 +999,7 @@ class Polytope:
                 )
 
             self._ehrhart_polynomial = h_star_to_ehrhart_polynomial(
-                dim=self.dim,
-                h_star_vector=self.h_star_vector,
+                self.h_star_vector,
             )
 
         return self._ehrhart_polynomial

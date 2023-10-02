@@ -1,6 +1,6 @@
 """Module defining additional functions for Ehrhart Theory related properties."""
 
-from sympy import floor, Poly, Rational
+from sympy import binomial, floor, Poly, Rational
 from sympy.abc import x
 from sympol._utils import _is_integer
 from sympol._utils import _binomial_polynomial, _eulerian_poly
@@ -44,7 +44,7 @@ def is_valid_h_star_vector(h: tuple[int]) -> bool:
     if h[1] < h[d]:
         return False
 
-    for i in range(2, floor(d / 2) + 1):
+    for i in range(2, floor(Rational(d, 2)) + 1):
         if not sum(h[k] for k in range(2, i + 1)) >= sum(
             h[k] for k in range(d - i + 1, d)
         ):
@@ -71,8 +71,9 @@ def is_valid_h_star_vector(h: tuple[int]) -> bool:
     return True
 
 
-def h_star_to_ehrhart_polynomial(dim: int, h_star_vector: tuple[int]) -> Poly:
+def h_star_to_ehrhart_polynomial(h_star_vector: tuple[int]) -> Poly:
     """Get the Ehrhart polynomial from the h*-polynomial."""
+    dim = len(h_star_vector) - 1
     return sum(
         [
             h_i * _binomial_polynomial(dim, dim - i, x)
@@ -82,16 +83,43 @@ def h_star_to_ehrhart_polynomial(dim: int, h_star_vector: tuple[int]) -> Poly:
     )
 
 
-def ehrhart_to_h_star_polynomial(
-    dim: int, ehrhart_coefficients: tuple[Rational]
-) -> Poly:
+def ehrhart_to_h_star_polynomial(ehrhart_coefficients: tuple[Rational]) -> Poly:
     """Get the h*-polynomial from the Ehrhart polynomial."""
+    dim = len(ehrhart_coefficients) - 1
     return sum(
         [
             ehrhart_coefficients[i] * _eulerian_poly(i, x) * (1 - x) ** (dim - i)
             for i in range(dim + 1)
         ]
-    ).simplify()
+    )
+
+
+def gamma_to_h_star_polynomial(gamma_vector: tuple[int]) -> Poly:
+    """Get the h*-polynomial from the gamma-polynomial."""
+    dim = len(gamma_vector) - 1
+    return sum(
+        [
+            gamma_vector[i] * Poly(x) ** i * Poly(x + 1) ** (dim - 2 * i)
+            for i in range(floor(Rational(dim, 2)) + 1)
+        ]
+    )
+
+
+def h_star_to_gamma_polynomial(h_star: tuple[int]) -> Poly:
+    """Get the gamma-polynomial from the h*-vector."""
+    d = max([i for i, h_i in enumerate(h_star) if h_i != 0])
+    return sum(
+        [
+            sum(
+                [
+                    (-1) ** (k - i) * binomial(d + k - 1 - i, k - i) * h_star[i]
+                    for i in range(k + 1)
+                ]
+            )
+            * Poly(x) ** k
+            for k in range(floor(Rational(d, 2)) + 1)
+        ]
+    )
 
 
 def h_star_vector_of_cartesian_product_from_h_star_vectors(
@@ -105,14 +133,14 @@ def h_star_vector_of_cartesian_product_from_h_star_vectors(
     dim_2 = len(h_star_vector_2) - 1
     dim = dim_1 + dim_2
 
-    ehrhart_polynomial_1 = h_star_to_ehrhart_polynomial(dim_1, h_star_vector_1)
-    ehrhart_polynomial_2 = h_star_to_ehrhart_polynomial(dim_2, h_star_vector_2)
+    ehrhart_polynomial_1 = h_star_to_ehrhart_polynomial(h_star_vector_1)
+    ehrhart_polynomial_2 = h_star_to_ehrhart_polynomial(h_star_vector_2)
     ehrhart_polynomial = ehrhart_polynomial_1 * ehrhart_polynomial_2
     x = ehrhart_polynomial.gens[0]
     ehrhart_coeffs = tuple(
         [ehrhart_polynomial.coeff_monomial(x**deg) for deg in range(dim + 1)]
     )
-    h_star_poly = ehrhart_to_h_star_polynomial(dim, ehrhart_coeffs)
+    h_star_poly = ehrhart_to_h_star_polynomial(ehrhart_coeffs)
     h_star_vector = tuple(
         [h_star_poly.coeff_monomial(x**deg) for deg in range(dim + 1)]
     )

@@ -3,6 +3,7 @@ from itertools import product
 from functools import cache
 from cdd import Fraction
 from sympy import binomial, factorial, Integer, Poly, Rational
+from sympy.abc import x
 
 
 def _cdd_fraction_to_simpy_rational(frac):
@@ -14,6 +15,11 @@ def _cdd_fraction_to_simpy_rational(frac):
         return Rational(frac.numerator, frac.denominator)
 
     raise TypeError("Expected a cddlib Fraction or an int")
+
+
+def _coefficients(poly: Poly, d: int) -> tuple[Rational]:
+    """Return the coefficients of the polynomial poly up to degree d."""
+    return tuple(poly.coeff_monomial(x**i) for i in range(d + 1))
 
 
 def _is_integer(num) -> bool:
