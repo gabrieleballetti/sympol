@@ -160,6 +160,10 @@ def test_arrays_equal_up_to_row_permutation():
     a = np.array([[1, 2, 3], [4, 5, 6]])
     b = np.array([[4, 5, 6], [1, 2, 3]])
     c = np.array([[1, 2, 3], [4, 6, 5]])
+    d = np.array([[1, 2, 3], [4, 5, 6], [1, 2, 3]])
+    e = np.array([[1, 2, 3], [4, 5, 6], [4, 5, 6]])
 
     assert _arrays_equal_up_to_row_permutation(a, b)
     assert not _arrays_equal_up_to_row_permutation(a, c)
+    assert not _arrays_equal_up_to_row_permutation(a, d)
+    assert not _arrays_equal_up_to_row_permutation(d, e)

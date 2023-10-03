@@ -1,9 +1,8 @@
 import numpy as np
-from sympy import Abs
 from sympol import Polytope
-from sympol._utils import _is_log_concave
 import pathlib
 from itertools import islice
+from sympol._utils import _arrays_equal_up_to_row_permutation
 
 DATA_FOLDER = ".data/4p_reflexive"
 

@@ -24,6 +24,7 @@ from sympol._utils import (
     _np_cartesian_product,
     _is_log_concave,
     _is_unimodal,
+    _arrays_equal_up_to_row_permutation,
 )
 
 
@@ -188,6 +189,7 @@ class Polytope:
         self._has_log_concave_h_star_vector = None
         self._has_unimodal_h_star_vector = None
 
+        self._is_centrally_symmetric = None
         self._is_spanning = None
         self._is_very_ample = None
         self._is_idp = None
@@ -1391,6 +1393,21 @@ class Polytope:
             self._has_unimodal_h_star_vector = _is_unimodal(self.h_star_vector)
 
         return self._has_unimodal_h_star_vector
+
+    @property
+    def is_centrally_symmetric(self):
+        """Check if a polytope is centrally symmetric
+
+        Returns:
+            True if the polytope is centrally symmetric, False otherwise.
+        """
+
+        if self._is_centrally_symmetric is None:
+            self._is_centrally_symmetric = _arrays_equal_up_to_row_permutation(
+                self.vertices, -self.vertices
+            )
+
+        return self._is_centrally_symmetric
 
     @property
     def is_spanning(self) -> bool:

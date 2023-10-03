@@ -1531,6 +1531,17 @@ def test_has_unimodal_h_star_vector():
     assert not p.has_unimodal_h_star_vector
 
 
+def test_is_centrally_symmetric():
+    """
+    Test that the is_centrally_symmetric property works correctly.
+    """
+    c = Polytope.cube(2) * 2
+    assert not c.is_centrally_symmetric
+
+    c = c - Point([1, 1])
+    assert c.is_centrally_symmetric
+
+
 def test_is_spanning():
     """
     Test the is_spanning property. In the first case only the vertices should be used.
