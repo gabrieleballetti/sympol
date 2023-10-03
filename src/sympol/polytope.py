@@ -15,11 +15,12 @@ from sympol._hilbert_basis_np import (
 from sympol._integer_points_np import find_integer_points
 from sympol._isomorphism import get_normal_form
 from sympol._half_open_parallelotope import HalfOpenParallelotope
-from sympol.ehrhart import h_star_to_ehrhart_polynomial
+from sympol.ehrhart import h_star_to_ehrhart_polynomial, h_to_gamma_vector
 from sympol.point import Point
 from sympol.point_configuration import PointConfiguration
 from sympol._utils import (
     _cdd_fraction_to_simpy_rational,
+    _coefficients,
     _np_cartesian_product,
     _is_log_concave,
     _is_unimodal,
@@ -163,6 +164,8 @@ class Polytope:
         self._ehrhart_coefficients = None
         self._h_star_polynomial = None
         self._h_star_vector = None
+        self._gamma_polynomial = None
+        self._gamma_vector = None
         self._degree = None
 
         self._half_open_parallelotopes_pts = None
@@ -999,8 +1002,7 @@ class Polytope:
                 )
 
             self._ehrhart_polynomial = h_star_to_ehrhart_polynomial(
-                dim=self.dim,
-                h_star_vector=self.h_star_vector,
+                self.h_star_vector,
             )
 
         return self._ehrhart_polynomial
@@ -1014,11 +1016,8 @@ class Polytope:
             as a tuple of sympy Rational objects.
         """
         if self._ehrhart_coefficients is None:
-            self._ehrhart_coefficients = tuple(
-                [
-                    self.ehrhart_polynomial.coeff_monomial(x**deg)
-                    for deg in range(self.dim + 1)
-                ]
+            self._ehrhart_coefficients = _coefficients(
+                self.ehrhart_polynomial, self.dim
             )
 
         return self._ehrhart_coefficients
@@ -1085,6 +1084,36 @@ class Polytope:
             self._h_star_vector = tuple(self._h_star_vector)
 
         return self._h_star_vector
+
+    @property
+    def gamma_polynomial(self) -> Poly:
+        """Get the gamma polynomial of the polytope.
+
+        Returns:
+            The gamma polynomial of the polytope as a sympy Poly object.
+        """
+        if self._gamma_polynomial is None:
+            self._gamma_polynomial = Poly(
+                sum([gamma_i * x**i for i, gamma_i in enumerate(self.gamma_vector)]),
+                x,
+            )
+
+        return self._gamma_polynomial
+
+    @property
+    def gamma_vector(self) -> tuple:
+        """Return the gamma vector of the polytope.
+
+        The gamma vector has trailing zeroes to match the degree of the h*-polynomial.
+
+        Returns:
+            The gamma vector of the polytope as a tuple of integers.
+        """
+
+        if self._gamma_vector is None:
+            self._gamma_vector = h_to_gamma_vector(self.h_star_vector)
+
+        return self._gamma_vector
 
     @property
     def degree(self) -> int:

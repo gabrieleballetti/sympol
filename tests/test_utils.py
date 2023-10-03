@@ -10,6 +10,8 @@ from sympol._utils import (
     _is_unimodal,
     _eulerian_number,
     _eulerian_poly,
+    _h_to_gamma,
+    _gamma_to_h,
 )
 
 
@@ -120,4 +122,34 @@ def test_eulerian_polynomial():
         + 152637 * x**3
         + 2036 * x**2
         + x
+    )
+
+
+def test_h_to_gamma():
+    g = _h_to_gamma(5)
+
+    assert np.array_equal(
+        g,
+        np.array(
+            [
+                [1, 0, 0],
+                [-5, 1, 0],
+                [5, -3, 1],
+            ]
+        ),
+    )
+
+
+def test_gamma_to_h():
+    s = _gamma_to_h(5)
+
+    assert np.array_equal(
+        s,
+        np.array(
+            [
+                [1, 0, 0],
+                [5, 1, 0],
+                [10, 3, 1],
+            ]
+        ),
     )

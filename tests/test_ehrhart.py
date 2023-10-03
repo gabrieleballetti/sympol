@@ -4,6 +4,8 @@ from sympol.ehrhart import (
     is_valid_h_star_vector,
     ehrhart_to_h_star_polynomial,
     h_star_to_ehrhart_polynomial,
+    gamma_to_h_vector,
+    h_to_gamma_vector,
     h_star_vector_of_cartesian_product_from_h_star_vectors,
 )
 from sympol import Polytope
@@ -28,33 +30,34 @@ def test_is_valid_h_star_vector():
 
 
 def test_ehrhart_to_h_star_polynomial():
-    """
-    Test that the method ehrhart_to_h_star_polynomial works correctly for a
-    unit cube.
-    """
     p = Polytope.cube(3)
 
     assert ehrhart_to_h_star_polynomial(
-        dim=p.dim, ehrhart_coefficients=p.ehrhart_coefficients
+        ehrhart_coefficients=p.ehrhart_coefficients
     ) == Poly(x**2 + 4 * x + 1, x)
 
 
 def test_h_star_to_ehrhart_polynomial():
-    """
-    Test that the method h_star_to_ehrhart_polynomial works correctly for a
-    unit cube.
-    """
     p = Polytope.cube(3)
+    assert h_star_to_ehrhart_polynomial(p.h_star_vector) == Poly(
+        (x + 1) ** 3, x, domain="QQ"
+    )
 
-    assert h_star_to_ehrhart_polynomial(
-        dim=p.dim, h_star_vector=p.h_star_vector
-    ) == Poly((x + 1) ** 3, x, domain="QQ")
+
+def test_gamma_to_h_star_vector():
+    gamma_vector = (1, 2, -1, 0, 0, 0)
+    assert gamma_to_h_vector(gamma_vector) == (1, 7, 15, 15, 7, 1)
+
+    gamma_vector = (1, 2, -1, 0, 0)
+    assert h_to_gamma_vector(gamma_to_h_vector(gamma_vector)) == (1, 2, -1, 0, 0)
+
+
+def test_h_star_to_gamma_vector():
+    h_star = (1, 7, 15, 15, 7, 1)
+    assert h_to_gamma_vector(h_star) == (1, 2, -1, 0, 0, 0)
 
 
 def test_h_star_vector_of_cartesian_product_from_h_star_vectors():
-    """
-    Test that the method h_star_vector_of_cartesian_product_from_h_star_vectors
-    """
     h1 = Polytope.cube(2).h_star_vector
     h2 = Polytope.cube(3).h_star_vector
 
