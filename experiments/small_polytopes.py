@@ -29,9 +29,3 @@ if __name__ == "__main__":
 
                 if p.is_lattice_pyramid:
                     continue
-
-                if p.is_idp:
-                    print(h)
-                    print(nes)
-                    print(lc)
-                    print("--------")
