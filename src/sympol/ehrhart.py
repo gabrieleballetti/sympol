@@ -1,7 +1,7 @@
 """Module defining additional functions for Ehrhart Theory related properties."""
 
 import numpy as np
-from sympy import binomial, floor, Poly, Rational
+from sympy import floor, Poly, Rational
 from sympy.abc import x
 from sympol._utils import (
     _is_integer,

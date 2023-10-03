@@ -9,7 +9,6 @@ from sympol.ehrhart import (
     h_star_vector_of_cartesian_product_from_h_star_vectors,
 )
 from sympol import Polytope
-from sympol._utils import _coefficients
 
 
 def test_is_valid_h_star_vector():
