@@ -8,13 +8,7 @@ from sympol._half_open_parallelotope import HalfOpenParallelotope
 from sympol.point import Point
 from sympol.point_configuration import PointConfiguration
 from sympol.polytope import Polytope, Simplex
-
-
-def _arrays_equal_up_to_row_permutation(a, b):
-    """
-    Check that two arrays are exactly equal up to row permutation
-    """
-    return np.array_equal(np.sort(a, axis=0), np.sort(b, axis=0))
+from sympol._utils import _arrays_equal_up_to_row_permutation
 
 
 def test_init_from_points():

@@ -12,6 +12,7 @@ from sympol._utils import (
     _eulerian_poly,
     _h_to_gamma,
     _gamma_to_h,
+    _arrays_equal_up_to_row_permutation,
 )
 
 
@@ -153,3 +154,12 @@ def test_gamma_to_h():
             ]
         ),
     )
+
+
+def test_arrays_equal_up_to_row_permutation():
+    a = np.array([[1, 2, 3], [4, 5, 6]])
+    b = np.array([[4, 5, 6], [1, 2, 3]])
+    c = np.array([[1, 2, 3], [4, 6, 5]])
+
+    assert _arrays_equal_up_to_row_permutation(a, b)
+    assert not _arrays_equal_up_to_row_permutation(a, c)

@@ -128,3 +128,31 @@ def _gamma_to_h(d):
         for j in range(m + 1):
             s[i, j] = binomial(d - 2 * j, i - j)
     return s
+
+
+def _arrays_equal_up_to_row_permutation(a, b):
+    """
+    Check that two arrays are exactly equal up to row permutation
+    """
+    rows_a = [tuple(r) for r in list(a)]
+    rows_b = [tuple(r) for r in list(b)]
+    # make sure the lists are of equal length
+    if len(rows_a) != len(rows_b):
+        return False
+
+    counts = {}
+    for row in rows_a:
+        if row in counts:
+            counts[row] = counts[row] + 1
+        else:
+            counts[row] = 1
+
+    for row in rows_b:
+        if row not in counts:
+            return False
+        if counts[row] == 0:
+            return False
+        else:
+            counts[row] = counts[row] - 1
+
+    return True
