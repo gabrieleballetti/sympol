@@ -1139,9 +1139,9 @@ def test_h_star_polynomial():
     for d in range(1, 5):
         assert Polytope.unimodular_simplex(d).h_star_polynomial == Poly(1, x)
 
-    Polytope.cube(1).h_star_polynomial == Poly(1, x)
-    Polytope.cube(2).h_star_polynomial == Poly(x + 1)
-    Polytope.cube(3).h_star_polynomial == Poly(x**2 + 4 * x + 1)
+    assert Polytope.cube(1).h_star_polynomial == Poly(1, x)
+    assert Polytope.cube(2).h_star_polynomial == Poly(x + 1)
+    assert Polytope.cube(3).h_star_polynomial == Poly(x**2 + 4 * x + 1)
 
 
 def test_h_star_vector():
@@ -1150,6 +1150,27 @@ def test_h_star_vector():
     """
     assert Polytope.cube(3).h_star_vector == (1, 4, 1, 0)
     assert (Polytope.cube(3) * 2).h_star_vector == (1, 23, 23, 1)
+
+
+def test_gamma_vector():
+    p = Polytope(
+        [
+            [-1, 0, 0],
+            [0, -1, 0],
+            [0, 0, -1],
+            [1, 1, 1],
+        ]
+    )
+    assert p.gamma_vector == (1, -2, 0, 0)
+
+    p = Polytope(
+        [
+            [-1, 0],
+            [0, -1],
+            [1, 1],
+        ]
+    )
+    assert p.gamma_vector == (1, -1, 0)
 
 
 def test_degree():

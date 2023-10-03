@@ -30,14 +30,7 @@ if __name__ == "__main__":
                 if p.is_lattice_pyramid:
                     continue
 
-                if p.is_very_ample and not p.is_idp:
-                    h = p.h_star_vector
-                    e = p.ehrhart_polynomial
-                    nes = [Abs(e(-i)) for i in range(1, d + 1)]
-                    lc = [
-                        nes[i] ** 2 - nes[i - 1] * nes[i + 1] for i in range(1, d - 1)
-                    ]
-
+                if p.is_idp:
                     print(h)
                     print(nes)
                     print(lc)

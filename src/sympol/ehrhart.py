@@ -1,9 +1,15 @@
 """Module defining additional functions for Ehrhart Theory related properties."""
 
+import numpy as np
 from sympy import binomial, floor, Poly, Rational
 from sympy.abc import x
-from sympol._utils import _is_integer
-from sympol._utils import _binomial_polynomial, _eulerian_poly
+from sympol._utils import (
+    _is_integer,
+    _binomial_polynomial,
+    _eulerian_poly,
+    _gamma_to_h,
+    _h_to_gamma,
+)
 
 
 def is_valid_h_star_vector(h: tuple[int]) -> bool:
@@ -94,32 +100,25 @@ def ehrhart_to_h_star_polynomial(ehrhart_coefficients: tuple[Rational]) -> Poly:
     )
 
 
-def gamma_to_h_star_polynomial(gamma_vector: tuple[int]) -> Poly:
-    """Get the h*-polynomial from the gamma-polynomial."""
-    dim = len(gamma_vector) - 1
-    return sum(
-        [
-            gamma_vector[i] * Poly(x) ** i * Poly(x + 1) ** (dim - 2 * i)
-            for i in range(floor(Rational(dim, 2)) + 1)
-        ]
-    )
+def gamma_to_h_vector(gamma: tuple[int]) -> tuple[int]:
+    """Get the h-vector from the gamma vector."""
+    s = len(gamma) - 1
+    half_gamma = gamma[: s // 2 + 1]
+    half_h = tuple(np.matmul(_gamma_to_h(s), half_gamma))
+    if s % 2 == 0:
+        h = half_h + half_h[1::-1]
+    else:
+        h = half_h + half_h[::-1]
+    return tuple(h)
 
 
-def h_star_to_gamma_polynomial(h_star: tuple[int]) -> Poly:
-    """Get the gamma-polynomial from the h*-vector."""
-    d = max([i for i, h_i in enumerate(h_star) if h_i != 0])
-    return sum(
-        [
-            sum(
-                [
-                    (-1) ** (k - i) * binomial(d + k - 1 - i, k - i) * h_star[i]
-                    for i in range(k + 1)
-                ]
-            )
-            * Poly(x) ** k
-            for k in range(floor(Rational(d, 2)) + 1)
-        ]
-    )
+def h_to_gamma_vector(h: tuple[int]) -> tuple[int]:
+    """Get the gamma vector from the h-vector."""
+    s = max([i for i, h_i in enumerate(h) if h_i != 0])
+    half_h = h[: s // 2 + 1]
+    gamma = list(np.matmul(_h_to_gamma(s), half_h))
+    gamma += [0] * ((s + 1) // 2)
+    return tuple(gamma)
 
 
 def h_star_vector_of_cartesian_product_from_h_star_vectors(

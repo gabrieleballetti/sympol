@@ -4,8 +4,8 @@ from sympol.ehrhart import (
     is_valid_h_star_vector,
     ehrhart_to_h_star_polynomial,
     h_star_to_ehrhart_polynomial,
-    gamma_to_h_star_polynomial,
-    h_star_to_gamma_polynomial,
+    gamma_to_h_vector,
+    h_to_gamma_vector,
     h_star_vector_of_cartesian_product_from_h_star_vectors,
 )
 from sympol import Polytope
@@ -45,23 +45,17 @@ def test_h_star_to_ehrhart_polynomial():
     )
 
 
-def test_gamma_to_h_star_polynomial():
-    gamma_vector = (1, -2, 0, 0)
-    assert gamma_to_h_star_polynomial(gamma_vector) == Poly(
-        x**3 + x**2 + x + 1, domain="ZZ"
-    )
+def test_gamma_to_h_star_vector():
+    gamma_vector = (1, 2, -1, 0, 0, 0)
+    assert gamma_to_h_vector(gamma_vector) == (1, 7, 15, 15, 7, 1)
+
+    gamma_vector = (1, 2, -1, 0, 0)
+    assert h_to_gamma_vector(gamma_to_h_vector(gamma_vector)) == (1, 2, -1, 0, 0)
 
 
-def test_h_star_to_gamma_polynomial():
-    h_star = (1, 1, 1, 1)
-    assert h_star_to_gamma_polynomial(h_star) == Poly(-2 * x + 1, domain="ZZ")
-
-
-def test_h_star_to_gamma_and_back():
-    h_star = (1, 1, 1, 1, 1)
-    d = len(h_star) - 1
-    gamma = _coefficients(h_star_to_gamma_polynomial(h_star), d)
-    assert _coefficients(gamma_to_h_star_polynomial(gamma), d) == h_star
+def test_h_star_to_gamma_vector():
+    h_star = (1, 7, 15, 15, 7, 1)
+    assert h_to_gamma_vector(h_star) == (1, 2, -1, 0, 0, 0)
 
 
 def test_h_star_vector_of_cartesian_product_from_h_star_vectors():

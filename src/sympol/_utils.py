@@ -1,8 +1,9 @@
 import numpy as np
 from itertools import product
 from functools import cache
+import numpy as np
 from cdd import Fraction
-from sympy import binomial, factorial, Integer, Poly, Rational
+from sympy import binomial, factorial, floor, Integer, Poly, Rational
 from sympy.abc import x
 
 
@@ -104,3 +105,27 @@ def _binomial_polynomial(d, k, x):
         poly *= Poly(x + k - i, x)
 
     return poly
+
+
+@cache
+def _h_to_gamma(d):
+    """Return the transformation matrix G that transforms h to gamma."""
+    m = floor(Rational(d, 2))
+    g = np.empty((m + 1, m + 1), dtype=object)
+    for i in range(m + 1):
+        for j in range(m + 1):
+            g[i, j] = (-1) ** (i - j) * (
+                binomial(d - i - j, i - j) + binomial(d - i - j - 1, i - j - 1)
+            )
+    return g
+
+
+@cache
+def _gamma_to_h(d):
+    """Return the transformation matrix S that transforms gamma to h."""
+    m = floor(Rational(d, 2))
+    s = np.empty((m + 1, m + 1), dtype=object)
+    for i in range(m + 1):
+        for j in range(m + 1):
+            s[i, j] = binomial(d - 2 * j, i - j)
+    return s
