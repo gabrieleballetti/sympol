@@ -1173,6 +1173,18 @@ def test_gamma_vector():
     assert p.gamma_vector == (1, -1, 0)
 
 
+def test_gamma_polynomial():
+    p = Polytope(
+        [
+            [-1, 0, 0],
+            [0, -1, 0],
+            [0, 0, -1],
+            [1, 1, 1],
+        ]
+    )
+    assert p.gamma_polynomial == Poly(1 - 2 * x)
+
+
 def test_degree():
     """
     Test that the degree of a lattice polytope is correct

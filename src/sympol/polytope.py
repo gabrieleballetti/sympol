@@ -20,6 +20,7 @@ from sympol.point import Point
 from sympol.point_configuration import PointConfiguration
 from sympol._utils import (
     _cdd_fraction_to_simpy_rational,
+    _coefficients,
     _np_cartesian_product,
     _is_log_concave,
     _is_unimodal,
@@ -1015,11 +1016,8 @@ class Polytope:
             as a tuple of sympy Rational objects.
         """
         if self._ehrhart_coefficients is None:
-            self._ehrhart_coefficients = tuple(
-                [
-                    self.ehrhart_polynomial.coeff_monomial(x**deg)
-                    for deg in range(self.dim + 1)
-                ]
+            self._ehrhart_coefficients = _coefficients(
+                self.ehrhart_polynomial, self.dim
             )
 
         return self._ehrhart_coefficients
@@ -1095,7 +1093,7 @@ class Polytope:
             The gamma polynomial of the polytope as a sympy Poly object.
         """
         if self._gamma_polynomial is None:
-            self._gamma_polynomial = (
+            self._gamma_polynomial = Poly(
                 sum([gamma_i * x**i for i, gamma_i in enumerate(self.gamma_vector)]),
                 x,
             )
