@@ -8,13 +8,7 @@ from sympol._half_open_parallelotope import HalfOpenParallelotope
 from sympol.point import Point
 from sympol.point_configuration import PointConfiguration
 from sympol.polytope import Polytope, Simplex
-
-
-def _arrays_equal_up_to_row_permutation(a, b):
-    """
-    Check that two arrays are exactly equal up to row permutation
-    """
-    return np.array_equal(np.sort(a, axis=0), np.sort(b, axis=0))
+from sympol._utils import _arrays_equal_up_to_row_permutation
 
 
 def test_init_from_points():
@@ -1535,6 +1529,17 @@ def test_has_unimodal_h_star_vector():
     p = Polytope([[0, 0, 0], [1, 0, 0], [0, 1, 0], [1, 1, 2]])
 
     assert not p.has_unimodal_h_star_vector
+
+
+def test_is_centrally_symmetric():
+    """
+    Test that the is_centrally_symmetric property works correctly.
+    """
+    c = Polytope.cube(2) * 2
+    assert not c.is_centrally_symmetric
+
+    c = c - Point([1, 1])
+    assert c.is_centrally_symmetric
 
 
 def test_is_spanning():
