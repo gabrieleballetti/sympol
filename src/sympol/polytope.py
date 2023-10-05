@@ -143,6 +143,8 @@ class Polytope:
 
         self._vertex_facet_pairing_matrix = None
 
+        self._dual = None
+
         self._triangulation = None
         self._half_open_decomposition = None
         self._induced_boundary_triangulation = None
@@ -672,6 +674,33 @@ class Polytope:
             )
 
         return self._vertex_facet_pairing_matrix
+
+    @property
+    def dual(self) -> "Polytope":
+        """Get the dual polytope.
+
+        Returns:
+            The dual polytope.
+
+        Raises:
+            ValueError: If the polytope is not full dimensional.
+            ValueError: If the polytope does not contain the origin in its interior.
+        """
+        if self._dual is None:
+            if not self.is_full_dim():
+                raise ValueError(
+                    "The dual polytope is only defined for full dimensional polytopes."
+                )
+
+            if not self.contains(self._origin(), strict=True):
+                raise ValueError(
+                    "The dual polytope is only defined for polytopes containing the"
+                    "origin in their interior."
+                )
+
+            self._dual = Polytope(self.homogeneous_inequalities[:, 1:])
+
+        return self._dual
 
     @property
     def barycenter(self) -> Point:
