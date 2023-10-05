@@ -112,9 +112,10 @@ def gamma_to_h_vector(gamma: tuple[int]) -> tuple[int]:
     return tuple(h)
 
 
-def h_to_gamma_vector(h: tuple[int]) -> tuple[int]:
+def h_to_gamma_vector(h: tuple[int], s: int = None) -> tuple[int]:
     """Get the gamma vector from the h-vector."""
-    s = max([i for i, h_i in enumerate(h) if h_i != 0])
+    if s is None:
+        s = max(i for i, h_i in enumerate(h) if h_i != 0)
     half_h = h[: s // 2 + 1]
     gamma = list(np.matmul(_h_to_gamma(s), half_h))
     gamma += [0] * ((s + 1) // 2)

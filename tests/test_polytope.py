@@ -860,6 +860,21 @@ def test_vertex_facet_pairing_matrix():
     assert np.array_equal(polytope.vertex_facet_pairing_matrix, expected)
 
 
+def test_dual():
+    cube = Polytope.cube(3) * 2 - Point([1, 1, 1])
+    cp = Polytope.cross_polytope(3)
+    assert _arrays_equal_up_to_row_permutation(cube.dual.vertices, cp.vertices)
+    assert _arrays_equal_up_to_row_permutation(
+        (cube * Rational(1, 2)).dual.vertices, (cp * 2).vertices
+    )
+
+    with pytest.raises(ValueError):
+        p = Polytope([[-1, 0], [1, 0]]).dual
+
+    with pytest.raises(ValueError):
+        p = Polytope.cube(3).dual
+
+
 def test_f_vector():
     """
     Test calculation of the f-vector for an hypercube

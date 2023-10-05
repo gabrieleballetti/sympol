@@ -54,7 +54,14 @@ def test_gamma_to_h_star_vector():
 
 def test_h_star_to_gamma_vector():
     h_star = (1, 7, 15, 15, 7, 1)
-    assert h_to_gamma_vector(h_star) == (1, 2, -1, 0, 0, 0)
+    expected_gamma = (1, 2, -1, 0, 0, 0)
+    assert h_to_gamma_vector(h_star) == expected_gamma
+
+    h_star2 = (1, 6, 14, 14, 6, 1)
+    h_star_diff = (0, 1, 1, 1, 1, 0)
+    gamma2 = h_to_gamma_vector(h_star2)
+    gamma_diff = h_to_gamma_vector(h_star_diff, s=len(gamma2) - 1)
+    assert h_to_gamma_vector(h_star) == tuple(a + b for a, b in zip(gamma2, gamma_diff))
 
 
 def test_h_star_vector_of_cartesian_product_from_h_star_vectors():
