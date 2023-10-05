@@ -869,10 +869,10 @@ def test_dual():
     )
 
     with pytest.raises(ValueError):
-        p = Polytope([[-1, 0], [1, 0]]).dual
+        Polytope([[-1, 0], [1, 0]]).dual
 
     with pytest.raises(ValueError):
-        p = Polytope.cube(3).dual
+        Polytope.cube(3).dual
 
 
 def test_f_vector():
