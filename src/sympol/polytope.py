@@ -1314,6 +1314,9 @@ class Polytope:
             True if the polytope is reflexive, False otherwise.
         """
         if self._is_reflexive is None:
+            if not self.is_full_dim():
+                self._is_reflexive = False
+                return False
             if not self.is_canonical:
                 self._is_reflexive = False
                 return False
