@@ -1,9 +1,6 @@
-from sympy import Abs
-
 """ Script to iterate through the B. database of "small" polytopes."""
 
 from sympol import Polytope
-from sympol._utils import _is_log_concave
 import pathlib
 
 DATA_FOLDER = ".data/"
