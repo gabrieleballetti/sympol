@@ -1,3 +1,6 @@
+""" Script to iterate through the Kreuzer-Skarke database of 4-dimensional
+reflexive polytopes. """
+
 import numpy as np
 from sympol import Polytope
 import pathlib
@@ -16,19 +19,14 @@ def _get_n_lines_iterator(filename):
                 break
             n_lines = 4 if n == 4 else n
             yield list(islice(fp, n_lines))
-
-    # None of the elements in B were found too many times, and the lists are
-    # the same length, they are a permutation
     return True
 
 
-if __name__ == "__main__":
+def _ks_database_iterator():
     # read the data from a file, one line at a time
     dim = 4
     n_verts = 5
-    tot = 0
     while True:
-        count = 0
         filename = pathlib.Path(DATA_FOLDER) / f"v{n_verts:02d}"
         if n_verts > 36:
             break
@@ -44,8 +42,11 @@ if __name__ == "__main__":
             vertices = np.array(lines)
             if vertices.shape[0] == dim:
                 vertices = vertices.T
-
             p = Polytope(vertices=vertices)
-            # do something
-
+            yield p
         n_verts += 1
+
+
+if __name__ == "__main__":
+    for p in _ks_database_iterator():
+        print(p.h_star_vector)

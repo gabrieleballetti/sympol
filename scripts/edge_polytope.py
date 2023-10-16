@@ -1,3 +1,4 @@
+""" Test with random edge polytopes. """
 import numpy as np
 from sympol import Polytope
 from igraph import Graph
@@ -20,5 +21,3 @@ if __name__ == "__main__":
         if p.dim < dim - 1:
             continue
         print(p.h_star_vector)
-        if not p.is_ehrhart_positive:
-            print(p.vertices)
