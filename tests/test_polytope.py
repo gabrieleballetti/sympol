@@ -1743,6 +1743,25 @@ def test_chisel():
     assert (Polytope.cube(2) * 3).chisel(1).n_vertices == 8
 
 
+def test_intersect_with_affine_subspace():
+    p = Polytope.cube(2) * 2 - Point([1, 1])
+    pts = PointConfiguration([[1, 0], [0, 1]])
+    q = p.intersect_with_affine_subspace(pts)
+    assert _arrays_equal_up_to_row_permutation(q.vertices, pts)
+
+    p = Polytope.cube(3) * 2 - Point([1, 1, 1])
+    pts = PointConfiguration([[0, 0, 0], [0, 1, 1]])
+    q = p.intersect_with_affine_subspace(pts)
+    expected = PointConfiguration([[0, 1, 1], [0, -1, -1]])
+    assert _arrays_equal_up_to_row_permutation(q.vertices, expected)
+
+    p = Polytope.cube(3) * 2 - Point([1, 1, 1])
+    pts = PointConfiguration([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
+    q = p.intersect_with_affine_subspace(pts)
+    expected = PointConfiguration([[-1, 1, 1], [1, -1, 1], [1, 1, -1]])
+    assert _arrays_equal_up_to_row_permutation(q.vertices, expected)
+
+
 def test_unimodular_simplex():
     """
     Test that the unimodular simplex is correctly constructed

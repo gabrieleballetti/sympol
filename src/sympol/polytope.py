@@ -2013,6 +2013,21 @@ class Polytope:
 
         return Polytope(new_verts)
 
+    def intersect_with_affine_subspace(self, points: PointConfiguration) -> "Polytope":
+        """Return the intersection of the polytope with an affine subspace.
+
+        Args:
+            points: A list of points affinely spanning the affine subspace.
+
+        Returns:
+            The intersection of the polytope with the affine subspace.
+        """
+        eqs = Polytope(points).equalities
+
+        new_eqs = np.vstack([self.equalities, eqs])
+
+        return Polytope(inequalities=self.inequalities, equalities=new_eqs)
+
     # Polytope relations
 
     def contains(self, other, strict=False) -> bool:
