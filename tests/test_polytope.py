@@ -1662,6 +1662,7 @@ def test_is_smooth():
     Test the is_smooth property
     """
     assert Polytope.cube(3).is_smooth
+    assert (Polytope.cube(3) * 2).is_smooth
     assert not Polytope([[0, 0, 0], [1, 0, 0], [0, 1, 0], [1, 1, 2]]).is_smooth
     assert not Polytope(
         [[0, 0, 0], [1, 0, 0], [0, 1, 0], [1, 1, 3], [0, 0, -1]]

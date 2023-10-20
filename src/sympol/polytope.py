@@ -1566,7 +1566,9 @@ class Polytope:
 
             for v_id in range(self.n_vertices):
                 v = self.vertices[v_id]
-                mat = Matrix([self.vertices[u_id] - v for u_id in self.neighbors(v_id)])
+                neighbors = [self.vertices[i] - v for i in self.neighbors(v_id)]
+                gcds = [gcd([int(c) for c in u]) for u in neighbors]
+                mat = Matrix([u / gcd for u, gcd in zip(neighbors, gcds)])
                 if not Abs(mat.det()) == 1:
                     self._is_smooth = False
                     return False
