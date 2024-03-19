@@ -122,7 +122,7 @@ def _find_integer_points_numba(
                         any_flag = True
                         break
                 if any_flag:
-                    # i_min is a boundary point, we need to go further to find interior p
+                    # i_min is a boundary point, we need to go further
                     ii_min = i_min + 1
                     any_flag_2 = False
                     for i in range(len(tmp_v)):
@@ -152,7 +152,7 @@ def _find_integer_points_numba(
                         any_flag = True
                         break
                 if any_flag:
-                    # i_max is a boundary point, we need to go further to find interior p
+                    # i_max is a boundary point, we need to go further
                     ii_max = i_max - 1
                     any_flag_2 = False
                     for i in range(len(tmp_v)):
