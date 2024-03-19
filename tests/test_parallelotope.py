@@ -43,15 +43,18 @@ def test_v_d_inv():
     assert hop.v_d_inv == Matrix([[0, 0, 1], [0, 0, 1], [0, 0, 1]])
 
 
+@pytest.mark.parametrize("disable_numba", [True, False])
 @pytest.mark.parametrize("count_only", [True, False])
 @pytest.mark.parametrize("height", [-1, 1])
-def test_integer_points(height, count_only):
+def test_integer_points(height, count_only, disable_numba):
     """
     Test calculation of number of integer points.
     """
     generators = PointConfiguration([[1, -1, -1], [1, 1, 0], [1, 0, 1]])
     hop = HalfOpenParallelotope(generators)
-    pts, h = hop.get_integer_points(count_only=count_only, height=height)
+    pts, h = hop.get_integer_points(
+        count_only=count_only, height=height, disable_numba=disable_numba
+    )
     if height == -1:
         if count_only:
             assert h == (1, 1, 1)
@@ -86,10 +89,10 @@ def test_integer_points_consistency(height, count_only):
     )
     hop = HalfOpenParallelotope(generators)
     pts1, h1 = hop.get_integer_points(
-        height=height, use_sympy=True, count_only=count_only
+        height=height, count_only=count_only, disable_numba=True
     )
     pts2, h2 = hop.get_integer_points(
-        height=height, use_sympy=False, count_only=count_only
+        height=height, count_only=count_only, disable_numba=False
     )
     assert h1 == h2
     if not count_only:

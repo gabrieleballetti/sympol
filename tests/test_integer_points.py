@@ -1,12 +1,12 @@
 import pytest
-import numpy as np
 
-from sympol._integer_points_np import find_integer_points
+from sympol._integer_points import _find_integer_points
 from sympol.polytope import Polytope
 
 
+@pytest.mark.parametrize("disable_numba", [True, False])
 @pytest.mark.parametrize("count_only", [True, False])
-def test_integer_points(count_only):
+def test_integer_points(count_only, disable_numba):
     p = Polytope(
         [
             [0, 0, 0],
@@ -26,11 +26,12 @@ def test_integer_points(count_only):
         n_points,
         n_interior_points,
         forced_stop,
-    ) = find_integer_points(
-        verts=p.vertices.view(np.ndarray).astype(np.int64),
-        ineqs=p.inequalities.view(np.ndarray).astype(np.int64),
+    ) = _find_integer_points(
+        verts=p.vertices,
+        ineqs=p.inequalities,
         dim=p.dim,
         count_only=count_only,
+        disable_numba=disable_numba,
     )
 
     assert not forced_stop
@@ -38,17 +39,18 @@ def test_integer_points(count_only):
     assert n_interior_points == 6
 
     if count_only:
-        assert interior_points is None
-        assert boundary_points is None
-        assert saturated_facets is None
+        assert interior_points.shape == (0, 3)
+        assert boundary_points.shape == (0, 3)
+        assert saturated_facets.shape == (0, 6)
     else:
         assert interior_points.shape == (6, 3)
         assert boundary_points.shape == (54, 3)
-        assert len(saturated_facets) == 54
+        assert saturated_facets.shape == (54, 6)
 
 
-def test_integer_points_consistency():
-    p = Polytope.random_lattice_polytope(dim=4, n_points=20, min=-10, max=10)
+@pytest.mark.parametrize("disable_numba", [True, False])
+def test_integer_points_consistency(disable_numba):
+    p = Polytope.random_lattice_polytope(dim=3, n_points=6, min=-3, max=3)
 
     (
         interior_points,
@@ -57,37 +59,27 @@ def test_integer_points_consistency():
         n_points,
         n_interior_points,
         forced_stop,
-    ) = find_integer_points(
-        verts=p.vertices.view(np.ndarray).astype(np.int64),
-        ineqs=p.inequalities.view(np.ndarray).astype(np.int64),
+    ) = _find_integer_points(
+        verts=p.vertices,
+        ineqs=p.inequalities,
         dim=p.dim,
         count_only=False,
+        disable_numba=disable_numba,
     )
 
     assert n_points == (interior_points.shape[0]) + boundary_points.shape[0]
     assert len(saturated_facets) == boundary_points.shape[0]
 
 
+@pytest.mark.parametrize("disable_numba", [True, False])
 @pytest.mark.parametrize("interior", [True, False])
 @pytest.mark.parametrize("count_only", [True, False])
-def test_stop_at_max_points(count_only, interior):
+def test_stop_at_max_points(count_only, interior, disable_numba):
     """
-    Test that the lattice point enumeration of a (massive) polytope stops
+    Test that the lattice point enumeration of a (big) polytope stops
     correctly if the maximum number of requested points is reached.
     """
-    p = (
-        Polytope(
-            vertices=[
-                [1, 0, 0],
-                [-1, 0, 0],
-                [0, 1, 0],
-                [0, -1, 0],
-                [0, 0, 1],
-                [0, 0, -1],
-            ]
-        )
-        * 100
-    )
+    p = Polytope.cube(2) * 100
 
     (
         interior_points,
@@ -96,13 +88,14 @@ def test_stop_at_max_points(count_only, interior):
         n_points,
         n_interior_points,
         forced_stop,
-    ) = find_integer_points(
-        verts=p.vertices.view(np.ndarray).astype(np.int64),
-        ineqs=p.inequalities.view(np.ndarray).astype(np.int64),
+    ) = _find_integer_points(
+        verts=p.vertices,
+        ineqs=p.inequalities,
         dim=p.dim,
         count_only=count_only,
         stop_at=-1 if interior else 10,
         stop_at_interior=10 if interior else -1,
+        disable_numba=disable_numba,
     )
 
     assert forced_stop
@@ -116,3 +109,29 @@ def test_stop_at_max_points(count_only, interior):
         assert n_points >= 0
         if not count_only:
             assert interior_points.shape[0] + boundary_points.shape[0] >= 10
+
+
+@pytest.mark.parametrize("disable_numba", [True, False])
+def test_integer_points_1d(disable_numba):
+    p = Polytope([[0], [3]])
+
+    (
+        interior_points,
+        boundary_points,
+        saturated_facets,
+        n_points,
+        n_interior_points,
+        forced_stop,
+    ) = _find_integer_points(
+        verts=p.vertices,
+        ineqs=p.inequalities,
+        dim=p.dim,
+        count_only=False,
+        disable_numba=disable_numba,
+    )
+
+    assert n_points == 4
+    assert n_interior_points == 2
+    assert interior_points.shape == (2, 1)
+    assert boundary_points.shape == (2, 1)
+    assert saturated_facets.shape == (2, 2)

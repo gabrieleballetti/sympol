@@ -1,11 +1,3 @@
-[build-system]
-requires = [
-    "cython >= 0.29.35",
-    "numpy >= 1.24.3",
-    "setuptools >= 57.4.0",
-]
-build-backend = "setuptools.build_meta"
-
 [project]
 name = "sympol"
 version = "0.0.1"
