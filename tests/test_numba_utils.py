@@ -26,7 +26,7 @@ def test_nb_cartesian_product(disable_numba):
 
 @pytest.mark.parametrize("disable_numba", [True, False])
 def test_cproduct_idx(disable_numba):
-    a = np.array([3, 2, 1])
+    a = np.array([3, 2, 1], dtype=np.int32)
 
     func = _cproduct_idx.py_func if disable_numba else _cproduct_idx
 
