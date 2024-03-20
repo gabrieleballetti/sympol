@@ -1096,12 +1096,12 @@ def test_boundary_points_facets():
     p = Polytope.cube(3)
     boundary_points_facets = p.boundary_points_facets
 
-    for pt, f_ids in zip(p.boundary_points, boundary_points_facets):
+    for i, pt in enumerate(p.boundary_points):
         for j, ineq in enumerate(p.inequalities):
             if np.dot(ineq[1:], pt) + ineq[0] == 0:
-                assert j in f_ids
+                assert boundary_points_facets[i, j]
             else:
-                assert j not in f_ids
+                assert not boundary_points_facets[i, j]
 
 
 def test_ehrhart_polynomial():

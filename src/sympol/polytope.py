@@ -8,11 +8,11 @@ from sympy import Abs, factorial, gcd, lcm, Number, Matrix, Poly, Rational
 from sympy.abc import x
 from sympy.matrices.normalforms import hermite_normal_form
 
-from sympol._hilbert_basis_np import (
-    get_hilbert_basis_hom_np,
-    check_hilbert_basis_in_polytope_np,
+from sympol._hilbert_basis import (
+    _get_hilbert_basis_hom,
+    _check_hilbert_basis_in_polytope,
 )
-from sympol._integer_points_np import find_integer_points
+from sympol._integer_points import _find_integer_points
 from sympol._isomorphism import get_normal_form
 from sympol._half_open_parallelotope import HalfOpenParallelotope
 from sympol.ehrhart import h_star_to_ehrhart_polynomial, h_to_gamma_vector
@@ -964,14 +964,13 @@ class Polytope:
 
     @property
     def boundary_points_facets(self) -> list:
-        """Get the ids facets of the polytope that contain boundary integer points.
+        """Get an occupancy grid for the boundary integer points of the polytope
 
-        This is a list of list of frozensets of facet ids. The i-th set in the list
-        contains the ids of the facets that contain the i-th boundary integer point.
+        The entry (i, j) of the grid is 1 if the i-th boundary integer point is on the
+        j-th facet of the polytope, 0 otherwise.
 
         Returns:
-            The ids facets of the polytope that contain boundary integer points as
-            a list of list of frozensets of facet ids.
+            The occupancy grid for the boundary integer points of the polytope.
         """
         if self._boundary_points_facets is None:
             self._get_integer_points()
@@ -1165,7 +1164,7 @@ class Polytope:
         Return all the points in the half-open parallelotopes of the triangulation
         of the polytope. This can be seen as a multi-graded version of the h*-vector.
 
-        Note that while their number at each height is invariative under unimodular
+        Note that while their number at each height is invariant under unimodular
         transformations, the actual points are not as they depend on the chosen
         half-open decomposition of the polytope into simplices.
 
@@ -1491,6 +1490,10 @@ class Polytope:
 
                 irreducibles = set([self.vertices[i] - v for i in self.neighbors(v_id)])
                 generators = generators.difference(irreducibles)
+
+                if len(generators) == 0:
+                    continue
+
                 generators = PointConfiguration(list(generators))
                 irreducibles = PointConfiguration(list(irreducibles))
 
@@ -1500,11 +1503,11 @@ class Polytope:
                 cone_ineqs = cone_ineqs[:, 1:]
                 other_ineqs = ineqs[ineqs[:, 0] != 0]
 
-                contains_hb = check_hilbert_basis_in_polytope_np(
-                    generators=np.array(generators, dtype=np.int64),
-                    irreducibles=np.array(irreducibles, dtype=np.int64),
-                    cone_inequalities=np.array(cone_ineqs, dtype=np.int64),
-                    other_inequalities=np.array(other_ineqs, dtype=np.int64),
+                contains_hb = _check_hilbert_basis_in_polytope(
+                    generators=generators,
+                    irreducibles=irreducibles,
+                    cone_inequalities=cone_ineqs,
+                    other_inequalities=other_ineqs,
                 )
 
                 if not contains_hb:
@@ -1669,9 +1672,9 @@ class Polytope:
             _n_integer_points,
             _n_interior_points,
             forced_stop,
-        ) = find_integer_points(
-            verts=self.vertices.view(np.ndarray).astype(np.int64),
-            ineqs=self.homogeneous_inequalities.view(np.ndarray).astype(np.int64),
+        ) = _find_integer_points(
+            verts=self.vertices,
+            ineqs=self.homogeneous_inequalities,
             dim=self.dim,
             count_only=count_only,
             stop_at_interior=stop_at_interior,
@@ -1780,21 +1783,19 @@ class Polytope:
         # the half-open parallelotopes points, except the origin (assumed to
         # be the first point), plus the missing vertices of the first simplex
         # in the triangulation of the polytope
-        generators = np.array(self.half_open_parallelotopes_pts[1:], dtype=np.int64)
+        generators = np.array(self.half_open_parallelotopes_pts[1:])
         for v_id in self.triangulation[0]:
             generators = np.vstack(
                 (
                     generators,
-                    np.array([1] + list(self.vertices[v_id]), dtype=np.int64),
+                    np.array([1] + list(self.vertices[v_id])),
                 )
             )
 
         hilbert_basis = tuple(
-            get_hilbert_basis_hom_np(
+            _get_hilbert_basis_hom(
                 generators=generators,
-                inequalities=self.homogeneous_inequalities.view(np.ndarray).astype(
-                    np.int64
-                ),
+                inequalities=self.homogeneous_inequalities,
                 stop_at_height=stop_at_height,
             )
         )

@@ -1,4 +1,5 @@
 """ Test with random edge polytopes. """
+
 import numpy as np
 from sympol import Polytope
 from igraph import Graph
